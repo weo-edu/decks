@@ -1107,6 +1107,7 @@ Handlebars.JavaScriptCompiler = function() {};
     // PUBLIC API: You can override these methods in a subclass to provide
     // alternative compiled forms for name lookup and buffering semantics
     nameLookup: function(parent, name, type) {
+    console.log('nameLookup',parent,name);
       if (/^[0-9]+$/.test(name)) {
         return parent + "[" + name + "]";
       } else if (JavaScriptCompiler.isValidJavaScriptVariableName(name)) {
@@ -1354,6 +1355,7 @@ Handlebars.JavaScriptCompiler = function() {};
     // Looks up the value of `name` on the current context and pushes
     // it onto the stack.
     lookupOnContext: function(name) {
+      console.log('lookupOnContext',name);
       this.pushStack(this.nameLookup('depth' + this.lastContext, name, 'context'));
     },
 
@@ -1390,6 +1392,7 @@ Handlebars.JavaScriptCompiler = function() {};
     // Replace the value on the stack with the result of looking
     // up `name` on `value`
     lookup: function(name) {
+      console.log('lookup',name);
       this.replaceStack(function(current) {
         return current + " == null || " + current + " === false ? " + current + " : " + this.nameLookup(current, name, 'context');
       });
@@ -1501,6 +1504,7 @@ Handlebars.JavaScriptCompiler = function() {};
     // and can be avoided by passing the `knownHelpers` and
     // `knownHelpersOnly` flags at compile-time.
     invokeAmbiguous: function(name) {
+      console.log('invokeAmbinguous',name);
       this.context.aliases.functionType = '"function"';
 
       this.pushStackLiteral('{}');
@@ -1512,8 +1516,13 @@ Handlebars.JavaScriptCompiler = function() {};
       var nonHelper = this.nameLookup('depth' + this.lastContext, name, 'context');
       var nextStack = this.nextStack();
 
+      var nonHelperBlock = 'else { ';
+      nonHelperBlock += nextStack + ' = ' + nonHelper + '; ' + nextStack + ' = typeof ' + nextStack + ' === functionType ? ' + nextStack + '() : ' + nextStack + ';';
+      nonHelperBlock += 'console.log("nonHelperBlock",' + nonHelper + ');';
+      nonHelperBlock += 'if(typeof ' + nonHelper + ' === "undefined") helpers._emit("' + name + '","depth' + this.lastContext + '");';
+      nonHelperBlock += '}';
       this.source.push('if (foundHelper) { ' + nextStack + ' = foundHelper.call(' + helper.callParams + '); }');
-      this.source.push('else { ' + nextStack + ' = ' + nonHelper + '; ' + nextStack + ' = typeof ' + nextStack + ' === functionType ? ' + nextStack + '() : ' + nextStack + '; }');
+      this.source.push(nonHelperBlock);
     },
 
     // [invokePartial]
@@ -1786,6 +1795,8 @@ Handlebars.compile = function(string, options) {
     }
     return compiled.call(this, context, options);
   };
+
+
 };
 ;
 // lib/handlebars/runtime.js
