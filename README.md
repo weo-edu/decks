@@ -9,8 +9,6 @@ Keywords
 * pi
 * e
 
-
-
 Operators
 ===
 * +
@@ -22,3 +20,11 @@ Operators
 * <=
 * >=
 * is
+* sqrt
+
+
+Generating Numbers
+===
+* find range (unary <=, unary =>, whole, natural)
+* integer or rational
+* binary constraints
