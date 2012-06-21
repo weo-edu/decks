@@ -1,0 +1,45 @@
+/* CSS declarations go here */
+body {
+	font-family: arial;
+}
+
+.deck {
+	width: 200px;
+	margin-bottom: 5px;
+	float: left;
+	margin-right: 30px;
+	cursor: pointer;
+}
+
+.deck img {
+	width: 200px;
+	height: 250px;
+}
+
+.deck-title {
+	text-align: center;
+	margin-bottom: 2px;
+}
+
+.card {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-box-align: center;
+}
+
+.card img {
+	margin-top: 5px;
+	width: 500px;
+	height: 50px;
+}
+
+.card input {
+	display: block
+	width: 100px;
+}
+
+.card-problem {
+	margin-top: 50px;
+	font-size: 24px;
+	margin-bottom: 50px;
+}
