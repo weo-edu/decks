@@ -1519,7 +1519,7 @@ Handlebars.JavaScriptCompiler = function() {};
       var nonHelperBlock = 'else { ';
       nonHelperBlock += nextStack + ' = ' + nonHelper + '; ' + nextStack + ' = typeof ' + nextStack + ' === functionType ? ' + nextStack + '() : ' + nextStack + ';';
       nonHelperBlock += 'console.log("nonHelperBlock",' + nonHelper + ');';
-      nonHelperBlock += 'if(typeof ' + nonHelper + ' === "undefined") helpers._emit("' + name + '","depth' + this.lastContext + '");';
+      nonHelperBlock += 'if(typeof ' + nonHelper + ' === "undefined" && helpers._emit) helpers._emit("' + name + '","depth' + this.lastContext + '");';
       nonHelperBlock += '}';
       this.source.push('if (foundHelper) { ' + nextStack + ' = foundHelper.call(' + helper.callParams + '); }');
       this.source.push(nonHelperBlock);
