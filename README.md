@@ -1,23 +1,7 @@
-weo milestone 1
+templates
 ===
 
-card
-===
+whole.r
 
-* image
-* name
-* template
-* tags
-
-deck
-===
-
-* image
-* name
-* cards
-* tags
-
-single player
-===
-
-* random 10 cards from the deck you chose
+{{whole even name=range, min: 5, max: 10} 
+whole(5,10).even()
