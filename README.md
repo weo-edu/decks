@@ -1,7 +1,30 @@
-templates
+Keywords
 ===
+* natural
+* odd
+* integer
+* even
+* whole
+* rational
+* pi
+* e
 
-whole.r
+Operators
+===
+* +
+* -
+* *
+* /
+* <
+* >
+* <=
+* >=
+* is
+* sqrt
 
-{{whole even name=range, min: 5, max: 10} 
-whole(5,10).even()
+
+Generating Numbers
+===
+* find range (unary <=, unary =>, whole, natural)
+* integer or rational
+* binary constraints
