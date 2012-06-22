@@ -3,7 +3,7 @@ Meteor.startup(function() {
 	var decks = [
 		{
 			name: 'arithmetic',
-			graphic: 'arithmetic.jpeg',
+			graphic: 'arithmetic.png',
 			cards: [
 				{
 					name: 'addition',

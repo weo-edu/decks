@@ -1,0 +1,403 @@
+@import url("http://fonts.googleapis.com/css?family=Play");
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+/* line 17, ../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* line 20, ../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+body {
+  line-height: 1;
+}
+
+/* line 22, ../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+ol, ul {
+  list-style: none;
+}
+
+/* line 24, ../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 26, ../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+/* line 28, ../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q, blockquote {
+  quotes: none;
+}
+/* line 101, ../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+/* line 30, ../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+a img {
+  border: none;
+}
+
+/* line 114, ../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+  display: block;
+}
+
+@font-face {
+  font-family: 'wisdom';
+  src: url("/fonts/wisdom_script-webfont.eot");
+  src: url("/fonts/wisdom_script-webfont.eot?#iefix") format("embedded-opentype"), url("/fonts/wisdom_script-webfont.woff") format("woff"), url("/fonts/wisdom_script-webfont.ttf") format("truetype"), url("/fonts/wisdom_script-webfont.svg#WisdomScriptAIRegular") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* line 49, ../sass/screen.scss */
+html {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #eeeeee));
+  background: -webkit-linear-gradient(#ffffff, #eeeeee);
+  background: -moz-linear-gradient(#ffffff, #eeeeee);
+  background: -o-linear-gradient(#ffffff, #eeeeee);
+  background: -ms-linear-gradient(#ffffff, #eeeeee);
+  background: linear-gradient(#ffffff, #eeeeee);
+  height: 100%;
+}
+
+/* line 55, ../sass/screen.scss */
+body {
+  -webkit-font-smoothing: subpixel-antialiased;
+  font: 15px/1.5em "Play";
+  color: #666;
+}
+
+/* line 61, ../sass/screen.scss */
+.right {
+  float: right;
+}
+
+/* line 62, ../sass/screen.scss */
+.left {
+  float: left;
+}
+
+/* line 68, ../sass/screen.scss */
+header {
+  -webkit-transition-property: top;
+  -moz-transition-property: top;
+  -ms-transition-property: top;
+  -o-transition-property: top;
+  transition-property: top;
+  -webkit-transition-duration: 0.5s;
+  -moz-transition-duration: 0.5s;
+  -ms-transition-duration: 0.5s;
+  -o-transition-duration: 0.5s;
+  transition-duration: 0.5s;
+  background: #dddddd;
+  -webkit-box-shadow: 0 1px 0 #aaaaaa;
+  -moz-box-shadow: 0 1px 0 #aaaaaa;
+  box-shadow: 0 1px 0 #aaaaaa;
+  height: 80px;
+  position: relative;
+  overflow: hidden;
+  *zoom: 1;
+}
+/* line 77, ../sass/screen.scss */
+header.hidden {
+  top: -90px;
+}
+
+/* line 85, ../sass/screen.scss */
+#logo {
+  -webkit-transition-property: top;
+  -moz-transition-property: top;
+  -ms-transition-property: top;
+  -o-transition-property: top;
+  transition-property: top;
+  -webkit-transition-duration: 0.4s;
+  -moz-transition-duration: 0.4s;
+  -ms-transition-duration: 0.4s;
+  -o-transition-duration: 0.4s;
+  transition-duration: 0.4s;
+  font-size: 60.87px;
+  height: 140px;
+  width: 140px;
+  line-height: 168px;
+  text-align: center;
+  background: #FF6347;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  border-radius: 50%;
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  margin-left: -70px;
+  font-family: 'wisdom';
+  color: #ff816b;
+  text-shadow: -1px -1px 0 #ff4523;
+  -webkit-box-shadow: 1px 1px 0 #e02200;
+  -moz-box-shadow: 1px 1px 0 #e02200;
+  box-shadow: 1px 1px 0 #e02200;
+  cursor: pointer;
+  z-index: 999;
+}
+/* line 106, ../sass/screen.scss */
+#logo:hover {
+  color: #ff816b;
+  text-shadow: 1px 1px 0 #ff4523;
+}
+/* line 110, ../sass/screen.scss */
+#logo:active {
+  color: #ff816b;
+  text-shadow: -1px -1px 0 #ff4523;
+}
+/* line 114, ../sass/screen.scss */
+#logo.hidden {
+  top: -103.704px;
+}
+
+/* line 120, ../sass/screen.scss */
+#main-nav {
+  margin: 45px 0 0 0px;
+  text-align: center;
+}
+/* line 124, ../sass/screen.scss */
+#main-nav .left {
+  width: 40%;
+}
+/* line 127, ../sass/screen.scss */
+#main-nav .left a {
+  width: 80px;
+  display: block;
+  float: right;
+}
+/* line 134, ../sass/screen.scss */
+#main-nav .right {
+  width: 40%;
+}
+/* line 137, ../sass/screen.scss */
+#main-nav .right a {
+  width: 80px;
+  display: block;
+  float: left;
+}
+
+/* line 149, ../sass/screen.scss */
+.deck {
+  width: 249px;
+  height: 383px;
+  display: block;
+  position: relative;
+  cursor: pointer;
+  float: left;
+  margin: 20px;
+  border-width: 10px 0px 0px 10px;
+  border-style: solid;
+  border-color: #333 transparent transparent #000;
+  display: none;
+}
+/* line 163, ../sass/screen.scss */
+.deck .deck-title {
+  background: rgba(51, 51, 51, 0.9);
+  color: #FFF;
+  position: absolute;
+  z-index: 99;
+  bottom: 10px;
+  left: -20px;
+  padding: 5px 10px;
+}
+/* line 174, ../sass/screen.scss */
+.deck img {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+/* line 187, ../sass/screen.scss */
+html .container {
+  width: 300px;
+  height: 200px;
+  position: relative;
+  margin: 40px auto 40px;
+  -webkit-perspective: 1200px;
+  perspective: 1200px;
+}
+/* line 196, ../sass/screen.scss */
+html #box {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-transition-duration: 1s;
+  -moz-transition-duration: 1s;
+  -ms-transition-duration: 1s;
+  -o-transition-duration: 1s;
+  transition-duration: 1s;
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -ms-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+  -webkit-transform: translateZ(0) rotateX(80deg) rotateZ(-40deg) rotateY(0deg);
+  -moz-transform: translateZ(0) rotateX(80deg) rotateZ(-40deg) rotateY(0deg);
+  -ms-transform: translateZ(0) rotateX(80deg) rotateZ(-40deg) rotateY(0deg);
+  -o-transform: translateZ(0) rotateX(80deg) rotateZ(-40deg) rotateY(0deg);
+  transform: translateZ(0) rotateX(80deg) rotateZ(-40deg) rotateY(0deg);
+}
+/* line 207, ../sass/screen.scss */
+html #box:hover .left {
+  -webkit-transform: rotateY(-110deg) translateZ(250px);
+  -moz-transform: rotateY(-110deg) translateZ(250px);
+  -ms-transform: rotateY(-110deg) translateZ(250px);
+  -o-transform: rotateY(-110deg) translateZ(250px);
+  transform: rotateY(-110deg) translateZ(250px);
+}
+/* line 213, ../sass/screen.scss */
+html #box figure {
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-transition-duration: 1s;
+  -moz-transition-duration: 1s;
+  -ms-transition-duration: 1s;
+  -o-transition-duration: 1s;
+  transition-duration: 1s;
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -ms-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+  display: block;
+  position: absolute;
+  border: 10px solid #dddddd;
+  line-height: 196px;
+  font-size: 90px;
+  text-align: center;
+  font-weight: bold;
+  color: white;
+  background: #A996C2 center center;
+  background-size: contain;
+}
+/* line 229, ../sass/screen.scss */
+html #box.panels-backface-invisible figure {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+/* line 234, ../sass/screen.scss */
+html #box .front,
+html #box .back {
+  width: 280px;
+  height: 180px;
+}
+/* line 241, ../sass/screen.scss */
+html #box .right,
+html #box .left {
+  width: 80px;
+  height: 180px;
+}
+/* line 246, ../sass/screen.scss */
+html #box .right {
+  left: 99px;
+}
+/* line 247, ../sass/screen.scss */
+html #box .left {
+  left: 101px;
+}
+/* line 250, ../sass/screen.scss */
+html #box .top,
+html #box .bottom {
+  width: 280px;
+  height: 80px;
+  top: 49px;
+  line-height: 96px;
+}
+/* line 257, ../sass/screen.scss */
+html #box .top {
+  top: 51px;
+}
+/* line 258, ../sass/screen.scss */
+html #box .bottom {
+  top: 49px;
+}
+/* line 261, ../sass/screen.scss */
+html #box .front {
+  -webkit-transform: translateZ(50px);
+  -moz-transform: translateZ(50px);
+  -ms-transform: translateZ(50px);
+  -o-transform: translateZ(50px);
+  transform: translateZ(50px);
+}
+/* line 264, ../sass/screen.scss */
+html #box .back {
+  -webkit-transform: rotateX(-180deg) translateZ(50px);
+  -moz-transform: rotateX(-180deg) translateZ(50px);
+  -ms-transform: rotateX(-180deg) translateZ(50px);
+  -o-transform: rotateX(-180deg) translateZ(50px);
+  transform: rotateX(-180deg) translateZ(50px);
+}
+/* line 267, ../sass/screen.scss */
+html #box .right {
+  -webkit-transform: rotateY(90deg) translateZ(150px);
+  -moz-transform: rotateY(90deg) translateZ(150px);
+  -ms-transform: rotateY(90deg) translateZ(150px);
+  -o-transform: rotateY(90deg) translateZ(150px);
+  transform: rotateY(90deg) translateZ(150px);
+}
+/* line 270, ../sass/screen.scss */
+html #box .left {
+  -webkit-transform: rotateY(-90deg) translateZ(150px);
+  -moz-transform: rotateY(-90deg) translateZ(150px);
+  -ms-transform: rotateY(-90deg) translateZ(150px);
+  -o-transform: rotateY(-90deg) translateZ(150px);
+  transform: rotateY(-90deg) translateZ(150px);
+}
+/* line 273, ../sass/screen.scss */
+html #box .top {
+  -webkit-transform: rotateX(90deg) translateZ(100px);
+  -moz-transform: rotateX(90deg) translateZ(100px);
+  -ms-transform: rotateX(90deg) translateZ(100px);
+  -o-transform: rotateX(90deg) translateZ(100px);
+  transform: rotateX(90deg) translateZ(100px);
+}
+/* line 276, ../sass/screen.scss */
+html #box .bottom {
+  -webkit-transform: rotateX(-90deg) translateZ(100px);
+  -moz-transform: rotateX(-90deg) translateZ(100px);
+  -ms-transform: rotateX(-90deg) translateZ(100px);
+  -o-transform: rotateX(-90deg) translateZ(100px);
+  transform: rotateX(-90deg) translateZ(100px);
+}
+/* line 281, ../sass/screen.scss */
+html #box.box2 {
+  z-index: -1;
+  margin-top: 99px;
+}
+/* line 285, ../sass/screen.scss */
+html #box.box2 figure {
+  background: tomato;
+}

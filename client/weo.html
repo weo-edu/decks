@@ -3,16 +3,54 @@
 </head>
 
 <body>
+	{{> nav}}
 	{{> main}}
+	<section class="container">
+  <div id="box">
+    <figure class="front"></figure>
+    <figure class="back"></figure>
+    <figure class="right"></figure>
+    <figure class="left"></figure>
+    <figure class="top"></figure>
+    <figure class="bottom"></figure>
+  </div>
+  <div id="box" class='box2'>
+    <figure class="front"></figure>
+    <figure class="back"></figure>
+    <figure class="right"></figure>
+    <figure class="left"></figure>
+    <figure class="top"></figure>
+    <figure class="bottom"></figure>
+  </div>
+</section>
 </body>
 
+
 <template name="main">
-	{{#if view_is "decks"}}
+	
+{{#if view_is "decks"}}
   	{{> browse}}
   {{/if}}
   {{#if view_is "play"}}
   	{{> card}}
   {{/if}}
+</template>
+
+<template name="nav">
+	<div id='logo'>Weo</div>
+	<header>
+		<div id='main-nav'>
+			<div class='left'>
+				<a>FRIENDS</a>
+				<a>STATS</a>
+				<a>DECKS</a>
+			</div>
+			<div class='right'>
+				<a>LOGIN IN</a>
+				<a>SIGN UP</a>
+			</div>
+		</div>
+	</header>
 </template>
 
 <template name="browse">
