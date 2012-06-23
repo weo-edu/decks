@@ -1,55 +1,96 @@
+var card = {
+	template: '{{a}}*5+{{b}}',
+	rules: [
+	'(a*3)+4-7 > 10',
+	'a is whole',
+	'a+b < 3'
+	]
+};
+
+Problemize.Problem = function(card){
+	this.card = card;
+	this.vars = this.findVars();
+	return this.collateRules();
+}
+
+setTimeout(function(){
+	new Problemize(card);
+},200);
+
 function Problemize(card) {
-	this.problem = this.parse(card);
+	this.problem = new Problemize.Problem(card);
+	this.normalizeConstraints();
 }
 
-Problemize.prototype.generate = function(){
-	
+Problemize.Problem.prototype.operators = ['>=', '<=', 'is', '>', '<', '='];
+
+
+Problemize.Problem.prototype.decomposeRule = function(str){
+	var regex = '(' + this.operators.join('|') + ')';
+	var toks = new RegExp(regex);
+	var parts = str.split(toks);
+	if(parts.length != 3){
+		throw new Error("Error parsing rule, unable to decompose into left/op/right");
+	}
+
+	return {left: parts[0].trim(), op: parts[1].trim(), right: parts[2].trim()};
 }
 
-Problemize.prototype.generateVars = function() {
-	/*var vars = this.findVars();
+Problemize.Problem.prototype.collateRules = function(){
+	var self = this;
+	var problem = {vars: {}, constraints: []};
 
-	_.each(vars,function(var) {
-		_.each(rules,function(rule) {
+	_.each(this.card.rules, function(val, key){
+		var rule = self.decomposeRule(val);
+		var varList = rule.left.match(/[a-zA-Z]+/g);
+		console.log(rule, varList);
 
-	})
+		_.each(varList, function(val, key){
+			if(!~self.vars.indexOf(val)){
+				console.log(self);
+				throw new Error("Rule contains a variable not referenced in the problem template");
+			}
+		});
+
+		if(varList.length == 1){
+			if(!problem.vars[varList[0]])
+				problem.vars[varList[0]] = [];
+
+			problem.vars[varList[0]].push(rule);
+		}
+		else if(varList.length > 1){
+			problem.constraints.push(rule);
+		}
+		else{
+			throw new Error("Rules cannot contain zero variables");
+		}
 	});
-	*/
+
+	return problem;
 }
 
-Problemize.prototype.organize
-
-Problemize.prototype.findVars = function() {
+Problemize.Problem.prototype.findVars = function() {
 	var vars = [];
 	HB.registerHelper('_emit',function(name) {
 		vars.push(name);
 	});
-	HB.compile(template);
+	HB.compile(this.card.template)({});
 	delete HB.helpers['_emit'];
 	return vars;
 }
 
-
-Problemize.prototype.operators = ['>=', '<=', 'is', '>', '<', '='];
-
-
-Problemize.prototype.tokenize = function(ruleText){
-	var regex = '(' + this.operators.join('|') + ')';
-	var toks = new RegExp(regex);
-	console.log(regex);
-	console.log(ruleText.split(toks));
+Problemize.prototype.normalizeConstraints = function() {
+	_.each(this.problem.vars, function(constraints, v) {
+		_.each(constraints,function(constraint, key) {
+			if (constraint.op != 'is') {
+				constraint.right = invert(constraint.left.replace(v, 'v'))(parseInt(constraint.right));
+				constraint.left = v;
+				console.log(constraint);
+			}
+		});
+	});
 }
-
-//Problemize.prototype.tokenize('a*3 is whole');
-
-Problemize.prototype.makeOdd = function(n){
-	return n | 1;
-}
-
-Problemize.prototype.makeEven = function(n){
-	return n & 0xFFFFFFFE;
-}
-
+/*
 var problemDefaults = {
 	min: -12,
 	max: 100
@@ -62,63 +103,60 @@ var problem = {
 			]
 		}
 	}
-};
+	constraints:
+	[
+		{}
+	]
+};*/
 
 //solve(problem);
 
-var eq = '10/v+17';
-var a = 7;
+function invert(eq){
+	var opList = [];
+	console.log('inverting', eq);
 
-
-var ops = ['', '', '+', '-', '*', '/'];
-
-
-calculator.opList = [];
-function recordVarOp(t1, t2, op){
-	var inverse = false;
-	if(t2 == 'v'){
-		t2 = t1;
-		inverse = true;
-	}
-
-	console.log(t1, t2, ops[op]);
-	var o = {op: ops[op], term: t2, invert: inverse};
-	console.log(o);
-	calculator.opList.push(o);
-}
-
-calculator.parse(eq);
-var res = calculator.parse(eq.replace('v', a));
-console.log(a);
-console.log(inverseFunc(res));
-
-
-function inverseFunc(v){
-	var transform;
-	while(transform = calculator.opList.pop()){
-		switch(transform.op){
-			case '+':
-			v -= transform.term;
-			break;
-			case '*':
-			v /= transform.term;
-			break;
-			case '-':
-			if(transform.invert){
-				v = -v;
-			}
-			v += transform.term;
-			break;
-			case '/':
-			if(transform.invert){
-				v = Math.pow(v, -1);
-			}
-			v *= transform.term;
-			break;
+	var ops = ['', '', '+', '-', '*', '/'];
+	calculator.recordVarOp = function(t1, t2, op){
+		var inverse = false;
+		if(t2 == 'v'){
+			t2 = t1;
+			inverse = true;
 		}
+
+		var o = {op: ops[op], term: t2, invert: inverse};
+		opList.push(o);
 	}
 
-	return v;
+	calculator.parse(eq);
+
+	console.log('opList', _.clone(opList));
+	return function(v){
+		var transform;
+		while(transform = opList.pop()){
+			switch(transform.op){
+				case '+':
+				v -= transform.term;
+				break;
+				case '*':
+				v /= transform.term;
+				break;
+				case '-':
+				if(transform.invert){
+					v = -v;
+				}
+				v += transform.term;
+				break;
+				case '/':
+				if(transform.invert){
+					v = Math.pow(v, -1);
+				}
+				v *= transform.term;
+				break;
+			}
+		}
+
+		return v;
+	}
 }
 
 /*
@@ -143,8 +181,6 @@ function compute(a, rule){
 
 function randInRange(min, max){
 	return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-*/
 /*
 	1. Parse rules into json object of unary/binary operators, and rules themselves into left/right/op
 	2. Translate whole/natural/counting constraints into integer/rational within range
