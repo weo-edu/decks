@@ -84,10 +84,14 @@ _.extend(Package.prototype, {
   init_from_library: function (name) {
     var self = this;
     self.name = name;
-    self.source_root = path.join(__dirname, '../../packages', name);
     self.serve_root = path.join('/packages', name);
 
-    var fullpath = path.join(files.get_package_dir(), name, 'package.js');
+    self.source_root = path.join(files.get_package_dir(), name);
+    if(!path.existsSync(self.source_root)){
+      self.source_root = path.join(files.get_user_package_dir(), name);
+    }
+
+    var fullpath = path.join(self.source_root, 'package.js');
     var code = fs.readFileSync(fullpath).toString();
     // \n is necessary in case final line is a //-comment
     var wrapped = "(function(Package,require){" + code + "\n})";
@@ -105,6 +109,7 @@ _.extend(Package.prototype, {
   },
 
   init_from_app_dir: function (app_dir, ignore_files) {
+    console.log('init from app dir');
     var self = this;
     self.name = null;
     self.source_root = app_dir;
@@ -214,12 +219,12 @@ var package_cache = {};
 
 var packages = module.exports = {
   // get a package by name. also maps package objects to themselves.
-  get: function (name) {
+  get: function (name, source_root) {
     if (name instanceof Package)
       return name;
     if (!(name in package_cache)) {
       var pkg = new Package;
-      pkg.init_from_library(name);
+      pkg.init_from_library(name, source_root);
       package_cache[name] = pkg;
     }
 
@@ -267,10 +272,20 @@ var packages = module.exports = {
   list: function () {
     var ret = {};
     var dir = files.get_package_dir();
+
     _.each(fs.readdirSync(dir), function (name) {
       // skip .meteor directory
       if (path.existsSync(path.join(dir, name, 'package.js')))
         ret[name] = packages.get(name);
+    });
+
+    var my_dir = '/Users/joshrtay/packages'
+    _.each(fs.readdirSync(my_dir), function (name) {
+      console.log('name',name);
+      // skip .meteor directory
+      if (path.existsSync(path.join(my_dir, name, 'package.js'))){
+        ret[name] = packages.get(name,my_dir);
+      }
     });
 
     return ret;
