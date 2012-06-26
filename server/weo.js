@@ -9,24 +9,42 @@ Meteor.startup(function() {
 					name: 'addition',
 					graphic: 'addition.gif',
 					problem: {
-						template: '{{range "0" "10"}} + {{range "0" "10"}}',
-						solution: 'vars.a + vars.b'
+						template: '$$ {{a}} + {{b}} $$',
+						solution: 'a + b',
+						rules: [
+							'a is integer',
+							'b is integer',
+							'a < b',
+							'b > 5'
+						]
 					}
 				},
 				{
 					name: 'subtraction',
 					graphic: 'subtraction.jpeg',
 					problem: {
-						template: '{{range "0" "10"}} - {{range "0" "10"}}',
-						solution: 'vars.a - vars.b'
+						template: '{{a}} - {{b}}',
+						solution: 'a - b',
+						rules: [
+							'a is integer',
+							'b is integer',
+							'a > b',
+							'b < 2'
+						]
 					}
 				},
 				{
 					name: 'multiplication',
 					graphic: 'multiplication.jpg',
 					problem: {
-						template: '{{range "0" "10"}} * {{range "0" "10"}}',
-						solution: 'vars.a * vars.b'
+						template: '{{a}} * {{b}}',
+						solution: 'a * b',
+						rules: [
+							'a is integer',
+							'b is integer',
+							'a > 2',
+							'a < 6'
+						]
 					}
 				}
 			]
@@ -39,24 +57,24 @@ Meteor.startup(function() {
 					name: 'word addition',
 					graphic: 'addition.gif',
 					problem: {
-						template: 'What is {{range "0" "10"}} plus {{range "0" "10"}}?',
-						solution: 'vars.a + vars.b'
+						template: 'What is {{a}} plus {{b}}?',
+						solution: 'a + b'
 					}
 				},
 				{
 					name: 'word subtraction',
 					graphic: 'subtraction.jpeg',
 					problem: {
-						template: 'What is {{range "0" "10"}} minus {{range "0" "10"}}?',
-						solution: 'vars.a - vars.b'
+						template: 'What is {{a}} minus {{b}}?',
+						solution: 'a - b'
 					}
 				},
 				{
 					name: 'word multiplication',
 					graphic: 'multiplication.jpg',
 					problem: {
-						template: 'What is {{range "0" "10"}} times {{range "0" "10"}}?',
-						solution: 'vars.a * vars.b'
+						template: 'What is {{a}} times {{b}}?',
+						solution: 'a * b'
 					}
 				}
 			]

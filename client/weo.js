@@ -49,7 +49,7 @@ Template.deck.events = {
 
 function play(id) {
   var deck = Decks.findOne(id);
-  game = new Game(deck,3);
+  game = new Game(deck,1);
   Session.set('view','play');
   Session.set('card',game.nextCard());
 }
@@ -73,7 +73,26 @@ make_okcancel_handler({
         Session.set('card',next_card);
         evt.target.value = "";
       }
-      else Session.set('view','decks');
+      else {
+        Session.set('view','result');
+      }
     }
   });
 
+Template.card.events['insert .card-problem'] = function(e) {
+  MathJax.Hub.Queue(["Typeset",MathJax.Hub,e.target]);
+}
+
+Template.result.numRight = function() {
+  return game.results.find({result: true}).count();
+}
+
+Template.result.numWrong = function() {
+  return game.results.find({result: false}).count();
+}
+
+Template.result.events = {
+  'click #decks-link': function() {
+    Session.set('view','decks')
+  }
+}

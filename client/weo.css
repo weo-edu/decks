@@ -43,3 +43,15 @@ body {
 	font-size: 24px;
 	margin-bottom: 50px;
 }
+
+.result {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-box-align: center;
+}
+
+#decks-link {
+	margin-top: 20px;
+	cursor: pointer;
+}
+
