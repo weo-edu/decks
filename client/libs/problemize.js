@@ -7,6 +7,8 @@ var card = {
 	]
 };
 
+console.log('test5')
+
 Problemize.Problem = function(card){
 	this.card = card;
 	this.vars = this.findVars();

@@ -1,13 +1,14 @@
 var game;
 
 Session.set('result',null);
-Session.set('view','decks');
+Session.set('view','deck_browse');
 
 // Returns an event_map key for attaching "ok/cancel" events to
 // a text input (given by selector)
 var okcancel_events = function (selector) {
   return 'keyup '+selector+', keydown '+selector+', focusout '+selector;
 };
+
 
 // Creates an event handler for interpreting "escape", "return", and "blur"
 // on a text field and calling "ok" or "cancel" callbacks.
@@ -32,39 +33,71 @@ var make_okcancel_handler = function (options) {
   };
 };
 
-Template.main.view_is = function(view) {
-  return Session.equals('view',view);
-}
-
-Template.browse.decks = function() {
+Template.deck_browse.decks = function() {
   return Decks.find({});
 }
 
-Template.deck.events = {
+
+Template.deck_browse.events = {
   'click .deck': function() {
-    play(this._id);
+    page('/deck/' + this.name + '/play/');
   }
 }
 
+Template.deck_play.events = {
+  'click #check': function(){
+    page('/deck/' + Session.get('deck') + '/play/');
+  }
+}
 
-function play(id) {
-  var deck = Decks.findOne(id);
+function all(ctx,next) {
+  console.log('context', ctx);
+  var action = ctx.params.action || 'index';
+  Session.set('view', ctx.view + '_' + ctx.params.action);
+  next();
+}
+
+$(document).ready(renderView);
+
+page('/deck/:name/:action', function(ctx, next) {
+  ctx.view = 'deck';
+  Session.set('deck', ctx.params.name);
+  if(ctx.params.action == 'play')
+    play(ctx.params.name);
+  next();
+}, all);
+
+function renderView(){
+  $('body').html(Meteor.ui.render(function(){
+    return Template[Session.get('view')]();
+  }));
+}
+
+function play(name) {
+  var deck = Decks.findOne({name: name});
   game = new Game(deck,3);
-  Session.set('view','play');
   Session.set('card',game.nextCard());
 }
 
-Template.card.card = function () {
+Template.deck_play.card = function () {
   return Session.get('card');
 };
 
-Template.card.result = function() {
+Template.deck_play.result = function() {
   return Session.get('result');
 }
 
-Template.card.events = {};
+Template.deck_results.correct = function() {
+  return game.results.find({result: true}).count();
+}
 
-Template.card.events[okcancel_events('#solution')] = 
+Template.deck_results.total = function(){
+  return game.results.find({}).count();
+}
+
+Template.deck_play.events = {};
+
+Template.deck_play.events[okcancel_events('#solution')] = 
 make_okcancel_handler({
     ok: function (value,evt) {
       game.recordResult(game.isSolution(parseInt(value)));
@@ -73,7 +106,7 @@ make_okcancel_handler({
         Session.set('card',next_card);
         evt.target.value = "";
       }
-      else Session.set('view','decks');
+      else Session.set('view','deck_results');
     }
   });
 

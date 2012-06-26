@@ -1,0 +1,33 @@
+<template name="browse">
+	<h2>Decks To Play</h2>
+	{{#each decks}}
+		{{> deck_view}}
+	{{/each}}
+</template>
+
+<template name="view">
+	<div class="deck">
+		<div class="deck-title">{{name}}</div>
+		<img src="/{{graphic}}" />
+	</div>
+</template>
+
+<template name="play">
+	<h2>Play</h2>
+	{{#with card}}
+	<div id='card'>
+		<h3>{{name}}</h3>
+		<img src='/{{graphic}}' />
+		<div id='question'>
+			{{question}}
+		</div>
+		<label for='answer'>Answer</label>
+		<input type='text' name='solution' id='solution' />
+	</div>
+	{{/with}}
+</template>
+
+<template name="results">
+	<h2>Results</h2>
+	You got {{correct}} out of {{total}} right!
+</template>

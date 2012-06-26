@@ -3,30 +3,21 @@
 </head>
 
 <body>
-	{{> main}}
+
 </body>
 
+
 <template name="main">
+{{render_content}}
+</template> 
+
+<template name="main-old">
 	{{#if view_is "decks"}}
   	{{> browse}}
   {{/if}}
   {{#if view_is "play"}}
   	{{> card}}
   {{/if}}
-</template>
-
-<template name="browse">
-	<h2>Decks To Play</h2>
-	{{#each decks}}
-		{{> deck}}
-	{{/each}}
-</template>
-
-<template name="deck">
-	<div class="deck">
-		<div class="deck-title">{{name}}</div>
-		<img src="{{graphic}}"/>
-	</div>
 </template>
 
 <template name="card">
@@ -44,5 +35,3 @@
 	 {{/if}}
  </div>
 </template>
-
-
