@@ -1,5 +1,5 @@
 /* CSS declarations go here */
-/*body {
+body {
 	font-family: arial;
 }
 
@@ -38,8 +38,19 @@
 	width: 100px;
 }
 
-.card-problem {
+.card .question {
 	margin-top: 50px;
 	font-size: 24px;
 	margin-bottom: 50px;
-}*/
+}
+
+.result {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-box-align: center;
+}
+
+#decks-link {
+	margin-top: 20px;
+	cursor: pointer;
+}

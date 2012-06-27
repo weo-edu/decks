@@ -1,31 +1,26 @@
 
 
 function Problem(problem) {
-	this.template = problem.template
-	this.vars = {};
-	this.vars_idx = 0;
+	this.problemize = new Problemize(problem);
+	this.template = problem.template;
 	this.sol = problem.solution;
+	this.assignment = null;
 }
 
 Problem.prototype.generate = function() {
-	var self = this;
-
-	HB.registerHelper('range',function(start, end, ctx) {
-		start = parseInt(start);
-		end = parseInt(end);
-		var v = Math.floor((Math.random()*end)+start);
-		self.vars[String.fromCharCode(self.vars_idx+97)] = v;
-		self.vars_idx++;
-		return ''+v;
-	});
-
-	var template = HB.compile(this.template);
-	this.question = template({});
-	return this.question;
+	this.assignment = this.problemize.generate();
+	console.log(this.template);
+	console.log(this.assignment);
+	return HB.compile(this.template)(this.assignment);
 }
 
 Problem.prototype.isSolution = function(sol) {
-	var vars = this.vars;
-	return eval(this.sol) == sol;
+	var vars = this.assignment;
+	var eval_string = '';
+	_.each(vars,function(val,name) {
+		eval_string += 'var ' + name + ' = ' + val + ';';
+	});
+	eval_string += this.sol;
+	return eval(eval_string) == sol;
 }
 

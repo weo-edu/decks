@@ -1,86 +1,14 @@
 <head>
   <title>weo</title>
+  <!--<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>-->
 </head>
 
 <body>
-	{{> nav}}
-	{{> main}}
-	<section class="container">
-<!--   <div id="box">
-    <figure class="front"></figure>
-    <figure class="back"></figure>
-    <figure class="right"></figure>
-    <figure class="left"></figure>
-    <figure class="top"></figure>
-    <figure class="bottom"></figure>
-  </div>
-  <div id="box" class='box2'>
-    <figure class="front"></figure>
-    <figure class="back"></figure>
-    <figure class="right"></figure>
-    <figure class="left"></figure>
-    <figure class="top"></figure>
-    <figure class="bottom"></figure>
-  </div> -->
-</section>
-</body>
-
-
-<template name="main">
-	
-{{#if view_is "decks"}}
-  	{{> browse}}
-  {{/if}}
-  {{#if view_is "play"}}
-  	{{> card}}
-  {{/if}}
-</template>
-
-<template name="nav">
-	<div id='logo'>Weo</div>
-	<header>
-		<div id='main-nav'>
-			<div class='left'>
-				<a>FRIENDS</a>
-				<a>STATS</a>
-				<a>DECKS</a>
-			</div>
-			<div class='right'>
-				<a>LOGIN IN</a>
-				<a>SIGN UP</a>
-			</div>
-		</div>
-	</header>
-</template>
-
-<template name="browse">
-	<h2>Decks To Play</h2>
-	{{#each decks}}
-		{{> deck}}
-	{{/each}}
-</template>
-
-<template name="deck">
-	<div class="deck">
-		<div class="deck-title">{{name}}</div>
-		<img src="{{graphic}}"/>
+	Test
+	<div id='content'>
+		te st
 	</div>
-</template>
-
-<template name="card">
-	<div class="card">
-		{{#with card}}
-			<div class="card-title">{{name}}</div>
-			<img src="{{graphic}}"/>
-			<div class="card-problem">
-		  	{{question}}
-			</div>
-		  <input id="solution" type="text"/>
-	 {{/with}}
-	 {{#if result}}
-	 <div class="card-instance-result">{{result}}</div>
-	 {{/if}}
- </div>
-</template>
-
+</body>
 
