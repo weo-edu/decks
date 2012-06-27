@@ -68,7 +68,291 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   display: block;
 }
 
-/* line 11, ../sass/screen.scss */
+@font-face {
+  font-family: 'HighlandsRegular';
+  src: url("/fonts/highlands-regular-webfont.eot");
+  src: url("/fonts/highlands-regular-webfont.eot?#iefix") format("embedded-opentype"), url("/fonts/highlands-regular-webfont.woff") format("woff"), url("/fonts/highlands-regular-webfont.ttf") format("truetype"), url("/fonts/highlands-regular-webfont.svg#HighlandsRegular") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* line 35, ../sass/screen.scss */
+html {
+  height: 100%;
+}
+
+/* line 40, ../sass/screen.scss */
 body {
   font-family: Arial;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #dddddd));
+  background: -webkit-linear-gradient(#ffffff, #dddddd);
+  background: -moz-linear-gradient(#ffffff, #dddddd);
+  background: -o-linear-gradient(#ffffff, #dddddd);
+  background: -ms-linear-gradient(#ffffff, #dddddd);
+  background: linear-gradient(#ffffff, #dddddd);
+  height: 100%;
+}
+
+/* line 47, ../sass/screen.scss */
+h1, h2, h3, h4, h5 {
+  font-family: HighlandsRegular;
+  text-transform: uppercase;
+}
+
+/* line 53, ../sass/screen.scss */
+h1 {
+  font-size: 60px;
+  line-height: 80px;
+  color: #FFF;
+  text-shadow: 2px 2px 0px #333333;
+}
+
+/* line 61, ../sass/screen.scss */
+#content {
+  width: 980px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* line 69, ../sass/screen.scss */
+#header {
+  background: #52C7DB;
+  height: 75px;
+  position: relative;
+  margin-bottom: 60px;
+}
+/* line 75, ../sass/screen.scss */
+#header .arrowed {
+  position: absolute;
+  top: 100%;
+  height: 12px;
+  width: 100%;
+  background: url("/arrow-bottom.png");
+}
+
+/* line 85, ../sass/screen.scss */
+nav {
+  width: 980px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* line 92, ../sass/screen.scss */
+#deck-flow {
+  height: 420px;
+  -webkit-perspective: 700px;
+  perspective: 700px;
+}
+/* line 99, ../sass/screen.scss */
+#deck-flow .deck:nth-child(1) {
+  background: tomato;
+  -webkit-box-shadow: 0 0 20px #333333;
+  -moz-box-shadow: 0 0 20px #333333;
+  box-shadow: 0 0 20px #333333;
+  z-index: 8;
+  z-index: 1;
+  -webkit-transform: translateX(-320px) translateZ(-100px) rotateY(35deg);
+  -moz-transform: translateX(-320px) translateZ(-100px) rotateY(35deg);
+  -ms-transform: translateX(-320px) translateZ(-100px) rotateY(35deg);
+  -o-transform: translateX(-320px) translateZ(-100px) rotateY(35deg);
+  transform: translateX(-320px) translateZ(-100px) rotateY(35deg);
+}
+/* line 102, ../sass/screen.scss */
+#deck-flow .deck:nth-child(1) .deck-title, #deck-flow .deck:nth-child(1) img {
+  display: none;
+}
+/* line 106, ../sass/screen.scss */
+#deck-flow .deck:nth-child(1):after {
+  content: "1";
+  font-family: 'Fresca';
+  font-size: 300px;
+  line-height: 340px;
+  padding-left: 90px;
+  color: #ff816b;
+  text-shadow: -1px -2px 0 #ff4d2d;
+}
+/* line 99, ../sass/screen.scss */
+#deck-flow .deck:nth-child(2) {
+  background: tomato;
+  -webkit-box-shadow: 0 0 20px #333333;
+  -moz-box-shadow: 0 0 20px #333333;
+  box-shadow: 0 0 20px #333333;
+  z-index: 8;
+  z-index: 2;
+  -webkit-transform: translateX(-240px) translateZ(-100px) rotateY(40deg);
+  -moz-transform: translateX(-240px) translateZ(-100px) rotateY(40deg);
+  -ms-transform: translateX(-240px) translateZ(-100px) rotateY(40deg);
+  -o-transform: translateX(-240px) translateZ(-100px) rotateY(40deg);
+  transform: translateX(-240px) translateZ(-100px) rotateY(40deg);
+}
+/* line 102, ../sass/screen.scss */
+#deck-flow .deck:nth-child(2) .deck-title, #deck-flow .deck:nth-child(2) img {
+  display: none;
+}
+/* line 106, ../sass/screen.scss */
+#deck-flow .deck:nth-child(2):after {
+  content: "2";
+  font-family: 'Fresca';
+  font-size: 300px;
+  line-height: 340px;
+  padding-left: 90px;
+  color: #ff816b;
+  text-shadow: -1px -2px 0 #ff4d2d;
+}
+/* line 99, ../sass/screen.scss */
+#deck-flow .deck:nth-child(3) {
+  background: tomato;
+  -webkit-box-shadow: 0 0 20px #333333;
+  -moz-box-shadow: 0 0 20px #333333;
+  box-shadow: 0 0 20px #333333;
+  z-index: 8;
+  z-index: 3;
+  -webkit-transform: translateX(-160px) translateZ(-100px) rotateY(45deg);
+  -moz-transform: translateX(-160px) translateZ(-100px) rotateY(45deg);
+  -ms-transform: translateX(-160px) translateZ(-100px) rotateY(45deg);
+  -o-transform: translateX(-160px) translateZ(-100px) rotateY(45deg);
+  transform: translateX(-160px) translateZ(-100px) rotateY(45deg);
+}
+/* line 102, ../sass/screen.scss */
+#deck-flow .deck:nth-child(3) .deck-title, #deck-flow .deck:nth-child(3) img {
+  display: none;
+}
+/* line 106, ../sass/screen.scss */
+#deck-flow .deck:nth-child(3):after {
+  content: "3";
+  font-family: 'Fresca';
+  font-size: 300px;
+  line-height: 340px;
+  padding-left: 90px;
+  color: #ff816b;
+  text-shadow: -1px -2px 0 #ff4d2d;
+}
+/* line 99, ../sass/screen.scss */
+#deck-flow .deck:nth-child(4) {
+  background: tomato;
+  -webkit-box-shadow: 0 0 20px #333333;
+  -moz-box-shadow: 0 0 20px #333333;
+  box-shadow: 0 0 20px #333333;
+  z-index: 8;
+}
+/* line 102, ../sass/screen.scss */
+#deck-flow .deck:nth-child(4) .deck-title, #deck-flow .deck:nth-child(4) img {
+  display: none;
+}
+/* line 106, ../sass/screen.scss */
+#deck-flow .deck:nth-child(4):after {
+  content: "4";
+  font-family: 'Fresca';
+  font-size: 300px;
+  line-height: 340px;
+  padding-left: 90px;
+  color: #ff816b;
+  text-shadow: -1px -2px 0 #ff4d2d;
+}
+/* line 99, ../sass/screen.scss */
+#deck-flow .deck:nth-child(5) {
+  background: tomato;
+  -webkit-box-shadow: 0 0 20px #333333;
+  -moz-box-shadow: 0 0 20px #333333;
+  box-shadow: 0 0 20px #333333;
+  z-index: 8;
+  z-index: -5;
+  -webkit-transform: translateX(160px) translateZ(-100px) rotateY(-45deg);
+  -moz-transform: translateX(160px) translateZ(-100px) rotateY(-45deg);
+  -ms-transform: translateX(160px) translateZ(-100px) rotateY(-45deg);
+  -o-transform: translateX(160px) translateZ(-100px) rotateY(-45deg);
+  transform: translateX(160px) translateZ(-100px) rotateY(-45deg);
+}
+/* line 102, ../sass/screen.scss */
+#deck-flow .deck:nth-child(5) .deck-title, #deck-flow .deck:nth-child(5) img {
+  display: none;
+}
+/* line 106, ../sass/screen.scss */
+#deck-flow .deck:nth-child(5):after {
+  content: "5";
+  font-family: 'Fresca';
+  font-size: 300px;
+  line-height: 340px;
+  padding-left: 90px;
+  color: #ff816b;
+  text-shadow: -1px -2px 0 #ff4d2d;
+}
+/* line 99, ../sass/screen.scss */
+#deck-flow .deck:nth-child(6) {
+  background: tomato;
+  -webkit-box-shadow: 0 0 20px #333333;
+  -moz-box-shadow: 0 0 20px #333333;
+  box-shadow: 0 0 20px #333333;
+  z-index: 8;
+  z-index: -6;
+  -webkit-transform: translateX(240px) translateZ(-100px) rotateY(-40deg);
+  -moz-transform: translateX(240px) translateZ(-100px) rotateY(-40deg);
+  -ms-transform: translateX(240px) translateZ(-100px) rotateY(-40deg);
+  -o-transform: translateX(240px) translateZ(-100px) rotateY(-40deg);
+  transform: translateX(240px) translateZ(-100px) rotateY(-40deg);
+}
+/* line 102, ../sass/screen.scss */
+#deck-flow .deck:nth-child(6) .deck-title, #deck-flow .deck:nth-child(6) img {
+  display: none;
+}
+/* line 106, ../sass/screen.scss */
+#deck-flow .deck:nth-child(6):after {
+  content: "6";
+  font-family: 'Fresca';
+  font-size: 300px;
+  line-height: 340px;
+  padding-left: 90px;
+  color: #ff816b;
+  text-shadow: -1px -2px 0 #ff4d2d;
+}
+/* line 99, ../sass/screen.scss */
+#deck-flow .deck:nth-child(7) {
+  background: tomato;
+  -webkit-box-shadow: 0 0 20px #333333;
+  -moz-box-shadow: 0 0 20px #333333;
+  box-shadow: 0 0 20px #333333;
+  z-index: 8;
+  z-index: -7;
+  -webkit-transform: translateX(320px) translateZ(-100px) rotateY(-35deg);
+  -moz-transform: translateX(320px) translateZ(-100px) rotateY(-35deg);
+  -ms-transform: translateX(320px) translateZ(-100px) rotateY(-35deg);
+  -o-transform: translateX(320px) translateZ(-100px) rotateY(-35deg);
+  transform: translateX(320px) translateZ(-100px) rotateY(-35deg);
+}
+/* line 102, ../sass/screen.scss */
+#deck-flow .deck:nth-child(7) .deck-title, #deck-flow .deck:nth-child(7) img {
+  display: none;
+}
+/* line 106, ../sass/screen.scss */
+#deck-flow .deck:nth-child(7):after {
+  content: "7";
+  font-family: 'Fresca';
+  font-size: 300px;
+  line-height: 340px;
+  padding-left: 90px;
+  color: #ff816b;
+  text-shadow: -1px -2px 0 #ff4d2d;
+}
+/* line 132, ../sass/screen.scss */
+#deck-flow h2 {
+  position: absolute;
+  text-align: center;
+  bottom: 0;
+  width: 100%;
+  font-size: 50px;
+  color: #666;
+}
+
+/* line 144, ../sass/screen.scss */
+.deck {
+  height: 340px;
+  width: 340px;
+  left: 50%;
+  margin-left: -170px;
+  position: absolute;
+}
+/* line 151, ../sass/screen.scss */
+.deck img {
+  width: 100%;
+  height: 100%;
 }

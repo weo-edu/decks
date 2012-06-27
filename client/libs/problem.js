@@ -9,8 +9,6 @@ function Problem(problem) {
 
 Problem.prototype.generate = function() {
 	this.assignment = this.problemize.generate();
-	console.log(this.template);
-	console.log(this.assignment);
 	return HB.compile(this.template)(this.assignment);
 }
 

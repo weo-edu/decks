@@ -6,9 +6,17 @@
 </head>
 
 <body>
-	Test
-	<div id='content'>
-		te st
+	<div id='header'>
+		<nav>
+			<h1>WEO</h1>
+		</nav>
+		<div class='arrowed'></div>
 	</div>
+	<div id='content'></div>
+	{{> weo_render}}
 </body>
 
+
+<template name="render">
+	{{render}}
+</template>

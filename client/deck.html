@@ -1,15 +1,18 @@
 <template name="browse">
-	<h2>Decks To Play</h2>
-	{{#each decks}}
-		{{> deck_view}}
-	{{/each}}
+	<div id='deck-flow'>
+		{{#each decks}}
+			{{> deck_view}}
+		{{/each}}
+		<h2>Decks To Play</h2>
+	</div>
+	
 </template>
 
 <template name="view">
-	<div class="deck">
-		<div class="deck-title">{{name}}</div>
-		<img src="/{{graphic}}" />
-	</div>
+		<div class="deck">
+			<div class="deck-title">{{name}}</div>
+			<img src="/{{graphic}}" />
+		</div>
 </template>
 
 <template name="play">
