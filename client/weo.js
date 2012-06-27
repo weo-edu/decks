@@ -39,7 +39,7 @@ Template.deck_browse.decks = function() {
 
 Template.deck_browse.events = {
   'click .deck': function() {
-    page('/deck/' + this.name + '/play/');
+    page('/deck/play/' + this.name);
   }
 }
 
@@ -48,30 +48,41 @@ function ready(ctx,next) {
 }
 
 function all(ctx,next) {
-  console.log('context', ctx);
   var action = ctx.params.action || 'index';
   Session.set('view', ctx.view + '_' + ctx.params.action);
 }
 
-page('/deck/:name/:action', ready,function(ctx, next) {
-  console.log('deck/name/action',ctx);
+page('/deck/:action/:name', ready,function(ctx, next) {
   ctx.view = 'deck';
   Session.set('deck', ctx.params.name);
   if(ctx.params.action == 'play')
     play(ctx.params.name);
-  next();
+  //next();
 }, all);
 
 page('/',ready,function(ctx) {
   Session.set('view','deck_browse');
 });
 
+page('/deck/*', function(ctx, next){
+  console.log('test2');
+});
+
+page('*', function(ctx, next){
+  console.log('test');
+  next();
+});
+
+
+
 page.start();
 
-$(document).ready(renderView);
+Template.weo_render.render = function(){
+  setTimeout(renderView, 0);
+}
 
 function renderView(){
-  $('body').html(Meteor.ui.render(function(){
+  $('#content').html(Meteor.ui.render(function(){
     return Template[Session.get('view')]();
   }));
 }
@@ -85,7 +96,6 @@ function play(name) {
     },
     function() {
       game = new Game(Decks.findOne({name: name}),3);
-      console.log('set card');
       Session.set('card',game.nextCard());
     }
   );
