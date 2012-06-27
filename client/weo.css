@@ -38,7 +38,7 @@ body {
 	width: 100px;
 }
 
-.card-problem {
+.card .question {
 	margin-top: 50px;
 	font-size: 24px;
 	margin-bottom: 50px;

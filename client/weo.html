@@ -6,58 +6,6 @@
 </head>
 
 <body>
-	{{> main}}
 </body>
-
-<template name="main">
-	{{#if view_is "decks"}}
-  	{{> browse}}
-  {{/if}}
-  {{#if view_is "play"}}
-  	{{> card}}
-  {{/if}}
-
-  {{#if view_is "result"}}
-  	{{> result}}
-  {{/if}}
-</template>
-
-<template name="browse">
-	<h2>Decks To Play</h2>
-	{{#each decks}}
-		{{> deck}}
-	{{/each}}
-</template>
-
-<template name="deck">
-	<div class="deck">
-		<div class="deck-title">{{name}}</div>
-		<img src="{{graphic}}"/>
-	</div>
-</template>
-
-<template name="card">
-	<div class="card">
-		{{#with card}}
-			<div class="card-title">{{name}}</div>
-			<img src="{{graphic}}"/>
-			<div class="card-problem">
-		  	{{question}}
-			</div>
-		  <input id="solution" type="text"/>
-	 {{/with}}
-	 {{#if result}}
-	 <div class="card-instance-result">{{result}}</div>
-	 {{/if}}
- </div>
-</template>
-
-<template name="result">
-	<div class="result">
-		You got {{numRight}} right and {{numWrong}} wrong!
-		<div id="decks-link">decks</div>
-	</div>
-
-</template>
 
 

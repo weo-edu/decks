@@ -9,7 +9,7 @@ Meteor.startup(function() {
 					name: 'addition',
 					graphic: 'addition.gif',
 					problem: {
-						template: '$$ {{a}} + {{b}} $$',
+						template: '\\[{{a}} + {{b}}\\]',
 						solution: 'a + b',
 						rules: [
 							'a is integer',
@@ -23,7 +23,7 @@ Meteor.startup(function() {
 					name: 'subtraction',
 					graphic: 'subtraction.jpeg',
 					problem: {
-						template: '{{a}} - {{b}}',
+						template: '\\[{{a}} - {{b}} \\]',
 						solution: 'a - b',
 						rules: [
 							'a is integer',
@@ -37,7 +37,7 @@ Meteor.startup(function() {
 					name: 'multiplication',
 					graphic: 'multiplication.jpg',
 					problem: {
-						template: '{{a}} * {{b}}',
+						template: '\\[{{a}} \\times {{b}} \\]',
 						solution: 'a * b',
 						rules: [
 							'a is integer',
