@@ -13,12 +13,15 @@ Problem.prototype.generate = function() {
 }
 
 Problem.prototype.isSolution = function(sol) {
+	return this.getSolution() == sol;
+}
+
+Problem.prototype.getSolution = function(sol) {
 	var vars = this.assignment;
 	var eval_string = '';
 	_.each(vars,function(val,name) {
 		eval_string += 'var ' + name + ' = ' + val + ';';
 	});
 	eval_string += this.sol;
-	return eval(eval_string) == sol;
+	return eval(eval_string);
 }
-
