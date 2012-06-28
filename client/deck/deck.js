@@ -11,9 +11,6 @@ route('/deck/browse',function() {
 	  }
 	}
 
-	// $('#deck-flow .deck').each(function(i){
-	// 	$(this).addClass('deck-' + i);
-	// });
 });
 
 
