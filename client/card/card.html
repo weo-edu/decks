@@ -1,0 +1,49 @@
+<template name="card_create">
+	<div class="create">
+		<form method="get">
+			<h1>Card Creator</h1>
+			<ul>
+				<li>
+					Name: <input id="card_name" class="instant_update" type="text" name="important" />
+				</li>
+				<li>
+					Graphic:
+					<input type="file" id="files" class="instant_update" name="files[]" multiple />
+					<output id="list"></output>
+				</li>
+			</ul>
+			<h2>Problem</h2>
+			<ul>
+				<li>
+					Template: <input id="template" type="text" class="instant_update" name="template"/>
+				</li>
+				<li>
+					Solution: <input class="instant_update" id="solution" type="text" name="solution"/>
+				</li>
+				<li><div>
+					Rules: <input id="rules" class="instant_update" type="text" name="rules"/> 
+					<ul id="rules_list">
+					</ul>
+				</div>
+				</li>
+			</ul>
+		</form>
+	</div>
+	<div>
+		{{>card_play}}
+	</div>
+</template>
+
+<template name="card_play">
+	{{#with card}}
+	<div class='card'>
+		<h3>{{name}}</h3>
+		<img src='/{{graphic}}' />
+		<div class='question'>
+			{{question}}
+		</div>
+		<label>solution:</label>
+		<div for='answer'>{{answer}}</div>
+	</div>
+	{{/with}}
+</template>
