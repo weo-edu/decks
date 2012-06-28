@@ -1,39 +1,23 @@
+route('/deck/browse',function() {
+	Session.set('view','deck_browse');
+
+	Template.deck_browse.decks = function() {
+	  return Decks.find({});
+	}
+
+	Template.deck_browse.events = {
+	  'click .deck': function() {
+	    page('/deck/play/' + this.name);
+	  }
+	}
+});
 
 
-/*route('/deck/:action/:name', function(ctx, next) {
-  ctx.view = 'deck';
-  console.log('play route');
-  Session.set('deck', ctx.params.name);
-  next();
-});*/
-
-
-Template.deck_browse.decks = function() {
-  return Decks.find({});
-}
-
-
-Template.deck_browse.events = {
-  'click .deck': function() {
-    page('/deck/play/' + this.name);
-  }
-}
-
-
-
-
-Template.deck_results.events = {
-  'click #decks-link': function() {
-    page('/');
-  }
-};
-
-route('/deck/play/:name', function(ctx, next){
+route('/deck/play/:name', function(ctx){
 	Session.set('view','deck_play');
 	var play_session = new _Session();
-	var game;
 	var name = ctx.params.name;
-	var view = ctx.view;
+	var game;
 
   Meteor.deps.await(
     function() {
@@ -46,18 +30,9 @@ route('/deck/play/:name', function(ctx, next){
     }
   );
 
-  view('deck_play', 'card', function(){
-		return play_session.get('card');
-	});
-
-  view('deck_results', 'correct', function(){
-	  return game.results.find({result: true}).count();
-	});
-
-  view('deck_results', 'total', function(){ 
-	  return game.results.find({}).count();
-	});
-
+  Template.deck_play.card = function(){
+  	return play_session.get('card')
+	}
 
 	var events = {};
 	events[util.okcancel_events('#solution')] = util.make_okcancel_handler({
@@ -76,5 +51,20 @@ route('/deck/play/:name', function(ctx, next){
 		MathJax.Hub.Queue(["Typeset",MathJax.Hub,e.target]);
 	};
 
-	view('deck_play', 'events', events);
+	Template.deck_play.events = events;
+
+  Template.deck_results.correct = function(){
+	  return game.results.find({result: true}).count();
+	}
+
+  Template.deck_results.total = function(){ 
+	  return game.results.find({}).count();
+	};
+
+	Template.deck_results.events = {
+	  'click #decks-link': function() {
+	    page('/');
+	  }
+	};
+	
 });
