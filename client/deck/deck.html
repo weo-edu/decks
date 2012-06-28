@@ -1,25 +1,22 @@
-<template name="browse">
-	<div id='deck-flow'>
-		{{#each decks}}
-			{{> deck_view}}
-		{{/each}}
-		<h2>Decks To Play</h2>
+<template name="deck_browse">
+	<h2>Decks To Play</h2>
+	{{#each decks}}
+		{{> deck_view}}
+	{{/each}}
+</template>
+
+<template name="deck_view">
+	<div class="deck">
+		<div class="deck-title">{{name}}</div>
+		<img src="/{{graphic}}" />
 	</div>
-	
 </template>
 
-<template name="view">
-		<div class="deck">
-			<div class="deck-title">{{name}}</div>
-			<img src="/{{graphic}}" />
-		</div>
-</template>
-
-<template name="play">
+<template name="deck_play">
 	<h2>Play</h2>
 	{{#with card}}
 	<div class='card'>
-		<h3>{{name}}</h3>
+		<h3>{{test}}</h3>
 		<img src='/{{graphic}}' />
 		<div class='question'>
 			{{question}}
@@ -30,7 +27,7 @@
 	{{/with}}
 </template>
 
-<template name="results">
+<template name="deck_results">
 	<h2>Results</h2>
 	You got {{correct}} out of {{total}} right!
 	<div id="decks-link">decks</div>

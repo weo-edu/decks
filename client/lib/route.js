@@ -1,8 +1,6 @@
 ;(function(){
 	var all;
 	var ready;
-	var view;
-
 	function route(path, fn){
 		var args = _.toArray(arguments);
 		if(typeof fn === 'function'){
@@ -25,19 +23,15 @@
 	route.start = page.start;
 	route.show  = page.show;
 
-
-	route.all(function(ctx,next) {
-	  var action = ctx.params.action || 'index';
-	  Session.set('view', ctx.view + '_' + ctx.params.action);
-	});
-
 	route.ready(function(ctx,next) {
-		if(view) view.destroy();
-		view = View();
-
-		ctx.view = view;
 	  $(document).ready(next);
 	});
+
+	route.redirect = function(path) {
+		setTimeout(function() {
+			page(path)
+		},0);
+	}
 
 
 	window.route = route;

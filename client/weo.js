@@ -1,11 +1,9 @@
 route('/', function(ctx, next) {
-  console.log('test');
-  Session.set('view','deck_browse');
+  route.redirect('/deck/browse');
 });
 
-
+console.log(Template)
 Template.weo_render.render = function(){
-  console.log('route start');
   route.start();
   setTimeout(renderView, 0);
 }
