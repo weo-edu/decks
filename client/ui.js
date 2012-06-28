@@ -1,13 +1,11 @@
-// $(function(){
-// 	$('#logo').live('click', function(){
-// 		$(this).toggleClass('hidden');
+// route('/', function(ctx){
+// 	$('#deck-flow .deck').each(function(i){
+// 		$(this).addClass('deck-' + i);
 // 	});
 // });
 
-// Template.nav.events = {
-//   'click #logo': function(e) {
-//   	var el = $(e.target);
-// 	el.toggleClass('hidden');
-// 	$('header').toggleClass('hidden');
+// Template.deck_browse.events = {
+//   'mouseover .deck': function(e) {
+//   console.log('test');
 //   }
 // }

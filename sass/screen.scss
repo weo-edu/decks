@@ -95,23 +95,14 @@ nav
 	@include perspective(700px);
 	$numDecks: 7;
 	@for $i from 1 through $numDecks{
-		.deck:nth-child(#{$i})
+		.deck-#{$i}
 		{
 			background: tomato;
 			.deck-title, img
 			{
 				display: none;
 			}
-			&:after
-			{
-				content: "#{$i}";
-				font-family: 'Fresca';
-				font-size: 300px;
-				line-height: 340px;
-				padding-left: 90px;
-				color: lighten(#FF6347, 7%);
-				text-shadow: -1px -2px 0 darken(#FF6347, 5%);
-			}
+			
 			@include box-shadow(0 0 20px #333);
 			z-index: $numDecks + 1;
 			@if $i < $numDecks/2
@@ -125,6 +116,17 @@ nav
 				z-index: -$i;
 				@include transform(translateX((($numDecks - $i) * -1) * 80px + 320) translateZ(-100px) rotateY(-70deg + $i * 5));
 			}
+
+			&:after
+			{
+				content: "#{$i}";
+				font-family: 'Fresca';
+				font-size: 300px;
+				line-height: 340px;
+				padding-left: 90px;
+				color: lighten(#FF6347, 7%);
+				text-shadow: -1px -2px 0 darken(#FF6347, 5%);
+			}
 		}
 	}
 
@@ -134,7 +136,7 @@ nav
 		text-align: center;
 		bottom: 0;
 		width: 100%;
-		font-size: 50px;
+		font-size: 40px;
 		color: #666;
 	}
 }
@@ -147,6 +149,7 @@ nav
 	left: 50%;
 	margin-left: -170px;
 	position: absolute;
+	cursor: pointer;
 	img
 	{
 		width: 100%;
