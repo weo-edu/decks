@@ -4,15 +4,24 @@ var express = require('express');
 var fs = require('fs');
 var path = require('path');
 
+
 app.post('/upload', function(req,res) {
-	console.log('upload',req.files);
-	var file = req.files.graphic.path;
+	var file = req.files.file.path;
 	var fileSlice = file.slice('/tmp/'.length);
-	var ext = req.files.graphic.name;
+	var ext = req.files.file.name;
 	ext = path.extname('./'+ext);
-	fs.rename(file, process.cwd()+'/public/'+fileSlice+ext);
-	res.send(fileSlice);
+	fs.rename(file, process.cwd()+'/.meteor/upload/'+fileSlice+ext);
+	console.log('send');
+
+	res.send({path: fileSlice+ext});
+	console.log('finish send');
 });
+
+var s = express.static(process.cwd()+"/.meteor/")
+app.get('/upload/*',function(req,res,next) {
+	return s(req,res,next);
+});
+
 
 Meteor.startup(function() {
 	Decks.remove({});
