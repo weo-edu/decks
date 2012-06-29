@@ -1,3 +1,11 @@
+var app = __meteor_bootstrap__.app;
+var require = __meteor_bootstrap__.require;
+var express = require('express');
+
+app.post('/upload', function(req,res) {
+	console.log('upload',req.files);
+});
+
 Meteor.startup(function() {
 	Decks.remove({});
 	var decks = [
