@@ -32,6 +32,7 @@ util.make_okcancel_handler = function (options) {
 };
 
 Handlebars.registerHelper('iter', function(ctx, options){
+  if (!ctx) return;
   if(ctx.fetch){
     ctx = ctx.fetch();
   }

@@ -24,7 +24,8 @@
 	route.show  = page.show;
 
 	route.ready(function(ctx,next) {
-	  $(document).ready(next);
+		console.log('ready')
+	 $(document).ready(next);
 	});
 
 	route.redirect = function(path) {

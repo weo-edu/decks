@@ -1,9 +1,17 @@
 var app = __meteor_bootstrap__.app;
 var require = __meteor_bootstrap__.require;
 var express = require('express');
+var fs = require('fs');
+var path = require('path');
 
 app.post('/upload', function(req,res) {
 	console.log('upload',req.files);
+	var file = req.files.graphic.path;
+	var fileSlice = file.slice('/tmp/'.length);
+	var ext = req.files.graphic.name;
+	ext = path.extname('./'+ext);
+	fs.rename(file, process.cwd()+'/public/'+fileSlice+ext);
+	res.send(fileSlice);
 });
 
 Meteor.startup(function() {
