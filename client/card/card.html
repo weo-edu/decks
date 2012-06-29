@@ -1,6 +1,7 @@
 <template name="card_create">
+
 	<div class="create">
-		<form method="get">
+		<form method="post" action="/upload" enctype="multipart/form-data">
 			<h1>Card Creator</h1>
 			<ul>
 				<li>
@@ -8,7 +9,7 @@
 				</li>
 				<li>
 					Graphic:
-					<input type="file" id="files" class="instant_update" name="files[]" multiple />
+					<input type="file" id="files" class="instant_update" name="graphic" multiple />
 					<output id="list"></output>
 				</li>
 			</ul>
@@ -27,6 +28,7 @@
 				</div>
 				</li>
 			</ul>
+		<input type="submit" value="submit"/>
 		</form>
 	</div>
 	<div>
