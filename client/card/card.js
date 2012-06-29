@@ -1,5 +1,5 @@
 route('/card/create',function(ctx) {
-	Session.set('view','card_create');
+
 	var session = new _Session();
 	var card;
 	var last_success;
@@ -97,8 +97,32 @@ route('/card/create',function(ctx) {
 			})
 			card = getCard();
 			session.set('card', card);
+		},
+		'insert #content' : function(evt){
+			var el = $('#files');
+			console.log('insert');
+			// $.ajax({
+			// 	type: 'POST',
+			// 	url: '/upload'
+			// });
+			el.fileupload({
+				url: '/upload',
+				multipart: true,
+				sequentialUploads: true,
+		        dataType: 'json',
+		        done: function (e, data) {
+		        	console.log('test this shit');
+		            $.each(data.result, function (index, file) {
+		                $('<p/>').text(file.name).appendTo(document.body);
+		            });
+		        }
+			});
 		}
 	};
+
+	console.log('test');
+	$(document).live('insert',function(){console.log('doc insert')});
+	$('#content').live('insert', function(){console.log('click')})
 
 	Template.card_create.events = events;
 
@@ -236,4 +260,5 @@ route('/card/create',function(ctx) {
 	Template.card_play.card = function(){
 		return session.get('card');
 	}
+	//renderView('card_create');
 });

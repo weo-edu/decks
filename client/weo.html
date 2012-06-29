@@ -1,4 +1,6 @@
 <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
   <title>weo</title>
   <script type="text/javascript"
   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
@@ -6,11 +8,12 @@
 </head>
 
 <body>
+	<div id='header'>
+		<nav>
+			<h1>WEO</h1>
+		</nav>
+		<div class='arrowed'></div>
+	</div>
 	<div id='content'></div>
-	{{> weo_render}}
 </body>
 
-
-<template name="weo_render">
-	{{render}}
-</template>

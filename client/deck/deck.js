@@ -1,20 +1,54 @@
 route('/deck/browse',function() {
-	Session.set('view','deck_browse');
+
+	var currentCover = 3;
+	var transformPrefix = domToCss(Modernizr.prefixed('transform'));
+
 
 	Template.deck_browse.decks = function() {
+		console.log('decks');
 	  return Decks.find({});
-	}
+	};
 
 	Template.deck_browse.events = {
-	  'click .deck': function() {
-	    page('/deck/play/' + this.name);
+	  'click .deck': function(e) {
+	  	// var el = $(e.target);
+	  	// var that = null;
+	  	// el.toggleClass('view-more');
+	  	route('/deck/play/' + this.name);
+	  },
+	  'mouseover .deck': function(e){
+	  	var el = $(e.target);
+	  	currentCover = el.index()
+	  	rearrangeCovers();
+	  },
+	  'insert .deck': function(){
+	  	var numDecks = $('.deck').length;
+	  	rearrangeCovers();
 	  }
+
+	  
 	}
+
+	function rearrangeCovers(){
+		// $('.deck').each(function(i){
+		// 	var element = $(this);
+		// 	var offset = Math.abs(currentCover - i);
+		// 	var x = i == currentCover ? 0 : (150 + (100 * offset)) * (i < currentCover ? -1 : 1);
+		// 	var z = i == currentCover ? 0 : -200;
+
+		// 	var rotationY = i == currentCover ? 0 : (80 + (offset * -5)) * (i < currentCover ? 1 : -1);
+
+		// 	element.css(transformPrefix, 'translateX(' + x +'px) translateZ(' + z + 'px) rotateY(' + rotationY + 'deg)');
+		// });
+  	}
+
+  	renderView('deck_browse');
 });
 
 
 route('/deck/play/:name', function(ctx){
-	Session.set('view','deck_play');
+	console.log('deck play')
+
 	var play_session = new _Session();
 	var name = ctx.params.name;
 	var game;
@@ -63,8 +97,9 @@ route('/deck/play/:name', function(ctx){
 
 	Template.deck_results.events = {
 	  'click #decks-link': function() {
-	    page('/');
+	    route('/');
 	  }
 	};
 	
+	renderView('deck_play');
 });
