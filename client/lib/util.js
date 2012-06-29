@@ -30,3 +30,23 @@ util.make_okcancel_handler = function (options) {
     }
   };
 };
+
+Handlebars.registerHelper('iter', function(ctx, options){
+  if(ctx.fetch){
+    ctx = ctx.fetch();
+  }
+  
+  var fn = options.fn, inverse = options.inverse;
+  var ret = '';
+  if(ctx && ctx.length > 0){
+    _.each(ctx, function(val, idx){
+      val.idx = idx + 1;
+      ret = ret + fn(val);
+    });
+  }
+  else{
+    ret = inverse(this);
+  }
+
+  return ret;
+});

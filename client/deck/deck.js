@@ -1,4 +1,8 @@
 route('/deck/browse',function() {
+
+	var currentCover = 3;
+	var transformPrefix = domToCss(Modernizr.prefixed('transform'));
+
 	Session.set('view','deck_browse');
 
 	Template.deck_browse.decks = function() {
@@ -6,11 +10,41 @@ route('/deck/browse',function() {
 	}
 
 	Template.deck_browse.events = {
-	  'click .deck': function() {
-	    page('/deck/play/' + this.name);
+	  'click .deck': function(e) {
+	  	var el = $(e.target);
+	  	var that = null;
+	  	el.toggleClass('view-more');
+	  },
+	  'click .deck h2': function(){
+	  		page('/deck/play/' + this.name);
+	  },
+	  'mouseover .deck': function(e){
+	  	var el = $(e.target);
+	  	currentCover = el.index()
+	  	rearrangeCovers();
+	  },
+	  'insert .deck': function(){
+		console.log('test');
+	  	var numDecks = $('.deck').length;
+	  	
+	  	rearrangeCovers();
 	  }
+
+	  
 	}
 
+	function rearrangeCovers(){
+		$('.deck').each(function(i){
+			var element = $(this);
+			var offset = Math.abs(currentCover - i);
+			var x = i == currentCover ? 0 : (150 + (100 * offset)) * (i < currentCover ? -1 : 1);
+			var z = i == currentCover ? 0 : -200;
+
+			var rotationY = i == currentCover ? 0 : (80 + (offset * -5)) * (i < currentCover ? 1 : -1);
+
+			element.css(transformPrefix, 'translateX(' + x +'px) translateZ(' + z + 'px) rotateY(' + rotationY + 'deg)');
+		});
+  	}
 });
 
 

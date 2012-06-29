@@ -74,10 +74,10 @@ h1
 	.arrowed
 	{
 		position: absolute;
-		top: 100%;
+		top: 74px;
 		height: 12px;
 		width: 100%;
-		background: url('/arrow-bottom.png');
+		background: url('/arrow-bottom.png') repeat-x;
 	}
 }
 
@@ -93,29 +93,30 @@ nav
 	// outline: 1px dashed red;
 	height: 420px;
 	@include perspective(700px);
+	@include transform-style(preserve-3d);
 	$numDecks: 7;
 	@for $i from 1 through $numDecks{
 		.deck-#{$i}
 		{
 			background: tomato;
-			.deck-title, img
-			{
-				display: none;
-			}
+			// // .deck-title//, img
+			// {
+			// 	display: none;
+			// }
 			
-			@include box-shadow(0 0 20px #333);
-			z-index: $numDecks + 1;
-			@if $i < $numDecks/2
-			{
-				z-index: $i;
-				@include transform(translateX(($i - $numDecks) * 80px + 160px) translateZ(-100px) rotateY(30deg + $i * 5));
+			
+			// z-index: $numDecks + 1;
+			// @if $i < $numDecks/2
+			// {
+			// 	z-index: $i;
+			// 	@include transform(translateX(($i - $numDecks) * 80px + 160px) translateZ(-100px) rotateY(30deg + $i * 5));
 				
-			}
-			@if $i > $numDecks/2 + 1
-			{
-				z-index: -$i;
-				@include transform(translateX((($numDecks - $i) * -1) * 80px + 320) translateZ(-100px) rotateY(-70deg + $i * 5));
-			}
+			// }
+			// @if $i > $numDecks/2 + 1
+			// {
+			// 	z-index: -$i;
+			// 	@include transform(translateX((($numDecks - $i) * -1) * 80px + 320) translateZ(-100px) rotateY(-70deg + $i * 5));
+			// }
 
 			&:after
 			{
@@ -127,6 +128,58 @@ nav
 				color: lighten(#FF6347, 7%);
 				text-shadow: -1px -2px 0 darken(#FF6347, 5%);
 			}
+		}
+	}
+
+	.deck
+	{
+		@include transition(all .5s ease-in-out);
+		// @include backface-visibility(hidden);
+		@include box-shadow(0 0 20px #333);
+		// @include transform-style(preserve-3d);
+		height: 340px;
+		width: 340px;
+		left: 50%;
+		margin-left: -170px;
+		position: absolute;
+		cursor: pointer;
+		&.view-more
+		{
+			@include transform(rotateY(180deg) translateZ(0px) translateX(0) !important);
+		}
+		// img
+		// {
+		// 	display: none;
+		// }
+		img
+		{
+			width: 100%;
+			height: 100%;
+			// @include backface-visibility(hidden);
+		}
+		.deck-front, .deck-back
+		{
+			width: 100%;
+			height: 100%;
+			
+			// 
+			@include transform-style(preserve-3d);
+			position: absolute;
+			
+		}
+		.deck-front{
+			pointer-events: none;
+			@include backface-visibility(hidden);
+		}
+		.deck-back
+		{
+			@include transform(rotateY(-180deg));
+			h2
+			{
+				background: purple;
+				z-index: 999;
+			}
+			// 
 		}
 	}
 
@@ -144,16 +197,5 @@ nav
 
 .deck
 {
-	height: 340px;
-	width: 340px;
-	left: 50%;
-	margin-left: -170px;
-	position: absolute;
-	cursor: pointer;
-	img
-	{
-		width: 100%;
-		height: 100%;
-
-	}
+	
 }

@@ -124,10 +124,10 @@ h1 {
 /* line 75, ../sass/screen.scss */
 #header .arrowed {
   position: absolute;
-  top: 100%;
+  top: 74px;
   height: 12px;
   width: 100%;
-  background: url("/arrow-bottom.png");
+  background: url("/arrow-bottom.png") repeat-x;
 }
 
 /* line 85, ../sass/screen.scss */
@@ -142,26 +142,14 @@ nav {
   height: 420px;
   -webkit-perspective: 700px;
   perspective: 700px;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
 }
-/* line 99, ../sass/screen.scss */
+/* line 100, ../sass/screen.scss */
 #deck-flow .deck-1 {
   background: tomato;
-  -webkit-box-shadow: 0 0 20px #333333;
-  -moz-box-shadow: 0 0 20px #333333;
-  box-shadow: 0 0 20px #333333;
-  z-index: 8;
-  z-index: 1;
-  -webkit-transform: translateX(-320px) translateZ(-100px) rotateY(35deg);
-  -moz-transform: translateX(-320px) translateZ(-100px) rotateY(35deg);
-  -ms-transform: translateX(-320px) translateZ(-100px) rotateY(35deg);
-  -o-transform: translateX(-320px) translateZ(-100px) rotateY(35deg);
-  transform: translateX(-320px) translateZ(-100px) rotateY(35deg);
 }
-/* line 102, ../sass/screen.scss */
-#deck-flow .deck-1 .deck-title, #deck-flow .deck-1 img {
-  display: none;
-}
-/* line 121, ../sass/screen.scss */
+/* line 122, ../sass/screen.scss */
 #deck-flow .deck-1:after {
   content: "1";
   font-family: 'Fresca';
@@ -171,25 +159,11 @@ nav {
   color: #ff816b;
   text-shadow: -1px -2px 0 #ff4d2d;
 }
-/* line 99, ../sass/screen.scss */
+/* line 100, ../sass/screen.scss */
 #deck-flow .deck-2 {
   background: tomato;
-  -webkit-box-shadow: 0 0 20px #333333;
-  -moz-box-shadow: 0 0 20px #333333;
-  box-shadow: 0 0 20px #333333;
-  z-index: 8;
-  z-index: 2;
-  -webkit-transform: translateX(-240px) translateZ(-100px) rotateY(40deg);
-  -moz-transform: translateX(-240px) translateZ(-100px) rotateY(40deg);
-  -ms-transform: translateX(-240px) translateZ(-100px) rotateY(40deg);
-  -o-transform: translateX(-240px) translateZ(-100px) rotateY(40deg);
-  transform: translateX(-240px) translateZ(-100px) rotateY(40deg);
 }
-/* line 102, ../sass/screen.scss */
-#deck-flow .deck-2 .deck-title, #deck-flow .deck-2 img {
-  display: none;
-}
-/* line 121, ../sass/screen.scss */
+/* line 122, ../sass/screen.scss */
 #deck-flow .deck-2:after {
   content: "2";
   font-family: 'Fresca';
@@ -199,25 +173,11 @@ nav {
   color: #ff816b;
   text-shadow: -1px -2px 0 #ff4d2d;
 }
-/* line 99, ../sass/screen.scss */
+/* line 100, ../sass/screen.scss */
 #deck-flow .deck-3 {
   background: tomato;
-  -webkit-box-shadow: 0 0 20px #333333;
-  -moz-box-shadow: 0 0 20px #333333;
-  box-shadow: 0 0 20px #333333;
-  z-index: 8;
-  z-index: 3;
-  -webkit-transform: translateX(-160px) translateZ(-100px) rotateY(45deg);
-  -moz-transform: translateX(-160px) translateZ(-100px) rotateY(45deg);
-  -ms-transform: translateX(-160px) translateZ(-100px) rotateY(45deg);
-  -o-transform: translateX(-160px) translateZ(-100px) rotateY(45deg);
-  transform: translateX(-160px) translateZ(-100px) rotateY(45deg);
 }
-/* line 102, ../sass/screen.scss */
-#deck-flow .deck-3 .deck-title, #deck-flow .deck-3 img {
-  display: none;
-}
-/* line 121, ../sass/screen.scss */
+/* line 122, ../sass/screen.scss */
 #deck-flow .deck-3:after {
   content: "3";
   font-family: 'Fresca';
@@ -227,19 +187,11 @@ nav {
   color: #ff816b;
   text-shadow: -1px -2px 0 #ff4d2d;
 }
-/* line 99, ../sass/screen.scss */
+/* line 100, ../sass/screen.scss */
 #deck-flow .deck-4 {
   background: tomato;
-  -webkit-box-shadow: 0 0 20px #333333;
-  -moz-box-shadow: 0 0 20px #333333;
-  box-shadow: 0 0 20px #333333;
-  z-index: 8;
 }
-/* line 102, ../sass/screen.scss */
-#deck-flow .deck-4 .deck-title, #deck-flow .deck-4 img {
-  display: none;
-}
-/* line 121, ../sass/screen.scss */
+/* line 122, ../sass/screen.scss */
 #deck-flow .deck-4:after {
   content: "4";
   font-family: 'Fresca';
@@ -249,25 +201,11 @@ nav {
   color: #ff816b;
   text-shadow: -1px -2px 0 #ff4d2d;
 }
-/* line 99, ../sass/screen.scss */
+/* line 100, ../sass/screen.scss */
 #deck-flow .deck-5 {
   background: tomato;
-  -webkit-box-shadow: 0 0 20px #333333;
-  -moz-box-shadow: 0 0 20px #333333;
-  box-shadow: 0 0 20px #333333;
-  z-index: 8;
-  z-index: -5;
-  -webkit-transform: translateX(160px) translateZ(-100px) rotateY(-45deg);
-  -moz-transform: translateX(160px) translateZ(-100px) rotateY(-45deg);
-  -ms-transform: translateX(160px) translateZ(-100px) rotateY(-45deg);
-  -o-transform: translateX(160px) translateZ(-100px) rotateY(-45deg);
-  transform: translateX(160px) translateZ(-100px) rotateY(-45deg);
 }
-/* line 102, ../sass/screen.scss */
-#deck-flow .deck-5 .deck-title, #deck-flow .deck-5 img {
-  display: none;
-}
-/* line 121, ../sass/screen.scss */
+/* line 122, ../sass/screen.scss */
 #deck-flow .deck-5:after {
   content: "5";
   font-family: 'Fresca';
@@ -277,25 +215,11 @@ nav {
   color: #ff816b;
   text-shadow: -1px -2px 0 #ff4d2d;
 }
-/* line 99, ../sass/screen.scss */
+/* line 100, ../sass/screen.scss */
 #deck-flow .deck-6 {
   background: tomato;
-  -webkit-box-shadow: 0 0 20px #333333;
-  -moz-box-shadow: 0 0 20px #333333;
-  box-shadow: 0 0 20px #333333;
-  z-index: 8;
-  z-index: -6;
-  -webkit-transform: translateX(240px) translateZ(-100px) rotateY(-40deg);
-  -moz-transform: translateX(240px) translateZ(-100px) rotateY(-40deg);
-  -ms-transform: translateX(240px) translateZ(-100px) rotateY(-40deg);
-  -o-transform: translateX(240px) translateZ(-100px) rotateY(-40deg);
-  transform: translateX(240px) translateZ(-100px) rotateY(-40deg);
 }
-/* line 102, ../sass/screen.scss */
-#deck-flow .deck-6 .deck-title, #deck-flow .deck-6 img {
-  display: none;
-}
-/* line 121, ../sass/screen.scss */
+/* line 122, ../sass/screen.scss */
 #deck-flow .deck-6:after {
   content: "6";
   font-family: 'Fresca';
@@ -305,25 +229,11 @@ nav {
   color: #ff816b;
   text-shadow: -1px -2px 0 #ff4d2d;
 }
-/* line 99, ../sass/screen.scss */
+/* line 100, ../sass/screen.scss */
 #deck-flow .deck-7 {
   background: tomato;
-  -webkit-box-shadow: 0 0 20px #333333;
-  -moz-box-shadow: 0 0 20px #333333;
-  box-shadow: 0 0 20px #333333;
-  z-index: 8;
-  z-index: -7;
-  -webkit-transform: translateX(320px) translateZ(-100px) rotateY(-35deg);
-  -moz-transform: translateX(320px) translateZ(-100px) rotateY(-35deg);
-  -ms-transform: translateX(320px) translateZ(-100px) rotateY(-35deg);
-  -o-transform: translateX(320px) translateZ(-100px) rotateY(-35deg);
-  transform: translateX(320px) translateZ(-100px) rotateY(-35deg);
 }
-/* line 102, ../sass/screen.scss */
-#deck-flow .deck-7 .deck-title, #deck-flow .deck-7 img {
-  display: none;
-}
-/* line 121, ../sass/screen.scss */
+/* line 122, ../sass/screen.scss */
 #deck-flow .deck-7:after {
   content: "7";
   font-family: 'Fresca';
@@ -333,18 +243,16 @@ nav {
   color: #ff816b;
   text-shadow: -1px -2px 0 #ff4d2d;
 }
-/* line 134, ../sass/screen.scss */
-#deck-flow h2 {
-  position: absolute;
-  text-align: center;
-  bottom: 0;
-  width: 100%;
-  font-size: 40px;
-  color: #666;
-}
-
-/* line 146, ../sass/screen.scss */
-.deck {
+/* line 135, ../sass/screen.scss */
+#deck-flow .deck {
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -ms-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  -webkit-box-shadow: 0 0 20px #333333;
+  -moz-box-shadow: 0 0 20px #333333;
+  box-shadow: 0 0 20px #333333;
   height: 340px;
   width: 340px;
   left: 50%;
@@ -352,8 +260,52 @@ nav {
   position: absolute;
   cursor: pointer;
 }
-/* line 154, ../sass/screen.scss */
-.deck img {
+/* line 147, ../sass/screen.scss */
+#deck-flow .deck.view-more {
+  -webkit-transform: rotateY(180deg) translateZ(0px) translateX(0) !important;
+  -moz-transform: rotateY(180deg) translateZ(0px) translateX(0) !important;
+  -ms-transform: rotateY(180deg) translateZ(0px) translateX(0) !important;
+  -o-transform: rotateY(180deg) translateZ(0px) translateX(0) !important;
+  transform: rotateY(180deg) translateZ(0px) translateX(0) !important;
+}
+/* line 155, ../sass/screen.scss */
+#deck-flow .deck img {
   width: 100%;
   height: 100%;
+}
+/* line 161, ../sass/screen.scss */
+#deck-flow .deck .deck-front, #deck-flow .deck .deck-back {
+  width: 100%;
+  height: 100%;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  position: absolute;
+}
+/* line 170, ../sass/screen.scss */
+#deck-flow .deck .deck-front {
+  pointer-events: none;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+/* line 175, ../sass/screen.scss */
+#deck-flow .deck .deck-back {
+  -webkit-transform: rotateY(-180deg);
+  -moz-transform: rotateY(-180deg);
+  -ms-transform: rotateY(-180deg);
+  -o-transform: rotateY(-180deg);
+  transform: rotateY(-180deg);
+}
+/* line 178, ../sass/screen.scss */
+#deck-flow .deck .deck-back h2 {
+  background: purple;
+  z-index: 999;
+}
+/* line 187, ../sass/screen.scss */
+#deck-flow h2 {
+  position: absolute;
+  text-align: center;
+  bottom: 0;
+  width: 100%;
+  font-size: 40px;
+  color: #666;
 }
