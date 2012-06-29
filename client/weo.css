@@ -2,6 +2,11 @@
 body {
 	font-family: arial;
 }
+#status_image{
+	border-radius:100%;
+	background-color:red;
+	background-position:center-top;
+}
 .remove{
 	padding: 0px 3px;
 	cursor:pointer;

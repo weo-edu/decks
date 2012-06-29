@@ -4,24 +4,24 @@
 			<h1>Card Creator</h1>
 			<ul>
 				<li>
-					Name: <input id="card_name" class="instant_update" type="text" name="important" />
+					Name: <input id="card_name" class="instant_update" type="text" name="important" />{{>card_status_light}}
 				</li>
 				<li>
 					Graphic:
 					<input type="file" id="files" class="instant_update" name="files[]" multiple />
-					<output id="list"></output>
+					<output id="list"></output>{{>card_status_light}}
 				</li>
 			</ul>
 			<h2>Problem</h2>
 			<ul>
 				<li>
-					Template: <input id="template" type="text" class="instant_update" name="template"/>
+					Template: <input id="template" type="text" class="instant_update" name="template"/>{{>card_status_light}}
 				</li>
 				<li>
-					Solution: <input class="instant_update" id="solution" type="text" name="solution"/>
+					Solution: <input class="instant_update" id="solution" type="text" name="solution"/>{{>card_status_light}}
 				</li>
 				<li><div>
-					Rules: <input id="rules" class="instant_update" type="text" name="rules"/> 
+					Rules: <input id="rules" type="text" name="rules"/>{{>card_status_light}}
 					<ul id="rules_list">
 					</ul>
 				</div>
@@ -32,6 +32,11 @@
 	<div>
 		{{>card_play}}
 	</div>
+</template>
+
+<template name="card_status_light">
+	<img id="status_image" src="/status.png" height="20" width="20" style="display:none;">
+	</img>
 </template>
 
 <template name="card_play">
