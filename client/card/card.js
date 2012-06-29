@@ -260,5 +260,5 @@ route('/card/create',function(ctx) {
 	Template.card_play.card = function(){
 		return session.get('card');
 	}
-	//renderView('card_create');
+	renderView('card_create');
 });
