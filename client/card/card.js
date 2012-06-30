@@ -38,6 +38,7 @@ route('/card/create',function(ctx) {
 			//session.set('card', card);
 		},
 		'keyup #rules' : function(event){
+			event.stopPropogation();
 			removeError($("#rules"));
 			var success = true;
 			try{
@@ -98,31 +99,21 @@ route('/card/create',function(ctx) {
 			card = getCard();
 			session.set('card', card);
 		},
-		'insert #content' : function(evt){
-			var el = $('#files');
-			console.log('insert');
-			// $.ajax({
-			// 	type: 'POST',
-			// 	url: '/upload'
-			// });
-			el.fileupload({
-				url: '/upload',
-				multipart: true,
-				sequentialUploads: true,
-		        dataType: 'json',
-		        done: function (e, data) {
-		        	console.log('test this shit');
-		            $.each(data.result, function (index, file) {
-		                $('<p/>').text(file.name).appendTo(document.body);
-		            });
-		        }
-			});
+		'insert .create' : function(evt){
+	    $('#file').fileupload({
+	    	url: "/upload",
+	    	type: "POST",
+	    	dataType: 'json',
+	    	multipart: true,
+	    	done: function(e,data) {
+	    		$("#card_path").html("/upload/"+data.result.path);
+	    		card = getCard();
+	    		console.log(card);
+	    		session.set('card',card);
+		    }
+	    });
 		}
 	};
-
-	console.log('test');
-	$(document).live('insert',function(){console.log('doc insert')});
-	$('#content').live('insert', function(){console.log('click')})
 
 	Template.card_create.events = events;
 
@@ -240,7 +231,7 @@ route('/card/create',function(ctx) {
 	function getValues(){
 		var update_card = {};
 		update_card.name = $('#card_name').val();
-		update_card.graphic = $('#list').val();
+		update_card.graphic = $('#card_path').html();
 		update_card.template = $("#template").val();
 		update_card.solution = $("#solution").val();
 		update_card.rules = rules;
