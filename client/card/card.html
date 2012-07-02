@@ -15,20 +15,28 @@
 				</li>
 			</ul>
 			<h2>Problem</h2>
-			<ul>
-				<li>
-					Template: <input id="template" type="text" class="instant_update" name="template"/>{{>card_status_light}}
-				</li>
-				<li>
-					Solution: <input class="instant_update" id="solution" type="text" name="solution"/>{{>card_status_light}}
-				</li>
-				<li><div>
-					Rules: <input id="rules" type="text" name="rules"/>{{>card_status_light}}
-					<ul id="rules_list">
-					</ul>
-				</div>
-				</li>
-			</ul>
+			{{#with error}}
+				<ul>
+					<li>
+						Template: <input id="template" type="text" class="instant_update" name="template"/> 
+						<div id="template-light" class='error-light {{template_on}}'></div>
+						<div id="template-message" class='error-message'>{{template_message}}</div>
+					</li>
+					<li>
+						Solution: <input class="instant_update" id="solution" type="text" name="solution"/>
+						<div id="solution-light" class='error-light {{solution_on}}'></div>
+						<div id="solution-message" class='error-message'>{{solution_message}}</div>
+					</li>
+					<li><div>
+						Rules: <input id="rules" type="text" name="rules"/>
+						<div id="rules-light" class='error-light {{rules_on}}'></div>
+						<div id="rules-message" class='error-message'>{{rules_message}}</div>
+						<ul id="rules_list">
+						</ul>
+					</div>
+					</li>
+				</ul>
+			{{/with}}
 		<input type="submit" value="submit"/>
 		</form>
 	</div>

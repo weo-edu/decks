@@ -1,14 +1,23 @@
 
 
 function Problem(problem) {
-	this.problemize = new Problemize(problem);
+	Emitter.call(this);
+	
+	this.problem = problem
 	this.template = problem.template;
 	this.sol = problem.solution;
 	this.assignment = null;
 }
 
+Problem.prototype = new Emitter;
+
 Problem.prototype.generate = function() {
-	this.assignment = this.problemize.generate();
+	var self = this;
+	var problemize = new Problemize(this.problem);
+	problemize.on('error',function(error) {
+		self.emit('error',err);
+	})
+	this.assignment = problemize.generate();
 	return HB.compile(this.template)(this.assignment);
 }
 
