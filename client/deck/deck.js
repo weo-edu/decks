@@ -5,8 +5,19 @@ route('/deck/browse',function() {
 
 
 	Template.deck_browse.decks = function() {
-		console.log('decks');
+		// console.log('decks');
+		Meteor.defer(function(){
+			console.log($('#deck-grid'));
+			$('#deck-grid').isotope({
+		  			// options
+		  			itemSelector : '.deck',
+		  			layoutMode : 'fitRows'
+		  			// animate: true
+			});
+		});
+
 	  return Decks.find({});
+
 	};
 
 	Template.deck_browse.events = {
@@ -20,11 +31,25 @@ route('/deck/browse',function() {
 	  	var el = $(e.target);
 	  	currentCover = el.index()
 	  	rearrangeCovers();
-	  },
-	  'insert .deck': function(){
-	  	var numDecks = $('.deck').length;
-	  	rearrangeCovers();
 	  }
+	  // 'insert #deck-grid': function(){
+	  // 	setTimeout(function(){
+	  // 		console.log('fuk');
+		 //  	$('#deck-grid').isotope({
+			//   			// options
+			//   			itemSelector : '.deck',
+			//   			layoutMode : 'fitRows'
+			//   			// animate: true
+			// 	});
+		 //  }, 100);
+	  	// 
+	  		// console.log('test deck grid');
+		  		
+			  	// var numDecks = $('.deck').length;
+			  	// rearrangeCovers();
+		  }
+	  	// }, 1000);
+	  	
 
 	  
 	}

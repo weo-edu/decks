@@ -84,12 +84,7 @@ html {
 /* line 40, ../sass/screen.scss */
 body {
   font-family: Arial;
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #dddddd));
-  background: -webkit-linear-gradient(#ffffff, #dddddd);
-  background: -moz-linear-gradient(#ffffff, #dddddd);
-  background: -o-linear-gradient(#ffffff, #dddddd);
-  background: -ms-linear-gradient(#ffffff, #dddddd);
-  background: linear-gradient(#ffffff, #dddddd);
+  background: url("/diagonal-noise.png");
   height: 100%;
 }
 
@@ -104,7 +99,7 @@ h1 {
   font-size: 60px;
   line-height: 80px;
   color: #FFF;
-  text-shadow: 2px 2px 0px #333333;
+  text-shadow: 2px 2px 0px black;
 }
 
 /* line 61, ../sass/screen.scss */
@@ -116,18 +111,10 @@ h1 {
 
 /* line 69, ../sass/screen.scss */
 #header {
-  background: #52C7DB;
+  background: #444;
   height: 75px;
   position: relative;
   margin-bottom: 60px;
-}
-/* line 75, ../sass/screen.scss */
-#header .arrowed {
-  position: absolute;
-  top: 74px;
-  height: 12px;
-  width: 100%;
-  background: url("/arrow-bottom.png") repeat-x;
 }
 
 /* line 85, ../sass/screen.scss */
@@ -137,42 +124,63 @@ nav {
   position: relative;
 }
 
-/* line 92, ../sass/screen.scss */
+/* line 95, ../sass/screen.scss */
+#deck-grid .deck {
+  height: 200px;
+  width: 200px;
+  overflow: hidden;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  border-radius: 8px;
+  -webkit-box-shadow: 0 0 5px #333333;
+  -moz-box-shadow: 0 0 5px #333333;
+  box-shadow: 0 0 5px #333333;
+  background: tomato;
+  cursor: pointer;
+}
+/* line 106, ../sass/screen.scss */
+#deck-grid .deck img {
+  display: none;
+}
+
+/* line 117, ../sass/screen.scss */
 #deck-flow {
   -webkit-perspective: 700px;
   perspective: 700px;
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
 }
-/* line 100, ../sass/screen.scss */
+/* line 125, ../sass/screen.scss */
 #deck-flow .deck-1 {
   background: tomato;
 }
-/* line 100, ../sass/screen.scss */
+/* line 125, ../sass/screen.scss */
 #deck-flow .deck-2 {
   background: tomato;
 }
-/* line 100, ../sass/screen.scss */
+/* line 125, ../sass/screen.scss */
 #deck-flow .deck-3 {
   background: tomato;
 }
-/* line 100, ../sass/screen.scss */
+/* line 125, ../sass/screen.scss */
 #deck-flow .deck-4 {
   background: tomato;
 }
-/* line 100, ../sass/screen.scss */
+/* line 125, ../sass/screen.scss */
 #deck-flow .deck-5 {
   background: tomato;
 }
-/* line 100, ../sass/screen.scss */
+/* line 125, ../sass/screen.scss */
 #deck-flow .deck-6 {
   background: tomato;
 }
-/* line 100, ../sass/screen.scss */
+/* line 125, ../sass/screen.scss */
 #deck-flow .deck-7 {
   background: tomato;
 }
-/* line 135, ../sass/screen.scss */
+/* line 160, ../sass/screen.scss */
 #deck-flow .deck {
   height: 200px;
   width: 200px;
@@ -180,11 +188,11 @@ nav {
   margin: 10px;
   overflow: hidden;
 }
-/* line 142, ../sass/screen.scss */
+/* line 167, ../sass/screen.scss */
 #deck-flow .deck img {
   height: 100%;
 }
-/* line 196, ../sass/screen.scss */
+/* line 221, ../sass/screen.scss */
 #deck-flow h2 {
   position: absolute;
   text-align: center;
