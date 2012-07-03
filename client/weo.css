@@ -69,3 +69,19 @@
 	margin-top: 20px;
 	cursor: pointer;
 }*/
+
+input {
+	display: block;
+}
+
+.error-message {
+	float: right;
+}
+
+.rules-errors {
+	float: right;
+}
+
+.rules-errors .error-message{
+	float: none;
+}

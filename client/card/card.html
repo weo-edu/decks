@@ -1,60 +1,60 @@
 <template name="card_create">
 
 	<div class="create">
-		<form method="post" action="/upload" enctype="multipart/form-data">
 			<h1>Card Creator</h1>
-			<ul>
-				<li>
-					Name: <input id="card_name" class="instant_update" type="text" name="important" />{{>card_status_light}}
-				</li>
-				<li>
-					Graphic:
-						<input type="file" id="files" class="instant_update" name="graphic" multiple />
-						<input type='button' id='upload' value='Upload' name='upload'/>
-						<output id="list"></output>
-				</li>
-			</ul>
+				Name: <input id="card_name" class="instant_update" type="text" name="important" />
+				Graphic:
+					<input type="file" id="file" name="file" multiple />
 			<h2>Problem</h2>
-			{{#with error}}
-				<ul>
-					<li>
-						Template: <input id="template" type="text" class="instant_update" name="template"/> 
-						<div id="template-light" class='error-light {{template_on}}'></div>
-						<div id="template-message" class='error-message'>{{template_message}}</div>
-					</li>
-					<li>
-						Solution: <input class="instant_update" id="solution" type="text" name="solution"/>
-						<div id="solution-light" class='error-light {{solution_on}}'></div>
-						<div id="solution-message" class='error-message'>{{solution_message}}</div>
-					</li>
-					<li><div>
-						Rules: <input id="rules" type="text" name="rules"/>
-						<div id="rules-light" class='error-light {{rules_on}}'></div>
-						<div id="rules-message" class='error-message'>{{rules_message}}</div>
-						<ul id="rules_list">
-						</ul>
-					</div>
-					</li>
-				</ul>
-			{{/with}}
-		<input type="submit" value="submit"/>
-		</form>
+				Template: <input id="template" type="text" class="instant_update" name="template"/> 
+				{{>template_errors}}
+				Solution: <input class="instant_update" id="solution" type="text" name="solution"/>
+				{{>solution_errors}}
+				{{>rules}}
 	</div>
 	<div>
 		{{>card_play}}
 	</div>
 </template>
 
-<template name="card_status_light">
-	<img id="status_image" src="/status.png" height="20" width="20" style="display:none;">
-	</img>
+
+<template name="template_errors">
+	<div class='error-light'></div>
+	<div class='error-message'>{{error}}</div>
 </template>
+
+<template name="solution_errors">
+	<div class='error-light'></div>
+	<div class='error-message'>{{error}}</div>
+</template>
+
+<template name="rules">
+	<div id="add-rule">Add Rule</div>
+	<div id='rules'></div>
+	{{>rules_errors}}
+</template>
+
+<template name="rules_errors">
+	<div class='rules-errors'>
+		{{#each rules_errors}}
+			<div class='error-light'></div>
+			<div class='error-message'>{{this}}</div>
+		{{/each}}
+	</div>
+</template>
+
+<template name="rule_input">
+	<input class="instant_update rule-input"/>
+</template>
+
 
 <template name="card_play">
 	{{#with card}}
 	<div class='card'>
 		<h3>{{name}}</h3>
-		<img src='{{graphic}}' />
+		{{#if graphic}}
+			<img src='{{graphic}}' />
+		{{/if}}
 		<div class='question'>
 			{{question}}
 		</div>
