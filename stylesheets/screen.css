@@ -124,7 +124,11 @@ nav {
   position: relative;
 }
 
-/* line 95, ../sass/screen.scss */
+/* line 93, ../sass/screen.scss */
+#deck-grid {
+  background: #564635;
+}
+/* line 98, ../sass/screen.scss */
 #deck-grid .deck {
   height: 200px;
   width: 200px;
@@ -140,47 +144,47 @@ nav {
   background: tomato;
   cursor: pointer;
 }
-/* line 106, ../sass/screen.scss */
+/* line 109, ../sass/screen.scss */
 #deck-grid .deck img {
   display: none;
 }
 
-/* line 117, ../sass/screen.scss */
+/* line 120, ../sass/screen.scss */
 #deck-flow {
   -webkit-perspective: 700px;
   perspective: 700px;
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
 }
-/* line 125, ../sass/screen.scss */
+/* line 128, ../sass/screen.scss */
 #deck-flow .deck-1 {
   background: tomato;
 }
-/* line 125, ../sass/screen.scss */
+/* line 128, ../sass/screen.scss */
 #deck-flow .deck-2 {
   background: tomato;
 }
-/* line 125, ../sass/screen.scss */
+/* line 128, ../sass/screen.scss */
 #deck-flow .deck-3 {
   background: tomato;
 }
-/* line 125, ../sass/screen.scss */
+/* line 128, ../sass/screen.scss */
 #deck-flow .deck-4 {
   background: tomato;
 }
-/* line 125, ../sass/screen.scss */
+/* line 128, ../sass/screen.scss */
 #deck-flow .deck-5 {
   background: tomato;
 }
-/* line 125, ../sass/screen.scss */
+/* line 128, ../sass/screen.scss */
 #deck-flow .deck-6 {
   background: tomato;
 }
-/* line 125, ../sass/screen.scss */
+/* line 128, ../sass/screen.scss */
 #deck-flow .deck-7 {
   background: tomato;
 }
-/* line 160, ../sass/screen.scss */
+/* line 163, ../sass/screen.scss */
 #deck-flow .deck {
   height: 200px;
   width: 200px;
@@ -188,11 +192,11 @@ nav {
   margin: 10px;
   overflow: hidden;
 }
-/* line 167, ../sass/screen.scss */
+/* line 170, ../sass/screen.scss */
 #deck-flow .deck img {
   height: 100%;
 }
-/* line 221, ../sass/screen.scss */
+/* line 224, ../sass/screen.scss */
 #deck-flow h2 {
   position: absolute;
   text-align: center;
@@ -200,4 +204,57 @@ nav {
   width: 100%;
   font-size: 40px;
   color: #666;
+}
+
+/**** Isotope Filtering ****/
+/* line 236, ../sass/screen.scss */
+.isotope-item {
+  z-index: 2;
+}
+
+/* line 240, ../sass/screen.scss */
+.isotope-hidden.isotope-item {
+  pointer-events: none;
+  z-index: 1;
+}
+
+/**** Isotope CSS3 transitions ****/
+/* line 248, ../sass/screen.scss */
+.isotope,
+.isotope .isotope-item {
+  -webkit-transition-duration: 0.8s;
+  -moz-transition-duration: 0.8s;
+  -ms-transition-duration: 0.8s;
+  -o-transition-duration: 0.8s;
+  transition-duration: 0.8s;
+}
+
+/* line 256, ../sass/screen.scss */
+.isotope {
+  -webkit-transition-property: height, width;
+  -moz-transition-property: height, width;
+  -ms-transition-property: height, width;
+  -o-transition-property: height, width;
+  transition-property: height, width;
+}
+
+/* line 264, ../sass/screen.scss */
+.isotope .isotope-item {
+  -webkit-transition-property: -webkit-transform, opacity;
+  -moz-transition-property: -moz-transform, opacity;
+  -ms-transition-property: -ms-transform, opacity;
+  -o-transition-property: top, left, opacity;
+  transition-property: transform, opacity;
+}
+
+/**** disabling Isotope CSS3 transitions ****/
+/* line 276, ../sass/screen.scss */
+.isotope.no-transition,
+.isotope.no-transition .isotope-item,
+.isotope .isotope-item.no-transition {
+  -webkit-transition-duration: 0s;
+  -moz-transition-duration: 0s;
+  -ms-transition-duration: 0s;
+  -o-transition-duration: 0s;
+  transition-duration: 0s;
 }

@@ -3,16 +3,13 @@ route('/deck/browse',function() {
 	var currentCover = 3;
 	var transformPrefix = domToCss(Modernizr.prefixed('transform'));
 
-
 	Template.deck_browse.decks = function() {
 		// console.log('decks');
 		Meteor.defer(function(){
-			console.log($('#deck-grid'));
 			$('#deck-grid').isotope({
-		  			// options
-		  			itemSelector : '.deck',
-		  			layoutMode : 'fitRows'
-		  			// animate: true
+			  // options
+			  itemSelector : '.deck',
+			  layoutMode : 'fitRows'
 			});
 		});
 
@@ -31,41 +28,8 @@ route('/deck/browse',function() {
 	  	var el = $(e.target);
 	  	currentCover = el.index()
 	  	rearrangeCovers();
-	  }
-	  // 'insert #deck-grid': function(){
-	  // 	setTimeout(function(){
-	  // 		console.log('fuk');
-		 //  	$('#deck-grid').isotope({
-			//   			// options
-			//   			itemSelector : '.deck',
-			//   			layoutMode : 'fitRows'
-			//   			// animate: true
-			// 	});
-		 //  }, 100);
-	  	// 
-	  		// console.log('test deck grid');
-		  		
-			  	// var numDecks = $('.deck').length;
-			  	// rearrangeCovers();
-		  }
-	  	// }, 1000);
-	  	
-
-	  
+	  }	  
 	}
-
-	function rearrangeCovers(){
-		// $('.deck').each(function(i){
-		// 	var element = $(this);
-		// 	var offset = Math.abs(currentCover - i);
-		// 	var x = i == currentCover ? 0 : (150 + (100 * offset)) * (i < currentCover ? -1 : 1);
-		// 	var z = i == currentCover ? 0 : -200;
-
-		// 	var rotationY = i == currentCover ? 0 : (80 + (offset * -5)) * (i < currentCover ? 1 : -1);
-
-		// 	element.css(transformPrefix, 'translateX(' + x +'px) translateZ(' + z + 'px) rotateY(' + rotationY + 'deg)');
-		// });
-  	}
 
   	renderView('deck_browse');
 });
