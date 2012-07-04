@@ -1,37 +1,143 @@
 route('/deck/browse',function() {
 
-	var currentCover = 3;
+	var containerWidth = 0;
+	var deckWidth = 0;
+	var decksPerRow = 0;
+	var gutter = 0;
 	var transformPrefix = domToCss(Modernizr.prefixed('transform'));
-
+	
 	Template.deck_browse.decks = function() {
-		// console.log('decks');
 		Meteor.defer(function(){
-			$('#deck-grid').isotope({
-			  // options
-			  itemSelector : '.deck',
-			  layoutMode : 'fitRows'
-			});
+			if(decks.count()){
+				containerWidth = $('#deck-grid').width();
+				deckWidth = $('#deck-grid .deck').width();
+				decksPerRow = Math.floor(containerWidth / deckWidth);
+				gutter = ((containerWidth - decksPerRow * deckWidth) / (decksPerRow - 1));
+
+				$('#deck-grid').height(((deckWidth + gutter) * (Math.floor(decks.count()/decksPerRow)) + deckWidth));
+
+				var idx = 0;
+				
+				var deal = setInterval(function(){
+					
+					var el = $('.deck-container').eq(idx);
+					var bg = getAverageRGB(el.find('img').get(0));
+					// var x = (deckWidth + gutter) * (idx%decksPerRow);
+					// var y = (deckWidth + gutter) * (Math.floor(idx/decksPerRow));
+					var rot = getTranslation(el);
+					// console.log(rot);
+					// el.css({'left': x, 'top': y});
+					// el.css(transformPrefix, 'rotateY(0deg) scale(1)');
+					el.css(transformPrefix, 'translate3d(' + rot.left + 'px,'+ rot.top +'px, 0)');
+					// el.find('.deck-meta').css({'border-color': bg});
+					idx++;
+					
+					if(idx >= decks.count())
+						clearInterval(deal);
+
+
+				}, 150);
+
+			}
 		});
 
-	  return Decks.find({});
+	  var decks = Decks.find({});
+	  // console.log(decks.count());
+	  return decks;
+
+
+	  
 
 	};
 
 	Template.deck_browse.events = {
 	  'click .deck': function(e) {
-	  	// var el = $(e.target);
+	  	var el = $(e.target).closest('.deck-container');
 	  	// var that = null;
-	  	// el.toggleClass('view-more');
+	  	$('.deck-container').not(el).removeClass('view-more');
+	  	el.toggleClass('view-more');
+	  	// el.css(transformPrefix, ' rotateY(-180deg) scale(1.1)');
+
+	  	// route('/deck/play/' + this.name);
+	  },
+	  'click .play': function() {
+	  	console.log('click play')
 	  	route('/deck/play/' + this.name);
 	  },
-	  'mouseover .deck': function(e){
-	  	var el = $(e.target);
-	  	currentCover = el.index()
-	  	rearrangeCovers();
-	  }	  
+	  'mouseover .deck-container': function(e){
+	  	// var el = $(e.target).closest('.deck');//.parent('.deck');
+	  	// // console.log(el.closest('.deck').attr('class'));
+	  	// // var rot = getTranslation(el);
+	  	// el.css(transformPrefix, ' rotateY(-180deg) scale(1.1)');
+	  	// el.css('z-index', 99);
+	  },
+	  'mouseout .deck': function(e){
+	  	// var el = $(e.target).closest('.deck');
+	  	// var rot = getTranslation(el);
+	  	// el.css(transformPrefix, 'translate3d(' + rot.left + 'px,'+ rot.top +'px, 0)');
+	  }
+
 	}
 
   	renderView('deck_browse');
+
+	function getAverageRGB(imgEl) {
+
+    var blockSize = 5, // only visit every 5 pixels
+        defaultRGB = {r:0,g:0,b:0}, // for non-supporting envs
+        canvas = document.createElement('canvas'),
+        context = canvas.getContext && canvas.getContext('2d'),
+        data, width, height,
+        i = -4,
+        length,
+        rgb = {r:0,g:0,b:0},
+        count = 0;
+
+    if (!context) {
+        return defaultRGB;
+    }
+
+    height = canvas.height = imgEl.naturalHeight || imgEl.offsetHeight || imgEl.height;
+    width = canvas.width = imgEl.naturalWidth || imgEl.offsetWidth || imgEl.width;
+
+    context.drawImage(imgEl, 0, 0);
+
+    try {
+        data = context.getImageData(0, 0, width, height);
+    } catch(e) {
+        /* security error, img on diff domain */
+        return defaultRGB;
+    }
+
+    length = data.data.length;
+
+    while ( (i += blockSize * 4) < length ) {
+        ++count;
+        rgb.r += data.data[i];
+        rgb.g += data.data[i+1];
+        rgb.b += data.data[i+2];
+    }
+
+    // ~~ used to floor values
+    // rgb.r = ~~(rgb.r/count);
+    // rgb.g = ~~(rgb.g/count);
+    // rgb.b = ~~(rgb.b/count);
+
+    var color = 'rgb(' + ~~(rgb.r/count) + ', '  + ~~(rgb.g/count) + ', ' + ~~(rgb.b/count) + ')'; 
+    return color;
+
+	}
+
+	function getTranslation(el)
+	{
+		var idx = el.parent().children(el).index(el);
+		// console.log(deckWidth, gutter, decksPerRow);
+		var x = (deckWidth + gutter) * (idx%decksPerRow);
+		var y = (deckWidth + gutter) * (Math.floor(idx/decksPerRow));
+
+		var rot = {left: x, top: y};
+		return rot;
+	}
 });
 
 

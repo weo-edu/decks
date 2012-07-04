@@ -84,7 +84,7 @@ html {
 /* line 40, ../sass/screen.scss */
 body {
   font-family: Arial;
-  background: url("/diagonal-noise.png");
+  background: url("/45degreee_fabric.png");
   height: 100%;
 }
 
@@ -126,65 +126,192 @@ nav {
 
 /* line 93, ../sass/screen.scss */
 #deck-grid {
-  background: #564635;
+  -webkit-transition: height 0.7s ease-out;
+  -moz-transition: height 0.7s ease-out;
+  -ms-transition: height 0.7s ease-out;
+  -o-transition: height 0.7s ease-out;
+  transition: height 0.7s ease-out;
 }
-/* line 98, ../sass/screen.scss */
-#deck-grid .deck {
-  height: 200px;
-  width: 200px;
+/* line 100, ../sass/screen.scss */
+#deck-grid .deck-container {
+  -webkit-transition: all 0.4s ease-out;
+  -moz-transition: all 0.4s ease-out;
+  -ms-transition: all 0.4s ease-out;
+  -o-transition: all 0.4s ease-out;
+  transition: all 0.4s ease-out;
+  height: 180px;
+  width: 180px;
+  -webkit-perspective: 700;
+  perspective: 700;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  border-radius: 8px;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-transform: rotateY(120deg) scale(0.01);
+  -moz-transform: rotateY(120deg) scale(0.01);
+  -ms-transform: rotateY(120deg) scale(0.01);
+  -o-transform: rotateY(120deg) scale(0.01);
+  transform: rotateY(120deg) scale(0.01);
+  position: absolute;
+  cursor: pointer;
+}
+/* line 130, ../sass/screen.scss */
+#deck-grid .deck-container .deck {
+  -webkit-transition: all 0.4s ease-in-out;
+  -moz-transition: all 0.4s ease-in-out;
+  -ms-transition: all 0.4s ease-in-out;
+  -o-transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
+  height: 180px;
+  width: 180px;
+  -webkit-box-shadow: 0 0 5px #333333;
+  -moz-box-shadow: 0 0 5px #333333;
+  box-shadow: 0 0 5px #333333;
   overflow: hidden;
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
   -ms-border-radius: 8px;
   -o-border-radius: 8px;
   border-radius: 8px;
-  -webkit-box-shadow: 0 0 5px #333333;
-  -moz-box-shadow: 0 0 5px #333333;
-  box-shadow: 0 0 5px #333333;
-  background: tomato;
-  cursor: pointer;
 }
-/* line 109, ../sass/screen.scss */
-#deck-grid .deck img {
-  display: none;
+/* line 142, ../sass/screen.scss */
+#deck-grid .deck-container .front {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+/* line 148, ../sass/screen.scss */
+#deck-grid .deck-container .front img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  border-radius: 8px;
+}
+/* line 175, ../sass/screen.scss */
+#deck-grid .deck-container .deck-meta {
+  -webkit-transition: all 0.4s ease-in-out;
+  -moz-transition: all 0.4s ease-in-out;
+  -ms-transition: all 0.4s ease-in-out;
+  -o-transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
+  position: absolute;
+  padding: 10px;
+  -webkit-border-radius: 0 0 8px 8px;
+  -moz-border-radius: 0 0 8px 8px;
+  -ms-border-radius: 0 0 8px 8px;
+  -o-border-radius: 0 0 8px 8px;
+  border-radius: 0 0 8px 8px;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  border-width: 0px;
+  border-style: solid;
+  font: 16px/1.2em sans-serif;
+  color: #FFF;
+  background: rgba(0, 0, 0, 0.6);
+  bottom: -180px;
+  z-index: 99;
+}
+/* line 211, ../sass/screen.scss */
+#deck-grid .deck-container.view-more .deck {
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+  -ms-transform: rotateY(180deg);
+  -o-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+  z-index: 98;
+}
+/* line 216, ../sass/screen.scss */
+#deck-grid .deck-container.view-more .deck-meta {
+  bottom: 0;
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+  -ms-transform: rotateY(180deg);
+  -o-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+}
+/* line 225, ../sass/screen.scss */
+#deck-grid .deck-container .play {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #dddddd));
+  background: -webkit-linear-gradient(#ffffff, #dddddd);
+  background: -moz-linear-gradient(#ffffff, #dddddd);
+  background: -o-linear-gradient(#ffffff, #dddddd);
+  background: -ms-linear-gradient(#ffffff, #dddddd);
+  background: linear-gradient(#ffffff, #dddddd);
+  cursor: pointer;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  position: relative;
+  color: #333;
+  padding: 5px;
+  display: block;
+  text-align: center;
+}
+/* line 235, ../sass/screen.scss */
+#deck-grid .deck-container .play:hover {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #ffffff));
+  background: -webkit-linear-gradient(#dddddd, #ffffff);
+  background: -moz-linear-gradient(#dddddd, #ffffff);
+  background: -o-linear-gradient(#dddddd, #ffffff);
+  background: -ms-linear-gradient(#dddddd, #ffffff);
+  background: linear-gradient(#dddddd, #ffffff);
 }
 
-/* line 120, ../sass/screen.scss */
+/* line 243, ../sass/screen.scss */
+#decks-title {
+  text-align: center;
+  font-size: 40px;
+  margin: 30px 0;
+  color: #999;
+}
+
+/* line 255, ../sass/screen.scss */
 #deck-flow {
   -webkit-perspective: 700px;
   perspective: 700px;
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
 }
-/* line 128, ../sass/screen.scss */
+/* line 263, ../sass/screen.scss */
 #deck-flow .deck-1 {
   background: tomato;
 }
-/* line 128, ../sass/screen.scss */
+/* line 263, ../sass/screen.scss */
 #deck-flow .deck-2 {
   background: tomato;
 }
-/* line 128, ../sass/screen.scss */
+/* line 263, ../sass/screen.scss */
 #deck-flow .deck-3 {
   background: tomato;
 }
-/* line 128, ../sass/screen.scss */
+/* line 263, ../sass/screen.scss */
 #deck-flow .deck-4 {
   background: tomato;
 }
-/* line 128, ../sass/screen.scss */
+/* line 263, ../sass/screen.scss */
 #deck-flow .deck-5 {
   background: tomato;
 }
-/* line 128, ../sass/screen.scss */
+/* line 263, ../sass/screen.scss */
 #deck-flow .deck-6 {
   background: tomato;
 }
-/* line 128, ../sass/screen.scss */
+/* line 263, ../sass/screen.scss */
 #deck-flow .deck-7 {
   background: tomato;
 }
-/* line 163, ../sass/screen.scss */
+/* line 298, ../sass/screen.scss */
 #deck-flow .deck {
   height: 200px;
   width: 200px;
@@ -192,11 +319,11 @@ nav {
   margin: 10px;
   overflow: hidden;
 }
-/* line 170, ../sass/screen.scss */
+/* line 305, ../sass/screen.scss */
 #deck-flow .deck img {
   height: 100%;
 }
-/* line 224, ../sass/screen.scss */
+/* line 359, ../sass/screen.scss */
 #deck-flow h2 {
   position: absolute;
   text-align: center;
@@ -204,57 +331,4 @@ nav {
   width: 100%;
   font-size: 40px;
   color: #666;
-}
-
-/**** Isotope Filtering ****/
-/* line 236, ../sass/screen.scss */
-.isotope-item {
-  z-index: 2;
-}
-
-/* line 240, ../sass/screen.scss */
-.isotope-hidden.isotope-item {
-  pointer-events: none;
-  z-index: 1;
-}
-
-/**** Isotope CSS3 transitions ****/
-/* line 248, ../sass/screen.scss */
-.isotope,
-.isotope .isotope-item {
-  -webkit-transition-duration: 0.8s;
-  -moz-transition-duration: 0.8s;
-  -ms-transition-duration: 0.8s;
-  -o-transition-duration: 0.8s;
-  transition-duration: 0.8s;
-}
-
-/* line 256, ../sass/screen.scss */
-.isotope {
-  -webkit-transition-property: height, width;
-  -moz-transition-property: height, width;
-  -ms-transition-property: height, width;
-  -o-transition-property: height, width;
-  transition-property: height, width;
-}
-
-/* line 264, ../sass/screen.scss */
-.isotope .isotope-item {
-  -webkit-transition-property: -webkit-transform, opacity;
-  -moz-transition-property: -moz-transform, opacity;
-  -ms-transition-property: -ms-transform, opacity;
-  -o-transition-property: top, left, opacity;
-  transition-property: transform, opacity;
-}
-
-/**** disabling Isotope CSS3 transitions ****/
-/* line 276, ../sass/screen.scss */
-.isotope.no-transition,
-.isotope.no-transition .isotope-item,
-.isotope .isotope-item.no-transition {
-  -webkit-transition-duration: 0s;
-  -moz-transition-duration: 0s;
-  -ms-transition-duration: 0s;
-  -o-transition-duration: 0s;
-  transition-duration: 0s;
 }

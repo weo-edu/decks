@@ -39,7 +39,7 @@ html
 body
 {
 	font-family: Arial;
-	background: url("/diagonal-noise.png");
+	background: url("/45degreee_fabric.png");
 	height: 100%;
 }
 
@@ -91,27 +91,162 @@ nav
 
 #deck-grid
 {
-	background: #564635;
-	// height: 100% !important;
-	// width: 100%;
-	.deck
+	// height: 100%;
+	// width: 980px;
+	// outline: 1px solid black;
+	
+	@include transition(height .7s ease-out);
+	.deck-container
 	{
-		$size: 200px;
+		@include transition(all .4s ease-out);
+		$size: 180px;
+		$background: #E54429;
 		height: $size;
 		width: $size;
-		overflow: hidden;
+		
+		// background: $background;
+		@include perspective(700);
 		@include border-radius(8px);
-		@include box-shadow(0 0 5px #333);
+		@include transform-style(preserve-3d);
+		@include transform(rotateY(120deg) scale(0.01));
+
+		position: absolute;
 		// float: left;
-		// margin: 0 15px 15px 0;
-		background: tomato;
+		// margin-bottom: 0 15px 15px 0;
 		cursor: pointer;
-		img{
-			display: none;
+		// &:hover
+		// {
+		// 	// @include transform(rotateY(-180deg) !important);
+
+		// 	// @include box-shadow(0 0 0);
+		// 	img
+		// 	{
+		// 		// @include opacity(0.2);
+		// 		// @include transform(scale(.5, .5) rotateY(90deg));
+		// 	}
+
+		// }
+		.deck
+		{
+			
+			
+			@include transition(all .4s ease-in-out);
+			height: $size;
+			width: $size;
+			@include box-shadow(0 0 5px #333);
+			overflow: hidden;
+			@include border-radius(8px);
+		}
+		
+		.front
+		{
+			// @include backface-visibility(hidden);
+			// @include transition(all .2s ease-in-out);
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			img{
+				// @include backface-visibility(hidden);
+				// display: block;
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				// @include backface-visibility(hidden);
+				// top: 50%;
+				// margin-top: -60px;
+				// left: 50%;
+				// margin-left: -60px;
+				// height: 80px;
+				// width: 80px;
+				// padding: 20px;
+				// background: lighten($background, 10%);
+				@include border-radius(8px);
+				// @include transition(all .3s ease-in-out);
+				// @include backface-visibility(hidden);
+				&:hover
+				{
+					
+				}	
+				// @include border-radius(50% 60% 55% 60%);
+				// @include box-shadow(2px 2px 0 lighten($background, 15%), -2px -2px 0px darken($background, 8%));
+			}	
+		}
+		.deck-meta
+		{
+
+			// padding: 10px;
+			// text-rendering: optimizeLegibility;
+			@include transition(all .4s ease-in-out);
+			position: absolute;
+			// @include transform(rotateY(-180deg));
+			// z-index: -99;
+
+			// @include backface-visibility(hidden);
+			$border-width: 0px;
+			$padding: 10px;
+			padding: $padding;
+			// height: $size - ($border-width*2) - ($padding*2);
+			// width: $size - ($border-width*2) - ($padding*2);
+			@include border-radius(0 0 8px 8px);
+			@include opacity(0);
+			border-width: $border-width;
+			border-style: solid;
+			font: 16px/1.2em sans-serif;
+			// text-shadow: -1px -1px 0 #000;
+			// text-transform: uppercase;
+			color: #FFF;
+			background: transparentize(#000, 0.4);
+			bottom: -$size;
+			z-index: 99;
+		}
+		&:hover
+		{
+			.deck
+			{
+				// @include transform(scale(1.03));
+			}
+		}
+		&.view-more{
+			.deck
+			{
+				@include transform(rotateY(180deg));
+				z-index: 98;
+
+			}
+			.deck-meta{
+				bottom: 0;
+				@include transform(rotateY(180deg));
+				@include opacity(1)
+				// position: relative;
+				// font-size: 98%;
+			}
+		}
+		.play
+		{
+			@include background(linear-gradient(#FFF, #DDD));
+			cursor: pointer;
+			@include border-radius(5px);
+			position: relative;
+			color: #333;
+			padding: 5px;
+			display: block;
+			text-align: center;
+			&:hover
+			{
+				@include background(linear-gradient(#DDD, #FFF));
+			}
 		}
 	}
 }
 
+#decks-title
+{
+	text-align: center;
+	font-size: 40px;
+	margin: 30px 0;
+	color: #999;
+	// @include text-shadow(-1px -1px 0 #000);
+}
 
 
 //	DECKS
@@ -231,52 +366,53 @@ nav
 	}
 }
 
-/**** Isotope Filtering ****/
+// /**** Isotope Filtering ****/
 
-.isotope-item {
-  z-index: 2;
-}
+// .isotope-item {
+//   z-index: 2;
+// }
 
-.isotope-hidden.isotope-item {
-  pointer-events: none;
-  z-index: 1;
-}
+// .isotope-hidden.isotope-item {
+//   pointer-events: none;
+//   z-index: 1;
+// }
 
-/**** Isotope CSS3 transitions ****/
+// /**** Isotope CSS3 transitions ****/
 
-.isotope,
-.isotope .isotope-item {
-  -webkit-transition-duration: 0.8s;
-     -moz-transition-duration: 0.8s;
-      -ms-transition-duration: 0.8s;
-       -o-transition-duration: 0.8s;
-          transition-duration: 0.8s;
-}
+// .isotope,
+// .isotope .isotope-item {
+// 	@include transition-duration(0.8s);
+//   // -webkit-transition-duration: 0.8s;
+//   //    -moz-transition-duration: 0.8s;
+//   //     -ms-transition-duration: 0.8s;
+//   //      -o-transition-duration: 0.8s;
+//   //         transition-duration: 0.8s;
+// }
 
-.isotope {
-  -webkit-transition-property: height, width;
-     -moz-transition-property: height, width;
-      -ms-transition-property: height, width;
-       -o-transition-property: height, width;
-          transition-property: height, width;
-}
+// .isotope {
+//   -webkit-transition-property: height, width;
+//      -moz-transition-property: height, width;
+//       -ms-transition-property: height, width;
+//        -o-transition-property: height, width;
+//           transition-property: height, width;
+// }
 
-.isotope .isotope-item {
-  -webkit-transition-property: -webkit-transform, opacity;
-     -moz-transition-property:    -moz-transform, opacity;
-      -ms-transition-property:     -ms-transform, opacity;
-       -o-transition-property:         top, left, opacity;
-          transition-property:         transform, opacity;
-}
+// .isotope .isotope-item {
+//   -webkit-transition-property: -webkit-transform, opacity;
+//      -moz-transition-property:    -moz-transform, opacity;
+//       -ms-transition-property:     -ms-transform, opacity;
+//        -o-transition-property:         top, left, opacity;
+//           transition-property:         transform, opacity;
+// }
 
-/**** disabling Isotope CSS3 transitions ****/
+// /**** disabling Isotope CSS3 transitions ****/
 
-.isotope.no-transition,
-.isotope.no-transition .isotope-item,
-.isotope .isotope-item.no-transition {
-  -webkit-transition-duration: 0s;
-     -moz-transition-duration: 0s;
-      -ms-transition-duration: 0s;
-       -o-transition-duration: 0s;
-          transition-duration: 0s;
-}
+// .isotope.no-transition,
+// .isotope.no-transition .isotope-item,
+// .isotope .isotope-item.no-transition {
+//   -webkit-transition-duration: 0s;
+//      -moz-transition-duration: 0s;
+//       -ms-transition-duration: 0s;
+//        -o-transition-duration: 0s;
+//           transition-duration: 0s;
+// }

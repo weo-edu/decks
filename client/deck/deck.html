@@ -3,24 +3,32 @@
 		{{#iter decks}}
 			{{> deck_view}}
 		{{/iter}}
-		<h2>Decks To Play</h2>
+		
 	</div>
-	
+	<h2 id='decks-title'>Decks To Play</h2>
 </template>
 
 <template name="deck_view">
-	<div class="deck deck-{{idx}}">
-		<!-- <div class='deck-front'> -->
-			<img src="/{{graphic}}" />
-			<div class="deck-title">{{name}}</div>
-		<!-- </div>
-		<div class='deck-back'>
-			
+	<div id='deck-{{idx}}' class='deck-container'>
+		<div class="deck deck-{{idx}}">
+			<!-- <div class='deck-front'> -->
+				<div class='front'>
+					<img src="/{{graphic}}" />
+				</div>
+				<div class='deck-meta'>
+					<div class="deck-title">{{name}}<br/> & other imformation about this card</div>
+					<a class='play'>PLAY</a>
+				</div>
+			<!-- </div>
+			<div class='deck-back'>
+				
 
-		</div> -->
-		
-		
+			</div> -->
+			
+			
+		</div>
 	</div>
+
 </template>
 
 <template name="deck_play">
