@@ -2,7 +2,8 @@ route('/card/create',function(ctx) {
 	console.log('card create');
 	var session = new _Session();
 	var card = new _Session({
-		template: '',
+		card_name:'Name',
+		template: 'Template',
 		solution: '',
 		graphic: null,
 		rules: []
@@ -39,6 +40,13 @@ route('/card/create',function(ctx) {
 
 			if (!card.equals(id,val))
 				card.set(id,val);
+		},
+		'click #create' : function(){
+			var c = card.all()
+			Cards.insert(c, function(){
+				console.log(Cards.findOne(c));
+			});
+			animateCreator();
 		}
 	};
 
@@ -48,7 +56,8 @@ route('/card/create',function(ctx) {
 	Template.rules.events = {
 		'keyup .instant_update': function(event) {
 			var el = $(event.target);
-			var idx = el.parent().children(".rule-input").index(el);
+			//var idx = el.parent().children(".rule-input").index(el);
+			var idx = el.parents('#rules').children().children('.rule-input').index(el);
 			console.log(idx);
 			var rules = _.clone(card.get('rules'));
 			console.log('rules',rules);
@@ -66,6 +75,41 @@ route('/card/create',function(ctx) {
 		}
 	}
 	
+	Template.template_errors.events = {
+		'mouseover .error-light-red' : function (event) {
+			$('#template-error-message').css('display','inline-block');
+		},
+		'mouseout .error-light-red' : function() {
+			$('#template-error-message').fadeOut('fast');
+		}
+	}
+
+	Template.solution_errors.events = {
+		'mouseover .error-light-red' : function (event) {
+			$('#solution-error-message').css('display','inline-block');
+		},
+		'mouseout .error-light-red' : function() {
+			$('#solution-error-message').fadeOut('fast');
+		}
+	}
+
+	Template.rules_errors.events = {
+		'mouseover .error-light-red' : function (event) {
+			var el = $(event.target).parent().children('#rules-error-message');
+			var light = $(event.target).parent().children('.error-light-red');
+			var cssObj = {
+				'display': 'block',
+				'top': $(light).position().top,
+				'left': $(light).position().left + $(light).width()
+			}
+			$(el).css(cssObj);
+		},
+		'mouseout .error-light-red' : function() {
+			var el = $(event.target).parent().children('#rules-error-message');
+			$(el).fadeOut('fast');
+		}
+	}
+
 	Template.card_play.card = function(){
 		var c = card.all();
 		console.log('c',c);
@@ -99,6 +143,10 @@ route('/card/create',function(ctx) {
 		return c;
 	}
 
+	Template.deck_list.deck = function(){
+		return Decks.find({});
+	}
+
 	Template.template_errors.error = function() {
 		return error.get('template');
 	}
@@ -107,7 +155,14 @@ route('/card/create',function(ctx) {
 		return error.get('solution');
 	}
 	Template.rules_errors.rules_errors = function() {
+		console.log(error.get('rules'));
 		return error.get('rules');
+	}
+	function animateCreator(){
+		var pt1 = $('#template-preview').position().left;
+		var pt2 = $('#card-preview').position().left;
+		var slide = pt2-pt1;
+		$('.display').animate({'left': '-='+slide});
 	}
 	renderView('card_create');
 });

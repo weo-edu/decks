@@ -1,65 +1,117 @@
 <template name="card_create">
-
+	<h2>Card Creator</h2>
 	<div class="create">
-			<h1>Card Creator</h1>
-				Name: <input id="card_name" class="instant_update" type="text" name="important" />
-				Graphic:
-					<input type="file" id="file" name="file" multiple />
-			<h2>Problem</h2>
-				Template: <input id="template" type="text" class="instant_update" name="template"/> 
-				{{>template_errors}}
-				Solution: <input class="instant_update" id="solution" type="text" name="solution"/>
-				{{>solution_errors}}
-				{{>rules}}
-	</div>
-	<div>
-		{{>card_play}}
+		<div>
+			<div id="template-preview" class="display">
+				<div class="display-inner">
+					<div>
+						<p>Name:</p><input id="card_name" class="instant_update" type="text" name="important" />
+					</div>
+					<div>
+						<p>Graphic: </p>
+							<input type="file" id="file" name="file" multiple />
+						</div>
+					<h3>Problem</h3>
+					<div>
+						<p>Template: </p><input id="template" type="text" class="instant_update" name="template"/> 
+						{{>template_errors}}
+					</div>
+					<div>
+						<p>Solution: </p><input class="instant_update" id="solution" type="text" name="solution"/>
+						{{>solution_errors}}
+					</div>
+						{{>rules}}
+				</div>
+			</div>
+			<div id="card-preview" class="display">
+				{{>card_play}}
+				<div id="create" class="quick-button">Create</div>
+			</div>
+			<div id="deck-preview"class="display">
+				<div id="select-deck">
+					{{>deck_list}}
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
+<template name="deck_list">
+	<div class="display-inner">
+		<h2>Select Deck to Add To</h2>
+		Decks:
+			{{#each deck}}
+				<div class="decks">
+					<p>{{name}}</p>
+					<img src="/{{graphic}}"/>
+				</div>
+			{{/each}}
+	</div>
+</template>
 
 <template name="template_errors">
-	<div class='error-light'></div>
-	<div class='error-message'>{{error}}</div>
+		{{#if error}}
+			<div class='error-light-red'></div>
+			<div id='template-error-message' class='error-message'>{{error}}</div>
+		{{else}}
+			<div class='error-light'></div>
+		{{/if}}
 </template>
 
 <template name="solution_errors">
-	<div class='error-light'></div>
-	<div class='error-message'>{{error}}</div>
+	{{#if error}}
+		<div class='error-light-red'></div>
+		<div id='solution-error-message' class='error-message'>{{error}}</div>
+	{{else}}
+		<div class='error-light'></div>
+	{{/if}}
 </template>
 
 <template name="rules">
-	<div id="add-rule">Add Rule</div>
-	<div id='rules'></div>
-	{{>rules_errors}}
-</template>
-
-<template name="rules_errors">
-	<div class='rules-errors'>
-		{{#each rules_errors}}
-			<div class='error-light'></div>
-			<div class='error-message'>{{this}}</div>
-		{{/each}}
+	<div id="add-rule" class="quick-button">Add Rule</div>
+	<div id="rule-container">
+		<ul id='rules'>
+		</ul>
+		{{>rules_errors}}
 	</div>
 </template>
 
+<template name="rules_errors">
+	<ul class='rules-errors'>
+		{{#each rules_errors}}
+			<li>
+				{{#if this}}
+					<div class='error-light-red'></div>
+					<div id='rules-error-message' class='error-message'>{{this}}</div>
+					{{else}}
+					<div class='error-light'></div>
+				{{/if}}
+			</li>
+		{{/each}}
+	</ul>
+</template>
+
 <template name="rule_input">
-	<input class="instant_update rule-input"/>
+	<li>
+		<input class="instant_update rule-input"/>
+	</li>
 </template>
 
 
 <template name="card_play">
 	{{#with card}}
-	<div class='card'>
-		<h3>{{name}}</h3>
-		{{#if graphic}}
-			<img src='{{graphic}}' />
-		{{/if}}
-		<div class='question'>
-			{{question}}
+	<div class='display-inner'>
+		<div class="card">
+			<h3>{{card_name}}</h3>
+			{{#if graphic}}
+				<img src='{{graphic}}' />
+			{{/if}}
+			<div class='question'>
+				{{question}}
+			</div>
+			<p>Solution:</p>
+			<div for='answer'>{{answer}}</div>
 		</div>
-		<label>solution:</label>
-		<div for='answer'>{{answer}}</div>
 	</div>
 	{{/with}}
 </template>

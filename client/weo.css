@@ -69,19 +69,109 @@
 	margin-top: 20px;
 	cursor: pointer;
 }*/
-
-input {
-	display: block;
+h2{
+	font-size:45px;
 }
+input {
+	display: inline-block;
+}
+h3{
+	text-align: center;
+}
+.card img {
+	height:40%;
+	width:100%;
+}
+.create{
+	position: relative;
+	height: 500px;
+	width: 70%;
+	margin: 0 auto;
+	overflow: hidden;
+}
+.card{
+	text-align:center;
+}
+.decks{
+	margin:15px;
+	height: 60px;
+	width:60px;
+	float:left;
+}
+.decks img {
+	height:100%;
+	width:100%;
+}
+#rules{
+	display: inline-block;
+}
+#rule-container{
+	margin: 0 auto;
+	height: 140px;
+	overflow-y: auto;
+}
+#add-rule{
 
+}
+.quick-button{
+	width: 50%;
+	margin: 5px auto;
+	text-align: center;
+	border: 2px outset grey;
+	padding: 5px;
+	cursor: pointer;
+}
+#card-preview{
+	left:360px;
+}
+#deck-preview{
+	left:720px;
+}
+.display{
+	position:absolute;
+	margin:15px;
+	height:400px;
+	width:300px;
+	overflow: hidden;
+	box-shadow: 0 7px 25px rgba(0, 0, 0, .2);
+	-webkit-box-shadow:0 7px 25px rgba(0, 0, 0, .2);
+	-moz-box-shadow:0 7px 25px rgba(0, 0, 0, .2);
+}
+.display-inner{
+	margin:10% auto;
+	width: 70%;
+}
+.error-light{
+	display:inline-block;
+	height:1em;
+	width:1em;
+	border-radius:100%;
+	background-color:green;
+}
+.error-light-red{
+	display:inline-block;
+	height:1em;
+	width:1em;
+	border-radius:100%;
+	background-color:red;
+}
 .error-message {
-	float: right;
+	padding:2px;
+	margin-left:5px;
+	color:#333;
+	background-color: #ccc;
+	border: 2px solid black;
+	position:absolute;
+	display: none;
 }
 
 .rules-errors {
-	float: right;
+	display: inline-block;
 }
-
+.rules-errors li {
+	display: block;
+	height:25px;
+}
 .rules-errors .error-message{
 	float: none;
 }
