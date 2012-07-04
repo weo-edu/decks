@@ -9,7 +9,7 @@ Meteor.startup(function() {
 console.log('test')
 
 function renderView(template) {
-	console.log('template',template);
+	console.log('renderView',template);
 	console.log($('#content'))
 	$("#content").html(function() {
 		return Meteor.ui.render(function() {

@@ -6,6 +6,7 @@ var path = require('path');
 
 
 app.post('/upload', function(req,res) {
+	console.log('upload');
 	var file = req.files.file.path;
 	var fileSlice = file.slice('/tmp/'.length);
 	var ext = req.files.file.name;
@@ -17,10 +18,8 @@ app.post('/upload', function(req,res) {
 	console.log('finish send');
 });
 
-var s = express.static(process.cwd()+"/.meteor/")
-app.get('/upload/*',function(req,res,next) {
-	return s(req,res,next);
-});
+//var s = express.static(process.cwd()+"/.meteor/")
+app.get('/upload/*',express.static(process.cwd()+"/.meteor/"));
 
 
 Meteor.startup(function() {

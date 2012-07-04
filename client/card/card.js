@@ -1,255 +1,168 @@
 route('/card/create',function(ctx) {
-
+	console.log('card create');
 	var session = new _Session();
-	var card;
+	var card = new _Session({
+		card_name:'Name',
+		template: 'Template',
+		solution: '',
+		graphic: null,
+		rules: []
+	});
+	var error = new _Session({
+		template: '',
+		solution: '',
+		rules: []
+	});
+
 	var last_success;
-	var view = ctx.view;
 	var rules = []
 	var error_message;
-	console.log('card create');
-	var events = {
-		'click #create' : function(){
-			console.log(session.get('card'));
-		},
-		'focus .instant_update' : function(){
-			$(event.target.nextElementSibling).fadeIn();
-			$(event.target.nextElementSibling).css('background-color', 'green');
-			card = getValues();
-			testCard(false,event);
-		},
-		'keyup .instant_update' : function(event){
-			var success = true;
-			card = getValues();
-			if(testCard(false, event))
-			{
-				last_success = getCard();
-				session.set('card', card);
-				$(event.target.nextElementSibling).css('background-color', 'green');
-			}
-		},
-		'focusout .instant_update' : function(event){
-			//$(event.target.parentElement + " .error").remove();
-			$(event.target.nextElementSibling).fadeOut();
-			card = getValues();
-			if(!_.isEqual(session.get('card'), card))
-			{
-				testCard(true, event);
-			}
-			//session.set('card', card);
-		},
-		'keyup #rules' : function(event){
-			event.stopPropogation();
-			removeError($("#rules"));
-			var success = true;
-			try{
-				rules.push($('#rules').val());
-				card = getCard();
-			}
-			catch(err)
-			{
-				success = false;
-				rules.pop();
-				card = getCard();
-				$(event.target.nextElementSibling).css('background-color', 'red');
-			}
-			if(success)
-			{
-				$(event.target.nextElementSibling).css('background-color', 'green');
-				rules.pop();
-			}
-			if(event.keyCode == 13)
-			{	
-				if(success)
-				{
-					rules.push($('#rules').val());
-					session.set('card', card);
-					$('#rules_list').append('<li>'+rules[rules.length-1]+'<span class="remove">-</span></li>');
-					$("#rules").val('');
-					$("#rules").focus();
-					console.log(session.get('card'));
-				}
-				else{
-					error_message = "Invalid rule";
-					if(!$(event.target.parentElement).has('.error').length)
-					{
-						var error = "<label class='error'>"+error_message+"</label>"
-						$(error).insertAfter($(event.target.nextElementSibling));
-					}
-				}
-			}
-		},
-		'focusout #rules' : function(event) {
-			$(event.target.nextElementSibling).fadeOut();
-		},
-		'focus #rules' : function(event)
-		{
-			$(event.target.nextElementSibling).css('background-color', 'green')
-			$(event.target.nextElementSibling).fadeIn();
-		},
-		'click .remove' : function (event)
-		{
-			var patt1 = /\b-/;
-			$(event.target.parentElement).remove();
-			var remove = ($(event.target.parentElement).text().trim().replace(patt1,''));
-			//console.log($(event.target.parentElement));
-			_.each(rules, function(num, val){
-				if(num == remove)
-					rules.splice(val, 1);
-			})
-			card = getCard();
-			session.set('card', card);
-		},
-		'insert .create' : function(evt){
-	    $('#file').fileupload({
+
+	Meteor.defer(function() {
+		console.log('file', $('#file'));
+		$('#file').fileupload({
 	    	url: "/upload",
 	    	type: "POST",
 	    	dataType: 'json',
 	    	multipart: true,
 	    	done: function(e,data) {
-	    		$("#card_path").html("/upload/"+data.result.path);
-	    		card = getCard();
-	    		console.log(card);
-	    		session.set('card',card);
+	    		console.log('done');
+	    		card.set("graphic","/upload/"+data.result.path);
 		    }
 	    });
+	})
+
+	var events = {
+		'keyup .instant_update' : function(event){
+			var el = $(event.target);
+			var id = $(event.target).attr('id');
+			var val = el.val();
+
+			if (!card.equals(id,val))
+				card.set(id,val);
+		},
+		'click #create' : function(){
+			var c = card.all()
+			Cards.insert(c, function(){
+				console.log(Cards.findOne(c));
+			});
+			animateCreator();
 		}
 	};
 
 	Template.card_create.events = events;
 
-	function testCard(for_color, event){
-		try{
-			card = getCard();
-			session.set('card', card);
-			$(".error").remove();
-			return true;
-		}
-		catch(err)
-		{
-			errorSwitch(err, for_color, event)
+
+	Template.rules.events = {
+		'keyup .instant_update': function(event) {
+			var el = $(event.target);
+			//var idx = el.parent().children(".rule-input").index(el);
+			var idx = el.parents('#rules').children().children('.rule-input').index(el);
+			console.log(idx);
+			var rules = _.clone(card.get('rules'));
+			console.log('rules',rules);
+			rules[idx] = el.val();
+			card.set('rules',rules);
 			return false;
+		},
+		'click #add-rule': function() {
+			$('#rules').prepend(Meteor.ui.render(function() {
+				return Template.rule_input();
+			}));
+			var rules = card.get('rules');
+			rules.unshift('');
+			card.set('rules',rules);
 		}
-	}
-	function errorSwitch(err, for_color, event)
-	{
-		switch(errorAssign(err, for_color))
-		{
-			case "template":
-				try
-				{
-					if($(event.target).is($('#template')))
-						$(event.target).next().css('background-color', 'red');
-					card = getValues();
-					card.template = last_success.template;
-					getCard(card);
-					removeError($('#solution'));
-				}
-				catch(err)
-				{
-					if($(event.target).is($('#solution')))
-						$(event.target).next().css('background-color', 'red');
-					errorAssign(err, for_color);
-				}
-			break;
-			case "solution":
-				try
-				{
-					if($(event.target).is($('#solution')))
-						$(event.target).next().css('background-color', 'red');
-					card = getValues();
-					card.solution = last_success.solution;
-					getCard(card);
-					removeError($('#template'));
-				}
-				catch(err)
-				{
-					if($(event.target).is($('#template')))
-						$(event.target).next().css('background-color', 'red');
-					errorAssign(err,for_color);
-					//$('#template').next().css('background-color', 'red');
-				}
-			break;
-			default:
-			break;
-		}
-	}
-	function errorMessage(target, message)
-	{
-		var tar = target.parent();
-		if(!$(tar).has('.error').length)
-		{
-			var error = "<label class='error'>"+error_message+"</label>"
-			$(tar).append(error);
-		}
-	}
-	function removeError(target)
-	{
-		var tar = target.parent();
-		var tar_ball = target.next();
-		if(tar.has($('.error')))
-		{
-			tar.children('.error').remove();
-		}
-		$(tar_ball).css('background-color', 'green');
-	}
-	function errorAssign(error, send_error)
-	{
-		var error_messagel;
-		var err = error;
-		var patt1 = / token: /
-		var patt2 = /end of input/
-		var patt3 = /not defined/
-		var patt4 = /of undefined/
-		if(patt1.test(err.message))
-			{
-				if(send_error)
-				{
-					error_message = "Invalid template";
-					errorMessage($("#template"), error_message);
-				}
-				return "template";
-			}
-			else if(patt2.test(err.message) || patt3.test(err.message) || patt4.test(err.message))
-			{
-				if(send_error)
-				{
-					error_message = "Invalid solution";
-					errorMessage($("#solution"), error_message);
-				}
-				return "solution";
-			}
-			else
-			{
-				if(send_error)
-				{
-					error_message = err.message;
-					errorMessage($(event.target), error_message);
-				}
-				return "else";
-			}
-	}
-	function getValues(){
-		var update_card = {};
-		update_card.name = $('#card_name').val();
-		update_card.graphic = $('#card_path').html();
-		update_card.template = $("#template").val();
-		update_card.solution = $("#solution").val();
-		update_card.rules = rules;
-		return update_card;
-	}
-	function getCard(fix_card){
-		if(fix_card)
-			var update_card = fix_card;
-		else
-			var update_card = getValues();
-		update_card.problem = new Problem(update_card);
-		update_card.question = update_card.problem.generate();
-		update_card.answer = update_card.problem.getSolution();
-		return update_card;
 	}
 	
+	Template.template_errors.events = {
+		'mouseover .error-light-red' : function (event) {
+			$('#template-error-message').css('display','inline-block');
+		},
+		'mouseout .error-light-red' : function() {
+			$('#template-error-message').fadeOut('fast');
+		}
+	}
+
+	Template.solution_errors.events = {
+		'mouseover .error-light-red' : function (event) {
+			$('#solution-error-message').css('display','inline-block');
+		},
+		'mouseout .error-light-red' : function() {
+			$('#solution-error-message').fadeOut('fast');
+		}
+	}
+
+	Template.rules_errors.events = {
+		'mouseover .error-light-red' : function (event) {
+			var el = $(event.target).parent().children('#rules-error-message');
+			var light = $(event.target).parent().children('.error-light-red');
+			var cssObj = {
+				'display': 'block',
+				'top': $(light).position().top,
+				'left': $(light).position().left + $(light).width()
+			}
+			$(el).css(cssObj);
+		},
+		'mouseout .error-light-red' : function() {
+			var el = $(event.target).parent().children('#rules-error-message');
+			$(el).fadeOut('fast');
+		}
+	}
+
 	Template.card_play.card = function(){
-		return session.get('card');
+		var c = card.all();
+		console.log('c',c);
+		var p = problemize(c);
+		c.question = p.html;
+		c.answer = p.solution;
+		var e = {
+			template: '',
+			solution: '',
+			rules: _.map(c.rules,function(rule) {return '';})
+		};
+
+		console.log('e',e);
+
+		_.each(p.errors,function(err) {
+			console.log(err.stack);
+			if (err.part == 'rule') {
+				console.log('rule error',err.idx);
+				e.rules[err.idx] = err.message;
+			}
+				
+			else
+				e[err.part] = err.message;
+		});
+
+		_.each(e,function(val,key) {
+			error.set(key,val);
+		})
+
+ 
+		return c;
+	}
+
+	Template.deck_list.deck = function(){
+		return Decks.find({});
+	}
+
+	Template.template_errors.error = function() {
+		return error.get('template');
+	}
+
+	Template.solution_errors.error = function() {
+		return error.get('solution');
+	}
+	Template.rules_errors.rules_errors = function() {
+		console.log(error.get('rules'));
+		return error.get('rules');
+	}
+	function animateCreator(){
+		var pt1 = $('#template-preview').position().left;
+		var pt2 = $('#card-preview').position().left;
+		var slide = pt2-pt1;
+		$('.display').animate({'left': '-='+slide});
 	}
 	renderView('card_create');
 });
