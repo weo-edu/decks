@@ -75,7 +75,7 @@ Meteor.startup(function() {
 		},
 		{
 			name: 'arithmetic',
-			graphic: 'arithmetic.png',
+			graphic: 'arithmetic-3.jpeg',
 			cards: [
 				{
 					name: 'addition',
@@ -123,7 +123,7 @@ Meteor.startup(function() {
 		},
 		{
 			name: 'arithmetic',
-			graphic: 'arithmetic.png',
+			graphic: 'word_arithmetic.jpeg',
 			cards: [
 				{
 					name: 'addition',
@@ -171,7 +171,7 @@ Meteor.startup(function() {
 		},
 		{
 			name: 'arithmetic',
-			graphic: 'arithmetic.png',
+			graphic: 'arithmetic-2.jpeg',
 			cards: [
 				{
 					name: 'addition',
@@ -219,7 +219,7 @@ Meteor.startup(function() {
 		},
 		{
 			name: 'arithmetic',
-			graphic: 'arithmetic.png',
+			graphic: 'arithmetic-3.jpeg',
 			cards: [
 				{
 					name: 'addition',
@@ -267,7 +267,7 @@ Meteor.startup(function() {
 		},
 		{
 			name: 'arithmetic',
-			graphic: 'arithmetic.png',
+			graphic: 'arithmetic-4.png',
 			cards: [
 				{
 					name: 'addition',

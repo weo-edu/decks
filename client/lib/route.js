@@ -1,6 +1,8 @@
 ;(function(){
 	var all;
 	var ready;
+	var base = '/' + __meteor_runtime_config__.METEOR_SUBAPP_PREFIX + 'decks';
+
 	function route(path, fn){
 		var args = _.toArray(arguments);
 		if(typeof fn === 'function'){
@@ -20,18 +22,23 @@
 
 	route.all = function(fn){ all = fn; };
 	route.ready = function(fn){ ready = fn; };
-	route.start = page.start;
+	route.start = function(){
+		if(__meteor_runtime_config__ && __meteor_runtime_config__.METEOR_SUBAPP_PREFIX)
+			page.base(base);
+
+		page.start();
+	};
+
 	route.show  = page.show;
 
 	route.ready(function(ctx,next) {
-		console.log('ready')
-	 $(document).ready(next);
+		$(document).ready(next);
 	});
 
 	route.redirect = function(path) {
 		setTimeout(function() {
 			page(path)
-		},0);
+		}, 0);
 	}
 
 

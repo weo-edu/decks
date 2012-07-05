@@ -84,12 +84,7 @@ html {
 /* line 40, ../sass/screen.scss */
 body {
   font-family: Arial;
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #dddddd));
-  background: -webkit-linear-gradient(#ffffff, #dddddd);
-  background: -moz-linear-gradient(#ffffff, #dddddd);
-  background: -o-linear-gradient(#ffffff, #dddddd);
-  background: -ms-linear-gradient(#ffffff, #dddddd);
-  background: linear-gradient(#ffffff, #dddddd);
+  background: url("/45degreee_fabric.png");
   height: 100%;
 }
 
@@ -104,7 +99,7 @@ h1 {
   font-size: 60px;
   line-height: 80px;
   color: #FFF;
-  text-shadow: 2px 2px 0px #333333;
+  text-shadow: 2px 2px 0px black;
 }
 
 /* line 61, ../sass/screen.scss */
@@ -116,18 +111,10 @@ h1 {
 
 /* line 69, ../sass/screen.scss */
 #header {
-  background: #52C7DB;
+  background: #444;
   height: 75px;
   position: relative;
   margin-bottom: 60px;
-}
-/* line 75, ../sass/screen.scss */
-#header .arrowed {
-  position: absolute;
-  top: 74px;
-  height: 12px;
-  width: 100%;
-  background: url("/arrow-bottom.png") repeat-x;
 }
 
 /* line 85, ../sass/screen.scss */
@@ -137,42 +124,194 @@ nav {
   position: relative;
 }
 
-/* line 92, ../sass/screen.scss */
+/* line 93, ../sass/screen.scss */
+#deck-grid {
+  -webkit-transition: height 0.7s ease-out;
+  -moz-transition: height 0.7s ease-out;
+  -ms-transition: height 0.7s ease-out;
+  -o-transition: height 0.7s ease-out;
+  transition: height 0.7s ease-out;
+}
+/* line 100, ../sass/screen.scss */
+#deck-grid .deck-container {
+  -webkit-transition: all 0.4s ease-out;
+  -moz-transition: all 0.4s ease-out;
+  -ms-transition: all 0.4s ease-out;
+  -o-transition: all 0.4s ease-out;
+  transition: all 0.4s ease-out;
+  height: 180px;
+  width: 180px;
+  -webkit-perspective: 700;
+  perspective: 700;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  border-radius: 8px;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-transform: rotateY(120deg) scale(0.01);
+  -moz-transform: rotateY(120deg) scale(0.01);
+  -ms-transform: rotateY(120deg) scale(0.01);
+  -o-transform: rotateY(120deg) scale(0.01);
+  transform: rotateY(120deg) scale(0.01);
+  position: absolute;
+  cursor: pointer;
+}
+/* line 130, ../sass/screen.scss */
+#deck-grid .deck-container .deck {
+  -webkit-transition: all 0.4s ease-in-out;
+  -moz-transition: all 0.4s ease-in-out;
+  -ms-transition: all 0.4s ease-in-out;
+  -o-transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
+  height: 180px;
+  width: 180px;
+  -webkit-box-shadow: 0 0 5px #333333;
+  -moz-box-shadow: 0 0 5px #333333;
+  box-shadow: 0 0 5px #333333;
+  overflow: hidden;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  border-radius: 8px;
+}
+/* line 142, ../sass/screen.scss */
+#deck-grid .deck-container .front {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+/* line 148, ../sass/screen.scss */
+#deck-grid .deck-container .front img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  border-radius: 8px;
+}
+/* line 175, ../sass/screen.scss */
+#deck-grid .deck-container .deck-meta {
+  -webkit-transition: all 0.4s ease-in-out;
+  -moz-transition: all 0.4s ease-in-out;
+  -ms-transition: all 0.4s ease-in-out;
+  -o-transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
+  position: absolute;
+  padding: 10px;
+  -webkit-border-radius: 0 0 8px 8px;
+  -moz-border-radius: 0 0 8px 8px;
+  -ms-border-radius: 0 0 8px 8px;
+  -o-border-radius: 0 0 8px 8px;
+  border-radius: 0 0 8px 8px;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  border-width: 0px;
+  border-style: solid;
+  font: 16px/1.2em sans-serif;
+  color: #FFF;
+  background: rgba(0, 0, 0, 0.6);
+  bottom: -180px;
+  z-index: 99;
+}
+/* line 211, ../sass/screen.scss */
+#deck-grid .deck-container.view-more .deck {
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+  -ms-transform: rotateY(180deg);
+  -o-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+  z-index: 98;
+}
+/* line 216, ../sass/screen.scss */
+#deck-grid .deck-container.view-more .deck-meta {
+  bottom: 0;
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+  -ms-transform: rotateY(180deg);
+  -o-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+}
+/* line 225, ../sass/screen.scss */
+#deck-grid .deck-container .play {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #dddddd));
+  background: -webkit-linear-gradient(#ffffff, #dddddd);
+  background: -moz-linear-gradient(#ffffff, #dddddd);
+  background: -o-linear-gradient(#ffffff, #dddddd);
+  background: -ms-linear-gradient(#ffffff, #dddddd);
+  background: linear-gradient(#ffffff, #dddddd);
+  cursor: pointer;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  position: relative;
+  color: #333;
+  padding: 5px;
+  display: block;
+  text-align: center;
+}
+/* line 235, ../sass/screen.scss */
+#deck-grid .deck-container .play:hover {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #ffffff));
+  background: -webkit-linear-gradient(#dddddd, #ffffff);
+  background: -moz-linear-gradient(#dddddd, #ffffff);
+  background: -o-linear-gradient(#dddddd, #ffffff);
+  background: -ms-linear-gradient(#dddddd, #ffffff);
+  background: linear-gradient(#dddddd, #ffffff);
+}
+
+/* line 243, ../sass/screen.scss */
+#decks-title {
+  text-align: center;
+  font-size: 40px;
+  margin: 30px 0;
+  color: #999;
+}
+
+/* line 255, ../sass/screen.scss */
 #deck-flow {
   -webkit-perspective: 700px;
   perspective: 700px;
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
 }
-/* line 100, ../sass/screen.scss */
+/* line 263, ../sass/screen.scss */
 #deck-flow .deck-1 {
   background: tomato;
 }
-/* line 100, ../sass/screen.scss */
+/* line 263, ../sass/screen.scss */
 #deck-flow .deck-2 {
   background: tomato;
 }
-/* line 100, ../sass/screen.scss */
+/* line 263, ../sass/screen.scss */
 #deck-flow .deck-3 {
   background: tomato;
 }
-/* line 100, ../sass/screen.scss */
+/* line 263, ../sass/screen.scss */
 #deck-flow .deck-4 {
   background: tomato;
 }
-/* line 100, ../sass/screen.scss */
+/* line 263, ../sass/screen.scss */
 #deck-flow .deck-5 {
   background: tomato;
 }
-/* line 100, ../sass/screen.scss */
+/* line 263, ../sass/screen.scss */
 #deck-flow .deck-6 {
   background: tomato;
 }
-/* line 100, ../sass/screen.scss */
+/* line 263, ../sass/screen.scss */
 #deck-flow .deck-7 {
   background: tomato;
 }
-/* line 135, ../sass/screen.scss */
+/* line 298, ../sass/screen.scss */
 #deck-flow .deck {
   height: 200px;
   width: 200px;
@@ -180,11 +319,11 @@ nav {
   margin: 10px;
   overflow: hidden;
 }
-/* line 142, ../sass/screen.scss */
+/* line 305, ../sass/screen.scss */
 #deck-flow .deck img {
   height: 100%;
 }
-/* line 196, ../sass/screen.scss */
+/* line 359, ../sass/screen.scss */
 #deck-flow h2 {
   position: absolute;
   text-align: center;

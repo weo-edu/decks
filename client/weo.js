@@ -5,13 +5,9 @@ route('/', function(ctx, next) {
 
 Meteor.startup(function() {
 	route.start();
-})
-
-console.log('test')
+});
 
 function renderView(template) {
-	console.log('renderView',template);
-	console.log($('#content'))
 	$("#content").html(function() {
 		return Meteor.ui.render(function() {
 			return Template[template]();
