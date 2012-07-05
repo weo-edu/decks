@@ -1,3 +1,4 @@
+
 route('/', function(ctx, next) {
   route.redirect('/deck/browse');
 });
