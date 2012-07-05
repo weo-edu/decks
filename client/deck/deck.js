@@ -1,5 +1,4 @@
 route('/deck/browse',function() {
-
 	var containerWidth = 0;
 	var deckWidth = 0;
 	var decksPerRow = 0;
@@ -7,6 +6,8 @@ route('/deck/browse',function() {
 	var transformPrefix = domToCss(Modernizr.prefixed('transform'));
 	
 	Template.deck_browse.decks = function() {
+		var decks;
+
 		Meteor.defer(function(){
 			if(decks.count()){
 				containerWidth = $('#deck-grid').width();
@@ -41,13 +42,8 @@ route('/deck/browse',function() {
 			}
 		});
 
-	  var decks = Decks.find({});
-	  // console.log(decks.count());
+	  decks = Decks.find({});
 	  return decks;
-
-
-	  
-
 	};
 
 	Template.deck_browse.events = {
