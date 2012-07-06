@@ -57,7 +57,6 @@ route('/deck/browse',function() {
 	  	// route('/deck/play/' + this.name);
 	  },
 	  'click .play': function() {
-	  	console.log('click play')
 	  	route('/deck/play/' + this.name);
 	  },
 	  'mouseover .deck-container': function(e){
@@ -138,8 +137,6 @@ route('/deck/browse',function() {
 
 
 route('/deck/play/:name', function(ctx){
-	console.log('deck play')
-
 	var play_session = new _Session();
 	var name = ctx.params.name;
 	var game;
@@ -156,7 +153,7 @@ route('/deck/play/:name', function(ctx){
   );
 
   Template.deck_play.card = function(){
-  	return play_session.get('card')
+  	return play_session.get('card');
 	}
 
 	var events = {};
