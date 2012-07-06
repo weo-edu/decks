@@ -57,7 +57,7 @@ route('/deck/browse',function() {
 	};
 
 	Template.deck_browse.events = {
-	  	'click .deck': function(e) {
+		 	'click .deck': function(e) {
 		  	var el = $(e.target).closest('.deck-container');
 		  	// var that = null;
 		  	$('.deck-container').not(el).removeClass('view-more');
@@ -67,7 +67,6 @@ route('/deck/browse',function() {
 		  	// route('/deck/play/' + this.name);
 	  	},
 	  	'click .play': function(e) {
-	  		// console.log($(e.target).attr('class'));
 	  		e.stopPropagation();
 	  		route('/deck/play/' + this.name);
 	  	},
@@ -83,7 +82,6 @@ route('/deck/browse',function() {
 	  		// var rot = getTranslation(el);
 	  		// el.css(transformPrefix, 'translate3d(' + rot.left + 'px,'+ rot.top +'px, 0)');
 	  	}
-
 	}
 
   	renderView('deck_browse');
@@ -149,8 +147,6 @@ route('/deck/browse',function() {
 
 
 route('/deck/play/:name', function(ctx){
-	console.log('deck play')
-
 	var play_session = new _Session();
 	var name = ctx.params.name;
 	var game;
@@ -167,7 +163,7 @@ route('/deck/play/:name', function(ctx){
   );
 
   Template.deck_play.card = function(){
-  	return play_session.get('card')
+  	return play_session.get('card');
 	}
 
 	var events = {};
@@ -179,7 +175,7 @@ route('/deck/play/:name', function(ctx){
 	   	    play_session.set('card',next_card);
 	   	    evt.target.value = "";
 	   	  }
-	   	  else Session.set('view','deck_results');
+	   	  else renderView('deck_results');
 	   	}
 		});
 
@@ -204,4 +200,5 @@ route('/deck/play/:name', function(ctx){
 	};
 	
 	renderView('deck_play');
+
 });
