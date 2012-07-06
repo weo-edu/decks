@@ -22,7 +22,7 @@ route('/deck/browse',function() {
 				var deal = setInterval(function(){
 					
 					var el = $('.deck-container').eq(idx);
-					var bg = getAverageRGB(el.find('img').get(0));
+					// var bg = getAverageRGB(el.find('img').get(0));
 					// var x = (deckWidth + gutter) * (idx%decksPerRow);
 					// var y = (deckWidth + gutter) * (Math.floor(idx/decksPerRow));
 					var rot = getTranslation(el);
@@ -30,7 +30,8 @@ route('/deck/browse',function() {
 					// el.css({'left': x, 'top': y});
 					// el.css(transformPrefix, 'rotateY(0deg) scale(1)');
 					el.css(transformPrefix, 'translate3d(' + rot.left + 'px,'+ rot.top +'px, 0)');
-					// el.find('.deck-meta').css({'border-color': bg});
+					el.css('z-index', 1);
+					// el.find('.deck-meta').css({'background': bg});
 					idx++;
 					
 					if(idx >= decks.count())
@@ -40,6 +41,15 @@ route('/deck/browse',function() {
 				}, 150);
 
 			}
+			$('#header').click(function(){
+				$('#tab').addClass('active', 400);
+				$(this).slideUp(300);
+			});
+
+			$('#tab').click(function(){
+				$('#header').slideDown(300);
+				$(this).removeClass('active', 400);
+			});
 		});
 
 	  decks = Decks.find({});
@@ -47,31 +57,31 @@ route('/deck/browse',function() {
 	};
 
 	Template.deck_browse.events = {
-	  'click .deck': function(e) {
-	  	var el = $(e.target).closest('.deck-container');
-	  	// var that = null;
-	  	$('.deck-container').not(el).removeClass('view-more');
-	  	el.toggleClass('view-more');
-	  	// el.css(transformPrefix, ' rotateY(-180deg) scale(1.1)');
+	  	'click .deck': function(e) {
+		  	var el = $(e.target).closest('.deck-container');
+		  	// var that = null;
+		  	$('.deck-container').not(el).removeClass('view-more');
+		  	el.toggleClass('view-more');
+		  	// el.css(transformPrefix, ' rotateY(-180deg) scale(1.1)');
 
-	  	// route('/deck/play/' + this.name);
-	  },
-	  'click .play': function() {
-	  	console.log('click play')
-	  	route('/deck/play/' + this.name);
-	  },
-	  'mouseover .deck-container': function(e){
-	  	// var el = $(e.target).closest('.deck');//.parent('.deck');
-	  	// // console.log(el.closest('.deck').attr('class'));
-	  	// // var rot = getTranslation(el);
-	  	// el.css(transformPrefix, ' rotateY(-180deg) scale(1.1)');
-	  	// el.css('z-index', 99);
-	  },
-	  'mouseout .deck': function(e){
-	  	// var el = $(e.target).closest('.deck');
-	  	// var rot = getTranslation(el);
-	  	// el.css(transformPrefix, 'translate3d(' + rot.left + 'px,'+ rot.top +'px, 0)');
-	  }
+		  	// route('/deck/play/' + this.name);
+	  	},
+	  	'click .play': function(e) {
+	  		e.stopPropagation();
+	  		route('/deck/play/' + this.name);
+	  	},
+	  	'mouseover .deck-container': function(e){
+		  	// var el = $(e.target).closest('.deck');//.parent('.deck');
+		  	// // console.log(el.closest('.deck').attr('class'));
+		  	// // var rot = getTranslation(el);
+		  	// el.css(transformPrefix, ' rotateY(-180deg) scale(1.1)');
+		  	// el.css('z-index', 99);
+	  	},
+	  	'mouseout .deck': function(e){
+	  		// var el = $(e.target).closest('.deck');
+	  		// var rot = getTranslation(el);
+	  		// el.css(transformPrefix, 'translate3d(' + rot.left + 'px,'+ rot.top +'px, 0)');
+	  	}
 
 	}
 

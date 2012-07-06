@@ -3,7 +3,7 @@
  * In this file you should write your main styles. (or centralize your imports)
  * Import this file using the following HTML or equivalent:
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
-/* line 17, ../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 17, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -20,50 +20,50 @@ time, mark, audio, video {
   margin: 0;
   padding: 0;
   border: 0;
-  font-size: 100%;
   font: inherit;
+  font-size: 100%;
   vertical-align: baseline;
 }
 
-/* line 20, ../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
-body {
+/* line 22, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html {
   line-height: 1;
 }
 
-/* line 22, ../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 24, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 ol, ul {
   list-style: none;
 }
 
-/* line 24, ../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 26, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-/* line 26, ../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 28, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
 
-/* line 28, ../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 30, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 q, blockquote {
   quotes: none;
 }
-/* line 101, ../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 103, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 q:before, q:after, blockquote:before, blockquote:after {
   content: "";
   content: none;
 }
 
-/* line 30, ../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 32, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 a img {
   border: none;
 }
 
-/* line 114, ../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 116, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
   display: block;
 }
@@ -84,7 +84,7 @@ html {
 /* line 40, ../sass/screen.scss */
 body {
   font-family: Arial;
-  background: url("/45degreee_fabric.png");
+  background: url("/textures/45degreee_fabric.png");
   height: 100%;
 }
 
@@ -107,84 +107,113 @@ h1 {
   width: 980px;
   margin: 0 auto;
   position: relative;
+  margin-top: 50px;
 }
 
 /* line 69, ../sass/screen.scss */
-#header {
-  background: #444;
-  height: 75px;
-  position: relative;
-  margin-bottom: 60px;
+#tab {
+  height: 25px;
+  width: 25px;
+  position: absolute;
+  top: -25px;
+  background: tomato;
+  z-index: 999;
+}
+/* line 78, ../sass/screen.scss */
+#tab.active {
+  top: 0;
 }
 
-/* line 85, ../sass/screen.scss */
+/* line 84, ../sass/screen.scss */
+#header {
+  background: #444444 url("/textures/low_contrast_linen.png");
+  height: 75px;
+  position: relative;
+}
+
+/* line 99, ../sass/screen.scss */
 nav {
   width: 980px;
   margin: 0 auto;
   position: relative;
 }
 
-/* line 93, ../sass/screen.scss */
+/* line 107, ../sass/screen.scss */
 #deck-grid {
   -webkit-transition: height 0.7s ease-out;
   -moz-transition: height 0.7s ease-out;
-  -ms-transition: height 0.7s ease-out;
   -o-transition: height 0.7s ease-out;
   transition: height 0.7s ease-out;
 }
-/* line 100, ../sass/screen.scss */
+/* line 110, ../sass/screen.scss */
 #deck-grid .deck-container {
   -webkit-transition: all 0.4s ease-out;
   -moz-transition: all 0.4s ease-out;
-  -ms-transition: all 0.4s ease-out;
   -o-transition: all 0.4s ease-out;
   transition: all 0.4s ease-out;
   height: 180px;
   width: 180px;
-  -webkit-perspective: 700;
-  perspective: 700;
+  -webkit-perspective: 800;
+  -moz-perspective: 800;
+  -ms-perspective: 800;
+  -o-perspective: 800;
+  perspective: 800;
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
   -ms-border-radius: 8px;
   -o-border-radius: 8px;
   border-radius: 8px;
   -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
   transform-style: preserve-3d;
-  -webkit-transform: rotateY(120deg) scale(0.01);
-  -moz-transform: rotateY(120deg) scale(0.01);
-  -ms-transform: rotateY(120deg) scale(0.01);
-  -o-transform: rotateY(120deg) scale(0.01);
-  transform: rotateY(120deg) scale(0.01);
+  -webkit-transform: rotateY(120deg) scale(0.001);
+  -moz-transform: rotateY(120deg) scale(0.001);
+  -ms-transform: rotateY(120deg) scale(0.001);
+  -o-transform: rotateY(120deg) scale(0.001);
+  transform: rotateY(120deg) scale(0.001);
   position: absolute;
   cursor: pointer;
+  z-index: 0;
 }
-/* line 130, ../sass/screen.scss */
+/* line 124, ../sass/screen.scss */
 #deck-grid .deck-container .deck {
-  -webkit-transition: all 0.4s ease-in-out;
-  -moz-transition: all 0.4s ease-in-out;
-  -ms-transition: all 0.4s ease-in-out;
-  -o-transition: all 0.4s ease-in-out;
-  transition: all 0.4s ease-in-out;
   height: 180px;
   width: 180px;
-  -webkit-box-shadow: 0 0 5px #333333;
-  -moz-box-shadow: 0 0 5px #333333;
-  box-shadow: 0 0 5px #333333;
-  overflow: hidden;
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  -ms-border-radius: 8px;
-  -o-border-radius: 8px;
-  border-radius: 8px;
+  -webkit-perspective: 800;
+  -moz-perspective: 800;
+  -ms-perspective: 800;
+  -o-perspective: 800;
+  perspective: 800;
 }
-/* line 142, ../sass/screen.scss */
+/* line 136, ../sass/screen.scss */
+#deck-grid .deck-container .front, #deck-grid .deck-container .deck-meta {
+  -webkit-transition: -webkit-transform 0.25s ease-in-out, box-shadow 0.15s ease-in-out;
+  -moz-transition: -moz-transform 0.25s ease-in-out, box-shadow 0.15s ease-in-out;
+  -o-transition: -o-transform 0.25s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition: transform 0.25s ease-in-out, box-shadow 0.15s ease-in-out;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.6), 0 0 7px #333333;
+  -moz-box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.6), 0 0 7px #333333;
+  box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.6), 0 0 7px #333333;
+}
+/* line 143, ../sass/screen.scss */
 #deck-grid .deck-container .front {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-/* line 148, ../sass/screen.scss */
-#deck-grid .deck-container .front img {
+  -webkit-transform: rotateX(0deg) rotateY(0deg);
+  -moz-transform: rotateX(0deg) rotateY(0deg);
+  -ms-transform: rotateX(0deg) rotateY(0deg);
+  -o-transform: rotateX(0deg) rotateY(0deg);
+  transform: rotateX(0deg) rotateY(0deg);
   position: absolute;
   width: 100%;
   height: 100%;
@@ -194,57 +223,35 @@ nav {
   -o-border-radius: 8px;
   border-radius: 8px;
 }
-/* line 175, ../sass/screen.scss */
+/* line 157, ../sass/screen.scss */
 #deck-grid .deck-container .deck-meta {
-  -webkit-transition: all 0.4s ease-in-out;
-  -moz-transition: all 0.4s ease-in-out;
-  -ms-transition: all 0.4s ease-in-out;
-  -o-transition: all 0.4s ease-in-out;
-  transition: all 0.4s ease-in-out;
   position: absolute;
+  left: 0;
   padding: 10px;
-  -webkit-border-radius: 0 0 8px 8px;
-  -moz-border-radius: 0 0 8px 8px;
-  -ms-border-radius: 0 0 8px 8px;
-  -o-border-radius: 0 0 8px 8px;
-  border-radius: 0 0 8px 8px;
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
-  opacity: 0;
-  border-width: 0px;
-  border-style: solid;
+  width: 160px;
+  height: 160px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  border-radius: 8px;
   font: 16px/1.2em sans-serif;
   color: #FFF;
-  background: rgba(0, 0, 0, 0.6);
-  bottom: -180px;
-  z-index: 99;
-}
-/* line 211, ../sass/screen.scss */
-#deck-grid .deck-container.view-more .deck {
-  -webkit-transform: rotateY(180deg);
-  -moz-transform: rotateY(180deg);
-  -ms-transform: rotateY(180deg);
-  -o-transform: rotateY(180deg);
-  transform: rotateY(180deg);
-  z-index: 98;
-}
-/* line 216, ../sass/screen.scss */
-#deck-grid .deck-container.view-more .deck-meta {
+  background: rgba(0, 0, 0, 0.3);
+  background: url("/textures/low_contrast_linen.png");
   bottom: 0;
   -webkit-transform: rotateY(180deg);
   -moz-transform: rotateY(180deg);
   -ms-transform: rotateY(180deg);
   -o-transform: rotateY(180deg);
   transform: rotateY(180deg);
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
-  opacity: 1;
 }
-/* line 225, ../sass/screen.scss */
-#deck-grid .deck-container .play {
+/* line 171, ../sass/screen.scss */
+#deck-grid .deck-container .deck-meta .play {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #dddddd));
   background: -webkit-linear-gradient(#ffffff, #dddddd);
   background: -moz-linear-gradient(#ffffff, #dddddd);
   background: -o-linear-gradient(#ffffff, #dddddd);
-  background: -ms-linear-gradient(#ffffff, #dddddd);
   background: linear-gradient(#ffffff, #dddddd);
   cursor: pointer;
   -webkit-border-radius: 5px;
@@ -252,83 +259,44 @@ nav {
   -ms-border-radius: 5px;
   -o-border-radius: 5px;
   border-radius: 5px;
-  position: relative;
+  position: absolute;
+  bottom: 10px;
+  width: 100px;
   color: #333;
   padding: 5px;
   display: block;
   text-align: center;
 }
-/* line 235, ../sass/screen.scss */
-#deck-grid .deck-container .play:hover {
+/* line 184, ../sass/screen.scss */
+#deck-grid .deck-container .deck-meta .play:hover {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #ffffff));
   background: -webkit-linear-gradient(#dddddd, #ffffff);
   background: -moz-linear-gradient(#dddddd, #ffffff);
   background: -o-linear-gradient(#dddddd, #ffffff);
-  background: -ms-linear-gradient(#dddddd, #ffffff);
   background: linear-gradient(#dddddd, #ffffff);
 }
+/* line 191, ../sass/screen.scss */
+#deck-grid .deck-container.view-more .front {
+  -webkit-transform: rotateY(-180deg);
+  -moz-transform: rotateY(-180deg);
+  -ms-transform: rotateY(-180deg);
+  -o-transform: rotateY(-180deg);
+  transform: rotateY(-180deg);
+}
+/* line 194, ../sass/screen.scss */
+#deck-grid .deck-container.view-more .deck-meta {
+  z-index: 99;
+  -webkit-transform: rotateY(0deg);
+  -moz-transform: rotateY(0deg);
+  -ms-transform: rotateY(0deg);
+  -o-transform: rotateY(0deg);
+  transform: rotateY(0deg);
+}
 
-/* line 243, ../sass/screen.scss */
+/* line 203, ../sass/screen.scss */
 #decks-title {
   text-align: center;
   font-size: 40px;
   margin: 30px 0;
   color: #999;
-}
-
-/* line 255, ../sass/screen.scss */
-#deck-flow {
-  -webkit-perspective: 700px;
-  perspective: 700px;
-  -webkit-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-}
-/* line 263, ../sass/screen.scss */
-#deck-flow .deck-1 {
-  background: tomato;
-}
-/* line 263, ../sass/screen.scss */
-#deck-flow .deck-2 {
-  background: tomato;
-}
-/* line 263, ../sass/screen.scss */
-#deck-flow .deck-3 {
-  background: tomato;
-}
-/* line 263, ../sass/screen.scss */
-#deck-flow .deck-4 {
-  background: tomato;
-}
-/* line 263, ../sass/screen.scss */
-#deck-flow .deck-5 {
-  background: tomato;
-}
-/* line 263, ../sass/screen.scss */
-#deck-flow .deck-6 {
-  background: tomato;
-}
-/* line 263, ../sass/screen.scss */
-#deck-flow .deck-7 {
-  background: tomato;
-}
-/* line 298, ../sass/screen.scss */
-#deck-flow .deck {
-  height: 200px;
-  width: 200px;
-  float: left;
-  margin: 10px;
-  overflow: hidden;
-}
-/* line 305, ../sass/screen.scss */
-#deck-flow .deck img {
-  height: 100%;
-}
-/* line 359, ../sass/screen.scss */
-#deck-flow h2 {
-  position: absolute;
-  text-align: center;
-  bottom: 0;
-  width: 100%;
-  font-size: 40px;
-  color: #666;
 }
