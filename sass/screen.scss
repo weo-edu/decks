@@ -209,170 +209,29 @@ nav
 }
 
 
-//	DECKS
+//	CARD CREATOR
 ////////////////////////////
 
-// #deck-flow{
-// 	// outline: 1px dashed red;
-// 	// height: 420px;
-// 	@include perspective(700px);
-// 	@include transform-style(preserve-3d);
-// 	$numDecks: 7;
-// 	@for $i from 1 through $numDecks{
-// 		.deck-#{$i}
-// 		{
-// 			background: tomato;
-// 			// // .deck-title//, img
-// 			// {
-// 			// 	display: none;
-// 			// }
-			
-			
-// 			// z-index: $numDecks + 1;
-// 			// @if $i < $numDecks/2
-// 			// {
-// 			// 	z-index: $i;
-// 			// 	@include transform(translateX(($i - $numDecks) * 80px + 160px) translateZ(-100px) rotateY(30deg + $i * 5));
-				
-// 			// }
-// 			// @if $i > $numDecks/2 + 1
-// 			// {
-// 			// 	z-index: -$i;
-// 			// 	@include transform(translateX((($numDecks - $i) * -1) * 80px + 320) translateZ(-100px) rotateY(-70deg + $i * 5));
-// 			// }
-
-// 			&:after
-// 			{
-// 				// content: "#{$i}";
-// 				// font-family: 'Fresca';
-// 				// font-size: 300px;
-// 				// line-height: 340px;
-// 				// padding-left: 90px;
-// 				// color: lighten(#FF6347, 7%);
-// 				// text-shadow: -1px -2px 0 darken(#FF6347, 5%);
-// 			}
-// 		}
-// 	}
-
-// 	.deck
-// 	{
-// 		height: 200px;
-// 		width: 200px;
-// 		float: left;
-// 		margin: 10px;
-// 		overflow: hidden;
-// 		img
-// 		{
-// 			height: 100%;
-// 		}
-// 		// @include transition(all .5s ease-in-out);
-// 		// // @include backface-visibility(hidden);
-// 		// @include box-shadow(0 0 20px #333);
-// 		// // @include transform-style(preserve-3d);
-// 		// height: 340px;
-// 		// width: 340px;
-// 		// left: 50%;
-// 		// margin-left: -170px;
-// 		// position: absolute;
-// 		// cursor: pointer;
-// 		// &.view-more
-// 		// {
-// 		// 	@include transform(rotateY(180deg) translateZ(0px) translateX(0) !important);
-// 		// }
-// 		// // img
-// 		// // {
-// 		// // 	display: none;
-// 		// // }
-// 		// img
-// 		// {
-// 		// 	width: 100%;
-// 		// 	height: 100%;
-// 		// 	// @include backface-visibility(hidden);
-// 		// }
-// 		// .deck-front, .deck-back
-// 		// {
-// 		// 	width: 100%;
-// 		// 	height: 100%;
-			
-// 		// 	// 
-// 		// 	@include transform-style(preserve-3d);
-// 		// 	position: absolute;
-			
-// 		// }
-// 		// .deck-front{
-// 		// 	pointer-events: none;
-// 		// 	@include backface-visibility(hidden);
-// 		// }
-// 		// .deck-back
-// 		// {
-// 		// 	@include transform(rotateY(-180deg));
-// 		// 	h2
-// 		// 	{
-// 		// 		background: purple;
-// 		// 		z-index: 999;
-// 		// 	}
-// 		// 	// 
-// 		// }
-// 	}
-
-// 	h2
+// #template-preview
+// {
+// 	$size: 400px;
+// 	width: $size;
+// 	height: $size;
+// 	background: transparentize(#FFF, 0.2);
+// 	@include border-radius(50%);
+// 	position: relative;
+// 	.display-inner
 // 	{
 // 		position: absolute;
-// 		text-align: center;
-// 		bottom: 0;
-// 		width: 100%;
-// 		font-size: 40px;
-// 		color: #666;
+// 		height: $size / 2;
+// 		width: $size / 2;
+// 		top: ($size / 4);
+// 		left: ($size / 4);
+// 		// background: grey;
+// 		input{
+// 			width: 100%;
+// 		}
+
 // 	}
 // }
 
-// // /**** Isotope Filtering ****/
-
-// // .isotope-item {
-// //   z-index: 2;
-// // }
-
-// // .isotope-hidden.isotope-item {
-// //   pointer-events: none;
-// //   z-index: 1;
-// // }
-
-// // /**** Isotope CSS3 transitions ****/
-
-// // .isotope,
-// // .isotope .isotope-item {
-// // 	@include transition-duration(0.8s);
-// //   // -webkit-transition-duration: 0.8s;
-// //   //    -moz-transition-duration: 0.8s;
-// //   //     -ms-transition-duration: 0.8s;
-// //   //      -o-transition-duration: 0.8s;
-// //   //         transition-duration: 0.8s;
-// // }
-
-// // .isotope {
-// //   -webkit-transition-property: height, width;
-// //      -moz-transition-property: height, width;
-// //       -ms-transition-property: height, width;
-// //        -o-transition-property: height, width;
-// //           transition-property: height, width;
-// // }
-
-// // .isotope .isotope-item {
-// //   -webkit-transition-property: -webkit-transform, opacity;
-// //      -moz-transition-property:    -moz-transform, opacity;
-// //       -ms-transition-property:     -ms-transform, opacity;
-// //        -o-transition-property:         top, left, opacity;
-// //           transition-property:         transform, opacity;
-// // }
-
-// // /**** disabling Isotope CSS3 transitions ****/
-
-// // .isotope.no-transition,
-// // .isotope.no-transition .isotope-item,
-// // .isotope .isotope-item.no-transition {
-// //   -webkit-transition-duration: 0s;
-// //      -moz-transition-duration: 0s;
-// //       -ms-transition-duration: 0s;
-// //        -o-transition-duration: 0s;
-// //           transition-duration: 0s;
-// // }

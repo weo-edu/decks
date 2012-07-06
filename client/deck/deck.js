@@ -67,6 +67,7 @@ route('/deck/browse',function() {
 		  	// route('/deck/play/' + this.name);
 	  	},
 	  	'click .play': function(e) {
+	  		// console.log($(e.target).attr('class'));
 	  		e.stopPropagation();
 	  		route('/deck/play/' + this.name);
 	  	},
