@@ -39,7 +39,7 @@ html
 body
 {
 	font-family: Arial;
-	background: url("/45degreee_fabric.png");
+	background: url("/textures/45degreee_fabric.png");
 	height: 100%;
 }
 
@@ -60,17 +60,31 @@ h1
 #content
 {
 	@include center();
+	margin-top: 50px;
 }
 
 //	HEADER
 ////////////////////////////
 
+#tab{
+	$size: 25px;
+	height: $size;
+	width: $size;
+	position: absolute;
+	top: -$size;
+	background: tomato;
+	z-index: 999;
+	&.active
+	{
+		top: 0;
+	}
+}
+
 #header
 {
-	background: #444;
+	background: #444 url('/textures/low_contrast_linen.png');
 	height: 75px;
 	position: relative;
-	margin-bottom: 60px;
 	// .arrowed
 	// {
 	// 	position: absolute;
@@ -90,150 +104,96 @@ nav
 ////////////////////////////
 
 #deck-grid
-{
-	// height: 100%;
-	// width: 980px;
-	// outline: 1px solid black;
-	
+{	
 	@include transition(height .7s ease-out);
 	.deck-container
 	{
 		@include transition(all .4s ease-out);
 		$size: 180px;
-		$background: #E54429;
 		height: $size;
 		width: $size;
-		
-		// background: $background;
-		@include perspective(700);
+		@include perspective(800);
 		@include border-radius(8px);
 		@include transform-style(preserve-3d);
-		@include transform(rotateY(120deg) scale(0.01));
-
+		@include transform(rotateY(120deg) scale(0.001));
 		position: absolute;
-		// float: left;
-		// margin-bottom: 0 15px 15px 0;
 		cursor: pointer;
-		// &:hover
-		// {
-		// 	// @include transform(rotateY(-180deg) !important);
-
-		// 	// @include box-shadow(0 0 0);
-		// 	img
-		// 	{
-		// 		// @include opacity(0.2);
-		// 		// @include transform(scale(.5, .5) rotateY(90deg));
-		// 	}
-
-		// }
+		z-index: 0;
+		
 		.deck
 		{
-			
-			
-			@include transition(all .4s ease-in-out);
 			height: $size;
 			width: $size;
-			@include box-shadow(0 0 5px #333);
-			overflow: hidden;
-			@include border-radius(8px);
+			@include perspective(800);
+			&:hover{
+				.front, .deck-meta{
+
+					// @include box-shadow(inset 1px 1px 1px transparentize(#FFF, 0.4), 0 0 15px #111);
+				}
+			}
 		}
 		
-		.front
-		{
-			// @include backface-visibility(hidden);
-			// @include transition(all .2s ease-in-out);
+		.front, .deck-meta{
+			@include transition(transform .25s ease-in-out, box-shadow .15s ease-in-out);
+			@include transform-style(preserve-3d);
+			@include backface-visibility(hidden);
+			@include box-shadow(inset 1px 1px 1px transparentize(#FFF, 0.4), 0 0 7px #333);
+		}
+
+		.front{
+			@include transform(rotateX(0deg) rotateY(0deg));
 			position: absolute;
 			width: 100%;
 			height: 100%;
-			img{
-				// @include backface-visibility(hidden);
-				// display: block;
-				position: absolute;
-				width: 100%;
-				height: 100%;
-				// @include backface-visibility(hidden);
-				// top: 50%;
-				// margin-top: -60px;
-				// left: 50%;
-				// margin-left: -60px;
-				// height: 80px;
-				// width: 80px;
-				// padding: 20px;
-				// background: lighten($background, 10%);
-				@include border-radius(8px);
-				// @include transition(all .3s ease-in-out);
-				// @include backface-visibility(hidden);
-				&:hover
-				{
-					
-				}	
-				// @include border-radius(50% 60% 55% 60%);
-				// @include box-shadow(2px 2px 0 lighten($background, 15%), -2px -2px 0px darken($background, 8%));
-			}	
+			@include border-radius(8px);
+			// img{
+			// 	position: absolute;
+			// 	width: 100%;
+			// 	height: 100%;
+			// 	@include border-radius(8px);
+			// }	
 		}
 		.deck-meta
 		{
-
-			// padding: 10px;
-			// text-rendering: optimizeLegibility;
-			@include transition(all .4s ease-in-out);
 			position: absolute;
-			// @include transform(rotateY(-180deg));
-			// z-index: -99;
-
-			// @include backface-visibility(hidden);
-			$border-width: 0px;
+			left: 0;
 			$padding: 10px;
 			padding: $padding;
-			// height: $size - ($border-width*2) - ($padding*2);
-			// width: $size - ($border-width*2) - ($padding*2);
-			@include border-radius(0 0 8px 8px);
-			@include opacity(0);
-			border-width: $border-width;
-			border-style: solid;
+			width: $size - $padding * 2;
+			height: $size - $padding * 2;
+			@include border-radius(8px);
 			font: 16px/1.2em sans-serif;
-			// text-shadow: -1px -1px 0 #000;
-			// text-transform: uppercase;
 			color: #FFF;
-			background: transparentize(#000, 0.4);
-			bottom: -$size;
-			z-index: 99;
-		}
-		&:hover
-		{
-			.deck
-			{
-				// @include transform(scale(1.03));
+			background: transparentize(#000, 0.7);
+			background: url("/textures/low_contrast_linen.png");
+			bottom: 0;
+			@include transform(rotateY(180deg));
+			.play{
+				@include background(linear-gradient(#FFF, #DDD));
+				cursor: pointer;
+				@include border-radius(5px);
+				// border: 8px solid #FF3366;
+				position: absolute;
+				bottom: 10px;
+				width: 100px;
+				color: #333;
+				padding: 5px;
+				display: block;
+				text-align: center;
+				&:hover
+				{
+					@include background(linear-gradient(#DDD, #FFF));
+				}
 			}
 		}
-		&.view-more{
-			.deck
-			{
-				@include transform(rotateY(180deg));
-				z-index: 98;
 
+		&.view-more{
+			.front{
+				@include transform(rotateY(-180deg));
 			}
 			.deck-meta{
-				bottom: 0;
-				@include transform(rotateY(180deg));
-				@include opacity(1)
-				// position: relative;
-				// font-size: 98%;
-			}
-		}
-		.play
-		{
-			@include background(linear-gradient(#FFF, #DDD));
-			cursor: pointer;
-			@include border-radius(5px);
-			position: relative;
-			color: #333;
-			padding: 5px;
-			display: block;
-			text-align: center;
-			&:hover
-			{
-				@include background(linear-gradient(#DDD, #FFF));
+				z-index: 99;
+				@include transform(rotateY(0deg));
 			}
 		}
 	}
@@ -252,167 +212,167 @@ nav
 //	DECKS
 ////////////////////////////
 
-#deck-flow{
-	// outline: 1px dashed red;
-	// height: 420px;
-	@include perspective(700px);
-	@include transform-style(preserve-3d);
-	$numDecks: 7;
-	@for $i from 1 through $numDecks{
-		.deck-#{$i}
-		{
-			background: tomato;
-			// // .deck-title//, img
-			// {
-			// 	display: none;
-			// }
+// #deck-flow{
+// 	// outline: 1px dashed red;
+// 	// height: 420px;
+// 	@include perspective(700px);
+// 	@include transform-style(preserve-3d);
+// 	$numDecks: 7;
+// 	@for $i from 1 through $numDecks{
+// 		.deck-#{$i}
+// 		{
+// 			background: tomato;
+// 			// // .deck-title//, img
+// 			// {
+// 			// 	display: none;
+// 			// }
 			
 			
-			// z-index: $numDecks + 1;
-			// @if $i < $numDecks/2
-			// {
-			// 	z-index: $i;
-			// 	@include transform(translateX(($i - $numDecks) * 80px + 160px) translateZ(-100px) rotateY(30deg + $i * 5));
+// 			// z-index: $numDecks + 1;
+// 			// @if $i < $numDecks/2
+// 			// {
+// 			// 	z-index: $i;
+// 			// 	@include transform(translateX(($i - $numDecks) * 80px + 160px) translateZ(-100px) rotateY(30deg + $i * 5));
 				
-			// }
-			// @if $i > $numDecks/2 + 1
-			// {
-			// 	z-index: -$i;
-			// 	@include transform(translateX((($numDecks - $i) * -1) * 80px + 320) translateZ(-100px) rotateY(-70deg + $i * 5));
-			// }
+// 			// }
+// 			// @if $i > $numDecks/2 + 1
+// 			// {
+// 			// 	z-index: -$i;
+// 			// 	@include transform(translateX((($numDecks - $i) * -1) * 80px + 320) translateZ(-100px) rotateY(-70deg + $i * 5));
+// 			// }
 
-			&:after
-			{
-				// content: "#{$i}";
-				// font-family: 'Fresca';
-				// font-size: 300px;
-				// line-height: 340px;
-				// padding-left: 90px;
-				// color: lighten(#FF6347, 7%);
-				// text-shadow: -1px -2px 0 darken(#FF6347, 5%);
-			}
-		}
-	}
+// 			&:after
+// 			{
+// 				// content: "#{$i}";
+// 				// font-family: 'Fresca';
+// 				// font-size: 300px;
+// 				// line-height: 340px;
+// 				// padding-left: 90px;
+// 				// color: lighten(#FF6347, 7%);
+// 				// text-shadow: -1px -2px 0 darken(#FF6347, 5%);
+// 			}
+// 		}
+// 	}
 
-	.deck
-	{
-		height: 200px;
-		width: 200px;
-		float: left;
-		margin: 10px;
-		overflow: hidden;
-		img
-		{
-			height: 100%;
-		}
-		// @include transition(all .5s ease-in-out);
-		// // @include backface-visibility(hidden);
-		// @include box-shadow(0 0 20px #333);
-		// // @include transform-style(preserve-3d);
-		// height: 340px;
-		// width: 340px;
-		// left: 50%;
-		// margin-left: -170px;
-		// position: absolute;
-		// cursor: pointer;
-		// &.view-more
-		// {
-		// 	@include transform(rotateY(180deg) translateZ(0px) translateX(0) !important);
-		// }
-		// // img
-		// // {
-		// // 	display: none;
-		// // }
-		// img
-		// {
-		// 	width: 100%;
-		// 	height: 100%;
-		// 	// @include backface-visibility(hidden);
-		// }
-		// .deck-front, .deck-back
-		// {
-		// 	width: 100%;
-		// 	height: 100%;
+// 	.deck
+// 	{
+// 		height: 200px;
+// 		width: 200px;
+// 		float: left;
+// 		margin: 10px;
+// 		overflow: hidden;
+// 		img
+// 		{
+// 			height: 100%;
+// 		}
+// 		// @include transition(all .5s ease-in-out);
+// 		// // @include backface-visibility(hidden);
+// 		// @include box-shadow(0 0 20px #333);
+// 		// // @include transform-style(preserve-3d);
+// 		// height: 340px;
+// 		// width: 340px;
+// 		// left: 50%;
+// 		// margin-left: -170px;
+// 		// position: absolute;
+// 		// cursor: pointer;
+// 		// &.view-more
+// 		// {
+// 		// 	@include transform(rotateY(180deg) translateZ(0px) translateX(0) !important);
+// 		// }
+// 		// // img
+// 		// // {
+// 		// // 	display: none;
+// 		// // }
+// 		// img
+// 		// {
+// 		// 	width: 100%;
+// 		// 	height: 100%;
+// 		// 	// @include backface-visibility(hidden);
+// 		// }
+// 		// .deck-front, .deck-back
+// 		// {
+// 		// 	width: 100%;
+// 		// 	height: 100%;
 			
-		// 	// 
-		// 	@include transform-style(preserve-3d);
-		// 	position: absolute;
+// 		// 	// 
+// 		// 	@include transform-style(preserve-3d);
+// 		// 	position: absolute;
 			
-		// }
-		// .deck-front{
-		// 	pointer-events: none;
-		// 	@include backface-visibility(hidden);
-		// }
-		// .deck-back
-		// {
-		// 	@include transform(rotateY(-180deg));
-		// 	h2
-		// 	{
-		// 		background: purple;
-		// 		z-index: 999;
-		// 	}
-		// 	// 
-		// }
-	}
+// 		// }
+// 		// .deck-front{
+// 		// 	pointer-events: none;
+// 		// 	@include backface-visibility(hidden);
+// 		// }
+// 		// .deck-back
+// 		// {
+// 		// 	@include transform(rotateY(-180deg));
+// 		// 	h2
+// 		// 	{
+// 		// 		background: purple;
+// 		// 		z-index: 999;
+// 		// 	}
+// 		// 	// 
+// 		// }
+// 	}
 
-	h2
-	{
-		position: absolute;
-		text-align: center;
-		bottom: 0;
-		width: 100%;
-		font-size: 40px;
-		color: #666;
-	}
-}
-
-// /**** Isotope Filtering ****/
-
-// .isotope-item {
-//   z-index: 2;
+// 	h2
+// 	{
+// 		position: absolute;
+// 		text-align: center;
+// 		bottom: 0;
+// 		width: 100%;
+// 		font-size: 40px;
+// 		color: #666;
+// 	}
 // }
 
-// .isotope-hidden.isotope-item {
-//   pointer-events: none;
-//   z-index: 1;
-// }
+// // /**** Isotope Filtering ****/
 
-// /**** Isotope CSS3 transitions ****/
+// // .isotope-item {
+// //   z-index: 2;
+// // }
 
-// .isotope,
-// .isotope .isotope-item {
-// 	@include transition-duration(0.8s);
-//   // -webkit-transition-duration: 0.8s;
-//   //    -moz-transition-duration: 0.8s;
-//   //     -ms-transition-duration: 0.8s;
-//   //      -o-transition-duration: 0.8s;
-//   //         transition-duration: 0.8s;
-// }
+// // .isotope-hidden.isotope-item {
+// //   pointer-events: none;
+// //   z-index: 1;
+// // }
 
-// .isotope {
-//   -webkit-transition-property: height, width;
-//      -moz-transition-property: height, width;
-//       -ms-transition-property: height, width;
-//        -o-transition-property: height, width;
-//           transition-property: height, width;
-// }
+// // /**** Isotope CSS3 transitions ****/
 
-// .isotope .isotope-item {
-//   -webkit-transition-property: -webkit-transform, opacity;
-//      -moz-transition-property:    -moz-transform, opacity;
-//       -ms-transition-property:     -ms-transform, opacity;
-//        -o-transition-property:         top, left, opacity;
-//           transition-property:         transform, opacity;
-// }
+// // .isotope,
+// // .isotope .isotope-item {
+// // 	@include transition-duration(0.8s);
+// //   // -webkit-transition-duration: 0.8s;
+// //   //    -moz-transition-duration: 0.8s;
+// //   //     -ms-transition-duration: 0.8s;
+// //   //      -o-transition-duration: 0.8s;
+// //   //         transition-duration: 0.8s;
+// // }
 
-// /**** disabling Isotope CSS3 transitions ****/
+// // .isotope {
+// //   -webkit-transition-property: height, width;
+// //      -moz-transition-property: height, width;
+// //       -ms-transition-property: height, width;
+// //        -o-transition-property: height, width;
+// //           transition-property: height, width;
+// // }
 
-// .isotope.no-transition,
-// .isotope.no-transition .isotope-item,
-// .isotope .isotope-item.no-transition {
-//   -webkit-transition-duration: 0s;
-//      -moz-transition-duration: 0s;
-//       -ms-transition-duration: 0s;
-//        -o-transition-duration: 0s;
-//           transition-duration: 0s;
-// }
+// // .isotope .isotope-item {
+// //   -webkit-transition-property: -webkit-transform, opacity;
+// //      -moz-transition-property:    -moz-transform, opacity;
+// //       -ms-transition-property:     -ms-transform, opacity;
+// //        -o-transition-property:         top, left, opacity;
+// //           transition-property:         transform, opacity;
+// // }
+
+// // /**** disabling Isotope CSS3 transitions ****/
+
+// // .isotope.no-transition,
+// // .isotope.no-transition .isotope-item,
+// // .isotope .isotope-item.no-transition {
+// //   -webkit-transition-duration: 0s;
+// //      -moz-transition-duration: 0s;
+// //       -ms-transition-duration: 0s;
+// //        -o-transition-duration: 0s;
+// //           transition-duration: 0s;
+// // }

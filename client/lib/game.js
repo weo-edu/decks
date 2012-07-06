@@ -17,12 +17,13 @@ Game.prototype.nextCard = function() {
 		this.current_card = card;
 		this.cur_problem = problemize(card.problem);
 		card.question = this.cur_problem.html;
+		console.log(this.cur_problem);
 		return card;
 	}
 }
 
 Game.prototype.isSolution = function(val) {
-	return this.cur_problem.isSolution(val);
+	return this.cur_problem.solution == val;
 }
 
 Game.prototype.recordResult = function(correct) {

@@ -11,21 +11,13 @@
 <template name="deck_view">
 	<div id='deck-{{idx}}' class='deck-container'>
 		<div class="deck deck-{{idx}}">
-			<!-- <div class='deck-front'> -->
-				<div class='front'>
-					<img src="/{{graphic}}" />
+				<div class='front' style='background: url(/{{graphic}});'>
+					<!-- <img src="/{{graphic}}" /> -->
 				</div>
 				<div class='deck-meta'>
 					<div class="deck-title">{{name}}<br/> & other imformation about this card</div>
 					<a class='play'>PLAY</a>
 				</div>
-			<!-- </div>
-			<div class='deck-back'>
-				
-
-			</div> -->
-			
-			
 		</div>
 	</div>
 
