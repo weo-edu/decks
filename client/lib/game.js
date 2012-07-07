@@ -17,7 +17,6 @@ Game.prototype.nextCard = function() {
 		this.current_card = card;
 		this.cur_problem = problemize(card.problem);
 		card.question = this.cur_problem.html;
-		console.log(this.cur_problem);
 		return card;
 	}
 }
