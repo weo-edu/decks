@@ -68,7 +68,16 @@ route('/deck/browse',function() {
 	  	},
 	  	'click .play': function(e) {
 	  		e.stopPropagation();
-	  		route('/deck/play/' + this.name);
+	  		var el = $(e.target).closest('.deck-container');
+	  		var that = this;
+	  		el.addClass('close').css(transformPrefix, 'translate3d(0, 0 ,0)').find('.front').css(transformPrefix, 'rotateY(0)').end().find('.deck-meta').css(transformPrefix, 'rotateY(180deg)');
+	  		// el.find('.font').css(transformPrefix, 'rotateY(0)');
+	  		$('.deck-container').not(el).css('opacity', 0);//transformPrefix, 'translate3d(0, 0, 0)');
+	  		// , function(){
+  			setTimeout(function(){
+  				route('/deck/play/' + that.name);
+  			}, 800);
+	  		// });
 	  	},
 	  	'mouseover .deck-container': function(e){
 		  	// var el = $(e.target).closest('.deck');//.parent('.deck');
