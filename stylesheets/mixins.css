@@ -1,0 +1,41 @@
+@font-face {
+  font-family: 'HighlandsRegular';
+  src: url("/app!common/fonts/highlands-regular-webfont.eot");
+  src: url("/app!common/fonts/highlands-regular-webfont.eot?#iefix") format("embedded-opentype"), url("/app!common/fonts/highlands-regular-webfont.woff") format("woff"), url("/app!common/fonts/highlands-regular-webfont.ttf") format("truetype"), url("/app!common/fonts/highlands-regular-webfont.svg#HighlandsRegular") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* line 29, ../sass/mixins.scss */
+html {
+  height: 100%;
+}
+
+/* line 34, ../sass/mixins.scss */
+body {
+  font-family: Arial;
+  background: url("/app!common/textures/45degreee_fabric.png");
+  height: 100%;
+}
+
+/* line 41, ../sass/mixins.scss */
+h1, h2, h3, h4, h5 {
+  font-family: HighlandsRegular;
+  text-transform: uppercase;
+}
+
+/* line 47, ../sass/mixins.scss */
+h1 {
+  font-size: 60px;
+  line-height: 80px;
+  color: #FFF;
+  text-shadow: 2px 2px 0px black 0px 1px #aaaaaa;
+}
+
+/* line 55, ../sass/mixins.scss */
+#content {
+  width: 980px;
+  margin: 0 auto;
+  position: relative;
+  margin-top: 50px;
+}
