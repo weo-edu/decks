@@ -67,6 +67,7 @@ route('/deck/browse',function() {
 		  	// route('/deck/play/' + this.name);
 	  	},
 	  	'click .play': function(e) {
+	  		/*
 	  		e.stopPropagation();
 	  		var el = $(e.target).closest('.deck-container');
 	  		var that = this;
@@ -77,7 +78,7 @@ route('/deck/browse',function() {
   			setTimeout(function(){
   				route('/deck/play/' + that.name);
   			}, 800);
-	  		// });
+	  		// }); */
 	  	},
 	  	'mouseover .deck-container': function(e){
 		  	// var el = $(e.target).closest('.deck');//.parent('.deck');
@@ -172,25 +173,31 @@ route('/deck/play/:name', function(ctx){
   );
 
   Template.deck_play.card = function(){
+  	Meteor.defer(function(){
+  		MathJax.Hub.Queue(["Typeset", MathJax.Hub, $('.card').get(0)]);
+  	});
+
   	return play_session.get('card');
 	}
 
 	var events = {};
 	events[util.okcancel_events('#solution')] = util.make_okcancel_handler({
-	   	ok: function (value,evt) {
-	  	  game.recordResult(game.isSolution(parseInt(value)));
-	   	  var next_card = game.nextCard();
-	   	  if (next_card) {
-	   	    play_session.set('card',next_card);
-	   	    evt.target.value = "";
-	   	  }
-	   	  else renderView('deck_results');
-	   	}
-		});
+   	ok: function (value,evt) {
+  	  game.recordResult(game.isSolution(parseInt(value)));
+   	  var next_card = game.nextCard();
+   	  if (next_card) {
+   	    play_session.set('card',next_card);
+   	    evt.target.value = "";
+   	  }
+   	  else{
+   	  	evt.stopPropagation();
 
-	events['insert .card'] = function(e) {
-		MathJax.Hub.Queue(["Typeset",MathJax.Hub,e.target]);
-	};
+   	  	Meteor.defer(function(){ 
+   	  		renderView('deck_results');
+   	  	});
+   	  }
+   	}
+	});
 
 	Template.deck_play.events = events;
 
@@ -201,13 +208,6 @@ route('/deck/play/:name', function(ctx){
   Template.deck_results.total = function(){ 
 	  return game.results.find({}).count();
 	};
-
-	Template.deck_results.events = {
-	  'click #decks-link': function() {
-	    route('/');
-	  }
-	};
 	
 	renderView('deck_play');
-
 });

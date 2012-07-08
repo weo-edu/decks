@@ -4,7 +4,7 @@ util = {}
 // Returns an event_map key for attaching "ok/cancel" events to
 // a text input (given by selector)
 util.okcancel_events = function (selector) {
-  return 'keyup '+selector+', keydown '+selector+', focusout '+selector;
+  return 'keyup '+selector+', keydown '+selector;
 };
 
 
