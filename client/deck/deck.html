@@ -16,7 +16,7 @@
 				</div>
 				<div class='deck-meta'>
 					<div class="deck-title">{{name}}<br/> & other imformation about this card</div>
-					<a class='play'>PLAY</a>
+					<a href='/deck/play/{{name}}' class='play'>PLAY</a>
 				</div>
 		</div>
 	</div>
@@ -42,5 +42,5 @@
 <template name="deck_results">
 	<h2>Results</h2>
 	You got {{correct}} out of {{total}} right!
-	<div id="decks-link">decks</div>
+	<a href='/deck/browse'>Decks</a>
 </template>

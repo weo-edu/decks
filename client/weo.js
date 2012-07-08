@@ -4,18 +4,18 @@ route('/', function(ctx, next) {
 });
 
 Meteor.startup(function() {
-	route.start();
+	route.start('decks');
 });
 
 
 function renderView(template) {
-	$("#content").html(function() {
-		return Meteor.ui.render(function() {
-			return Template[template]();
+	$('#content').html(function(){
+		return Meteor.ui.render(function(){
+			//	Force all templates to be wrapped in an blank div
+			//	This fixes a bug(?) in Meteor's liverange code
+			return '<div>' + Template[template]() + '</div>';
 		});
 	});
-
-	MathJax.Hub.Typeset();
 }
 
 
