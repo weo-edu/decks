@@ -41,15 +41,7 @@ route('/deck/browse',function() {
 				}, 150);
 
 			}
-			$('#header').click(function(){
-				$('#tab').addClass('active', 400);
-				$(this).slideUp(300);
-			});
 
-			$('#tab').click(function(){
-				$('#header').slideDown(300);
-				$(this).removeClass('active', 400);
-			});
 		});
 
 	  decks = Decks.find({});
@@ -57,14 +49,14 @@ route('/deck/browse',function() {
 	};
 
 	Template.deck_browse.events = {
-		 	'click .deck': function(e) {
-		  	var el = $(e.target).closest('.deck-container');
-		  	// var that = null;
-		  	$('.deck-container').not(el).removeClass('view-more');
-		  	el.toggleClass('view-more');
-		  	// el.css(transformPrefix, ' rotateY(-180deg) scale(1.1)');
+	 	'click .deck': function(e) {
+	  	var el = $(e.target).closest('.deck-container');
+	  	// var that = null;
+	  	$('.deck-container').not(el).removeClass('view-more');
+	  	el.toggleClass('view-more');
+	  	// el.css(transformPrefix, ' rotateY(-180deg) scale(1.1)');
 
-		  	// route('/deck/play/' + this.name);
+	  	// route('/deck/play/' + this.name);
 	  	},
 	  	'click .play': function(e) {
 	  		e.stopPropagation();
@@ -72,14 +64,19 @@ route('/deck/browse',function() {
 	  		var that = this;
 	  		el.addClass('close').css(transformPrefix, 'translate3d(0, 0 ,0)').find('.front').css(transformPrefix, 'rotateY(0)').end().find('.deck-meta').css(transformPrefix, 'rotateY(180deg)');
 	  		// el.find('.font').css(transformPrefix, 'rotateY(0)');
-	  		$('.deck-container').not(el).css('opacity', 0);//transformPrefix, 'translate3d(0, 0, 0)');
+	  		$('.deck-container').not(el).css('opacity', 0);
 	  		// , function(){
   			setTimeout(function(){
   				route('/deck/play/' + that.name);
   			}, 800);
 	  		// });
 	  	},
-	  	'mouseover .deck-container': function(e){
+	  	'mouseover .front': function(e){
+	  		// $(e.target).not('.bouncing, .play').addClass('bouncing').stop(true, false).effect('bounce', {times: 1, distance: 5}, 200, function(){
+	  		// 	$(this).removeClass('bouncing');
+	  		// });
+
+			// $(e.target).clearQueue().stop(true, true).effect('bounce', {times: 1, distance: 5}, 1000);
 		  	// var el = $(e.target).closest('.deck');//.parent('.deck');
 		  	// // console.log(el.closest('.deck').attr('class'));
 		  	// // var rot = getTranslation(el);
