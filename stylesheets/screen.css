@@ -325,16 +325,6 @@ a {
 
 /* line 180, ../sass/screen.scss */
 #deck-dock {
-  -webkit-transform-style: preserve-3d;
-  -moz-transform-style: preserve-3d;
-  -ms-transform-style: preserve-3d;
-  -o-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-  -webkit-perspective: 800;
-  -moz-perspective: 800;
-  -ms-perspective: 800;
-  -o-perspective: 800;
-  perspective: 800;
   margin-top: 20px;
   height: 180px;
   width: 100%;
@@ -342,6 +332,16 @@ a {
 }
 /* line 191, ../sass/screen.scss */
 #deck-dock > div {
+  -webkit-perspective: 800;
+  -moz-perspective: 800;
+  -ms-perspective: 800;
+  -o-perspective: 800;
+  perspective: 800;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
+  transform-style: preserve-3d;
   position: absolute;
   width: 180px;
   height: 180px;
@@ -349,8 +349,9 @@ a {
   -moz-transition: -moz-transform 0.3s ease-in-out;
   -o-transition: -o-transform 0.3s ease-in-out;
   transition: transform 0.3s ease-in-out;
+  z-index: 1;
 }
-/* line 196, ../sass/screen.scss */
+/* line 199, ../sass/screen.scss */
 #deck-dock > div > div {
   position: absolute;
   cursor: pointer;
@@ -361,15 +362,19 @@ a {
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
-/* line 208, ../sass/screen.scss */
+/* line 211, ../sass/screen.scss */
 #deck-dock #answered {
   z-index: 999;
 }
-/* line 210, ../sass/screen.scss */
+/* line 213, ../sass/screen.scss */
 #deck-dock #answered .deck-container {
   z-index: 999;
 }
-/* line 221, ../sass/screen.scss */
+/* line 222, ../sass/screen.scss */
+#deck-dock .card-container {
+  background: #777;
+}
+/* line 225, ../sass/screen.scss */
 #deck-dock .card-container .card {
   -webkit-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
@@ -381,7 +386,7 @@ a {
   -moz-filter: grayscale(100%);
   filter: grayscale(100%);
 }
-/* line 227, ../sass/screen.scss */
+/* line 231, ../sass/screen.scss */
 #deck-dock .card-container.current .card {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
@@ -389,13 +394,13 @@ a {
   -moz-filter: grayscale(0%);
   filter: grayscale(0%);
 }
-/* line 232, ../sass/screen.scss */
+/* line 236, ../sass/screen.scss */
 #deck-dock .card-container.wrong, #deck-dock .card-container.correct {
   -webkit-box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.6), 0 0 7px #333333;
   -moz-box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.6), 0 0 7px #333333;
   box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.6), 0 0 7px #333333;
 }
-/* line 234, ../sass/screen.scss */
+/* line 238, ../sass/screen.scss */
 #deck-dock .card-container.wrong .card, #deck-dock .card-container.correct .card {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
   opacity: 0.4;
@@ -403,11 +408,11 @@ a {
   -moz-box-shadow: 0 0 0;
   box-shadow: 0 0 0;
 }
-/* line 240, ../sass/screen.scss */
+/* line 244, ../sass/screen.scss */
 #deck-dock .card-container.wrong {
   background: #FF3366;
 }
-/* line 244, ../sass/screen.scss */
+/* line 248, ../sass/screen.scss */
 #deck-dock .card-container.correct {
   background: #A2E67E;
 }

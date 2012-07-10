@@ -43,15 +43,7 @@ route('/deck/browse',function() {
 
 route('/deck/play/:name', function(ctx){
 
-	// Template.deck_play.cards = function() {
-	// 	var cards;
-	// 	var play_session = new _Session();
-	// 	var name = ctx.params.name;
-
-	// 	cards = Decks.findOne({name: name}).cards;
-	// 	console.log('cards:', cards);
-	//   	return cards;
- 	//  	}
+	
  	var total_cards;
 	var working_card = 0;
 	var problems = [];
@@ -79,7 +71,7 @@ route('/deck/play/:name', function(ctx){
 			unanswered.width(unanswered.parent().width() - answered.width() - 20);
 
 			deal($('#deck-dock'), 0);
-			deal(unanswered, 100);
+			deal(unanswered, 100, 'fit');
 			$("#playground").slideDown(1000, function(){
 				$('#unanswered .card').eq(0).click();
   				$('#playground .solution').focus();	
@@ -131,8 +123,7 @@ route('/deck/play/:name', function(ctx){
 	  				el.addClass('wrong');
 
 
-	  			deal($('#unanswered'), 0, 'grid', function(){
-	  				console.log('unanswered')
+	  			deal($('#unanswered'), 0, 'fit', function(){
 	  				$('#unanswered .card').eq(0).click();
 		  			$('#playground .solution').focus();
 
@@ -145,7 +136,7 @@ route('/deck/play/:name', function(ctx){
 						renderView('deck_results');
 		  			}
 	  			});
-	  			deal($('#answered'), 0, 'collapse', function(){console.log('answered')});
+	  			deal($('#answered'), 0, 'collapse');
 	  			
 
 	  			
@@ -153,49 +144,59 @@ route('/deck/play/:name', function(ctx){
 	  	}
   	}
 
+  	//Josh's Game
+  	// Template.deck_play.cards = function() {
+	// 	var cards;
+	// 	var play_session = new _Session();
+	// 	var name = ctx.params.name;
+
+	// 	cards = Decks.findOne({name: name}).cards;
+	// 	console.log('cards:', cards);
+	//   	return cards;
+ 	//  	}
 	
 	// var game;
 
- //  Meteor.deps.await(
- //    function() {
- //      var deck = Decks.findOne({name: name});
- //      return  deck !== undefined;
- //    },
- //    function() {
- //      game = new Game(Decks.findOne({name: name}), 3);
- //      // play_session.set('card', game.nextCard());
- //      play_session.set('card', game.getCards());
- //    }
- //  );
+	 //  Meteor.deps.await(
+	 //    function() {
+	 //      var deck = Decks.findOne({name: name});
+	 //      return  deck !== undefined;
+	 //    },
+	 //    function() {
+	 //      game = new Game(Decks.findOne({name: name}), 3);
+	 //      // play_session.set('card', game.nextCard());
+	 //      play_session.set('card', game.getCards());
+	 //    }
+	 //  );
 
- //  Template.deck_play.card = function(){
- //  	Meteor.defer(function(){
- //  		MathJax.Hub.Queue(["Typeset", MathJax.Hub, $('.card').get(0)]);
- //  	});
+	 //  Template.deck_play.card = function(){
+	 //  	Meteor.defer(function(){
+	 //  		MathJax.Hub.Queue(["Typeset", MathJax.Hub, $('.card').get(0)]);
+	 //  	});
 
- //  	return play_session.get('card');
-	// }
+	 //  	return play_session.get('card');
+		// }
 
-	// var events = {};
-	// events[util.okcancel_events('#solution')] = util.make_okcancel_handler({
- //   	ok: function (value,evt) {
- //  	  game.recordResult(game.isSolution(parseInt(value)));
- //   	  var next_card = game.nextCard();
- //   	  if (next_card) {
- //   	    play_session.set('card',next_card);
- //   	    evt.target.value = "";
- //   	  }
- //   	  else{
- //   	  	evt.stopPropagation();
+		// var events = {};
+		// events[util.okcancel_events('#solution')] = util.make_okcancel_handler({
+	 //   	ok: function (value,evt) {
+	 //  	  game.recordResult(game.isSolution(parseInt(value)));
+	 //   	  var next_card = game.nextCard();
+	 //   	  if (next_card) {
+	 //   	    play_session.set('card',next_card);
+	 //   	    evt.target.value = "";
+	 //   	  }
+	 //   	  else{
+	 //   	  	evt.stopPropagation();
 
- //   	  	Meteor.defer(function(){ 
- //   	  		renderView('deck_results');
- //   	  	});
- //   	  }
- //   	}
-	// });
+	 //   	  	Meteor.defer(function(){ 
+	 //   	  		renderView('deck_results');
+	 //   	  	});
+	 //   	  }
+	 //   	}
+		// });
 
-	// Template.deck_play.events = events;
+		// Template.deck_play.events = events;
 
   	Template.deck_results.correct = function(){
 	  return count;

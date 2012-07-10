@@ -12,13 +12,22 @@
 			children.parent().height(deckOuterWidth * (Math.ceil(children.length/decksPerRow)));
 			return rot;
 		},
-		fit: function(children){
-			return;
+		fit: function(children, deckOuterWidth, decksPerRow, width, deckWidth){
+
+			var rot = [];
+			var num_cards = children.length
+			var spacing = (width - deckWidth) / (num_cards - 1); //deckWidth - (((num_cards * deckWidth) - width) / (num_cards-1));
+			console.log(spacing);
+			children.each(function(idx){
+				rot[idx] = {x: (spacing * idx), y: 0, z: -idx * 0.1};
+			});
+
+			return rot;
 		},
 		collapse: function(children){
 			var rot = [];
 			children.each(function(idx){
-				rot[idx] = {x: (4 * idx), y: 0, z: (20 * idx)};
+				rot[idx] = {x: (2 * idx), y: 0, z: (3 * idx)};
 			});
 
 			return rot;
@@ -43,7 +52,7 @@
 			throw new Error('getTranslation called with invalid type: ' + type);
 		}
 
-		return types[type](children, deckOuterWidth, decksPerRow);
+		return types[type](children, deckOuterWidth, decksPerRow, width, deckWidth);
 	}
 
 

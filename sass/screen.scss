@@ -178,8 +178,8 @@ $size: 180px;
 
 
 #deck-dock {
-	@include transform-style(preserve-3d);
-	@include perspective(800);
+	// @include transform-style(preserve-3d);
+	// @include perspective(800);
 	margin-top: 20px;
 	// bottom: 10px;
 	// position: absolute;
@@ -189,10 +189,13 @@ $size: 180px;
 	// background: url("/app!common/textures/low_contrast_linen.png");
 
 	> div{
+		@include perspective(800);
+		@include transform-style(preserve-3d);
 		position: absolute;
 		width: $size;
 		height: $size;
 		@include transition(transform .3s ease-in-out);
+		z-index: 1;
 		> div {
 			position: absolute;
 			cursor: pointer;
@@ -218,6 +221,7 @@ $size: 180px;
 
 	.card-container {
 
+		background: #777;
 		.card {
 			@include transition(all .2s ease-in-out);
 			@include opacity(.7);
