@@ -4,10 +4,10 @@ function Game(deck,num_problems) {
 	this.card_idxs = [];
 	this.cur_idx = 0;
 	this.cur_problem;
-  while (this.card_idxs.length < num_problems) {
-    this.card_idxs.push(Utilities.rand_int(0, deck.cards.length));
-  }
-  this.results = new LocalCollection;
+  	while (this.card_idxs.length < num_problems) {
+  	  this.card_idxs.push(Utilities.rand_int(0, deck.cards.length));
+ 	}
+ 	this.results = new LocalCollection;
 }
 
 Game.prototype.nextCard = function() {
@@ -19,6 +19,12 @@ Game.prototype.nextCard = function() {
 		card.question = this.cur_problem.html;
 		return card;
 	}
+}
+
+Game.prototype.getCards = function() {
+	var cards = this.deck.cards;
+	console.log('cards:', cards);
+	return cards;
 }
 
 Game.prototype.isSolution = function(val) {
