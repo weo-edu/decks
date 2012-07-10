@@ -4,7 +4,7 @@ route('/', function(ctx, next) {
 });
 
 Meteor.startup(function() {
-	route.start('decks');
+	route.start();
 });
 
 
