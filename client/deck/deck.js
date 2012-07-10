@@ -156,6 +156,7 @@ route('/deck/play/:name', function(ctx){
 	  						count++;
 
 	  				}
+
   					renderView('deck_results');
 	  			}
 	  		}	
