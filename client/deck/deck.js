@@ -95,7 +95,11 @@ route('/deck/play/:name', function(ctx){
 		Meteor.defer(function(){
 			deal($('#deck-dock'), 0);
 			deal($('#unanswered'), 100);
-			$("#playground").slideDown(1000);
+			$("#playground").slideDown(1000, function(){
+				$('#unanswered .card').eq(0).click();
+  				$('#playground .solution').focus();	
+			});
+			
 		});
 
 

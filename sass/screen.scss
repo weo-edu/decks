@@ -157,9 +157,21 @@ $size: 180px;
 	@include border-radius(8px);
 	@include box-shadow(0 0 10px #333);
 	padding: 20px;
-	&.hide
-	{
+	&.hide {
 		display: none;
+	}
+
+	h3 {
+		font-size: 50px;
+		line-height: 1.5em;
+		color: #777;
+		text-align: center;
+	}
+
+	.question {
+		font-size: 30px;
+		line-height: 1.5em;
+		text-align: center;
 	}
 	// @include transition(all 1.4s ease-in-out);
 }
@@ -197,7 +209,7 @@ $size: 180px;
 		z-index: 999;
 		.deck-container{
 			z-index: 999;
-		}	
+		}
 	}
 	
 

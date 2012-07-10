@@ -305,12 +305,25 @@ a {
   box-shadow: 0 0 10px #333333;
   padding: 20px;
 }
-/* line 161, ../sass/screen.scss */
+/* line 160, ../sass/screen.scss */
 #playground.hide {
   display: none;
 }
+/* line 164, ../sass/screen.scss */
+#playground h3 {
+  font-size: 50px;
+  line-height: 1.5em;
+  color: #777;
+  text-align: center;
+}
+/* line 171, ../sass/screen.scss */
+#playground .question {
+  font-size: 30px;
+  line-height: 1.5em;
+  text-align: center;
+}
 
-/* line 168, ../sass/screen.scss */
+/* line 180, ../sass/screen.scss */
 #deck-dock {
   -webkit-transform-style: preserve-3d;
   -moz-transform-style: preserve-3d;
@@ -327,7 +340,7 @@ a {
   width: 100%;
   position: relative;
 }
-/* line 179, ../sass/screen.scss */
+/* line 191, ../sass/screen.scss */
 #deck-dock > div {
   position: absolute;
   width: 180px;
@@ -337,7 +350,7 @@ a {
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
-/* line 184, ../sass/screen.scss */
+/* line 196, ../sass/screen.scss */
 #deck-dock > div > div {
   position: absolute;
   cursor: pointer;
@@ -348,15 +361,15 @@ a {
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
-/* line 196, ../sass/screen.scss */
+/* line 208, ../sass/screen.scss */
 #deck-dock #answered {
   z-index: 999;
 }
-/* line 198, ../sass/screen.scss */
+/* line 210, ../sass/screen.scss */
 #deck-dock #answered .deck-container {
   z-index: 999;
 }
-/* line 209, ../sass/screen.scss */
+/* line 221, ../sass/screen.scss */
 #deck-dock .card-container .card {
   -webkit-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
@@ -368,7 +381,7 @@ a {
   -moz-filter: grayscale(100%);
   filter: grayscale(100%);
 }
-/* line 215, ../sass/screen.scss */
+/* line 227, ../sass/screen.scss */
 #deck-dock .card-container.current .card {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
@@ -376,13 +389,13 @@ a {
   -moz-filter: grayscale(0%);
   filter: grayscale(0%);
 }
-/* line 220, ../sass/screen.scss */
+/* line 232, ../sass/screen.scss */
 #deck-dock .card-container.wrong, #deck-dock .card-container.correct {
   -webkit-box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.6), 0 0 7px #333333;
   -moz-box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.6), 0 0 7px #333333;
   box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.6), 0 0 7px #333333;
 }
-/* line 222, ../sass/screen.scss */
+/* line 234, ../sass/screen.scss */
 #deck-dock .card-container.wrong .card, #deck-dock .card-container.correct .card {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
   opacity: 0.4;
@@ -390,11 +403,11 @@ a {
   -moz-box-shadow: 0 0 0;
   box-shadow: 0 0 0;
 }
-/* line 228, ../sass/screen.scss */
+/* line 240, ../sass/screen.scss */
 #deck-dock .card-container.wrong {
   background: #FF3366;
 }
-/* line 232, ../sass/screen.scss */
+/* line 244, ../sass/screen.scss */
 #deck-dock .card-container.correct {
   background: #A2E67E;
 }
