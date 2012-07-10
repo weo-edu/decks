@@ -9,11 +9,13 @@ Meteor.startup(function() {
 
 
 function renderView(template) {
-	$('#content').html(function(){
-		return Meteor.ui.render(function(){
-			//	Force all templates to be wrapped in an blank div
-			//	This fixes a bug(?) in Meteor's liverange code
-			return '<div>' + Template[template]() + '</div>';
+	Meteor.defer(function(){
+		$('#content').html(function(){
+			return Meteor.ui.render(function(){
+				//	Force all templates to be wrapped in an blank div
+				//	This fixes a bug(?) in Meteor's liverange code
+				return '<div>' + Template[template]() + '</div>';
+			});
 		});
 	});
 }

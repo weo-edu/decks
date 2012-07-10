@@ -5,7 +5,7 @@
 		{{/iter}}
 		
 	</div>
-	<h2 id='decks-title'>Decks To Play</h2>
+	<!-- <h2 id='decks-title'>Decks To Play</h2> -->
 </template>
 
 <template name="deck_view">
@@ -14,7 +14,7 @@
 				<div class='front' style='background: url(/{{graphic}});'>
 					<!-- <img src="/{{graphic}}" /> -->
 				</div>
-				<div class='deck-meta'>
+				<div class='back'>
 					<div class="deck-title">{{name}}<br/> & other imformation about this card</div>
 					<a href='/deck/play/{{name}}' class='play'>PLAY</a>
 				</div>
@@ -24,22 +24,55 @@
 </template>
 
 <template name="deck_play">
-	<h2>Play</h2>
-	{{#with card}}
-	<div class='card'>
-		<h3>{{test}}</h3>
-		<img src='/{{graphic}}' />
-		<div class='question'>
-			{{question}}
+	<div id='playground' class='hide'></div>
+	<div id='deck-dock'>
+
+		<div id='answered'> 
+			{{#with deck}}
+			<div class='deck-container'>
+				<div class="deck">
+						<div class='front' style='background: url(/{{graphic}});'>
+							<!-- <img src="/{{graphic}}" /> -->
+						</div>
+						<div class='back'>
+							<div class="deck-title">{{name}}<br/> & other imformation about this card</div>
+							<a href='/deck/play/{{name}}' class='play'>PLAY</a>
+						</div>
+				</div>
+			</div>
+			{{/with}}
 		</div>
-		<label for='answer'>Answer</label>
-		<input type='text' name='solution' id='solution' />
+
+		<div id='unanswered'>
+			{{#each deck.cards}}
+				{{> deck_card}}
+			{{/each}}
+		</div>
 	</div>
-	{{/with}}
+</template>
+
+<template name="deck_card">
+	<div class='card-container'>
+	<div class='card'>
+		<div class='front' style='background: url(/{{graphic}});'></div>
+
+		<div class='back'>
+			<h3>{{name}}</h3>
+			<div class='question'>
+				{{question}}
+			</div>
+			<label for='answer'>Answer</label>
+			<input type='text' name='solution' class='solution' />
+		</div>
+	</div>
+</div>
+	
 </template>
 
 <template name="deck_results">
-	<h2>Results</h2>
-	You got {{correct}} out of {{total}} right!
-	<a href='/deck/browse'>Decks</a>
+	<div id='playground'>
+		<h2>Results</h2>
+		You got {{correct}} out of {{total}} right!
+		<a href='/deck/browse'>Decks</a>
+	</div>
 </template>

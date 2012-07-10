@@ -70,11 +70,25 @@ Meteor.startup(function() {
 							'a < 6'
 						]
 					}
+				},
+				{
+					name: 'multiplication',
+					graphic: 'multiplication.jpg',
+					problem: {
+						template: '\\[{{a}} \\times {{b}} \\]',
+						solution: 'a * b',
+						rules: [
+							'a is integer',
+							'b is integer',
+							'a > 2',
+							'a < 6'
+						]
+					}
 				}
 			]
 		},
 		{
-			name: 'arithmetic',
+			name: 'arithmetic-2',
 			graphic: 'arithmetic-3.jpeg',
 			cards: [
 				{
@@ -122,7 +136,7 @@ Meteor.startup(function() {
 			]
 		},
 		{
-			name: 'arithmetic',
+			name: 'arithmetic-3',
 			graphic: 'word_arithmetic.jpeg',
 			cards: [
 				{
@@ -170,7 +184,7 @@ Meteor.startup(function() {
 			]
 		},
 		{
-			name: 'arithmetic',
+			name: 'arithmetic-4',
 			graphic: 'arithmetic-2.jpeg',
 			cards: [
 				{
@@ -218,7 +232,7 @@ Meteor.startup(function() {
 			]
 		},
 		{
-			name: 'arithmetic',
+			name: 'arithmetic-5',
 			graphic: 'arithmetic-3.jpeg',
 			cards: [
 				{
@@ -266,7 +280,7 @@ Meteor.startup(function() {
 			]
 		},
 		{
-			name: 'arithmetic',
+			name: 'arithmetic-6',
 			graphic: 'arithmetic-4.png',
 			cards: [
 				{
@@ -314,6 +328,126 @@ Meteor.startup(function() {
 			]
 		},
 		{
+			name: 'word arithmetic 1',
+			graphic: 'arithmetic-2.jpeg',
+			cards: [
+				{
+					name: 'word addition',
+					graphic: 'addition.gif',
+					problem: {
+						template: 'What is {{a}} plus {{b}}?',
+						solution: 'a + b'
+					}
+				},
+				{
+					name: 'word subtraction',
+					graphic: 'subtraction.jpeg',
+					problem: {
+						template: 'What is {{a}} minus {{b}}?',
+						solution: 'a - b'
+					}
+				},
+				{
+					name: 'word multiplication',
+					graphic: 'multiplication.jpg',
+					problem: {
+						template: 'What is {{a}} times {{b}}?',
+						solution: 'a * b'
+					}
+				}
+			]
+		},
+		{
+			name: 'word arithmetic 2',
+			graphic: 'arithmetic-4.png',
+			cards: [
+				{
+					name: 'word addition',
+					graphic: 'addition.gif',
+					problem: {
+						template: 'What is {{a}} plus {{b}}?',
+						solution: 'a + b'
+					}
+				},
+				{
+					name: 'word subtraction',
+					graphic: 'subtraction.jpeg',
+					problem: {
+						template: 'What is {{a}} minus {{b}}?',
+						solution: 'a - b'
+					}
+				},
+				{
+					name: 'word multiplication',
+					graphic: 'multiplication.jpg',
+					problem: {
+						template: 'What is {{a}} times {{b}}?',
+						solution: 'a * b'
+					}
+				}
+			]
+		},
+		{
+			name: 'word arithmetic 3',
+			graphic: 'word_arithmetic.jpeg',
+			cards: [
+				{
+					name: 'word addition',
+					graphic: 'addition.gif',
+					problem: {
+						template: 'What is {{a}} plus {{b}}?',
+						solution: 'a + b'
+					}
+				},
+				{
+					name: 'word subtraction',
+					graphic: 'subtraction.jpeg',
+					problem: {
+						template: 'What is {{a}} minus {{b}}?',
+						solution: 'a - b'
+					}
+				},
+				{
+					name: 'word multiplication',
+					graphic: 'multiplication.jpg',
+					problem: {
+						template: 'What is {{a}} times {{b}}?',
+						solution: 'a * b'
+					}
+				}
+			]
+		},
+		{
+			name: 'word arithmetic',
+			graphic: 'arithmetic.png',
+			cards: [
+				{
+					name: 'word addition',
+					graphic: 'addition.gif',
+					problem: {
+						template: 'What is {{a}} plus {{b}}?',
+						solution: 'a + b'
+					}
+				},
+				{
+					name: 'word subtraction',
+					graphic: 'subtraction.jpeg',
+					problem: {
+						template: 'What is {{a}} minus {{b}}?',
+						solution: 'a - b'
+					}
+				},
+				{
+					name: 'word multiplication',
+					graphic: 'multiplication.jpg',
+					problem: {
+						template: 'What is {{a}} times {{b}}?',
+						solution: 'a * b'
+					}
+				}
+			]
+		},
+		{
 			name: 'word arithmetic',
 			graphic: 'word_arithmetic.jpeg',
 			cards: [
@@ -342,7 +476,128 @@ Meteor.startup(function() {
 					}
 				}
 			]
+		},
+		{
+			name: 'word arithmetic',
+			graphic: 'arithmetic.png',
+			cards: [
+				{
+					name: 'word addition',
+					graphic: 'addition.gif',
+					problem: {
+						template: 'What is {{a}} plus {{b}}?',
+						solution: 'a + b'
+					}
+				},
+				{
+					name: 'word subtraction',
+					graphic: 'subtraction.jpeg',
+					problem: {
+						template: 'What is {{a}} minus {{b}}?',
+						solution: 'a - b'
+					}
+				},
+				{
+					name: 'word multiplication',
+					graphic: 'multiplication.jpg',
+					problem: {
+						template: 'What is {{a}} times {{b}}?',
+						solution: 'a * b'
+					}
+				}
+			]
+		},
+		{
+			name: 'word arithmetic',
+			graphic: 'arithmetic-2.jpeg',
+			cards: [
+				{
+					name: 'word addition',
+					graphic: 'addition.gif',
+					problem: {
+						template: 'What is {{a}} plus {{b}}?',
+						solution: 'a + b'
+					}
+				},
+				{
+					name: 'word subtraction',
+					graphic: 'subtraction.jpeg',
+					problem: {
+						template: 'What is {{a}} minus {{b}}?',
+						solution: 'a - b'
+					}
+				},
+				{
+					name: 'word multiplication',
+					graphic: 'multiplication.jpg',
+					problem: {
+						template: 'What is {{a}} times {{b}}?',
+						solution: 'a * b'
+					}
+				}
+			]
+		},
+		{
+			name: 'word arithmetic',
+			graphic: 'arithmetic-3.jpeg',
+			cards: [
+				{
+					name: 'word addition',
+					graphic: 'addition.gif',
+					problem: {
+						template: 'What is {{a}} plus {{b}}?',
+						solution: 'a + b'
+					}
+				},
+				{
+					name: 'word subtraction',
+					graphic: 'subtraction.jpeg',
+					problem: {
+						template: 'What is {{a}} minus {{b}}?',
+						solution: 'a - b'
+					}
+				},
+				{
+					name: 'word multiplication',
+					graphic: 'multiplication.jpg',
+					problem: {
+						template: 'What is {{a}} times {{b}}?',
+						solution: 'a * b'
+					}
+				}
+			]
+		},
+		{
+			name: 'word arithmetic',
+			graphic: 'arithmetic-4.png',
+			cards: [
+				{
+					name: 'word addition',
+					graphic: 'addition.gif',
+					problem: {
+						template: 'What is {{a}} plus {{b}}?',
+						solution: 'a + b'
+					}
+				},
+				{
+					name: 'word subtraction',
+					graphic: 'subtraction.jpeg',
+					problem: {
+						template: 'What is {{a}} minus {{b}}?',
+						solution: 'a - b'
+					}
+				},
+				{
+					name: 'word multiplication',
+					graphic: 'multiplication.jpg',
+					problem: {
+						template: 'What is {{a}} times {{b}}?',
+						solution: 'a * b'
+					}
+				}
+			]
 		}
+
 	]
 	_.each(decks,function(deck) {
 		Decks.insert(deck);

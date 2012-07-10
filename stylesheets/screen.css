@@ -3,7 +3,7 @@
  * In this file you should write your main styles. (or centralize your imports)
  * Import this file using the following HTML or equivalent:
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
-/* line 17, /Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 17, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -25,45 +25,45 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
-/* line 22, /Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 22, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 html {
   line-height: 1;
 }
 
-/* line 24, /Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 24, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 ol, ul {
   list-style: none;
 }
 
-/* line 26, /Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 26, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-/* line 28, /Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 28, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
 
-/* line 30, /Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 30, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 q, blockquote {
   quotes: none;
 }
-/* line 103, /Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 103, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 q:before, q:after, blockquote:before, blockquote:after {
   content: "";
   content: none;
 }
 
-/* line 32, /Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 32, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 a img {
   border: none;
 }
 
-/* line 116, /Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 116, ../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
   display: block;
 }
@@ -76,89 +76,50 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   font-style: normal;
 }
 
-/* line 34, /Users/mweint/weo/common/public/sass/mixins.scss */
+/* line 34, ../../common/public/sass/mixins.scss */
 body {
   font-family: Arial;
   background: url("/app!common/textures/45degreee_fabric.png");
   height: 100%;
 }
 
-/* line 41, /Users/mweint/weo/common/public/sass/mixins.scss */
+/* line 41, ../../common/public/sass/mixins.scss */
 h1, h2, h3, h4, h5 {
   font-family: HighlandsRegular;
   text-transform: uppercase;
 }
 
-/* line 47, /Users/mweint/weo/common/public/sass/mixins.scss */
-h1 {
-  font-size: 60px;
-  line-height: 80px;
-  color: #FFF;
-  text-shadow: 2px 2px 0px black 0px 1px #aaaaaa;
-}
-
-/* line 55, /Users/mweint/weo/common/public/sass/mixins.scss */
+/* line 47, ../../common/public/sass/mixins.scss */
 #content {
   width: 980px;
   margin: 0 auto;
   position: relative;
-  margin-top: 50px;
+  padding: 0 10px;
+  height: 100%;
+  overflow: hidden;
 }
 
-/* line 14, ../sass/screen.scss */
-#tab {
-  height: 25px;
-  width: 25px;
-  position: absolute;
-  top: -25px;
-  background: tomato;
-  z-index: 999;
-}
-/* line 23, ../sass/screen.scss */
-#tab.active {
-  top: 0;
+/* line 54, ../../common/public/sass/mixins.scss */
+a {
+  text-decoration: none;
 }
 
-/* line 29, ../sass/screen.scss */
-#header {
-  background: #444444 url("/textures/low_contrast_linen.png");
-  height: 75px;
-  position: relative;
-}
-
-/* line 44, ../sass/screen.scss */
-nav {
-  width: 980px;
-  margin: 0 auto;
-  position: relative;
-}
-
-/* line 52, ../sass/screen.scss */
+/* line 27, ../sass/screen.scss */
 #deck-grid {
+  padding-top: 40px;
   -webkit-transition: height 0.7s ease-out;
   -moz-transition: height 0.7s ease-out;
   -o-transition: height 0.7s ease-out;
   transition: height 0.7s ease-out;
   position: relative;
 }
-/* line 57, ../sass/screen.scss */
+/* line 33, ../sass/screen.scss */
 #deck-grid .deck-container {
-  -webkit-transition: all 0.4s ease-out;
-  -moz-transition: all 0.4s ease-out;
-  -o-transition: all 0.4s ease-out;
-  transition: all 0.4s ease-out;
-  height: 180px;
-  width: 180px;
   -webkit-perspective: 800;
   -moz-perspective: 800;
   -ms-perspective: 800;
   -o-perspective: 800;
   perspective: 800;
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  -ms-border-radius: 8px;
-  -o-border-radius: 8px;
-  border-radius: 8px;
   -webkit-transform-style: preserve-3d;
   -moz-transform-style: preserve-3d;
   -ms-transform-style: preserve-3d;
@@ -169,22 +130,46 @@ nav {
   -ms-transform: rotateY(120deg) scale(0.001);
   -o-transform: rotateY(120deg) scale(0.001);
   transform: rotateY(120deg) scale(0.001);
-  position: absolute;
   cursor: pointer;
-  z-index: 0;
+  position: absolute;
 }
-/* line 71, ../sass/screen.scss */
-#deck-grid .deck-container .deck {
+
+/* line 43, ../sass/screen.scss */
+#decks-title {
+  text-align: center;
+  font-size: 40px;
+  margin: 30px 0;
+  color: #999;
+}
+
+/* line 52, ../sass/screen.scss */
+.card-container, .deck-container {
   height: 180px;
   width: 180px;
+  -webkit-transition: all 0.4s ease-out;
+  -moz-transition: all 0.4s ease-out;
+  -o-transition: all 0.4s ease-out;
+  transition: all 0.4s ease-out;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  border-radius: 8px;
+  z-index: 0;
+}
+
+/* line 64, ../sass/screen.scss */
+.deck-container .deck, .deck-container .card, .card-container .deck, .card-container .card {
+  height: 100%;
+  width: 100%;
   -webkit-perspective: 800;
   -moz-perspective: 800;
   -ms-perspective: 800;
   -o-perspective: 800;
   perspective: 800;
 }
-/* line 83, ../sass/screen.scss */
-#deck-grid .deck-container .front, #deck-grid .deck-container .deck-meta {
+/* line 76, ../sass/screen.scss */
+.deck-container .front, .deck-container .back, .card-container .front, .card-container .back {
   -webkit-transition: -webkit-transform 0.25s ease-in-out, box-shadow 0.15s ease-in-out;
   -moz-transition: -moz-transform 0.25s ease-in-out, box-shadow 0.15s ease-in-out;
   -o-transition: -o-transform 0.25s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -202,9 +187,11 @@ nav {
   -webkit-box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.6), 0 0 7px #333333;
   -moz-box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.6), 0 0 7px #333333;
   box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.6), 0 0 7px #333333;
+  background-size: 180px 180px;
+  background-position: center;
 }
-/* line 90, ../sass/screen.scss */
-#deck-grid .deck-container .front {
+/* line 85, ../sass/screen.scss */
+.deck-container .front, .card-container .front {
   -webkit-transform: rotateX(0deg) rotateY(0deg);
   -moz-transform: rotateX(0deg) rotateY(0deg);
   -ms-transform: rotateX(0deg) rotateY(0deg);
@@ -219,8 +206,8 @@ nav {
   -o-border-radius: 8px;
   border-radius: 8px;
 }
-/* line 104, ../sass/screen.scss */
-#deck-grid .deck-container .deck-meta {
+/* line 99, ../sass/screen.scss */
+.deck-container .back, .card-container .back {
   position: absolute;
   left: 0;
   padding: 10px;
@@ -242,8 +229,8 @@ nav {
   -o-transform: rotateY(180deg);
   transform: rotateY(180deg);
 }
-/* line 118, ../sass/screen.scss */
-#deck-grid .deck-container .deck-meta .play {
+/* line 113, ../sass/screen.scss */
+.deck-container .back .play, .card-container .back .play {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #dddddd));
   background: -webkit-linear-gradient(#ffffff, #dddddd);
   background: -moz-linear-gradient(#ffffff, #dddddd);
@@ -263,24 +250,24 @@ nav {
   display: block;
   text-align: center;
 }
-/* line 131, ../sass/screen.scss */
-#deck-grid .deck-container .deck-meta .play:hover {
+/* line 126, ../sass/screen.scss */
+.deck-container .back .play:hover, .card-container .back .play:hover {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #ffffff));
   background: -webkit-linear-gradient(#dddddd, #ffffff);
   background: -moz-linear-gradient(#dddddd, #ffffff);
   background: -o-linear-gradient(#dddddd, #ffffff);
   background: linear-gradient(#dddddd, #ffffff);
 }
-/* line 138, ../sass/screen.scss */
-#deck-grid .deck-container.view-more .front {
+/* line 133, ../sass/screen.scss */
+.deck-container.view-more .front, .card-container.view-more .front {
   -webkit-transform: rotateY(-180deg);
   -moz-transform: rotateY(-180deg);
   -ms-transform: rotateY(-180deg);
   -o-transform: rotateY(-180deg);
   transform: rotateY(-180deg);
 }
-/* line 141, ../sass/screen.scss */
-#deck-grid .deck-container.view-more .deck-meta {
+/* line 136, ../sass/screen.scss */
+.deck-container.view-more .back, .card-container.view-more .back {
   z-index: 99;
   -webkit-transform: rotateY(0deg);
   -moz-transform: rotateY(0deg);
@@ -288,25 +275,139 @@ nav {
   -o-transform: rotateY(0deg);
   transform: rotateY(0deg);
 }
-/* line 147, ../sass/screen.scss */
-#deck-grid .deck-container.close {
+/* line 141, ../sass/screen.scss */
+.deck-container.close, .card-container.close {
   -webkit-transition: all 0.8s ease-out;
   -moz-transition: all 0.8s ease-out;
   -o-transition: all 0.8s ease-out;
   transition: all 0.8s ease-out;
 }
-/* line 150, ../sass/screen.scss */
-#deck-grid .deck-container.close .deck-meta, #deck-grid .deck-container.close .front {
+/* line 143, ../sass/screen.scss */
+.deck-container.close .back, .deck-container.close .front, .card-container.close .back, .card-container.close .front {
   -webkit-transition: all 0.5s ease-out;
   -moz-transition: all 0.5s ease-out;
   -o-transition: all 0.5s ease-out;
   transition: all 0.5s ease-out;
 }
 
-/* line 158, ../sass/screen.scss */
-#decks-title {
+/* line 153, ../sass/screen.scss */
+#playground {
+  height: 450px;
+  margin-top: 30px;
+  background: #FFF;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  border-radius: 8px;
+  -webkit-box-shadow: 0 0 10px #333333;
+  -moz-box-shadow: 0 0 10px #333333;
+  box-shadow: 0 0 10px #333333;
+  padding: 20px;
+}
+/* line 160, ../sass/screen.scss */
+#playground.hide {
+  display: none;
+}
+/* line 164, ../sass/screen.scss */
+#playground h3 {
+  font-size: 50px;
+  line-height: 1.5em;
+  color: #777;
   text-align: center;
-  font-size: 40px;
-  margin: 30px 0;
-  color: #999;
+}
+/* line 171, ../sass/screen.scss */
+#playground .question {
+  font-size: 30px;
+  line-height: 1.5em;
+  text-align: center;
+}
+
+/* line 180, ../sass/screen.scss */
+#deck-dock {
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-perspective: 800;
+  -moz-perspective: 800;
+  -ms-perspective: 800;
+  -o-perspective: 800;
+  perspective: 800;
+  margin-top: 20px;
+  height: 180px;
+  width: 100%;
+  position: relative;
+}
+/* line 191, ../sass/screen.scss */
+#deck-dock > div {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+/* line 196, ../sass/screen.scss */
+#deck-dock > div > div {
+  position: absolute;
+  cursor: pointer;
+  width: 180px;
+  height: 180px;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+/* line 208, ../sass/screen.scss */
+#deck-dock #answered {
+  z-index: 999;
+}
+/* line 210, ../sass/screen.scss */
+#deck-dock #answered .deck-container {
+  z-index: 999;
+}
+/* line 221, ../sass/screen.scss */
+#deck-dock .card-container .card {
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70);
+  opacity: 0.7;
+  -webkit-filter: grayscale(100%);
+  -moz-filter: grayscale(100%);
+  filter: grayscale(100%);
+}
+/* line 227, ../sass/screen.scss */
+#deck-dock .card-container.current .card {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  -webkit-filter: grayscale(0%);
+  -moz-filter: grayscale(0%);
+  filter: grayscale(0%);
+}
+/* line 232, ../sass/screen.scss */
+#deck-dock .card-container.wrong, #deck-dock .card-container.correct {
+  -webkit-box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.6), 0 0 7px #333333;
+  -moz-box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.6), 0 0 7px #333333;
+  box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.6), 0 0 7px #333333;
+}
+/* line 234, ../sass/screen.scss */
+#deck-dock .card-container.wrong .card, #deck-dock .card-container.correct .card {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
+  opacity: 0.4;
+  -webkit-box-shadow: 0 0 0;
+  -moz-box-shadow: 0 0 0;
+  box-shadow: 0 0 0;
+}
+/* line 240, ../sass/screen.scss */
+#deck-dock .card-container.wrong {
+  background: #FF3366;
+}
+/* line 244, ../sass/screen.scss */
+#deck-dock .card-container.correct {
+  background: #A2E67E;
 }
