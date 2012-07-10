@@ -192,7 +192,7 @@ $size: 180px;
 		position: absolute;
 		width: $size;
 		height: $size;
-		@include transition(all .3s ease-in-out);
+		@include transition(transform .3s ease-in-out);
 		> div {
 			position: absolute;
 			cursor: pointer;

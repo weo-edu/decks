@@ -84,6 +84,62 @@ Meteor.startup(function() {
 							'a < 6'
 						]
 					}
+				},
+				{
+					name: 'addition',
+					graphic: 'addition.gif',
+					problem: {
+						template: '\\[{{a}} + {{b}}\\]',
+						solution: 'a + b',
+						rules: [
+							'a is integer',
+							'b is integer',
+							'a < b',
+							'b > 5'
+						]
+					}
+				},
+				{
+					name: 'subtraction',
+					graphic: 'subtraction.jpeg',
+					problem: {
+						template: '\\[{{a}} - {{b}} \\]',
+						solution: 'a - b',
+						rules: [
+							'a is integer',
+							'b is integer',
+							'a > b',
+							'b < 2'
+						]
+					}
+				},
+				{
+					name: 'multiplication',
+					graphic: 'multiplication.jpg',
+					problem: {
+						template: '\\[{{a}} \\times {{b}} \\]',
+						solution: 'a * b',
+						rules: [
+							'a is integer',
+							'b is integer',
+							'a > 2',
+							'a < 6'
+						]
+					}
+				},
+				{
+					name: 'multiplication',
+					graphic: 'multiplication.jpg',
+					problem: {
+						template: '\\[{{a}} \\times {{b}} \\]',
+						solution: 'a * b',
+						rules: [
+							'a is integer',
+							'b is integer',
+							'a > 2',
+							'a < 6'
+						]
+					}
 				}
 			]
 		},

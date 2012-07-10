@@ -1,7 +1,3 @@
-var containerWidth = 0;
-var deckWidth = 0;
-var decksPerRow = 0;
-var gutter = 0;
 var transformPrefix = domToCss(Modernizr.prefixed('transform'));
 
 route('/deck/browse',function() {
@@ -11,15 +7,7 @@ route('/deck/browse',function() {
 
 		Meteor.defer(function(){
 			if(decks.count()){
-				containerWidth = $('#deck-grid').width();
-				deckWidth = $('#deck-grid .deck').width();
-				decksPerRow = Math.floor(containerWidth / deckWidth);
-				gutter = ((containerWidth - decksPerRow * deckWidth) / (decksPerRow - 1));
-
-				$('#deck-grid').height((deckWidth + gutter) * (Math.ceil(decks.count()/decksPerRow)));
-
 				deal($('#deck-grid'), 600);
-
 			}
 
 		});
@@ -63,9 +51,8 @@ route('/deck/play/:name', function(ctx){
 	// 	cards = Decks.findOne({name: name}).cards;
 	// 	console.log('cards:', cards);
 	//   	return cards;
- //  	}
+ 	//  	}
  	var total_cards;
-	var num_cards;
 	var working_card = 0;
 	var problems = [];
 	var results = [];
@@ -73,11 +60,8 @@ route('/deck/play/:name', function(ctx){
 
  	Template.deck_play.deck = function() {
  		var deck;
- 		
-		var play_session = new _Session();
 		var name = ctx.params.name;
 		
-
 		deck = Decks.findOne({name: name});
 		total_cards = deck.cards.length;
 
@@ -87,21 +71,20 @@ route('/deck/play/:name', function(ctx){
 			cur_card.question = problems[i].html;
 		}
 
-		console.log(problems);
-		// console.log('length:', deck.cards.length);
-		// console.log(problemize(deck.cards[0].problem).html);
-		// console.log('deck:', deck);
-
 		Meteor.defer(function(){
+			var answered = $('#answered');
+			var unanswered = $('#unanswered');
+
+			answered.width(answered.children().width());
+			unanswered.width(unanswered.parent().width() - answered.width() - 20);
+
 			deal($('#deck-dock'), 0);
-			deal($('#unanswered'), 100);
+			deal(unanswered, 100);
 			$("#playground").slideDown(1000, function(){
 				$('#unanswered .card').eq(0).click();
   				$('#playground .solution').focus();	
 			});
-			
 		});
-
 
 	  	return deck;
 
@@ -148,21 +131,24 @@ route('/deck/play/:name', function(ctx){
 	  				el.addClass('wrong');
 
 
-	  			deal($('#unanswered'), 0);
-	  			deal($('#answered'), 0, 'collapse');
+	  			deal($('#unanswered'), 0, 'grid', function(){
+	  				console.log('unanswered')
+	  				$('#unanswered .card').eq(0).click();
+		  			$('#playground .solution').focus();
 
-	  			$('#unanswered .card').eq(0).click();
-	  			$('#playground .solution').focus();
+		  			if(problems.length <= 0) {
+		  				for(var i = 0; i < results.length;  i++) {
+		  					if(results[i] == true)
+		  						count++;
 
-	  			if(problems.length <= 0) {
-	  				for(var i = 0; i < results.length;  i++) {
-	  					if(results[i] == true)
-	  						count++;
+		  				}
+						renderView('deck_results');
+		  			}
+	  			});
+	  			deal($('#answered'), 0, 'collapse', function(){console.log('answered')});
+	  			
 
-	  				}
-
-  					renderView('deck_results');
-	  			}
+	  			
 	  		}	
 	  	}
   	}
@@ -221,50 +207,3 @@ route('/deck/play/:name', function(ctx){
 	
 	renderView('deck_play');
 });
-
-function getTranslation(el, type) {
-
-
-	type = typeof type !== 'undefined' ? type : 'grid';
-
-	var idx = el.parent().children(el).index(el);
-
-	switch(type)
-	{
-		case 'grid':
-		{	
-			var cur_x = (deckWidth + gutter) * (idx%decksPerRow);
-			var cur_y = (deckWidth + gutter) * (Math.floor(idx/decksPerRow));
-
-			var rot = {x: cur_x, y: cur_y, z: 0};
-			break;
-		}
-		case 'collapse':
-		{
-			var rot = {x: (4 * idx), y: 0, z: (20 * idx)};
-			break;
-		}
-	}
-
-	
-	return rot;
-}
-
-function deal(container, dur, type) {
-
-	var idx = 0;
-	var num_cards = container.children().length;
-				
-	var dealInterval = setInterval(function(){
-		
-		var el = container.children().eq(idx);
-		var rot = getTranslation(el, type);
-		el.css(transformPrefix, 'translate3d(' + rot.x + 'px,'+ rot.y +'px,' + rot.z +'px)');
-		el.css('z-index', 1);
-		idx++;
-		
-		if(idx > num_cards)
-			clearInterval(dealInterval);
-
-	}, (dur / num_cards));
-}
