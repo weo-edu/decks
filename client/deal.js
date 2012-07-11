@@ -1,6 +1,6 @@
 ;(function(){
 	var types = {
-		grid: function(children, deckOuterWidth, decksPerRow){
+		grid: function(children, deckOuterWidth, decksPerRow, width){
 			var rot = [];
 			children.each(function(idx){
 				rot[idx] = {};
@@ -16,10 +16,14 @@
 
 			var rot = [];
 			var num_cards = children.length
-			var spacing = (width - deckWidth) / (num_cards - 1); //deckWidth - (((num_cards * deckWidth) - width) / (num_cards-1));
-			console.log(spacing);
+			var spacing = (width - deckWidth) / (num_cards - 1);
+
+			if(spacing > deckWidth - 50)
+				spacing = deckWidth / 2;
+
+
 			children.each(function(idx){
-				rot[idx] = {x: (spacing * idx), y: 0, z: -idx * 0.1};
+				rot[idx] = {x: (spacing * idx), y: 0, z: -idx * 0.01};
 			});
 
 			return rot;
@@ -37,9 +41,6 @@
 	function getTranslation(container, type) {
 		type = typeof type !== 'undefined' ? type : 'grid';
 
-		// var idx = el.parent().children(el).index(el);
-
-		var width = container.width();
 		var children = container.children();
 		var containerWidth = container.width();
 		var deckWidth = children.width();
@@ -52,7 +53,7 @@
 			throw new Error('getTranslation called with invalid type: ' + type);
 		}
 
-		return types[type](children, deckOuterWidth, decksPerRow, width, deckWidth);
+		return types[type](children, deckOuterWidth, decksPerRow, containerWidth, deckWidth);
 	}
 
 
@@ -70,7 +71,6 @@
 		}
 					
 		var dealInterval = setInterval(function(){
-
 			var el = container.children().eq(idx);
 			
 			el.css(transformPrefix, 'translate3d(' + rot[idx].x + 'px,'+ rot[idx].y +'px,' + rot[idx].z +'px)');
@@ -83,7 +83,27 @@
 			}
 
 		}, (dur / num_cards));
+
+		return rot;
 	}
 
+	function featureCard(card) {
+		var container = card.parent();
+		var idx = container.children().index(card);
+		var num_cards = container.children().length;
+		var rot = getTranslation(container, 'fit');
+
+		for(var i = 0; i < num_cards; i++)
+		{
+			var offset = Math.abs(idx - i);
+			var turnY = i == idx ? 0 : (50 + (offset * -5)) * (i < idx ? 1 : -1);
+			var z = i == idx ? 0 : -100;
+			var el = container.children().eq(i);
+
+			el.css(transformPrefix, 'translate3d(' + rot[i].x + 'px,'+ rot[i].y +'px,' + z +'px) rotateY(' + turnY + 'deg)');
+		}
+	}
+
+	window.featureCard = featureCard;
 	window.deal = deal;
 })();

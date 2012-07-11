@@ -15,8 +15,8 @@
 					<!-- <img src="/{{graphic}}" /> -->
 				</div>
 				<div class='back'>
-					<div class="deck-title">{{name}}<br/> & other imformation about this card</div>
-					<a href='/deck/play/{{name}}' class='play'>PLAY</a>
+					<div class="deck-title">{{name}}</div>
+					<div rel='/deck/play/{{name}}' class='play'>PLAY</div>
 				</div>
 		</div>
 	</div>
@@ -32,11 +32,10 @@
 			<div class='deck-container'>
 				<div class="deck">
 						<div class='front' style='background: url(/{{graphic}});'>
-							<!-- <img src="/{{graphic}}" /> -->
 						</div>
 						<div class='back'>
-							<div class="deck-title">{{name}}<br/> & other imformation about this card</div>
-							<a href='/deck/play/{{name}}' class='play'>PLAY</a>
+							<div class="deck-title">{{name}}</div>
+							<div rel='/deck/play/{{name}}' class='play'>PLAY</div>
 						</div>
 				</div>
 			</div>
@@ -71,7 +70,7 @@
 
 <template name="deck_results">
 	<div id='playground'>
-		<h2>Results</h2>
+		<h3>Results</h3>
 		You got {{correct}} out of {{total}} right!
 		<a href='/deck/browse'>Decks</a>
 	</div>

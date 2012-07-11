@@ -25,7 +25,9 @@ $size: 180px;
 
 #deck-grid
 {	
-	padding-top: 40px;
+	margin-top: 40px;
+	// padding: 20px;
+	// @include block;
 	@include transition(height .7s ease-out);
 	// overflow: hidden;
 	position: relative;
@@ -151,7 +153,7 @@ $size: 180px;
 ////////////////////////////
 
 #playground {
-	height: 450px;
+	height: 400px;
 	margin-top: 30px;
 	background: #FFF;
 	@include border-radius(8px);
@@ -189,7 +191,7 @@ $size: 180px;
 	// background: url("/app!common/textures/low_contrast_linen.png");
 
 	> div{
-		@include perspective(800);
+		@include perspective(1000);
 		@include transform-style(preserve-3d);
 		position: absolute;
 		width: $size;
@@ -209,7 +211,7 @@ $size: 180px;
 	}
 
 	#answered {
-		z-index: 999;
+		z-index: 2 !important;
 		.deck-container{
 			z-index: 999;
 		}
@@ -221,16 +223,18 @@ $size: 180px;
 
 	.card-container {
 
-		background: #777;
+		background: #000;
 		.card {
 			@include transition(all .2s ease-in-out);
 			@include opacity(.7);
-			@include filter(grayscale(100%));
+			// @include filter(grayscale(100%));
 		}
 		
-		&.current .card {
+		&.current, &:hover {
+		.card {
 			@include opacity(1);
-			@include filter(grayscale(0%));
+		}
+			// @include filter(grayscale(0%));
 		}
 
 		&.wrong, &.correct {
