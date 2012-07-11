@@ -12,7 +12,7 @@
 //	DECKS GRID
 ////////////////////////////
 
-$size: 180px;
+$size: 175px;
 
 @mixin deckCards{
 	height: $size;
@@ -22,10 +22,13 @@ $size: 180px;
 	z-index: 0;
 }
 
+#content
+{
+	padding-top: 40px;
+}
 
 #deck-grid
 {	
-	margin-top: 40px;
 	// padding: 20px;
 	// @include block;
 	@include transition(height .7s ease-out);
