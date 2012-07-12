@@ -99,13 +99,12 @@ route('/deck/play/:name', function(ctx){
 	  		MathJax.Hub.Queue(["Typeset", MathJax.Hub, el.find('.question').get(0)]);
 	  		// $('#play-card').html(el.find('.back').html());
 
-
 	  		var lastChild = $('#unanswered .card-container:last-child');
 	  		var values = lastChild.css(transformPrefix).split('(')[1].split(')')[0].split(',');
 	  		var skipCoords = {};
 	  		skipCoords.top = lastChild.offset().top;
 	  		skipCoords.left = lastChild.offset().left;
-	  		skipCoords.y = -Math.round(Math.asin(values[2]) * (180/Math.PI));	  		 
+	  		skipCoords.y = -Math.round(Math.asin(values[2]) * (180/Math.PI));
 
 	  		if($('#playground .card-container').index() != -1)
   				$('#playground .card-container').animateInsert('append', $('#unanswered'), function(){}, skipCoords);
@@ -183,7 +182,7 @@ route('/deck/play/:name', function(ctx){
 	    	callback = callback || function(){};
 			var offset = this.offset();
 
-			var stage = $('<div class="stage" style="position: absolute; height: 100%; width: 100%; z-index: 9999;"></div>');
+			var stage = $('<div class="stage" style="position: absolute; height: 100%; width: 100%; z-index: 1;"></div>');
 
 	    	$('body').prepend(stage);
 
@@ -200,8 +199,6 @@ route('/deck/play/:name', function(ctx){
     				new_offset = endCoords;
 
     			var rotateY = new_offset.y ? new_offset.y : 0;
-
-    			console.log(rotateY);
 
 				that.css(transformPrefix, 'translate3d(' + new_offset.left + 'px, ' + new_offset.top + 'px, 0) rotateY('+ rotateY + 'deg)');
     		}, 0);
