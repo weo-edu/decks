@@ -291,15 +291,29 @@ a {
   transition: all 0.5s ease-out;
 }
 
-/* line 160, ../sass/screen.scss */
-#stage > * {
-  -webkit-transition: all 0.4s ease-in-out;
-  -moz-transition: all 0.4s ease-in-out;
-  -o-transition: all 0.4s ease-in-out;
-  transition: all 0.4s ease-in-out;
+/* line 159, ../sass/screen.scss */
+.stage {
+  -webkit-perspective: 1000;
+  -moz-perspective: 1000;
+  -ms-perspective: 1000;
+  -o-perspective: 1000;
+  perspective: 1000;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+/* line 162, ../sass/screen.scss */
+.stage .card-container {
+  -webkit-transition: all 1.5s ease-in-out;
+  -webkit-transition-delay: !important;
+  -moz-transition: all 1.5s ease-in-out !important;
+  -o-transition: all 1.5s ease-in-out !important;
+  transition: all 1.5s ease-in-out !important;
 }
 
-/* line 165, ../sass/screen.scss */
+/* line 167, ../sass/screen.scss */
 #playground {
   height: 400px;
   margin-top: 30px;
@@ -314,27 +328,19 @@ a {
   box-shadow: 0 0 10px #333333;
   padding: 20px;
 }
-/* line 172, ../sass/screen.scss */
+/* line 174, ../sass/screen.scss */
 #playground.hide {
   display: none;
 }
-/* line 175, ../sass/screen.scss */
-#playground .card-container {
-  -webkit-transform: translate3d(0, 0, 0) !important;
-  -moz-transform: translate3d(0, 0, 0) !important;
-  -ms-transform: translate3d(0, 0, 0) !important;
-  -o-transform: translate3d(0, 0, 0) !important;
-  transform: translate3d(0, 0, 0) !important;
-}
 
-/* line 195, ../sass/screen.scss */
+/* line 197, ../sass/screen.scss */
 #deck-dock {
   margin-top: 20px;
   height: 175px;
   width: 100%;
   position: relative;
 }
-/* line 206, ../sass/screen.scss */
+/* line 208, ../sass/screen.scss */
 #deck-dock > div {
   -webkit-perspective: 1000;
   -moz-perspective: 1000;
@@ -355,7 +361,7 @@ a {
   transition: transform 0.3s ease-in-out;
   z-index: 1;
 }
-/* line 214, ../sass/screen.scss */
+/* line 216, ../sass/screen.scss */
 #deck-dock > div > div {
   position: absolute;
   cursor: pointer;
@@ -366,27 +372,27 @@ a {
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
-/* line 226, ../sass/screen.scss */
+/* line 228, ../sass/screen.scss */
 #deck-dock #answered {
   z-index: 2 !important;
 }
-/* line 228, ../sass/screen.scss */
+/* line 230, ../sass/screen.scss */
 #deck-dock #answered .deck-container {
   z-index: 999;
 }
 
-/* line 234, ../sass/screen.scss */
+/* line 236, ../sass/screen.scss */
 .card-container {
-  -webkit-transition: -webkit-transform 0.3s linear;
-  -moz-transition: -moz-transform 0.3s linear;
-  -o-transition: -o-transform 0.3s linear;
-  transition: transform 0.3s linear;
+  -webkit-transition: -webkit-transform 0.35s ease-in-out;
+  -moz-transition: -moz-transform 0.35s ease-in-out;
+  -o-transition: -o-transform 0.35s ease-in-out;
+  transition: transform 0.35s ease-in-out;
 }
-/* line 249, ../sass/screen.scss */
+/* line 251, ../sass/screen.scss */
 .card-container.current.current, .card-container:hover.current {
   background: none;
 }
-/* line 251, ../sass/screen.scss */
+/* line 253, ../sass/screen.scss */
 .card-container.current.current .front, .card-container:hover.current .front {
   -webkit-transform: rotateY(-180deg);
   -moz-transform: rotateY(-180deg);
@@ -394,7 +400,7 @@ a {
   -o-transform: rotateY(-180deg);
   transform: rotateY(-180deg);
 }
-/* line 254, ../sass/screen.scss */
+/* line 256, ../sass/screen.scss */
 .card-container.current.current .back, .card-container:hover.current .back {
   z-index: 99;
   -webkit-transform: rotateY(0deg);
@@ -403,11 +409,11 @@ a {
   -o-transform: rotateY(0deg);
   transform: rotateY(0deg);
 }
-/* line 270, ../sass/screen.scss */
+/* line 272, ../sass/screen.scss */
 .card-container.wrong {
   background: #FF3366;
 }
-/* line 274, ../sass/screen.scss */
+/* line 276, ../sass/screen.scss */
 .card-container.correct {
   background: #A2E67E;
 }

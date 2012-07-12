@@ -155,10 +155,12 @@ $size: 175px;
 //	PLAY
 ////////////////////////////
 
-#stage
+.stage
 {
-	> *{
-		@include transition(all .4s ease-in-out);
+	@include perspective(1000);
+	@include transform-style(preserve-3d);
+	.card-container{
+		@include transition(all 1.5s ease-in-out !important);
 	}
 }
 
@@ -172,9 +174,9 @@ $size: 175px;
 	&.hide {
 		display: none;
 	}
-	.card-container {
-		@include transform(translate3d(0, 0, 0) !important);
-	}
+	// .card-container {
+	// 	@include transform(translate3d(0, 0, 0) !important);
+	// }
 
 	// h3 {
 	// 	font-size: 50px;
@@ -234,7 +236,7 @@ $size: 175px;
 .card-container {
 
 	// background: #000;
-	@include transition(transform .3s linear);
+	@include transition(transform .35s ease-in-out);
 	.card {
 		// @include transition(all .2s ease-in-out);
 		// @include opacity(.7);
