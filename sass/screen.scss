@@ -265,25 +265,89 @@ $size: 175px;
 //	CARD CREATOR
 ////////////////////////////
 
-// #template-preview
-// {
-// 	$size: 400px;
-// 	width: $size;
-// 	height: $size;
-// 	background: transparentize(#FFF, 0.2);
-// 	@include border-radius(50%);
-// 	position: relative;
-// 	.display-inner
-// 	{
-// 		position: absolute;
-// 		height: $size / 2;
-// 		width: $size / 2;
-// 		top: ($size / 4);
-// 		left: ($size / 4);
-// 		// background: grey;
-// 		input{
-// 			width: 100%;
-// 		}
+$cardsize:380px;
+$cardmargin:15px;
 
-// 	}
-// }
+.create{
+	width:$cardsize*2 + $cardmargin*4;
+	height:$cardsize + $cardmargin*2;
+	margin:0 auto;
+}
+
+.display
+{
+	width: $cardsize;
+	height: $cardsize;
+	margin: $cardmargin;
+	z-index:0;
+	float:left;
+	overflow:auto;
+	background: transparentize(#FFF, 0.2);
+	@include transition(all .5s ease-in-out);
+	@include border-radius(8px);
+	@include box-shadow(0 7px 25px rgba(0,0,0,0.4));
+	position: relative;
+	.display-inner
+	{
+		padding:20px;
+
+	}
+}
+.deck-holder{
+	background:none;
+	left: 0px;
+	box-shadow: none;
+	overflow: visible;
+}
+.deck-preview{
+	$size:90px;
+	width:100%;
+	@include transform-style(preserve-3d);
+	@include perspective(800);
+	.deck-container{
+		@include transition(all .5s ease-in-out);
+		position: absolute;
+		width:$size;
+		height:$size;
+		.deck{
+			@include transition(all .5s ease-in-out);
+			.front{
+				@include transition(all .5s ease-in-out);
+			}
+			.back{
+				@include transition(all .5s ease-in-out);
+				height:$cardsize;
+				width:$cardsize;
+				padding:0px;
+			}
+		}
+	}
+	.selected{
+		top:0px;
+		left:0px;
+		height:$cardsize;
+		width:$cardsize;
+	}
+	.choose-deck{
+			@include background(linear-gradient(#FFF, #DDD));
+			cursor: pointer;
+			@include border-radius(5px);
+			// border: 8px solid #FF3366;
+			position: absolute;
+			bottom: 10px;
+			width: 100px;
+			color: #333;
+			padding: 5px;
+			display: block;
+			text-align: center;
+			&:hover
+			{
+				@include background(linear-gradient(#DDD, #FFF));
+			}
+		}
+	.chosen{
+		border:2px solid yellow;
+		left:-2px;
+		top:-2px;
+	}
+}
