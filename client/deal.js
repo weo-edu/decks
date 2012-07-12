@@ -86,7 +86,9 @@
 		return rot;
 	}
 
-	function featureCard(card) {
+	function featureCard(card, callback) {
+		callback = callback || function(){};
+
 		var container = card.parent();
 		var idx = container.children().index(card);
 		var num_cards = container.children().length;
@@ -101,6 +103,10 @@
 
 			el.css(transformPrefix, 'translate3d(' + rot[i].x + 'px,'+ rot[i].y +'px,' + z +'px) rotateY(' + turnY + 'deg)');
 		}
+
+		callback();
+
+		return card;
 	}
 
 	window.featureCard = featureCard;

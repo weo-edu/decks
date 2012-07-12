@@ -1,4 +1,14 @@
+var transitionEndEvents = {
+		'WebkitTransition' : 'webkitTransitionEnd',
+		'MozTransition'    : 'transitionend',
+		'OTransition'      : 'oTransitionEnd',
+		'msTransition'     : 'MSTransitionEnd',
+		'transition'       : 'transitionend'
+	};
+var domTransitionProperty = Modernizr.prefixed('transition');
 var transformPrefix = domToCss(Modernizr.prefixed('transform'));
+var transitionPrefix = domToCss(domTransitionProperty);
+var transitionEndEvent = transitionEndEvents[domTransitionProperty];
 
 route('/deck/browse',function() {
 	
@@ -60,10 +70,15 @@ route('/deck/play/:name', function(ctx){
 			cur_card.question = problems[i].html;
 		}
 
-		console.log(problems);
+	  	return deck;
+  	}
 
-		Meteor.defer(function(){
-			var answered = $('#answered');
+
+
+
+  	Template.deck_play.events = {
+  		'render': function() {
+  			var answered = $('#answered');
 			var unanswered = $('#unanswered');
 
 			answered.width(answered.children().width());
@@ -71,27 +86,36 @@ route('/deck/play/:name', function(ctx){
 
 			deal($('#deck-dock'), 0);
 			featureCard(unanswered.children().eq(0), 0);
-			$('#unanswered .card').eq(0).click();
-			console.log($('#unanswered .card'));
+			
 			$("#playground").slideDown(1000, function(){
-  				$('#playground .solution').focus();	
+					$('#playground .solution').focus();
+					$('#unanswered .card').eq(0).click();
 			});
-		});
-
-	  	return deck;
-  	}
-
-
-  	Template.deck_play.events = {
-
-  		'click .card': function(e) {
+  		},
+  		'click #unanswered .card': function(e) {
 			$('.card-container').removeClass('current');
-	  		var el = $(e.target).closest('.card-container').addClass('current');
-	  		working_card = el.parent().children(el).index(el);
+	  		var el = $(e.target).closest('.card-container');
+	  		working_card = (el.attr('data') - 1);
 	  		MathJax.Hub.Queue(["Typeset", MathJax.Hub, el.find('.question').get(0)]);
-	  		$('#playground').html(el.find('.back').html());
-	  		featureCard(el);
-	  		$('#playground .solution').focus();
+	  		// $('#play-card').html(el.find('.back').html());
+
+	  		var lastChild = $('#unanswered .card-container:last-child');
+	  		var values = lastChild.css(transformPrefix).split('(')[1].split(')')[0].split(',');
+	  		var skipCoords = {};
+	  		skipCoords.top = lastChild.offset().top;
+	  		skipCoords.left = lastChild.offset().left;
+	  		skipCoords.y = -Math.round(Math.asin(values[2]) * (180/Math.PI));
+
+	  		if($('#playground .card-container').index() != -1)
+  				$('#playground .card-container').animateInsert('append', $('#unanswered'), function(){}, skipCoords);
+  					
+	  		el.animateInsert('prepend', $('#playground'), function(){
+	  			$('#playground .current .solution').focus();
+	  		}).addClass('current');
+	  		
+	  		el.addClass('current');
+
+	  		featureCard($('#unanswered .card-container').eq(0));
 	  	},
 	  	'mouseenter #unanswered .card-container': function(e) {
 	  		var el = $(e.currentTarget);
@@ -101,47 +125,46 @@ route('/deck/play/:name', function(ctx){
 	  		featureCard($(e.currentTarget).find('.current'));
 	  	},
 	  	'keydown #playground .solution': function(e){
-	  		var cur_idx = $('#unanswered .card-container.current').index();
+	  		// var cur_idx = $('#unanswered .card-container.current').index();
 
 	  		if(e.which === 13)
 	  		{
-	  			el = $('#unanswered .card-container').eq(working_card);
-	  			$('#answered').prepend(el);
-	  			el.removeClass('correct wrong');
+	  			el = $('#playground .card-container');
+
+	  			el.animateInsert('prepend', $('#answered'));
+	  			// el.removeClass('correct wrong');
 
 	  			var result = e.target.value == problems[working_card].solution;	
-
 	  			results.push(result);
-	  			problems.splice(working_card, 1);
+	  			problems[working_card].answered = 1;
 
-	  			if(result)
-	  				el.addClass('correct');	  				
-	  			else
-	  				el.addClass('wrong');
+	  			// if(result)
+	  			// 	el.addClass('correct');	  				
+	  			// else
+	  			// 	el.addClass('wrong');
 
-	  			deal($('#unanswered'), 0, 'fit', function(){
-	  				$('#unanswered .card').eq(0).click();
-		  			$('#playground .solution').focus();
+  				$('#unanswered .card').eq(0).click();
+	  			$('#playground .solution').focus();
+	  			deal($('#answered'), 100, 'collapse');
 
-		  			if(problems.length <= 0) {
+		  		if(results.length == total_cards) {
 		  				for(var i = 0; i < results.length;  i++) {
 		  					if(results[i] == true)
 		  						count++;
 
 		  				}
-						renderView('deck_results');
-		  			}
-	  			});
-	  			deal($('#answered'), 100, 'collapse');
+	  					renderView('deck_results');	
+						
+		  		}
+	  			
 	  		}
-	  		else if(e.which === 37 && cur_idx != 0)
-	  			$('#unanswered .card-container .card').eq(cur_idx - 1).click();
+	  		else if(e.which === 37)
+	  			$('#unanswered .card-container:last-child .card').click();
 	  		else if(e.which === 39)
-	  			$('#unanswered .card-container .card').eq(cur_idx + 1).click();
+	  			$('#unanswered .card-container .card').eq(0).click();
 
 	  		$('#playground .solution').focus();	
 	  	}
-
   	}
 
   	Template.deck_results.correct = function(){
@@ -153,7 +176,47 @@ route('/deck/play/:name', function(ctx){
 	};
 	
 	renderView('deck_play');
+
+	$.fn.extend({
+	    animateInsert: function(type, container, callback, endCoords){
+	    	callback = callback || function(){};
+			var offset = this.offset();
+
+			var stage = $('<div class="stage" style="position: absolute; height: 100%; width: 100%; z-index: 1;"></div>');
+
+	    	$('body').prepend(stage);
+
+	    	var new_el = this.clone().css(transformPrefix, 'translate3d(0,0,0)').css('visibility', 'hidden');
+	    	(container)[type](new_el);
+
+	    	this.css({'position': 'absolute'}).css(transformPrefix, 'translate3d(' + offset.left + 'px, ' + offset.top + 'px, 0)').prependTo(stage);
+
+	    	var new_offset = new_el.offset();	    	
+	    	
+	    	var that = this;
+    		setTimeout(function(){    			
+    			if(endCoords)
+    				new_offset = endCoords;
+
+    			var rotateY = new_offset.y ? new_offset.y : 0;
+
+				that.css(transformPrefix, 'translate3d(' + new_offset.left + 'px, ' + new_offset.top + 'px, 0) rotateY('+ rotateY + 'deg)');
+    		}, 0);
+
+    		this.get(0).addEventListener( 
+		     	transitionEndEvent, 
+		     	function() { 
+		    		new_el.css('visibility', 'visible');
+    				stage.remove();
+    				callback(); 		
+	     		}, false);
+
+    		return new_el;
+	    }
+	});
 });
+
+
 
 
 

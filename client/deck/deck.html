@@ -24,7 +24,11 @@
 </template>
 
 <template name="deck_play">
-	<div id='playground' class='hide'></div>
+	<div id='playground' class='hide'>
+		<div id='play-card'>
+
+		</div>
+	</div>
 	<div id='deck-dock'>
 
 		<div id='answered'> 
@@ -43,15 +47,15 @@
 		</div>
 
 		<div id='unanswered'>
-			{{#each deck.cards}}
+			{{#iter deck.cards}}
 				{{> deck_card}}
-			{{/each}}
+			{{/iter}}
 		</div>
 	</div>
 </template>
 
 <template name="deck_card">
-	<div class='card-container'>
+	<div data='{{idx}}' class='card-container'>
 	<div class='card'>
 		<div class='front' style='background: url(/{{graphic}});'></div>
 
