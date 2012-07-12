@@ -1,4 +1,14 @@
+var transitionEndEvents = {
+		'WebkitTransition' : 'webkitTransitionEnd',
+		'MozTransition'    : 'transitionend',
+		'OTransition'      : 'oTransitionEnd',
+		'msTransition'     : 'MSTransitionEnd',
+		'transition'       : 'transitionend'
+	};
+var domTransitionProperty = Modernizr.prefixed('transition');
 var transformPrefix = domToCss(Modernizr.prefixed('transform'));
+var transitionPrefix = domToCss(domTransitionProperty);
+var transitionEndEvent = transitionEndEvents[domTransitionProperty];
 
 route('/deck/browse',function() {
 	
@@ -60,38 +70,48 @@ route('/deck/play/:name', function(ctx){
 			cur_card.question = problems[i].html;
 		}
 
-		console.log(problems);
-
-		Meteor.defer(function(){
-			var answered = $('#answered');
-			var unanswered = $('#unanswered');
-
-			answered.width(answered.children().width());
-			unanswered.width(unanswered.parent().width() - answered.width() - 20);
-
-			deal($('#deck-dock'), 0);
-			featureCard(unanswered.children().eq(0), 0);
-			$('#unanswered .card').eq(0).click();
-			console.log($('#unanswered .card'));
-			$("#playground").slideDown(1000, function(){
-  				$('#playground .solution').focus();	
-			});
-		});
+		if(deck)
+			Meteor.defer(initDecks);
 
 	  	return deck;
   	}
 
+  	var initDecks = _.once(function() {
+  		var answered = $('#answered');
+		var unanswered = $('#unanswered');
+
+		answered.width(answered.children().width());
+		unanswered.width(unanswered.parent().width() - answered.width() - 20);
+
+		deal($('#deck-dock'), 0);
+		featureCard(unanswered.children().eq(0), 0);
+		
+		$("#playground").slideDown(1000, function(){
+				$('#playground .solution').focus();
+				// $('#unanswered .card').eq(0).click();
+		});
+  	});
+
+
+
 
   	Template.deck_play.events = {
 
-  		'click .card': function(e) {
+  		'click #unanswered .card': function(e) {
 			$('.card-container').removeClass('current');
 	  		var el = $(e.target).closest('.card-container').addClass('current');
-	  		working_card = el.parent().children(el).index(el);
+	  		working_card = (el.attr('data') - 1);
 	  		MathJax.Hub.Queue(["Typeset", MathJax.Hub, el.find('.question').get(0)]);
-	  		$('#playground').html(el.find('.back').html());
-	  		featureCard(el);
-	  		$('#playground .solution').focus();
+	  		// $('#play-card').html(el.find('.back').html());
+	  		if($('#playground .card-container').index() != -1)
+  				$('#playground .card-container').animateInsert('append', $('#unanswered'));
+
+	  		el.animateInsert('prepend', $('#playground'), function(){
+	  			$('#playground .current .solution').focus();
+	  		});
+
+	  		featureCard($('#unanswered .card-container').eq(0));
+	  		
 	  	},
 	  	'mouseenter #unanswered .card-container': function(e) {
 	  		var el = $(e.currentTarget);
@@ -105,34 +125,38 @@ route('/deck/play/:name', function(ctx){
 
 	  		if(e.which === 13)
 	  		{
-	  			el = $('#unanswered .card-container').eq(working_card);
-	  			$('#answered').prepend(el);
+	  			el = $('#playground .card-container');
+
+	  			el.animateInsert('prepend', $('#answered'));
 	  			el.removeClass('correct wrong');
 
 	  			var result = e.target.value == problems[working_card].solution;	
 
+	  			// console.log(e.target.value, problems[working_card].solution);
 	  			results.push(result);
-	  			problems.splice(working_card, 1);
+	  			// problems.splice(working_card, 1);
+	  			problems[working_card].answered = 1;
 
 	  			if(result)
 	  				el.addClass('correct');	  				
 	  			else
 	  				el.addClass('wrong');
 
-	  			deal($('#unanswered'), 0, 'fit', function(){
-	  				$('#unanswered .card').eq(0).click();
-		  			$('#playground .solution').focus();
 
-		  			if(problems.length <= 0) {
+	  			// deal($('#unanswered'), 0, 'fit', function(){
+  				$('#unanswered .card').eq(0).click();
+	  			$('#playground .solution').focus();
+	  			deal($('#answered'), 100, 'collapse');
+
+		  		if(results.length == total_cards) {
 		  				for(var i = 0; i < results.length;  i++) {
 		  					if(results[i] == true)
 		  						count++;
 
 		  				}
 						renderView('deck_results');
-		  			}
-	  			});
-	  			deal($('#answered'), 100, 'collapse');
+		  		}
+	  			
 	  		}
 	  		else if(e.which === 37 && cur_idx != 0)
 	  			$('#unanswered .card-container .card').eq(cur_idx - 1).click();
@@ -153,7 +177,63 @@ route('/deck/play/:name', function(ctx){
 	};
 	
 	renderView('deck_play');
+
+	$.fn.extend({
+	    animateInsert: function(type, container, callback){
+	    	callback = callback || function(){};
+			var offset = this.offset();
+
+			offset.left -= parseInt(matrixToArray(this.css(transformPrefix))[4], 10);
+			offset.top -= parseInt(matrixToArray(this.css(transformPrefix))[5], 10);
+
+			// console.log(matrix);
+
+
+			var stage = $('<div id="stage" style="position: absolute; height: 100%; width: 100%; z-index: 9999;"></div>');
+
+	    	$('body').prepend(stage);
+
+	    	if(type == 'prepend')
+	    		var new_el = this.clone().css('visibility', 'hidden').prependTo(container);
+	    	else if(type == 'append')
+	    		var new_el = this.clone().css('visibility', 'hidden').appendTo(container);
+
+	    	// this.css(transformPrefix, matrix);
+	    	this.prependTo(stage).css({'position': 'absolute', 'top': offset.top, 'left': offset.left});
+
+	    	// console.log('origin', offset);
+
+
+	    	var new_offset = new_el.offset();
+
+
+	    	
+	    	var new_matrix = new_el.css(transformPrefix);
+	    	
+	    	var that = this;
+    		setTimeout(function(){
+    			that.css(transformPrefix, new_matrix);
+    			that.css({'top': new_offset.top, 'left': new_offset.left});
+    			console.log(new_offset);
+    		}, 0);
+
+    		this.get(0).addEventListener( 
+		     	transitionEndEvent, 
+		     	function() { 
+		    		new_el.css('visibility', 'visible');
+    				stage.remove();
+    				callback(); 		
+	     		}, false);
+
+	    	function matrixToArray(matrix) {
+			    return matrix.substr(7, matrix.length - 8).split(', ');
+			}
+	    }
+	});
+
 });
+
+
 
 
 
