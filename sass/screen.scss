@@ -160,7 +160,7 @@ $size: 175px;
 	@include perspective(1000);
 	@include transform-style(preserve-3d);
 	.card-container{
-		@include transition(all 1.5s ease-in-out !important);
+		// @include transition(all 1.5s ease-in-out !important);
 	}
 }
 

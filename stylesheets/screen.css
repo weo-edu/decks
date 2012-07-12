@@ -304,14 +304,6 @@ a {
   -o-transform-style: preserve-3d;
   transform-style: preserve-3d;
 }
-/* line 162, ../sass/screen.scss */
-.stage .card-container {
-  -webkit-transition: all 1.5s ease-in-out;
-  -webkit-transition-delay: !important;
-  -moz-transition: all 1.5s ease-in-out !important;
-  -o-transition: all 1.5s ease-in-out !important;
-  transition: all 1.5s ease-in-out !important;
-}
 
 /* line 167, ../sass/screen.scss */
 #playground {
