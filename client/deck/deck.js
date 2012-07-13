@@ -48,7 +48,7 @@ route('/deck/browse',function() {
 
 route('/deck/play/:name', function(ctx){
 
- 	var total_cards;
+ 	var totalCards;
 	var working_card = 0;
 	var problems = [];
 	var results = [];
@@ -59,9 +59,9 @@ route('/deck/play/:name', function(ctx){
 		var name = ctx.params.name;
 		
 		deck = Decks.findOne({name: name});
-		total_cards = deck.cards.length;
+		totalCards = deck.cards.length;
 
-		for(var i = 0; i < total_cards; i++) {
+		for(var i = 0; i < totalCards; i++) {
 			var curCard = deck.cards[i];
 			problems[i] = problemize(deck.cards[i].problem);
 			curCard.question = problems[i].html;
@@ -146,12 +146,10 @@ route('/deck/play/:name', function(ctx){
 	  			$('#playground .solution').focus();
 	  			deal($('#answered'), 100, 'collapse');
 
-		  		if(results.length == total_cards) {
-		  				for(var i = 0; i < results.length;  i++) {
-		  					if(results[i] == true)
-		  						count++;
-		  				}
-	  					renderView('deck_results');	
+  				count = updateMeta();
+
+  				if(results.length == totalCards) {
+  					renderView('deck_results');	
 		  		}
 	  		}
 	  		else if(e.which === 37)
@@ -168,8 +166,23 @@ route('/deck/play/:name', function(ctx){
 	}
 
   	Template.deck_results.total = function(){ 
-	  return total_cards;
+	  return totalCards;
 	};
+
+	function updateMeta() {
+		var thisCount = 0;
+		var numAnswered = results.length;
+		  		
+		for(var i = 0; i < numAnswered;  i++) {
+			if(results[i] == true)
+				thisCount++;
+		}
+
+		if(thisCount != 0)
+			$('#bar .fill').animate({'height': (thisCount / numAnswered * 100)  + '%' }, 600, 'easeOutBounce');
+
+		return thisCount;
+	}
 	
 	renderView('deck_play');
 });

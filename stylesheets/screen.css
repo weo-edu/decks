@@ -371,8 +371,9 @@ a {
 /* line 212, ../sass/screen.scss */
 #play-meta {
   float: right;
-  width: 360px;
-  height: 400px;
+  width: 320px;
+  height: 360px;
+  padding: 20px;
   background: #FFF;
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
@@ -385,13 +386,30 @@ a {
 }
 
 /* line 222, ../sass/screen.scss */
+#bar {
+  float: left;
+  width: 30px;
+  height: 100%;
+  background: #CCC;
+  position: relative;
+}
+/* line 228, ../sass/screen.scss */
+#bar .fill {
+  height: 0;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  background: #87CEEB;
+}
+
+/* line 240, ../sass/screen.scss */
 #deck-dock {
   margin-top: 20px;
   height: 150px;
   width: 100%;
   position: relative;
 }
-/* line 228, ../sass/screen.scss */
+/* line 246, ../sass/screen.scss */
 #deck-dock > div {
   -webkit-perspective: 1000px;
   -moz-perspective: 1000px;
@@ -412,7 +430,7 @@ a {
   transition: transform 0.3s ease-in-out;
   z-index: 1;
 }
-/* line 236, ../sass/screen.scss */
+/* line 254, ../sass/screen.scss */
 #deck-dock > div > div {
   position: absolute;
   cursor: pointer;
@@ -423,16 +441,16 @@ a {
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
-/* line 248, ../sass/screen.scss */
+/* line 266, ../sass/screen.scss */
 #deck-dock #answered {
   z-index: 999 !important;
 }
-/* line 250, ../sass/screen.scss */
+/* line 268, ../sass/screen.scss */
 #deck-dock #answered .deck-container {
   z-index: 999;
 }
 
-/* line 256, ../sass/screen.scss */
+/* line 274, ../sass/screen.scss */
 .card-container {
   -webkit-transition-property: -webkit-transform, height, width;
   -moz-transition-property: -moz-transform, height, width;
@@ -447,14 +465,14 @@ a {
   -o-transition-timing-function: ease-in-out;
   transition-timing-function: ease-in-out;
 }
-/* line 263, ../sass/screen.scss */
+/* line 281, ../sass/screen.scss */
 .card-container .front {
   -webkit-background-size: 100%;
   -moz-background-size: 100%;
   -o-background-size: 100%;
   background-size: 100%;
 }
-/* line 266, ../sass/screen.scss */
+/* line 284, ../sass/screen.scss */
 .card-container .front, .card-container .back {
   -webkit-transition-property: -webkit-transform, height, width;
   -moz-transition-property: -moz-transform, height, width;
@@ -469,11 +487,15 @@ a {
   -o-transition-timing-function: ease-in-out;
   transition-timing-function: ease-in-out;
 }
-/* line 272, ../sass/screen.scss */
+/* line 288, ../sass/screen.scss */
+.card-container .front .solution, .card-container .back .solution {
+  width: 100px;
+}
+/* line 293, ../sass/screen.scss */
 .card-container .back-content {
   display: none;
 }
-/* line 280, ../sass/screen.scss */
+/* line 301, ../sass/screen.scss */
 .card-container.current .front {
   -webkit-transform: rotateY(-180deg);
   -moz-transform: rotateY(-180deg);
@@ -481,7 +503,7 @@ a {
   -o-transform: rotateY(-180deg);
   transform: rotateY(-180deg);
 }
-/* line 285, ../sass/screen.scss */
+/* line 306, ../sass/screen.scss */
 .card-container.current .back {
   z-index: 99;
   -webkit-transform: rotateY(0deg);
@@ -490,23 +512,23 @@ a {
   -o-transform: rotateY(0deg);
   transform: rotateY(0deg);
 }
-/* line 304, ../sass/screen.scss */
+/* line 325, ../sass/screen.scss */
 .card-container.wrong {
   background: #FF3366;
 }
-/* line 308, ../sass/screen.scss */
+/* line 329, ../sass/screen.scss */
 .card-container.correct {
   background: #A2E67E;
 }
 
-/* line 321, ../sass/screen.scss */
+/* line 342, ../sass/screen.scss */
 .create {
   width: 820px;
   height: 410px;
   margin: 0 auto;
 }
 
-/* line 328, ../sass/screen.scss */
+/* line 349, ../sass/screen.scss */
 .display {
   width: 380px;
   height: 380px;
@@ -529,12 +551,12 @@ a {
   box-shadow: 0 7px 25px rgba(0, 0, 0, 0.4);
   position: relative;
 }
-/* line 341, ../sass/screen.scss */
+/* line 362, ../sass/screen.scss */
 .display .display-inner {
   padding: 20px;
 }
 
-/* line 346, ../sass/screen.scss */
+/* line 367, ../sass/screen.scss */
 .deck-holder {
   background: none;
   left: 0px;
@@ -542,7 +564,7 @@ a {
   overflow: visible;
 }
 
-/* line 352, ../sass/screen.scss */
+/* line 373, ../sass/screen.scss */
 .deck-preview {
   width: 100%;
   -webkit-transform-style: preserve-3d;
@@ -556,7 +578,7 @@ a {
   -o-perspective: 800px;
   perspective: 800px;
 }
-/* line 357, ../sass/screen.scss */
+/* line 378, ../sass/screen.scss */
 .deck-preview .deck-container {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
@@ -566,21 +588,21 @@ a {
   width: 90px;
   height: 90px;
 }
-/* line 362, ../sass/screen.scss */
+/* line 383, ../sass/screen.scss */
 .deck-preview .deck-container .deck {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
   -o-transition: all 0.5s ease-in-out;
   transition: all 0.5s ease-in-out;
 }
-/* line 364, ../sass/screen.scss */
+/* line 385, ../sass/screen.scss */
 .deck-preview .deck-container .deck .front {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
   -o-transition: all 0.5s ease-in-out;
   transition: all 0.5s ease-in-out;
 }
-/* line 367, ../sass/screen.scss */
+/* line 388, ../sass/screen.scss */
 .deck-preview .deck-container .deck .back {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
@@ -590,14 +612,14 @@ a {
   width: 380px;
   padding: 0px;
 }
-/* line 375, ../sass/screen.scss */
+/* line 396, ../sass/screen.scss */
 .deck-preview .selected {
   top: 0px;
   left: 0px;
   height: 380px;
   width: 380px;
 }
-/* line 381, ../sass/screen.scss */
+/* line 402, ../sass/screen.scss */
 .deck-preview .choose-deck {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #dddddd));
   background: -webkit-linear-gradient(#ffffff, #dddddd);
@@ -618,7 +640,7 @@ a {
   display: block;
   text-align: center;
 }
-/* line 394, ../sass/screen.scss */
+/* line 415, ../sass/screen.scss */
 .deck-preview .choose-deck:hover {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #ffffff));
   background: -webkit-linear-gradient(#dddddd, #ffffff);
@@ -626,7 +648,7 @@ a {
   background: -o-linear-gradient(#dddddd, #ffffff);
   background: linear-gradient(#dddddd, #ffffff);
 }
-/* line 398, ../sass/screen.scss */
+/* line 419, ../sass/screen.scss */
 .deck-preview .chosen {
   border: 2px solid yellow;
   left: -2px;

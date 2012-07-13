@@ -211,12 +211,30 @@ $playWidth: 555px;
 
 #play-meta {
 	float: right;
-	width: 360px;
-	height: 400px;
+	width: 320px;
+	height: 360px;
+	padding: 20px;
 	background: #FFF;
 	@include border-radius(8px);
 	@include box-shadow(0 0 10px #333);
 }
+
+#bar {
+	float: left;
+	width: 30px;
+	height: 100%;
+	background: #CCC;
+	position: relative;
+	.fill {
+		height: 0;
+		width: 100%;
+		position: absolute;
+		bottom: 0;
+		background: #87CEEB;
+	}
+}
+
+
 
 
 #deck-dock {
@@ -267,6 +285,9 @@ $playWidth: 555px;
 		@include transition-property(transform, height, width);
 		@include transition-duration($dur);
 		@include transition-timing-function(ease-in-out);
+		.solution {
+			width: 100px;
+		}
 	}
 	.back-content
 	{
