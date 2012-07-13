@@ -11,7 +11,7 @@
 <template name="deck_view">
 	<div id='deck-{{idx}}' class='deck-container'>
 		<div class="deck deck-{{idx}}">
-				<div class='front' style='background: url(/{{graphic}});'>
+				<div class='front' style='background-image: url(/{{graphic}});'>
 					<!-- <img src="/{{graphic}}" /> -->
 				</div>
 				<div class='back'>
@@ -38,7 +38,7 @@
 			{{#with deck}}
 			<div class='deck-container'>
 				<div class="deck">
-						<div class='front' style='background: url(/{{graphic}});'>
+						<div class='front' style='background-image: url(/{{graphic}});'>
 						</div>
 						<div class='back'>
 							<div class="deck-title">{{name}}</div>
@@ -60,7 +60,7 @@
 <template name="deck_card">
 	<div data='{{idx}}' class='card-container'>
 	<div class='card'>
-		<div class='front' style='background: url(/{{graphic}});'></div>
+		<div class='front' style='background-image: url(/{{graphic}});'></div>
 
 		<div class='back'>
 			<div class='back-content'>

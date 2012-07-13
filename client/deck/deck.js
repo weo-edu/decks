@@ -140,6 +140,8 @@ route('/deck/play/:name', function(ctx){
 
 	  			var result = parseInt(e.target.value, 10) === parseInt(problems[working_card].solution, 10);	
 	  			results.push(result);
+	  			if(!result)
+	  				$('#bar, #bar .fill').effect('highlight', {color: '#E54429'});
 	  			problems[working_card].answered = 1;
 
   				$('#unanswered .card').eq(0).click();
@@ -171,15 +173,14 @@ route('/deck/play/:name', function(ctx){
 
 	function updateMeta() {
 		var thisCount = 0;
-		var numAnswered = results.length;
 		  		
-		for(var i = 0; i < numAnswered;  i++) {
+		for(var i = 0; i < results.length;  i++) {
 			if(results[i] == true)
 				thisCount++;
 		}
 
 		if(thisCount != 0)
-			$('#bar .fill').animate({'height': (thisCount / numAnswered * 100)  + '%' }, 600, 'easeOutBounce');
+			$('#bar .fill').animate({'height': (thisCount / totalCards * 100)  + '%' }, 600, 'easeOutBounce');
 
 		return thisCount;
 	}

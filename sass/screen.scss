@@ -72,7 +72,8 @@ $size: 150px;
 		@include transform-style(preserve-3d);
 		@include backface-visibility(hidden);
 		@include box-shadow(inset 1px 1px 1px transparentize(#FFF, 0.4), 0 0 7px #333);
-		background-size: $size $size;
+		@include background-size(100%);
+		background-repeat: no-repeat;
 		background-position: center;
 	}
 
@@ -221,7 +222,7 @@ $playWidth: 555px;
 
 #bar {
 	float: left;
-	width: 30px;
+	width: 50px;
 	height: 100%;
 	background: #CCC;
 	position: relative;
@@ -280,6 +281,7 @@ $playWidth: 555px;
 
 	.front{
 		@include background-size(100%);
+		background-repeat: no-repeat;
 	}
 	.front, .back {
 		@include transition-property(transform, height, width);

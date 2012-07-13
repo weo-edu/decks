@@ -33,7 +33,12 @@ $.fn.extend({
 
 		function end() {
     		new_el.css('visibility', 'visible');
-			stage.remove();
+    		
+    		//	Use settime out to  assure new_el 
+    		//	is visibile before removing animated
+    		//	element to prevent flicker in FF.
+    		////////////////////////////////////////
+			setTimeout(function(){stage.remove()},10);
 			callback(new_el);		
 		}
     }
