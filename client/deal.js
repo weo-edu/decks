@@ -98,7 +98,7 @@
 		for(var i = 0; i < num_cards; i++)
 		{
 			var offset = Math.abs(idx - i);
-			var turnY = i == idx ? 0 : (50 + (offset * -5)) * (i < idx ? 1 : -1);
+			var turnY = i == idx ? 0 : Math.abs((50 + (offset * -5))) * (i < idx ? 1 : -1);
 			var z = i == idx ? 0 : -100;
 			var el = container.children().eq(i);
 
