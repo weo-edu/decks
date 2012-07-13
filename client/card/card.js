@@ -1,21 +1,59 @@
 route('/card/create', function() {
 	var transformPrefix = domToCss(Modernizr.prefixed('transform'));
-	console.log('card create');
 	var session = new _Session();
 	var card = new _Session({
-		card_name:'Name',
+		name:'Name',
+		graphic: null,
+		problem:{}
+	});
+	var problem = new _Session({
 		template: 'Template',
 		solution: '',
-		graphic: null,
 		rules: []
-	});
+	})
 	var error = new _Session({
 		template: '',
 		solution: '',
 		rules: []
 	});
+	session.set('msg', 'Continue');
 
 
+function focusOn(el)
+{
+	var elem = '#' + el.attr('id') + '-cont';
+	$('.step-nav').removeClass('active');
+	el.addClass('active');
+	$('.create').removeClass('active');
+	$(elem).addClass('active');
+	switch(el.attr('id'))
+	{
+		case 'step-1':
+			session.set('msg', 'Continue');
+			break;
+		case 'step-2':
+			session.set('msg', 'Create Card');
+			break;
+		case 'step-3':
+			session.set('msg', 'Insert in Decks');
+			break;
+		default:
+			session.set('msg', 'Continue');
+			break;
+	}
+}
+
+function deckInsert(callback){
+	callback = callback || function(){};
+	var x = $('.chosen').children();
+	console.log(x);
+	_.each(x, function(el){
+		Decks.update({_id:el.id}, {$addToSet: {cards:card.all()}}, function(){
+			callback();
+		});
+		console.log(Decks.findOne({_id:el.id}))
+	});
+}
 
 	var watchErrors = function(){
 		var update = function(){
@@ -24,14 +62,19 @@ route('/card/create', function() {
 				_.each(err, function(msg, ele){
 					if(ele == 'rules')
 					{
-						_.each(msg, function(mssg, elem){
-							var num = $('#rules').children().index() - elem;
-							var el = '#rules-' + num.toString();
-							if(mssg)
-								$(el).addClass('error');
-							else
-								$(el).removeClass('error');
-						})
+						if(msg.length == 0)
+							$('#rules').children().children('.error').removeClass('error');
+						else
+							{
+							_.each(msg, function(mssg, elem){
+								var num = $('#rules').children().index() - elem;
+								var el = '#rules-' + num.toString();
+								if(mssg)
+									$(el).addClass('error');
+								else
+									$(el).removeClass('error');
+							})
+						}
 					}
 					else
 					{
@@ -40,7 +83,6 @@ route('/card/create', function() {
 							$(el).addClass('error');
 						else
 							$(el).removeClass('error');
-						console.log(msg);
 					}
 					//console.log(test);	
 				}); 
@@ -57,29 +99,34 @@ route('/card/create', function() {
 
 			if (!card.equals(id,val))
 			{
-				card.set(id,val);
-				watchErrors(el, id);
+				if(id == 'name')
+					card.set('name', val);
+				else{
+					problem.set(id,val);
+					card.set('problem',problem.all());
+					watchErrors(el, id);
+				}
 			}
 		},
-		'click #create' : function(){
+		'click .create-button' : function(event){
+			var el = $(event.target);
 			var c = card.all()
+			session.set('submit','true');
+			el.text('Insert');
+			el.removeClass('create-button');
 			Cards.insert(c, function(){
 				console.log(Cards.findOne(c));
 			});
-			animateCreator(function(){
-			});
+			animateCreator();
 		},
-		'mouseover .error' : function(){
+		'mouseover .error' : function(event){
 			var el = $(event.target);
 			var id = $(event.target).attr('id');
 			err_msg = el.parent().children('.error-message');
-			console.log(err_msg);
 		},
-		'click .color-picker-min' : function(){
-			$('.color-choose').toggle();
-		},
-		'click .color-choose' : function() {
-			$('.color-choose').toggle();
+		'click .step-nav' : function(event) {
+			el = $(event.target);
+			focusOn(el);
 		}
 	};
 
@@ -90,39 +137,47 @@ route('/card/create', function() {
 		'keyup .instant_update': function(event) {
 			var el = $(event.target);
 			var idx = el.parents('#rules').children().children('.rule-input').index(el);
-			var rules = _.clone(card.get('rules'));
+			var rules = _.clone(problem.get('rules'));
 
 			rules[idx] = el.val();
-			card.set('rules',rules);
+			problem.set('rules',rules);
+			card.set('problem',problem.all())
 			watchErrors();
 			return false;
 		},
-		'click #add-rule': function() {
+		'click #add-rule': function(event) {
 			$('#rules').prepend(Meteor.ui.render(function() {
 				return Template.rule_input();
 			}));
-			var rules = card.get('rules');
+			var rules = problem.get('rules');
 			rules.unshift('');
-			card.set('rules',rules);
+			problem.set('rules', rules)
+			card.set('problem', problem.all());
 		}
 	}
 
 	Template.deck_preview.events = {
 		'click .deck' : function(event){
-			el = $(event.target).closest('.deck-container');
-			el.removeClass('last-selected')
-			el.toggleClass('selected');
-			if(el.hasClass('selected'))
-			{
-				el.parent().children().not('.selected').hide();
-				el.css(transformPrefix, 'rotateY(180deg)');
-			}
-			else
-			{ 
-				el.addClass('last-selected');
-				deal($('.deck-preview'),200, 'grid');
-				el.css(transformPrefix, 'rotateY(0deg)');
-				el.parent().children().fadeIn(500);
+			el = $(event.target);
+			cont = $(event.target).closest('.deck-container');
+			cont.removeClass('last-selected')
+			if(cont.hasClass('chosen') && !cont.hasClass('view-more'))
+				cont.toggleClass('chosen');
+			else{
+				cont.toggleClass('selected');
+				if(cont.hasClass('selected'))
+				{
+					cont.parent().children().not('.selected').hide();
+					cont.css(transformPrefix, 'translate3d(0,0,0)');
+					cont.addClass('view-more');
+				}
+				else
+				{ 
+					cont.addClass('last-selected');
+					deal($('.deck-preview'),200, 'grid');
+					cont.removeClass('view-more');
+					cont.parent().children().fadeIn(400);
+				}
 			}
 			return false;
 		},
@@ -132,10 +187,30 @@ route('/card/create', function() {
 		}
 	}
 
+	Template.section_title.events = {
+		'click' : function() {
+			switch(session.get('msg'))
+			{
+				case 'Continue':
+					focusOn($('#step-2'));
+					break;
+				case 'Create Card':
+					Cards.insert(card.all());
+					focusOn($('#step-3'));
+					break;
+				case 'Insert in Decks':
+					deckInsert(function(){
+						alert('succesful insert');
+					});
+					break;
+			}
+		}
+	}
+
 	Template.card_play.card = function(){
 		var c = card.all();
-		console.log('c',c);
-		var p = problemize(c);
+		var prob = problem.all();
+		var p = problemize(prob);
 		c.question = p.html;
 		c.answer = p.solution;
 		var e = {
@@ -144,10 +219,7 @@ route('/card/create', function() {
 			rules: _.map(c.rules,function(rule) {return '';})
 		};
 
-		console.log('e',e);
-
 		_.each(p.errors,function(err) {
-			console.log(err.stack);
 			if (err.part == 'rule') {
 				console.log('rule error',err.idx);
 				e.rules[err.idx] = err.message;
@@ -165,12 +237,8 @@ route('/card/create', function() {
 		return c;
 	}
 
-	Template.template_errors.error = function() {
-		return error.get('template');
-	}
-
-	Template.solution_errors.error = function() {
-		return error.get('solution');
+	Template.card_create.button = function() {
+		return session.equals('submit','true') ? 'insert' : 'create';
 	}
 
 	Template.rule_input.idx = function(){
@@ -178,7 +246,7 @@ route('/card/create', function() {
 	}
 	Template.deck_preview.deck = function(){
 		Meteor.defer(function() {
-			$('#colorpicker').farbtastic('#color');
+			$('#colorpicker').farbtastic('.color-update');
 			console.log('file', $('#file'));
 			$('#file').fileupload({
 		    	url: "/upload",
@@ -193,18 +261,10 @@ route('/card/create', function() {
 			});
 		return Decks.find({});
 	}
-
-	function animateCreator(){
-		//var pt1 = $('#template-preview').position().left;
-		//var pt2 = $('#card-preview').position().left;
-		var slide = 0;
-		$('.display').animate({'left': '-='+slide}, function(){
-			$('#deck-preview').show();
-		});
-		deal($('.deck-preview'),600,'grid');
-		$('#template-preview').fadeOut();
-		$('.color-picker-min').fadeOut();
+	Template.section_title.title = function(){
+		return session.get('msg');
 	}
+
 	//watchErrors();
 	renderView('card_create');
 });

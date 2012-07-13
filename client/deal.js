@@ -64,7 +64,6 @@
 		var idx = 0;
 		var num_cards = container.children().length;
 		var rot = getTranslation(container, type);
-		console.log(rot);
 		if(rot.length == 0) {
 			callback();
 			return;

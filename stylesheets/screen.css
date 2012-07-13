@@ -521,14 +521,76 @@ a {
   background: #A2E67E;
 }
 
-/* line 342, ../sass/screen.scss */
+/* line 343, ../sass/screen.scss */
+.wrapper {
+  overflow: hidden;
+  position: relative;
+  margin: 0 auto;
+  width: 820px;
+  height: 410px;
+}
+
+/* line 351, ../sass/screen.scss */
+.step-nav-bar {
+  width: 978px;
+  position: relative;
+  height: 30px;
+  text-align: center;
+  -webkit-box-shadow: 0 0 10px #333333;
+  -moz-box-shadow: 0 0 10px #333333;
+  box-shadow: 0 0 10px #333333;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  border-radius: 8px;
+  vertical-align: baseline;
+}
+/* line 361, ../sass/screen.scss */
+.step-nav-bar .active {
+  background-color: #aaa;
+  color: white;
+  text-shadow: -1px -1px 0 black;
+}
+/* line 366, ../sass/screen.scss */
+.step-nav-bar .step-nav {
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  cursor: pointer;
+  height: 30px;
+  line-height: 30px;
+  width: 326px;
+  float: left;
+}
+/* line 374, ../sass/screen.scss */
+.step-nav-bar #step-1 {
+  border-radius: 8px 0px 0px 8px;
+}
+/* line 377, ../sass/screen.scss */
+.step-nav-bar #step-3 {
+  border-radius: 0px 8px 8px 0px;
+}
+
+/* line 382, ../sass/screen.scss */
 .create {
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  left: 1000px;
+  position: absolute;
   width: 820px;
   height: 410px;
   margin: 0 auto;
 }
+/* line 389, ../sass/screen.scss */
+.create.active {
+  left: 0px;
+}
 
-/* line 349, ../sass/screen.scss */
+/* line 396, ../sass/screen.scss */
 .display {
   width: 380px;
   height: 380px;
@@ -546,17 +608,72 @@ a {
   -ms-border-radius: 8px;
   -o-border-radius: 8px;
   border-radius: 8px;
-  -webkit-box-shadow: 0 7px 25px rgba(0, 0, 0, 0.4);
-  -moz-box-shadow: 0 7px 25px rgba(0, 0, 0, 0.4);
-  box-shadow: 0 7px 25px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0 7px 10px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0 7px 10px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 7px 10px rgba(0, 0, 0, 0.4);
   position: relative;
 }
-/* line 362, ../sass/screen.scss */
+/* line 409, ../sass/screen.scss */
+.display h2 {
+  font-size: 25px;
+  margin-top: 15px;
+  text-align: center;
+  text-decoration: underline;
+  padding: 5px;
+  background-image: url("/app!common/textures/low_contrast_linen.png");
+  color: white;
+  text-shadow: 1px 1px #AAA;
+}
+/* line 420, ../sass/screen.scss */
 .display .display-inner {
   padding: 20px;
 }
+/* line 425, ../sass/screen.scss */
+.display .card-section {
+  text-align: center;
+  margin: 20px;
+}
+/* line 430, ../sass/screen.scss */
+.display .choose-deck {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #cccccc), color-stop(100%, #dddddd));
+  background: -webkit-linear-gradient(#cccccc, #dddddd);
+  background: -moz-linear-gradient(#cccccc, #dddddd);
+  background: -o-linear-gradient(#cccccc, #dddddd);
+  background: linear-gradient(#cccccc, #dddddd);
+  cursor: pointer;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  border: 2px solid transparent;
+  position: relative;
+  margin: auto;
+  width: 100px;
+  color: #333;
+  padding: 5px;
+  display: block;
+  text-align: center;
+}
+/* line 444, ../sass/screen.scss */
+.display .choose-deck:hover {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #cccccc));
+  background: -webkit-linear-gradient(#dddddd, #cccccc);
+  background: -moz-linear-gradient(#dddddd, #cccccc);
+  background: -o-linear-gradient(#dddddd, #cccccc);
+  background: linear-gradient(#dddddd, #cccccc);
+}
+/* line 448, ../sass/screen.scss */
+.display .choose-deck:active {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #cccccc));
+  background: -webkit-linear-gradient(#dddddd, #cccccc);
+  background: -moz-linear-gradient(#dddddd, #cccccc);
+  background: -o-linear-gradient(#dddddd, #cccccc);
+  background: linear-gradient(#dddddd, #cccccc);
+  border: 2px inset;
+}
 
-/* line 367, ../sass/screen.scss */
+/* line 454, ../sass/screen.scss */
 .deck-holder {
   background: none;
   left: 0px;
@@ -564,7 +681,7 @@ a {
   overflow: visible;
 }
 
-/* line 373, ../sass/screen.scss */
+/* line 460, ../sass/screen.scss */
 .deck-preview {
   width: 100%;
   -webkit-transform-style: preserve-3d;
@@ -578,7 +695,7 @@ a {
   -o-perspective: 800px;
   perspective: 800px;
 }
-/* line 378, ../sass/screen.scss */
+/* line 465, ../sass/screen.scss */
 .deck-preview .deck-container {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
@@ -588,38 +705,44 @@ a {
   width: 90px;
   height: 90px;
 }
-/* line 383, ../sass/screen.scss */
+/* line 470, ../sass/screen.scss */
 .deck-preview .deck-container .deck {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
   -o-transition: all 0.5s ease-in-out;
   transition: all 0.5s ease-in-out;
 }
-/* line 385, ../sass/screen.scss */
+/* line 472, ../sass/screen.scss */
 .deck-preview .deck-container .deck .front {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
   -o-transition: all 0.5s ease-in-out;
   transition: all 0.5s ease-in-out;
+  background-size: 100% !important;
 }
-/* line 388, ../sass/screen.scss */
+/* line 476, ../sass/screen.scss */
 .deck-preview .deck-container .deck .back {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
   -o-transition: all 0.5s ease-in-out;
   transition: all 0.5s ease-in-out;
+  -webkit-perspective: 800;
+  -moz-perspective: 800;
+  -ms-perspective: 800;
+  -o-perspective: 800;
+  perspective: 800;
   height: 380px;
   width: 380px;
   padding: 0px;
 }
-/* line 396, ../sass/screen.scss */
+/* line 485, ../sass/screen.scss */
 .deck-preview .selected {
   top: 0px;
   left: 0px;
   height: 380px;
   width: 380px;
 }
-/* line 402, ../sass/screen.scss */
+/* line 491, ../sass/screen.scss */
 .deck-preview .choose-deck {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #dddddd));
   background: -webkit-linear-gradient(#ffffff, #dddddd);
@@ -640,7 +763,7 @@ a {
   display: block;
   text-align: center;
 }
-/* line 415, ../sass/screen.scss */
+/* line 504, ../sass/screen.scss */
 .deck-preview .choose-deck:hover {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #ffffff));
   background: -webkit-linear-gradient(#dddddd, #ffffff);
@@ -648,9 +771,15 @@ a {
   background: -o-linear-gradient(#dddddd, #ffffff);
   background: linear-gradient(#dddddd, #ffffff);
 }
-/* line 419, ../sass/screen.scss */
+/* line 508, ../sass/screen.scss */
 .deck-preview .chosen {
-  border: 2px solid yellow;
-  left: -2px;
-  top: -2px;
+  left: -3px;
+  top: -3px;
+  border: 3px outset yellow;
+}
+
+/* line 515, ../sass/screen.scss */
+#colorpicker {
+  width: 195px;
+  margin: 10px auto;
 }
