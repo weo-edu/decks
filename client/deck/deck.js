@@ -104,11 +104,13 @@ route('/deck/play/:name', function(ctx){
 
   			curCard.removeClass('current');
   					
-	  		el.animateInsert('prepend', $('#playground'), function(){
-	  			$('#playground .card-container.current .solution').focus();
-	  		}).addClass('current');
+	  		el.animateInsert('prepend', $('#playground'), function(newEl){
+	  			newEl.addClass('current');
+  				$('#playground .card-container.current .solution').focus();
+	  		});
+	  		$('#play-area').html(el.find('.back-content').html());
 	  		el.addClass('current');
-
+	  		
 	  		featureCard($('#unanswered .card-container').eq(0));
 
 	  		function returnCardTo(el) {

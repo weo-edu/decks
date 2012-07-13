@@ -3,7 +3,9 @@ $.fn.extend({
     	callback = callback || function(){};
 		var offset = this.offset();
 
-		var stage = $('<div class="stage" style="position: absolute; height: 100%; width: 100%; z-index: 99;"></div>');
+		var stage = $('<div class="stage" style="position: absolute; z-index: 99; overflow: hidden;"></div>');
+
+		stage.width($(window).width()).height($(window).height());
 
     	$('body').prepend(stage);
 
@@ -32,7 +34,7 @@ $.fn.extend({
 		function end() {
     		new_el.css('visibility', 'visible');
 			stage.remove();
-			callback();		
+			callback(new_el);		
 		}
     }
 });

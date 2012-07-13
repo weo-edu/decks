@@ -25,6 +25,7 @@
 
 <template name="deck_play">
 	<div id='playground' class='hide'>
+		<div id='play-area'></div>
 		<div id='play-meta'>
 
 		</div>
@@ -60,12 +61,15 @@
 		<div class='front' style='background: url(/{{graphic}});'></div>
 
 		<div class='back'>
-			<h3>{{name}}</h3>
-			<div class='question'>
-				{{question}}
+			<div class='back-content'>
+				<h3>{{name}}</h3>
+				<div class='question'>
+					{{question}}
+				</div>
 			</div>
 			<label for='answer'>Answer</label>
 			<input type='text' name='solution' class='solution' />
+
 		</div>
 	</div>
 </div>

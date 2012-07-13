@@ -36,7 +36,7 @@ $size: 150px;
 	position: relative;
 	.deck-container
 	{
-		@include perspective(800);
+		@include perspective(800px);
 		@include transform-style(preserve-3d);
 		@include transform(rotateY(120deg) scale(0.001));
 		cursor: pointer;
@@ -64,11 +64,11 @@ $size: 150px;
 	{
 		height: 100%;
 		width: 100%;
-		@include perspective(800);
+		@include perspective(800px);
 	}
 		
 	.front, .back{
-		@include transition(transform .25s ease-in-out, box-shadow .15s ease-in-out);
+		@include transition(all .25s ease-in-out);
 		@include transform-style(preserve-3d);
 		@include backface-visibility(hidden);
 		@include box-shadow(inset 1px 1px 1px transparentize(#FFF, 0.4), 0 0 7px #333);
@@ -137,9 +137,12 @@ $size: 150px;
 //	PLAY
 ////////////////////////////
 
+$playHeight: 400px;
+$playWidth: 555px;
+
 .stage
 {
-	@include perspective(1000);
+	@include perspective(1000px);
 	@include transform-style(preserve-3d);
 	pointer-events: none;
 	// div {
@@ -147,7 +150,21 @@ $size: 150px;
 	// }
 }
 
+// .card-container.current.play {
+// 	@include transition(all .4s ease-in-out);
+// 	height: $playHeight;
+// 	width: $playWidth;
+// 	.back {
+// 		@include transition(all .4s ease-in-out);
+// 		$padding: 20px;
+// 		padding: $padding;
+// 		height: $playHeight - $padding * 2;
+// 		width: $playWidth - $padding * 2;
+// 	}
+// }
+
 #playground {
+	position: relative;
 	height: 400px;
 	margin-top: 30px;
 	background: url("/app!common/textures/45degreee_fabric.png");
@@ -157,25 +174,38 @@ $size: 150px;
 	&.hide {
 		display: none;
 	}
+
 	.card-container {
-		float: left;
+		position: absolute;
+		bottom: 20px;
+		left: 20px;
+		.front {
+			@include transform(rotateY(-180deg));
+		}
+		.back {
+			@include transform(rotateY(0deg));
+		}
 	}
-	// .card-container {
-	// 	@include transform(translate3d(0, 0, 0) !important);
-	// }
 
-	// h3 {
-	// 	font-size: 50px;
-	// 	line-height: 1.5em;
-	// 	color: #777;
-	// 	text-align: center;
-	// }
+	#play-area {
+		float: left;
+		width: 555px;
+		height: 400px;
+		h3 {
+			font-size: 50px;
+			line-height: 1.5em;
+			color: #777;
+			text-align: center;
+		}
 
-	// .question {
-	// 	font-size: 30px;
-	// 	line-height: 1.5em;
-	// 	text-align: center;
-	// }
+		.question {
+			font-size: 30px;
+			line-height: 1.5em;
+			text-align: center;
+		}
+	}
+
+	
 	// @include transition(all 1.4s ease-in-out);
 }
 
@@ -196,7 +226,7 @@ $size: 150px;
 	position: relative;
 
 	> div{
-		@include perspective(1000);
+		@include perspective(1000px);
 		@include transform-style(preserve-3d);
 		position: absolute;
 		width: $size;
@@ -238,26 +268,27 @@ $size: 150px;
 		@include transition-duration($dur);
 		@include transition-timing-function(ease-in-out);
 	}
+	.back-content
+	{
+		display: none;
+	}
 	&.current
 	{
-		$height: 400px;
-		$width: 555px;
-		background: none;
-		height: $height;
-		width: $width;
+		// background: none;
+		// height: $playHeight;
+		// width: $playWidth;
 		.front {
-			height: 100%;
-			width: 100%;
+			// height: $size;
+			// width: $size;
 			@include transform(rotateY(-180deg));
 		}
 		.back {
-			$padding: 20px;
-			padding: $padding;
-			height: $height - $padding * 2;
-			width: $width - $padding * 2;
+			// height: $size;
+			// width: $size;
 			z-index: 99;
 			@include transform(rotateY(0deg));
 		}
+
 	}
 
 
@@ -322,7 +353,7 @@ $cardmargin:15px;
 	$size:90px;
 	width:100%;
 	@include transform-style(preserve-3d);
-	@include perspective(800);
+	@include perspective(800px);
 	.deck-container{
 		@include transition(all .5s ease-in-out);
 		position: absolute;
