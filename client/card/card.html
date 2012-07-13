@@ -29,7 +29,7 @@
 		<h2>Template Your Card</h2>
 		<div class="display-inner">
 			<div>
-				<p>Name:</p><input id="card_name" class="instant_update" type="text" name="important" />
+				<p>Name:</p><input id="name" class="instant_update" type="text" name="important" />
 			</div>
 			<h3>Problem</h3>
 			<div>
@@ -153,7 +153,7 @@
 
 <template name="card_play">
 	{{#with card}}
-	<h2>{{card_name}}</h2>
+	<h2>{{name}}</h2>
 	<div class="display-inner">
 		<div class="card">
 			{{#if graphic}}

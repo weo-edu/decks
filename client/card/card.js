@@ -2,12 +2,15 @@ route('/card/create', function() {
 	var transformPrefix = domToCss(Modernizr.prefixed('transform'));
 	var session = new _Session();
 	var card = new _Session({
-		card_name:'Name',
+		name:'Name',
+		graphic: null,
+		problem:{}
+	});
+	var problem = new _Session({
 		template: 'Template',
 		solution: '',
-		graphic: null,
 		rules: []
-	});
+	})
 	var error = new _Session({
 		template: '',
 		solution: '',
@@ -42,7 +45,14 @@ function focusOn(el)
 
 function deckInsert(callback){
 	callback = callback || function(){};
-	$('.chosen')
+	var x = $('.chosen').children();
+	console.log(x);
+	_.each(x, function(el){
+		Decks.update({_id:el.id}, {$addToSet: {cards:card.all()}}, function(){
+			callback();
+		});
+		console.log(Decks.findOne({_id:el.id}))
+	});
 }
 
 	var watchErrors = function(){
@@ -52,14 +62,19 @@ function deckInsert(callback){
 				_.each(err, function(msg, ele){
 					if(ele == 'rules')
 					{
-						_.each(msg, function(mssg, elem){
-							var num = $('#rules').children().index() - elem;
-							var el = '#rules-' + num.toString();
-							if(mssg)
-								$(el).addClass('error');
-							else
-								$(el).removeClass('error');
-						})
+						if(msg.length == 0)
+							$('#rules').children().children('.error').removeClass('error');
+						else
+							{
+							_.each(msg, function(mssg, elem){
+								var num = $('#rules').children().index() - elem;
+								var el = '#rules-' + num.toString();
+								if(mssg)
+									$(el).addClass('error');
+								else
+									$(el).removeClass('error');
+							})
+						}
 					}
 					else
 					{
@@ -84,8 +99,13 @@ function deckInsert(callback){
 
 			if (!card.equals(id,val))
 			{
-				card.set(id,val);
-				watchErrors(el, id);
+				if(id == 'name')
+					card.set('name', val);
+				else{
+					problem.set(id,val);
+					card.set('problem',problem.all());
+					watchErrors(el, id);
+				}
 			}
 		},
 		'click .create-button' : function(event){
@@ -117,10 +137,11 @@ function deckInsert(callback){
 		'keyup .instant_update': function(event) {
 			var el = $(event.target);
 			var idx = el.parents('#rules').children().children('.rule-input').index(el);
-			var rules = _.clone(card.get('rules'));
+			var rules = _.clone(problem.get('rules'));
 
 			rules[idx] = el.val();
-			card.set('rules',rules);
+			problem.set('rules',rules);
+			card.set('problem',problem.all())
 			watchErrors();
 			return false;
 		},
@@ -128,9 +149,10 @@ function deckInsert(callback){
 			$('#rules').prepend(Meteor.ui.render(function() {
 				return Template.rule_input();
 			}));
-			var rules = card.get('rules');
+			var rules = problem.get('rules');
 			rules.unshift('');
-			card.set('rules',rules);
+			problem.set('rules', rules)
+			card.set('problem', problem.all());
 		}
 	}
 
@@ -187,7 +209,8 @@ function deckInsert(callback){
 
 	Template.card_play.card = function(){
 		var c = card.all();
-		var p = problemize(c);
+		var prob = problem.all();
+		var p = problemize(prob);
 		c.question = p.html;
 		c.answer = p.solution;
 		var e = {
