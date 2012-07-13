@@ -12,7 +12,7 @@
 //	DECKS GRID
 ////////////////////////////
 
-$size: 175px;
+$size: 150px;
 
 @mixin deckCards{
 	height: $size;
@@ -150,7 +150,7 @@ $size: 175px;
 #playground {
 	height: 400px;
 	margin-top: 30px;
-	background: #FFF;
+	background: url("/app!common/textures/45degreee_fabric.png");
 	@include border-radius(8px);
 	@include box-shadow(0 0 10px #333);
 	padding: 20px;
@@ -183,7 +183,7 @@ $size: 175px;
 	float: right;
 	width: 360px;
 	height: 400px;
-	background: tomato;
+	background: #FFF;
 	@include border-radius(8px);
 	@include box-shadow(0 0 10px #333);
 }
@@ -216,7 +216,7 @@ $size: 175px;
 	}
 
 	#answered {
-		z-index: 2 !important;
+		z-index: 999 !important;
 		.deck-container{
 			z-index: 999;
 		}

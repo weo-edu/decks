@@ -136,7 +136,7 @@ route('/deck/play/:name', function(ctx){
 	  			el.animateInsert('prepend', $('#answered')).removeClass('current');
 	  			el.removeClass('current');
 
-	  			var result = e.target.value === problems[working_card].solution;	
+	  			var result = parseInt(e.target.value, 10) === parseInt(problems[working_card].solution, 10);	
 	  			results.push(result);
 	  			problems[working_card].answered = 1;
 

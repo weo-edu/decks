@@ -3,7 +3,7 @@ $.fn.extend({
     	callback = callback || function(){};
 		var offset = this.offset();
 
-		var stage = $('<div class="stage" style="position: absolute; height: 100%; width: 100%; z-index: 2;"></div>');
+		var stage = $('<div class="stage" style="position: absolute; height: 100%; width: 100%; z-index: 99;"></div>');
 
     	$('body').prepend(stage);
 

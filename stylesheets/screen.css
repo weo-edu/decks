@@ -3,7 +3,6 @@
  * In this file you should write your main styles. (or centralize your imports)
  * Import this file using the following HTML or equivalent:
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
-
 /* line 17, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -26,58 +25,45 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
-
 /* line 22, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
-
 html {
   line-height: 1;
 }
-
 
 /* line 24, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 ol, ul {
   list-style: none;
 }
 
-
 /* line 26, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
-
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-
 /* line 28, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
-
 caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
 
-
 /* line 30, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 q, blockquote {
   quotes: none;
 }
 /* line 103, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
-
 q:before, q:after, blockquote:before, blockquote:after {
   content: "";
   content: none;
 }
 
-
 /* line 32, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
-
 a img {
   border: none;
 }
 
-
 /* line 116, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
-
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
   display: block;
 }
@@ -159,8 +145,8 @@ a {
 
 /* line 57, ../sass/screen.scss */
 .card-container, .deck-container {
-  height: 175px;
-  width: 175px;
+  height: 150px;
+  width: 150px;
   -webkit-transition: all 0.4s ease-out;
   -moz-transition: all 0.4s ease-out;
   -o-transition: all 0.4s ease-out;
@@ -202,7 +188,7 @@ a {
   -webkit-box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.6), 0 0 7px #333333;
   -moz-box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.6), 0 0 7px #333333;
   box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.6), 0 0 7px #333333;
-  background-size: 175px 175px;
+  background-size: 150px 150px;
   background-position: center;
 }
 /* line 79, ../sass/screen.scss */
@@ -226,8 +212,8 @@ a {
   position: absolute;
   left: 0;
   padding: 10px;
-  width: 155px;
-  height: 155px;
+  width: 130px;
+  height: 130px;
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
   -ms-border-radius: 8px;
@@ -324,7 +310,7 @@ a {
 #playground {
   height: 400px;
   margin-top: 30px;
-  background: #FFF;
+  background: url("/app!common/textures/45degreee_fabric.png");
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
   -ms-border-radius: 8px;
@@ -349,7 +335,7 @@ a {
   float: right;
   width: 360px;
   height: 400px;
-  background: tomato;
+  background: #FFF;
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
   -ms-border-radius: 8px;
@@ -363,7 +349,7 @@ a {
 /* line 192, ../sass/screen.scss */
 #deck-dock {
   margin-top: 20px;
-  height: 175px;
+  height: 150px;
   width: 100%;
   position: relative;
 }
@@ -380,8 +366,8 @@ a {
   -o-transform-style: preserve-3d;
   transform-style: preserve-3d;
   position: absolute;
-  width: 175px;
-  height: 175px;
+  width: 150px;
+  height: 150px;
   -webkit-transition: -webkit-transform 0.3s ease-in-out;
   -moz-transition: -moz-transform 0.3s ease-in-out;
   -o-transition: -o-transform 0.3s ease-in-out;
@@ -392,8 +378,8 @@ a {
 #deck-dock > div > div {
   position: absolute;
   cursor: pointer;
-  width: 175px;
-  height: 175px;
+  width: 150px;
+  height: 150px;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
@@ -401,7 +387,7 @@ a {
 }
 /* line 218, ../sass/screen.scss */
 #deck-dock #answered {
-  z-index: 2 !important;
+  z-index: 999 !important;
 }
 /* line 220, ../sass/screen.scss */
 #deck-dock #answered .deck-container {
@@ -482,14 +468,14 @@ a {
   background: #A2E67E;
 }
 
-/* line 271, ../sass/screen.scss */
+/* line 290, ../sass/screen.scss */
 .create {
   width: 820px;
   height: 410px;
   margin: 0 auto;
 }
 
-/* line 278, ../sass/screen.scss */
+/* line 297, ../sass/screen.scss */
 .display {
   width: 380px;
   height: 380px;
@@ -512,12 +498,12 @@ a {
   box-shadow: 0 7px 25px rgba(0, 0, 0, 0.4);
   position: relative;
 }
-/* line 291, ../sass/screen.scss */
+/* line 310, ../sass/screen.scss */
 .display .display-inner {
   padding: 20px;
 }
 
-/* line 296, ../sass/screen.scss */
+/* line 315, ../sass/screen.scss */
 .deck-holder {
   background: none;
   left: 0px;
@@ -525,7 +511,7 @@ a {
   overflow: visible;
 }
 
-/* line 302, ../sass/screen.scss */
+/* line 321, ../sass/screen.scss */
 .deck-preview {
   width: 100%;
   -webkit-transform-style: preserve-3d;
@@ -539,7 +525,7 @@ a {
   -o-perspective: 800;
   perspective: 800;
 }
-/* line 307, ../sass/screen.scss */
+/* line 326, ../sass/screen.scss */
 .deck-preview .deck-container {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
@@ -549,21 +535,21 @@ a {
   width: 90px;
   height: 90px;
 }
-/* line 312, ../sass/screen.scss */
+/* line 331, ../sass/screen.scss */
 .deck-preview .deck-container .deck {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
   -o-transition: all 0.5s ease-in-out;
   transition: all 0.5s ease-in-out;
 }
-/* line 314, ../sass/screen.scss */
+/* line 333, ../sass/screen.scss */
 .deck-preview .deck-container .deck .front {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
   -o-transition: all 0.5s ease-in-out;
   transition: all 0.5s ease-in-out;
 }
-/* line 317, ../sass/screen.scss */
+/* line 336, ../sass/screen.scss */
 .deck-preview .deck-container .deck .back {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
@@ -573,14 +559,14 @@ a {
   width: 380px;
   padding: 0px;
 }
-/* line 325, ../sass/screen.scss */
+/* line 344, ../sass/screen.scss */
 .deck-preview .selected {
   top: 0px;
   left: 0px;
   height: 380px;
   width: 380px;
 }
-/* line 331, ../sass/screen.scss */
+/* line 350, ../sass/screen.scss */
 .deck-preview .choose-deck {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #dddddd));
   background: -webkit-linear-gradient(#ffffff, #dddddd);
@@ -601,7 +587,7 @@ a {
   display: block;
   text-align: center;
 }
-/* line 344, ../sass/screen.scss */
+/* line 363, ../sass/screen.scss */
 .deck-preview .choose-deck:hover {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #ffffff));
   background: -webkit-linear-gradient(#dddddd, #ffffff);
@@ -609,7 +595,7 @@ a {
   background: -o-linear-gradient(#dddddd, #ffffff);
   background: linear-gradient(#dddddd, #ffffff);
 }
-/* line 348, ../sass/screen.scss */
+/* line 367, ../sass/screen.scss */
 .deck-preview .chosen {
   border: 2px solid yellow;
   left: -2px;
