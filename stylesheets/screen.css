@@ -3,6 +3,7 @@
  * In this file you should write your main styles. (or centralize your imports)
  * Import this file using the following HTML or equivalent:
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+
 /* line 17, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -25,45 +26,58 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
+
 /* line 22, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+
 html {
   line-height: 1;
 }
+
 
 /* line 24, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 ol, ul {
   list-style: none;
 }
 
+
 /* line 26, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
+
 /* line 28, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+
 caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
 
+
 /* line 30, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 q, blockquote {
   quotes: none;
 }
 /* line 103, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+
 q:before, q:after, blockquote:before, blockquote:after {
   content: "";
   content: none;
 }
 
+
 /* line 32, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+
 a img {
   border: none;
 }
 
+
 /* line 116, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
   display: block;
 }
@@ -466,4 +480,138 @@ a {
 /* line 277, ../sass/screen.scss */
 .card-container.correct {
   background: #A2E67E;
+}
+
+/* line 271, ../sass/screen.scss */
+.create {
+  width: 820px;
+  height: 410px;
+  margin: 0 auto;
+}
+
+/* line 278, ../sass/screen.scss */
+.display {
+  width: 380px;
+  height: 380px;
+  margin: 15px;
+  z-index: 0;
+  float: left;
+  overflow: auto;
+  background: rgba(255, 255, 255, 0.8);
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  border-radius: 8px;
+  -webkit-box-shadow: 0 7px 25px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0 7px 25px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 7px 25px rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+/* line 291, ../sass/screen.scss */
+.display .display-inner {
+  padding: 20px;
+}
+
+/* line 296, ../sass/screen.scss */
+.deck-holder {
+  background: none;
+  left: 0px;
+  box-shadow: none;
+  overflow: visible;
+}
+
+/* line 302, ../sass/screen.scss */
+.deck-preview {
+  width: 100%;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-perspective: 800;
+  -moz-perspective: 800;
+  -ms-perspective: 800;
+  -o-perspective: 800;
+  perspective: 800;
+}
+/* line 307, ../sass/screen.scss */
+.deck-preview .deck-container {
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  position: absolute;
+  width: 90px;
+  height: 90px;
+}
+/* line 312, ../sass/screen.scss */
+.deck-preview .deck-container .deck {
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+}
+/* line 314, ../sass/screen.scss */
+.deck-preview .deck-container .deck .front {
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+}
+/* line 317, ../sass/screen.scss */
+.deck-preview .deck-container .deck .back {
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  height: 380px;
+  width: 380px;
+  padding: 0px;
+}
+/* line 325, ../sass/screen.scss */
+.deck-preview .selected {
+  top: 0px;
+  left: 0px;
+  height: 380px;
+  width: 380px;
+}
+/* line 331, ../sass/screen.scss */
+.deck-preview .choose-deck {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #dddddd));
+  background: -webkit-linear-gradient(#ffffff, #dddddd);
+  background: -moz-linear-gradient(#ffffff, #dddddd);
+  background: -o-linear-gradient(#ffffff, #dddddd);
+  background: linear-gradient(#ffffff, #dddddd);
+  cursor: pointer;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  position: absolute;
+  bottom: 10px;
+  width: 100px;
+  color: #333;
+  padding: 5px;
+  display: block;
+  text-align: center;
+}
+/* line 344, ../sass/screen.scss */
+.deck-preview .choose-deck:hover {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #ffffff));
+  background: -webkit-linear-gradient(#dddddd, #ffffff);
+  background: -moz-linear-gradient(#dddddd, #ffffff);
+  background: -o-linear-gradient(#dddddd, #ffffff);
+  background: linear-gradient(#dddddd, #ffffff);
+}
+/* line 348, ../sass/screen.scss */
+.deck-preview .chosen {
+  border: 2px solid yellow;
+  left: -2px;
+  top: -2px;
 }

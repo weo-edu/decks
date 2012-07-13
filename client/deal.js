@@ -21,9 +21,9 @@
 			if(spacing > deckWidth - 50)
 				spacing = deckWidth / 2;
 
-
 			children.each(function(idx){
 				rot[idx] = {x: (spacing * idx), y: 0, z: -idx * 0.01};
+
 			});
 
 			return rot;
@@ -43,7 +43,7 @@
 
 		var children = container.children();
 		var containerWidth = container.width();
-		var deckWidth = children.width();
+		var deckWidth = children.not('.last-selected').width();
 		var decksPerRow = Math.floor(containerWidth / deckWidth);
 		var gutter = ((containerWidth - decksPerRow * deckWidth) / (decksPerRow - 1));
 
@@ -64,7 +64,7 @@
 		var idx = 0;
 		var num_cards = container.children().length;
 		var rot = getTranslation(container, type);
-
+		console.log(rot);
 		if(rot.length == 0) {
 			callback();
 			return;
@@ -72,7 +72,6 @@
 					
 		var dealInterval = setInterval(function(){
 			var el = container.children().eq(idx);
-			
 			el.css(transformPrefix, 'translate3d(' + rot[idx].x + 'px,'+ rot[idx].y +'px,' + rot[idx].z +'px)');
 			el.css('z-index', 1);
 			idx++;

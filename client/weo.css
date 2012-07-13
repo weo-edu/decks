@@ -1,28 +1,10 @@
 /* CSS declarations go here */
-/*body {
+body {
 	font-family: arial;
 }
-#status_image{
-	border-radius:100%;
-	background-color:red;
-	background-position:center-top;
-}
-.remove{
-	padding: 0px 3px;
-	cursor:pointer;
-	margin-left:5px;
-	border:1px solid black;
-}
-.error{
-	color:red;
-	text-decoration: underline;
-	font-size:12px;
-}
+
 .deck {
-	width: 200px;
-	margin-bottom: 5px;
-	float: left;
-	margin-right: 30px;
+	z-index:2;
 	cursor: pointer;
 }
 
@@ -36,27 +18,17 @@
 	margin-bottom: 2px;
 }
 
-.card {
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	-webkit-box-align: center;
-}
-
 .card img {
+	border-radius:8px;
 	margin-top: 5px;
 	width: 500px;
 	height: 50px;
-}
-
-.card input {
-	display: block
-	width: 100px;
+	box-shadow:0 4px 10px rgba(0, 0, 0, .5);
 }
 
 .card .question {
-	margin-top: 50px;
+	margin: 10px;
 	font-size: 24px;
-	margin-bottom: 50px;
 }
 
 .result {
@@ -64,81 +36,117 @@
 	-webkit-box-orient: vertical;
 	-webkit-box-align: center;
 }
-
-#decks-link {
-	margin-top: 20px;
-	cursor: pointer;
-}*/
-/*h2{
-	font-size:45px;
-}
 input {
 	display: inline-block;
 }
-h3{
-	text-align: center;
+
+.error{
+	border-color:red;
 }
 .card img {
 	height:40%;
 	width:100%;
 }
-.create{
+/*.create{
+	padding:20px;
 	position: relative;
-	height: 500px;
-	width: 70%;
+	height: 420px;
+	width: 80%;
 	margin: 0 auto;
-	overflow: hidden;
-}
+}*/
 .card{
 	text-align:center;
 }
+.color-picker-min{
+	background-color: tomato;
+	position: relative;
+	border-radius: 8px;
+	height: 40px;
+	width: 40px;
+	float: right;
+}
+.color-choose{
+	box-shadow: 0 7px 25px rgba(0, 0, 0, 0.98);
+	z-index: 2;
+	background-color: #CCC;
+	position: fixed;
+	border-radius: 8px;
+	display: none;
+}
+#card-image{
+	background-size:100%;
+}
 .decks{
 	margin:15px;
-	height: 60px;
-	width:60px;
+	height: 90px;
+	width:90px;
 	float:left;
 }
 .decks img {
 	height:100%;
 	width:100%;
 }
+.instant_update{
+	width:100%;
+}
+.selected{
+	border-color:green;
+}
 #rules{
 	display: inline-block;
 }
 #rule-container{
 	margin: 0 auto;
-	height: 140px;
 	overflow-y: auto;
 }
 #add-rule{
 
 }
 .quick-button{
+	border-radius:8px;
 	width: 50%;
-	margin: 5px auto;
+	margin: 10px auto;
 	text-align: center;
 	border: 2px outset grey;
 	padding: 5px;
 	cursor: pointer;
 }
+#card-title{
+	text-align: center;
+	font-size: 40px;
+	margin: 30px 0;
+	color: #999;
+}
 #card-preview{
-	left:360px;
+	//left:360px;
 }
-#deck-preview{
-	left:720px;
-}
-.display{
-	position:absolute;
-	margin:15px;
+/*#deck-preview{
+	position: relative;
+	float: left;
+	width: 400px;
+	display:none;
+}*/
+/*#deck-preview #deck-grid{
 	height:400px;
-	width:300px;
-	overflow: hidden;
-	box-shadow: 0 7px 25px rgba(0, 0, 0, .2);
-	-webkit-box-shadow:0 7px 25px rgba(0, 0, 0, .2);
-	-moz-box-shadow:0 7px 25px rgba(0, 0, 0, .2);
+}*/
+#create-deck-container{
+	
 }
+/*.display{
+	background-color:white;
+	position:relative;
+	float: left;
+	border-radius:8px;
+	margin:15px;
+	height:350px;
+	width:350px;
+	overflow: hidden;
+	box-shadow: 0 7px 25px rgba(0, 0, 0, .5);
+	-webkit-box-shadow:0 7px 25px rgba(0, 0, 0, .5);
+	-moz-box-shadow:0 7px 25px rgba(0, 0, 0, .5);
+}*/
 .display-inner{
-	margin:10% auto;
+	margin: auto;
 	width: 70%;
 }
 .error-light{
@@ -175,4 +183,3 @@ h3{
 .rules-errors .error-message{
 	float: none;
 }
-*/
