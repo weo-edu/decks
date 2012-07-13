@@ -1,54 +1,97 @@
 <template name="card_create">
 	<div class="holder">
-		<div class="create">
-			<div>
-				<div id="template-preview" class="display">
-					<div class="display-inner">
-						<div>
-							<p>Name:</p><input id="card_name" class="instant_update" type="text" name="important" />
-						</div>
-						<div>
-							<p>Graphic: </p>
-								<input type="file" id="file" name="file" multiple />
-							</div>
-						<h3>Problem</h3>
-						<div>
-							<p>Template: </p>
-							<input id="template" type="text" class="instant_update" name="template"/> 
-							{{>template_errors}}
-						</div>
-						<div>
-							<p>Solution: </p>
-							<input class="instant_update" id="solution" type="text" name="solution"/>
-							{{>solution_errors}}
-						</div>
-						{{>rules}}
-					</div>
-				</div>
-				<div>
-					<div class="display" id="color">
-						<div class="color">
-							<div class="display-inner">
-								{{>card_play}}
-								<div id="create" class="quick-button">Create</div>
-							</div>
-						</div>
-					</div>
-					<div class="color-picker">
-						<div class="color-picker-min" id="color"></div>
-							<div class='color-choose'>
-								<form><input type="hidden" id="color" name="color" value="#123456" /></form>
-								<div id="colorpicker"></div>
-							</div>
-						</div>
-					</div>
-				{{>deck_preview}}
+		<div class="step-nav-bar">
+			<div class="step-nav active" id="step-1">
+				Step 1
+			</div>
+			<div class="step-nav" id="step-2">
+				Step 2
+			</div>
+			<div class="step-nav" id="step-3">
+				Step 3
 			</div>
 		</div>
+		<div class="wrapper">
+			{{>step_container_1}}
+			{{>step_container_2}}
+			{{>step_container_3}}
+		</div>
 	</div>
-	<h2 id="card-title">Card Creator</h2>
+	{{>section_title}}
 </template>
-	
+
+<template name="section_title">
+	<h2 id="card-title">{{title}}</h2>
+</template>
+
+<template name="template_preview">
+	<div id="template-preview" class="display">
+		<h2>Template Your Card</h2>
+		<div class="display-inner">
+			<div>
+				<p>Name:</p><input id="card_name" class="instant_update" type="text" name="important" />
+			</div>
+			<h3>Problem</h3>
+			<div>
+				<p>Template: </p>
+				<input id="template" type="text" class="instant_update" name="template"/> 
+				{{>template_errors}}
+			</div>
+			<div>
+				<p>Solution: </p>
+				<input class="instant_update" id="solution" type="text" name="solution"/>
+				{{>solution_errors}}
+			</div>
+			{{>rules}}
+		</div>
+	</div>
+</template>	
+
+<template name="card_preview">
+	<div class="display color-update">
+		<div>
+			{{>card_play}}
+			<!-- <div  class="choose-deck create-button">Create</div> -->
+		</div>
+	</div>
+</template>
+
+<template name="color_picker">
+	<div class="display color-picker">
+		<h2>Design Your Card</h2>
+		<div class="card-section">
+			<h3>Graphic: </h3>
+			<input type="file" id="file" name="file" tabindex="-1" multiple />
+		</div>
+		<div class="card-section">
+			<h3>Background Color:</h3>
+			<form><input type="hidden" id="color" name="color" value="#123456" /></form>
+			<div id="colorpicker"></div>
+		</div>
+	</div>
+</template>
+
+<template name="step_container_1">
+	<div class="create active" id="step-1-cont">
+		{{>template_preview}}
+		{{>card_preview}}
+	</div>
+</template>
+
+<template name="step_container_2">
+	<div class="create" id="step-2-cont">
+		{{>color_picker}}
+		{{>card_preview}}
+	</div>
+</template>
+
+<template name="step_container_3">
+	<div class = "create" id="step-3-cont">
+		{{>deck_preview}}
+		{{>card_preview}}
+	</div>
+</template>
+
 <template name="deck_preview">
 	<div class="deck-holder display">
 		<div class="deck-preview">
@@ -93,7 +136,7 @@
 </template>
 
 <template name="rules">
-	<div id="add-rule" class="quick-button">Add Rule</div>
+	<div id="add-rule" class="choose-deck">Add Rule</div>
 	<div id="rule-container">
 		<ul id='rules'>
 		</ul>
@@ -110,8 +153,9 @@
 
 <template name="card_play">
 	{{#with card}}
+	<h2>{{card_name}}</h2>
+	<div class="display-inner">
 		<div class="card">
-			<h3>{{card_name}}</h3>
 			{{#if graphic}}
 				<img src='{{graphic}}' />
 			{{/if}}
@@ -121,5 +165,6 @@
 			<p>Solution:</p>
 			<div for='answer'>{{answer}}</div>
 		</div>
+	</div>
 	{{/with}}
 </template>
