@@ -12,7 +12,7 @@
 //	DECKS GRID
 ////////////////////////////
 
-$size: 175px;
+$size: 150px;
 
 @mixin deckCards{
 	height: $size;
@@ -36,7 +36,7 @@ $size: 175px;
 	position: relative;
 	.deck-container
 	{
-		@include perspective(800);
+		@include perspective(800px);
 		@include transform-style(preserve-3d);
 		@include transform(rotateY(120deg) scale(0.001));
 		cursor: pointer;
@@ -56,11 +56,6 @@ $size: 175px;
 
 .card-container, .deck-container{
 	@include deckCards;
-	// .front, img{
-	// 	width: $size;
-	// 	height: $size;
-	// 	@include border-radius(8px);
-	// }
 }
 
 .deck-container, .card-container
@@ -69,17 +64,11 @@ $size: 175px;
 	{
 		height: 100%;
 		width: 100%;
-		@include perspective(800);
-		&:hover{
-			.front, .back{
-
-				// @include box-shadow(inset 1px 1px 1px transparentize(#FFF, 0.4), 0 0 15px #111);
-			}
-		}
+		@include perspective(800px);
 	}
 		
 	.front, .back{
-		@include transition(transform .25s ease-in-out, box-shadow .15s ease-in-out);
+		@include transition(all .25s ease-in-out);
 		@include transform-style(preserve-3d);
 		@include backface-visibility(hidden);
 		@include box-shadow(inset 1px 1px 1px transparentize(#FFF, 0.4), 0 0 7px #333);
@@ -93,12 +82,6 @@ $size: 175px;
 		width: 100%;
 		height: 100%;
 		@include border-radius(8px);
-		// img{
-		// 	position: absolute;
-		// 	width: 100%;
-		// 	height: 100%;
-		// 	
-		// }	
 	}
 	.back
 	{
@@ -119,7 +102,6 @@ $size: 175px;
 			@include background(linear-gradient(#FFF, #DDD));
 			cursor: pointer;
 			@include border-radius(5px);
-			// border: 8px solid #FF3366;
 			position: absolute;
 			bottom: 10px;
 			width: 100px;
@@ -155,58 +137,96 @@ $size: 175px;
 //	PLAY
 ////////////////////////////
 
+$playHeight: 400px;
+$playWidth: 555px;
+
 .stage
 {
-	@include perspective(1000);
+	@include perspective(1000px);
 	@include transform-style(preserve-3d);
-	.card-container{
-		// @include transition(all 1.5s ease-in-out !important);
-	}
+	pointer-events: none;
+	// div {
+	// 	@include transition(all 1s ease-in-out !important);
+	// }
 }
 
+// .card-container.current.play {
+// 	@include transition(all .4s ease-in-out);
+// 	height: $playHeight;
+// 	width: $playWidth;
+// 	.back {
+// 		@include transition(all .4s ease-in-out);
+// 		$padding: 20px;
+// 		padding: $padding;
+// 		height: $playHeight - $padding * 2;
+// 		width: $playWidth - $padding * 2;
+// 	}
+// }
+
 #playground {
+	position: relative;
 	height: 400px;
 	margin-top: 30px;
-	background: #FFF;
+	background: url("/app!common/textures/45degreee_fabric.png");
 	@include border-radius(8px);
 	@include box-shadow(0 0 10px #333);
 	padding: 20px;
 	&.hide {
 		display: none;
 	}
-	// .card-container {
-	// 	@include transform(translate3d(0, 0, 0) !important);
-	// }
 
-	// h3 {
-	// 	font-size: 50px;
-	// 	line-height: 1.5em;
-	// 	color: #777;
-	// 	text-align: center;
-	// }
+	.card-container {
+		position: absolute;
+		bottom: 20px;
+		left: 20px;
+		.front {
+			@include transform(rotateY(-180deg));
+		}
+		.back {
+			@include transform(rotateY(0deg));
+		}
+	}
 
-	// .question {
-	// 	font-size: 30px;
-	// 	line-height: 1.5em;
-	// 	text-align: center;
-	// }
+	#play-area {
+		float: left;
+		width: 555px;
+		height: 400px;
+		h3 {
+			font-size: 50px;
+			line-height: 1.5em;
+			color: #777;
+			text-align: center;
+		}
+
+		.question {
+			font-size: 30px;
+			line-height: 1.5em;
+			text-align: center;
+		}
+	}
+
+	
 	// @include transition(all 1.4s ease-in-out);
+}
+
+#play-meta {
+	float: right;
+	width: 360px;
+	height: 400px;
+	background: #FFF;
+	@include border-radius(8px);
+	@include box-shadow(0 0 10px #333);
 }
 
 
 #deck-dock {
-	// @include transform-style(preserve-3d);
-	// @include perspective(800);
 	margin-top: 20px;
-	// bottom: 10px;
-	// position: absolute;
 	height: $size;
 	width: 100%;
 	position: relative;
-	// background: url("/app!common/textures/low_contrast_linen.png");
 
 	> div{
-		@include perspective(1000);
+		@include perspective(1000px);
 		@include transform-style(preserve-3d);
 		position: absolute;
 		width: $size;
@@ -226,7 +246,7 @@ $size: 175px;
 	}
 
 	#answered {
-		z-index: 2 !important;
+		z-index: 999 !important;
 		.deck-container{
 			z-index: 999;
 		}
@@ -235,31 +255,43 @@ $size: 175px;
 
 .card-container {
 
-	// background: #000;
-	@include transition(transform .35s ease-in-out);
-	.card {
-		// @include transition(all .2s ease-in-out);
-		// @include opacity(.7);
-		// @include filter(grayscale(100%));
+	$dur: .5s;
+	@include transition-property(transform, height, width);
+	@include transition-duration($dur);
+	@include transition-timing-function(ease-in-out);
+
+	.front{
+		@include background-size(100%);
 	}
-	
-	&.current, &:hover {
-	.card {
-		// @include opacity(1);
+	.front, .back {
+		@include transition-property(transform, height, width);
+		@include transition-duration($dur);
+		@include transition-timing-function(ease-in-out);
+	}
+	.back-content
+	{
+		display: none;
 	}
 	&.current
 	{
-		background: none;
+		// background: none;
+		// height: $playHeight;
+		// width: $playWidth;
 		.front {
+			// height: $size;
+			// width: $size;
 			@include transform(rotateY(-180deg));
 		}
 		.back {
+			// height: $size;
+			// width: $size;
 			z-index: 99;
 			@include transform(rotateY(0deg));
 		}
+
 	}
-		// @include filter(grayscale(0%));
-	}
+
+
 
 	// &.wrong, &.correct {
 	// 	@include box-shadow(inset 1px 1px 1px transparentize(#FFF, 0.4), 0 0 7px #333);
@@ -408,7 +440,7 @@ $cardmargin:15px;
 	$size:90px;
 	width:100%;
 	@include transform-style(preserve-3d);
-	@include perspective(800);
+	@include perspective(800px);
 	.deck-container{
 		@include transition(all .5s ease-in-out);
 		position: absolute;
@@ -458,7 +490,9 @@ $cardmargin:15px;
 		border:3px outset yellow;
 	}
 }
+
 #colorpicker{
 	width:195px;
 	margin: 10px auto;
 }
+
