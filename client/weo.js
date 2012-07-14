@@ -1,6 +1,6 @@
-
+//
 route('/', function(ctx, next) {
-  route.redirect('/deck/browse');
+ // route.redirect('/deck/browse');
 });
 
 Meteor.startup(function() {
@@ -9,7 +9,7 @@ Meteor.startup(function() {
 
 
 function renderView(template) {
-	if(!Template[template])
+	/*if(!Template[template])
 		throw new Error('Invalid template name');
 
 	var tmpl = Template[template];
@@ -25,7 +25,8 @@ function renderView(template) {
 		if(tmpl.events['render']){
 			tmpl.events['render']();
 		}
-	});
+	});*/
+	view.render(template);
 }
 
 
