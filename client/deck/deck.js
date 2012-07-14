@@ -67,46 +67,41 @@ route('/deck/play/:name', function(ctx){
 	var problems = [];
 	var results = [];
 	var count = 0;
+	var deck = Decks.findOne({name: name});
 
  	Template.deck_play.deck = function() {
+ 		if(!deck){
+			var name = ctx.params.name;
+			deck = Decks.findOne({name: name});
+			if(deck){
+				totalCards = deck.cards.length;
 
-		var name = ctx.params.name;
-		/*
-		Meteor.deps.await(function(){
-			return Decks.findOne({name: name});
-		}, function(){
-			Meteor.deps.invalidate();
-		}); */
+				for(var i = 0; i < totalCards; i++) {
+					problems[i] = problemize(deck.cards[i].problem);
+					deck.cards[i].question = problems[i].html;
+				}
 
-		var deck = Decks.findOne({name: name});
-		if(deck){
-			totalCards = deck.cards.length;
+				Meteor.defer(function(){
+		  			var answered = $('#answered');
+					var unanswered = $('#unanswered');
 
-			for(var i = 0; i < totalCards; i++) {
-				problems[i] = problemize(deck.cards[i].problem);
-				deck.cards[i].question = problems[i].html;
+					answered.width(answered.children().width());
+					unanswered.width(unanswered.parent().width() - answered.width() - 20);
+
+					deal($('#deck-dock'), 0);
+					playSound('shuffling-cards-5', muted);
+					featureCard(unanswered.children().eq(0), 0);
+					
+					$("#playground").slideDown(1000, function(){
+							$('#unanswered .card').eq(0).click();
+							$('#playground .solution').focus();
+					});
+
+					$('.card-container .question').each(function(){
+						MathJax.Hub.Queue(['Typeset', MathJax.Hub, $(this).get(0)]);
+					});
+				});
 			}
-
-			Meteor.defer(function(){
-	  			var answered = $('#answered');
-				var unanswered = $('#unanswered');
-
-				answered.width(answered.children().width());
-				unanswered.width(unanswered.parent().width() - answered.width() - 20);
-
-				deal($('#deck-dock'), 0);
-				playSound('shuffling-cards-5', muted);
-				featureCard(unanswered.children().eq(0), 0);
-				
-				$("#playground").slideDown(1000, function(){
-						$('#unanswered .card').eq(0).click();
-						$('#playground .solution').focus();
-				});
-
-				$('.card-container .question').each(function(){
-					MathJax.Hub.Queue(['Typeset', MathJax.Hub, $(this).get(0)]);
-				});
-			});
 		}
 
 	  	return deck;
