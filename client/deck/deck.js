@@ -14,19 +14,12 @@ var transformPrefix = domToCss(Modernizr.prefixed('transform'));
 var transitionPrefix = domToCss(domTransitionProperty);
 var transitionEndEvent = transitionEndEvents[domTransitionProperty];
 
+var muted = false;
 
-//  Initialize Sounds
-////////////////////////////////////////
-
-var a = document.createElement('audio');
-var ext = !!(a.canPlayType && a.canPlayType('audio/mpeg;')) ? '.mp3' : '.ogg';
-
-var click = new Audio("/app!common/sounds/click" + ext);
-var shortShuffle = new Audio("/app!common/sounds/shuffling-cards-5.wav");
-var longShuffle = new Audio("/app!common/sounds/shuffling-cards-3.wav");
-var wrong = new Audio("/app!common/sounds/wrong" + ext);
-var right = new Audio("/app!common/sounds/right" + ext);
-var playSound = new Audio("/app!common/sounds/switch" + ext);
+$('#mute-button').live('click', function(){
+	muted = muted ? false : true;
+	$(this).toggleClass('muted');
+});
 
 route('/deck/browse',function() {
 	
@@ -36,7 +29,7 @@ route('/deck/browse',function() {
 		Meteor.defer(function(){
 			if(decks.count()) {
 				deal($('#deck-grid'), 600);
-				longShuffle.play();
+				playSound('shuffling-cards-3', muted);
 			}
 		});
 
@@ -49,10 +42,10 @@ route('/deck/browse',function() {
 		  	var el = $(e.target).closest('.deck-container');
 		  	$('.deck-container').not(el).removeClass('view-more');
 		  	el.toggleClass('view-more');
-		  	click.play();
+		  	playSound('click', muted);
 	  	},
 	  	'click .play': function(e) {
-	  		playSound.play();
+	  		playSound('switch', muted);
 	  		e.stopPropagation();
 	  		var el = $(e.target).closest('.deck-container');
 	  		el.addClass('close').css(transformPrefix, 'translate3d(0, 0, 0)').find('.front').css(transformPrefix, 'rotateY(0)').end().find('.back').css(transformPrefix, 'rotateY(180deg)');
@@ -100,7 +93,7 @@ route('/deck/play/:name', function(ctx){
 			unanswered.width(unanswered.parent().width() - answered.width() - 20);
 
 			deal($('#deck-dock'), 0);
-			shortShuffle.play();
+			playSound('shuffling-cards-5', muted);
 			featureCard(unanswered.children().eq(0), 0);
 			
 			$("#playground").slideDown(1000, function(){
@@ -109,7 +102,7 @@ route('/deck/play/:name', function(ctx){
 			});
   		},
   		'click #unanswered .card': function(e) {
-  			click.play();
+  			playSound('click', muted);
 	  		var el = $(e.target).closest('.card-container');
 	  		working_card = (el.attr('data') - 1);
 	  		MathJax.Hub.Queue(["Typeset", MathJax.Hub, el.find('.question').get(0)]);
@@ -164,10 +157,10 @@ route('/deck/play/:name', function(ctx){
 	  			results.push(result);
 	  			if(!result) {
 	  				$('#bar, #bar .fill').stop(true, false).effect('highlight', {color: '#E54429'});
-	  				wrong.play();
+	  				playSound('wrong', muted);
 	  			}
 	  			else {
-	  				right.play();
+	  				playSound('right', muted);
 	  			}
 	  			problems[working_card].answered = 1;
 
