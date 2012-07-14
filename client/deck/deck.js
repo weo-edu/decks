@@ -42,7 +42,7 @@ route('/deck/browse',function() {
 		  	var el = $(e.target).closest('.deck-container');
 		  	$('.deck-container').not(el).removeClass('view-more');
 		  	el.toggleClass('view-more');
-		  	playSound('click', muted);
+		  	playSound('tear', muted);
 	  	},
 	  	'click .play': function(e) {
 	  		playSound('switch', muted);
@@ -102,7 +102,7 @@ route('/deck/play/:name', function(ctx){
 			});
   		},
   		'click #unanswered .card': function(e) {
-  			playSound('click', muted);
+  			playSound('tear', muted);
 	  		var el = $(e.target).closest('.card-container');
 	  		working_card = (el.attr('data') - 1);
 	  		MathJax.Hub.Queue(["Typeset", MathJax.Hub, el.find('.question').get(0)]);
