@@ -266,5 +266,5 @@ function deckInsert(callback){
 	}
 
 	//watchErrors();
-	renderView('card_create');
+	view.render('card_create');
 });

@@ -56,7 +56,7 @@ route('/deck/browse',function() {
   			}, 800);
 	  	}
 	}
-  	renderView('deck_browse');
+  	view.render('deck_browse');
 });
 
 
@@ -69,41 +69,50 @@ route('/deck/play/:name', function(ctx){
 	var count = 0;
 
  	Template.deck_play.deck = function() {
-		var name = ctx.params.name;
 
+		var name = ctx.params.name;
+		/*
 		Meteor.deps.await(function(){
 			return Decks.findOne({name: name});
 		}, function(){
-			var deck = Decks.findOne({name: name});
+			Meteor.deps.invalidate();
+		}); */
 
-			total_cards = deck.cards.length;
+		var deck = Decks.findOne({name: name});
+		if(deck){
+			totalCards = deck.cards.length;
 
-			for(var i = 0; i < total_cards; i++) {
+			for(var i = 0; i < totalCards; i++) {
 				problems[i] = problemize(deck.cards[i].problem);
 				deck.cards[i].question = problems[i].html;
 			}
-		});
 
-	  	return Decks.findOne({name: name});
+			Meteor.defer(function(){
+	  			var answered = $('#answered');
+				var unanswered = $('#unanswered');
+
+				answered.width(answered.children().width());
+				unanswered.width(unanswered.parent().width() - answered.width() - 20);
+
+				deal($('#deck-dock'), 0);
+				playSound('shuffling-cards-5', muted);
+				featureCard(unanswered.children().eq(0), 0);
+				
+				$("#playground").slideDown(1000, function(){
+						$('#unanswered .card').eq(0).click();
+						$('#playground .solution').focus();
+				});
+
+				$('.card-container .question').each(function(){
+					MathJax.Hub.Queue(['Typeset', MathJax.Hub, $(this).get(0)]);
+				});
+			});
+		}
+
+	  	return deck;
   	}
 
   	Template.deck_play.events = {
-  		'render': function() {
-  			var answered = $('#answered');
-			var unanswered = $('#unanswered');
-
-			answered.width(answered.children().width());
-			unanswered.width(unanswered.parent().width() - answered.width() - 20);
-
-			deal($('#deck-dock'), 0);
-			playSound('shuffling-cards-5', muted);
-			featureCard(unanswered.children().eq(0), 0);
-			
-			$("#playground").slideDown(1000, function(){
-					$('#unanswered .card').eq(0).click();
-					$('#playground .solution').focus();
-			});
-  		},
   		'click #unanswered .card': function(e) {
   			playSound('tear', muted);
 	  		var el = $(e.target).closest('.card-container');
@@ -183,7 +192,7 @@ route('/deck/play/:name', function(ctx){
 
 	  		function checkResults(){
 				if(results.length == totalCards) 
-					renderView('deck_results');	
+					view.render('deck_results');	
 			}
 	  	}
   	}
@@ -211,5 +220,5 @@ route('/deck/play/:name', function(ctx){
 	}
 	
 
-	renderView('deck_play');
+	view.render('deck_play');
 });
