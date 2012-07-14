@@ -69,19 +69,22 @@ route('/deck/play/:name', function(ctx){
 	var count = 0;
 
  	Template.deck_play.deck = function() {
- 		var deck;
 		var name = ctx.params.name;
-		
-		deck = Decks.findOne({name: name});
-		totalCards = deck.cards.length;
 
-		for(var i = 0; i < totalCards; i++) {
-			var curCard = deck.cards[i];
-			problems[i] = problemize(deck.cards[i].problem);
-			curCard.question = problems[i].html;
-		}
+		Meteor.deps.await(function(){
+			return Decks.findOne({name: name});
+		}, function(){
+			var deck = Decks.findOne({name: name});
 
-	  	return deck;
+			total_cards = deck.cards.length;
+
+			for(var i = 0; i < total_cards; i++) {
+				problems[i] = problemize(deck.cards[i].problem);
+				deck.cards[i].question = problems[i].html;
+			}
+		});
+
+	  	return Decks.findOne({name: name});
   	}
 
   	Template.deck_play.events = {
