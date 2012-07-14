@@ -27,13 +27,18 @@ $.fn.extend({
 			that.css(transformPrefix, 'translate3d(' + new_offset.left + 'px, ' + new_offset.top + 'px, ' + translateZ + 'px) rotateY('+ rotateY + 'deg)');
 		}, 0);
 
-		this.get(0).addEventListener(transitionEndEvent, end, false);
+		this.get(0).addEventListener(transitionEndEvent, finish, false);
 
 		return new_el;
 
-		function end() {
+		function finish() {
     		new_el.css('visibility', 'visible');
-			stage.remove();
+    		
+    		//	Use setTimeout to  assure new_el 
+    		//	is visibile before removing animated
+    		//	element to prevent flicker in FF.
+    		////////////////////////////////////////
+			setTimeout(function(){stage.remove()},10);
 			callback(new_el);		
 		}
     }

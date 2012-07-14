@@ -22,6 +22,18 @@ $size: 150px;
 	z-index: 0;
 }
 
+#mute-button {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	height: 30px;
+	cursor: pointer;
+	text-decoration: line-through;
+	&.muted {
+		text-decoration: none;
+	}
+}
+
 #content
 {
 	padding-top: 40px;
@@ -72,7 +84,8 @@ $size: 150px;
 		@include transform-style(preserve-3d);
 		@include backface-visibility(hidden);
 		@include box-shadow(inset 1px 1px 1px transparentize(#FFF, 0.4), 0 0 7px #333);
-		background-size: $size $size;
+		@include background-size(100%);
+		background-repeat: no-repeat;
 		background-position: center;
 	}
 
@@ -186,21 +199,22 @@ $playWidth: 555px;
 			@include transform(rotateY(0deg));
 		}
 	}
-
+	h3 {
+		font-size: 50px;
+		line-height: 1.5em;
+		color: #999;
+		@include text-shadow(-1px -1px 0 #333);
+		text-align: center;
+	}
 	#play-area {
 		float: left;
 		width: 555px;
 		height: 400px;
-		h3 {
-			font-size: 50px;
-			line-height: 1.5em;
-			color: #777;
-			text-align: center;
-		}
-
 		.question {
-			font-size: 30px;
-			line-height: 1.5em;
+			color: #999;
+			@include text-shadow(-1px -1px 0 #333);
+			font-size: 60px;
+			line-height: 1.2em;
 			text-align: center;
 		}
 	}
@@ -211,12 +225,30 @@ $playWidth: 555px;
 
 #play-meta {
 	float: right;
-	width: 360px;
-	height: 400px;
+	width: 320px;
+	height: 360px;
+	padding: 20px;
 	background: #FFF;
 	@include border-radius(8px);
 	@include box-shadow(0 0 10px #333);
 }
+
+#bar {
+	float: left;
+	width: 50px;
+	height: 100%;
+	background: #CCC;
+	position: relative;
+	.fill {
+		height: 0;
+		width: 100%;
+		position: absolute;
+		bottom: 0;
+		background: #87CEEB;
+	}
+}
+
+
 
 
 #deck-dock {
@@ -262,11 +294,15 @@ $playWidth: 555px;
 
 	.front{
 		@include background-size(100%);
+		background-repeat: no-repeat;
 	}
 	.front, .back {
 		@include transition-property(transform, height, width);
 		@include transition-duration($dur);
 		@include transition-timing-function(ease-in-out);
+		.solution {
+			width: 100px;
+		}
 	}
 	.back-content
 	{
@@ -315,14 +351,61 @@ $playWidth: 555px;
 //	CARD CREATOR
 ////////////////////////////
 
+
 $cardsize:380px;
 $cardmargin:15px;
 
+.wrapper{
+	overflow:hidden;
+	position:relative;
+	margin:0 auto;
+	width:$cardsize*2 + $cardmargin*4;
+	height:$cardsize + $cardmargin*2;
+}
+
+.step-nav-bar{
+	$height:30px;
+	$width:326px;
+	width:$width * 3;
+	position:relative;
+	height:$height;
+	text-align:center;
+	@include box-shadow(0 0 10px #333);
+	@include border-radius(8px);
+	vertical-align:baseline;
+	.active{
+		background-color:#aaa;
+		color:white;
+		@include text-shadow(-1px -1px 0 #000);
+	}
+	.step-nav{
+		@include transition(all .5s ease-in-out);
+		cursor:pointer;
+		height:$height;
+		line-height:$height;
+		width:$width;
+		float:left;
+	}
+	#step-1{
+		border-radius:8px 0px 0px 8px;
+	}
+	#step-3{
+		border-radius:0px 8px 8px 0px;
+	}
+}
+
 .create{
+	@include transition(all .5s ease-in-out);
+	left:1000px;
+	position:absolute;
 	width:$cardsize*2 + $cardmargin*4;
 	height:$cardsize + $cardmargin*2;
 	margin:0 auto;
+	&.active{
+		left:0px;
+	}
 }
+
 
 .display
 {
@@ -335,12 +418,52 @@ $cardmargin:15px;
 	background: transparentize(#FFF, 0.2);
 	@include transition(all .5s ease-in-out);
 	@include border-radius(8px);
-	@include box-shadow(0 7px 25px rgba(0,0,0,0.4));
+	@include box-shadow(0 7px 10px rgba(0,0,0,0.4));
 	position: relative;
+	h2
+	{
+		font-size:25px;
+		margin-top:15px;
+		text-align:center;
+		text-decoration:underline;
+		padding: 5px;
+		background-image:url('/app!common/textures/low_contrast_linen.png');
+		color: white;
+		text-shadow: 1px 1px #AAA;
+	}
 	.display-inner
 	{
 		padding:20px;
 
+	}
+	.card-section
+	{
+		text-align:center;
+		margin:20px;
+	}
+	.choose-deck
+	{
+		@include background(linear-gradient(#ccc, #DDD));
+		cursor: pointer;
+		@include border-radius(5px);
+		// border: 8px solid #FF3366;
+		border:2px solid transparent;
+		position: relative;
+		margin: auto;
+		width: 100px;
+		color: #333;
+		padding: 5px;
+		display: block;
+		text-align: center;
+		&:hover
+		{
+			@include background(linear-gradient(#DDD, #ccc));
+		}
+		&:active
+		{
+			@include background(linear-gradient(#DDD, #ccc));
+			border:2px inset;
+		}
 	}
 }
 .deck-holder{
@@ -363,9 +486,11 @@ $cardmargin:15px;
 			@include transition(all .5s ease-in-out);
 			.front{
 				@include transition(all .5s ease-in-out);
+				background-size:100% !important;
 			}
 			.back{
 				@include transition(all .5s ease-in-out);
+				@include perspective(800);
 				height:$cardsize;
 				width:$cardsize;
 				padding:0px;
@@ -396,8 +521,14 @@ $cardmargin:15px;
 			}
 		}
 	.chosen{
-		border:2px solid yellow;
-		left:-2px;
-		top:-2px;
+		left:-3px;
+		top:-3px;
+		border:3px outset yellow;
 	}
 }
+
+#colorpicker{
+	width:195px;
+	margin: 10px auto;
+}
+

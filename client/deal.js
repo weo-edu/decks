@@ -64,12 +64,11 @@
 		var idx = 0;
 		var num_cards = container.children().length;
 		var rot = getTranslation(container, type);
-		console.log(rot);
 		if(rot.length == 0) {
 			callback();
 			return;
 		}
-					
+		
 		var dealInterval = setInterval(function(){
 			var el = container.children().eq(idx);
 			el.css(transformPrefix, 'translate3d(' + rot[idx].x + 'px,'+ rot[idx].y +'px,' + rot[idx].z +'px)');

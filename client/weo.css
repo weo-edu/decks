@@ -47,35 +47,11 @@ input {
 	height:40%;
 	width:100%;
 }
-/*.create{
-	padding:20px;
-	position: relative;
-	height: 420px;
-	width: 80%;
-	margin: 0 auto;
-}*/
+
 .card{
 	text-align:center;
 }
-.color-picker-min{
-	background-color: tomato;
-	position: relative;
-	border-radius: 8px;
-	height: 40px;
-	width: 40px;
-	float: right;
-}
-.color-choose{
-	box-shadow: 0 7px 25px rgba(0, 0, 0, 0.98);
-	z-index: 2;
-	background-color: #CCC;
-	position: fixed;
-	border-radius: 8px;
-	display: none;
-}
-#card-image{
-	background-size:100%;
-}
+
 .decks{
 	margin:15px;
 	height: 90px;
@@ -99,69 +75,17 @@ input {
 	margin: 0 auto;
 	overflow-y: auto;
 }
-#add-rule{
 
-}
-.quick-button{
-	border-radius:8px;
-	width: 50%;
-	margin: 10px auto;
-	text-align: center;
-	border: 2px outset grey;
-	padding: 5px;
-	cursor: pointer;
-}
 #card-title{
 	text-align: center;
 	font-size: 40px;
 	margin: 30px 0;
 	color: #999;
 }
-#card-preview{
-	//left:360px;
-}
-/*#deck-preview{
-	position: relative;
-	float: left;
-	width: 400px;
-	display:none;
-}*/
-/*#deck-preview #deck-grid{
-	height:400px;
-}*/
-#create-deck-container{
-	
-}
-/*.display{
-	background-color:white;
-	position:relative;
-	float: left;
-	border-radius:8px;
-	margin:15px;
-	height:350px;
-	width:350px;
-	overflow: hidden;
-	box-shadow: 0 7px 25px rgba(0, 0, 0, .5);
-	-webkit-box-shadow:0 7px 25px rgba(0, 0, 0, .5);
-	-moz-box-shadow:0 7px 25px rgba(0, 0, 0, .5);
-}*/
+
 .display-inner{
 	margin: auto;
 	width: 70%;
-}
-.error-light{
-	display:inline-block;
-	height:1em;
-	width:1em;
-	border-radius:100%;
-	background-color:green;
-}
-.error-light-red{
-	display:inline-block;
-	height:1em;
-	width:1em;
-	border-radius:100%;
-	background-color:red;
 }
 .error-message {
 	padding:2px;
@@ -171,15 +95,4 @@ input {
 	border: 2px solid black;
 	position:absolute;
 	display: none;
-}
-
-.rules-errors {
-	display: inline-block;
-}
-.rules-errors li {
-	display: block;
-	height:25px;
-}
-.rules-errors .error-message{
-	float: none;
 }

@@ -1,3 +1,7 @@
+//	Use modernizer to get proper 
+//	vendor prefixes
+////////////////////////////////////////
+
 var transitionEndEvents = {
 		'WebkitTransition' : 'webkitTransitionEnd',
 		'MozTransition'    : 'transitionend',
@@ -10,14 +14,23 @@ var transformPrefix = domToCss(Modernizr.prefixed('transform'));
 var transitionPrefix = domToCss(domTransitionProperty);
 var transitionEndEvent = transitionEndEvents[domTransitionProperty];
 
+var muted = false;
+
+$('#mute-button').live('click', function(){
+	muted = muted ? false : true;
+	$(this).toggleClass('muted');
+});
+
 route('/deck/browse',function() {
 	
 	Template.deck_browse.decks = function() {
 		var decks;
 
 		Meteor.defer(function(){
-			if(decks.count())
+			if(decks.count()) {
 				deal($('#deck-grid'), 600);
+				playSound('shuffling-cards-3', muted);
+			}
 		});
 
 	  decks = Decks.find({});
@@ -25,13 +38,14 @@ route('/deck/browse',function() {
 	};
 
 	Template.deck_browse.events = {
-
 	 	'click .deck': function(e) {
 		  	var el = $(e.target).closest('.deck-container');
 		  	$('.deck-container').not(el).removeClass('view-more');
 		  	el.toggleClass('view-more');
+		  	playSound('click', muted);
 	  	},
 	  	'click .play': function(e) {
+	  		playSound('switch', muted);
 	  		e.stopPropagation();
 	  		var el = $(e.target).closest('.deck-container');
 	  		el.addClass('close').css(transformPrefix, 'translate3d(0, 0, 0)').find('.front').css(transformPrefix, 'rotateY(0)').end().find('.back').css(transformPrefix, 'rotateY(180deg)');
@@ -48,17 +62,14 @@ route('/deck/browse',function() {
 
 route('/deck/play/:name', function(ctx){
 
- 	var total_cards;
+ 	var totalCards;
 	var working_card = 0;
 	var problems = [];
 	var results = [];
 	var count = 0;
 
  	Template.deck_play.deck = function() {
- 		var deck;
 		var name = ctx.params.name;
-		
-		deck = Decks.findOne({name: name});
 
 		Meteor.deps.await(function(){
 			return Decks.findOne({name: name});
@@ -68,13 +79,12 @@ route('/deck/play/:name', function(ctx){
 			total_cards = deck.cards.length;
 
 			for(var i = 0; i < total_cards; i++) {
-				var curCard = deck.cards[i];
 				problems[i] = problemize(deck.cards[i].problem);
-				curCard.question = problems[i].html;
+				deck.cards[i].question = problems[i].html;
 			}
 		});
 
-	  	return deck;
+	  	return Decks.findOne({name: name});
   	}
 
   	Template.deck_play.events = {
@@ -86,6 +96,7 @@ route('/deck/play/:name', function(ctx){
 			unanswered.width(unanswered.parent().width() - answered.width() - 20);
 
 			deal($('#deck-dock'), 0);
+			playSound('shuffling-cards-5', muted);
 			featureCard(unanswered.children().eq(0), 0);
 			
 			$("#playground").slideDown(1000, function(){
@@ -94,6 +105,7 @@ route('/deck/play/:name', function(ctx){
 			});
   		},
   		'click #unanswered .card': function(e) {
+  			playSound('click', muted);
 	  		var el = $(e.target).closest('.card-container');
 	  		working_card = (el.attr('data') - 1);
 	  		MathJax.Hub.Queue(["Typeset", MathJax.Hub, el.find('.question').get(0)]);
@@ -129,7 +141,6 @@ route('/deck/play/:name', function(ctx){
 
 	  			return skipCoords;
 	  		}
-
 	  	},
 	  	'mouseenter #unanswered .card-container': function(e) {
 	  		var el = $(e.currentTarget);
@@ -142,24 +153,26 @@ route('/deck/play/:name', function(ctx){
 	  		if(e.which === 13)
 	  		{
 	  			el = $('#playground .card-container');
-	  			el.animateInsert('prepend', $('#answered')).removeClass('current');
+	  			el.animateInsert('prepend', $('#answered'), checkResults).removeClass('current');
 	  			el.removeClass('current');
 
 	  			var result = parseInt(e.target.value, 10) === parseInt(problems[working_card].solution, 10);	
 	  			results.push(result);
+	  			if(!result) {
+	  				$('#bar, #bar .fill').stop(true, false).effect('highlight', {color: '#E54429'});
+	  				playSound('wrong', muted);
+	  			}
+	  			else {
+	  				playSound('right', muted);
+	  			}
 	  			problems[working_card].answered = 1;
 
   				$('#unanswered .card').eq(0).click();
 	  			$('#playground .solution').focus();
 	  			deal($('#answered'), 100, 'collapse');
 
-		  		if(results.length == total_cards) {
-		  				for(var i = 0; i < results.length;  i++) {
-		  					if(results[i] == true)
-		  						count++;
-		  				}
-	  					renderView('deck_results');	
-		  		}
+  				count = updateMeta();
+
 	  		}
 	  		else if(e.which === 37)
 	  			$('#unanswered .card-container:last-child .card').click();
@@ -167,6 +180,11 @@ route('/deck/play/:name', function(ctx){
 	  			$('#unanswered .card-container .card').eq(0).click();
 
 	  		$('#playground .solution').focus();	
+
+	  		function checkResults(){
+				if(results.length == totalCards) 
+					renderView('deck_results');	
+			}
 	  	}
   	}
 
@@ -175,8 +193,23 @@ route('/deck/play/:name', function(ctx){
 	}
 
   	Template.deck_results.total = function(){ 
-	  return total_cards;
+	  return totalCards;
 	};
+
+	function updateMeta() {
+		var thisCount = 0;
+		  		
+		for(var i = 0; i < results.length;  i++) {
+			if(results[i] == true)
+				thisCount++;
+		}
+
+		if(thisCount != 0)
+			$('#bar .fill').animate({'height': (thisCount / totalCards * 100)  + '%' }, 600, 'easeOutBounce');
+
+		return thisCount;
+	}
 	
+
 	renderView('deck_play');
 });
