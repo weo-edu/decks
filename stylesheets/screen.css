@@ -352,27 +352,30 @@ a {
   -o-transform: rotateY(0deg);
   transform: rotateY(0deg);
 }
-/* line 191, ../sass/screen.scss */
+/* line 190, ../sass/screen.scss */
+#playground h3 {
+  font-size: 50px;
+  line-height: 1.5em;
+  color: #999;
+  text-shadow: -1px -1px 0 #333333;
+  text-align: center;
+}
+/* line 197, ../sass/screen.scss */
 #playground #play-area {
   float: left;
   width: 555px;
   height: 400px;
 }
-/* line 195, ../sass/screen.scss */
-#playground #play-area h3 {
-  font-size: 50px;
-  line-height: 1.5em;
-  color: #777;
-  text-align: center;
-}
-/* line 202, ../sass/screen.scss */
+/* line 201, ../sass/screen.scss */
 #playground #play-area .question {
-  font-size: 30px;
-  line-height: 1.5em;
+  color: #999;
+  text-shadow: -1px -1px 0 #333333;
+  font-size: 60px;
+  line-height: 1.2em;
   text-align: center;
 }
 
-/* line 213, ../sass/screen.scss */
+/* line 214, ../sass/screen.scss */
 #play-meta {
   float: right;
   width: 320px;
@@ -389,7 +392,7 @@ a {
   box-shadow: 0 0 10px #333333;
 }
 
-/* line 223, ../sass/screen.scss */
+/* line 224, ../sass/screen.scss */
 #bar {
   float: left;
   width: 50px;
@@ -397,7 +400,7 @@ a {
   background: #CCC;
   position: relative;
 }
-/* line 229, ../sass/screen.scss */
+/* line 230, ../sass/screen.scss */
 #bar .fill {
   height: 0;
   width: 100%;
@@ -406,14 +409,14 @@ a {
   background: #87CEEB;
 }
 
-/* line 241, ../sass/screen.scss */
+/* line 242, ../sass/screen.scss */
 #deck-dock {
   margin-top: 20px;
   height: 150px;
   width: 100%;
   position: relative;
 }
-/* line 247, ../sass/screen.scss */
+/* line 248, ../sass/screen.scss */
 #deck-dock > div {
   -webkit-perspective: 1000px;
   -moz-perspective: 1000px;
@@ -434,7 +437,7 @@ a {
   transition: transform 0.3s ease-in-out;
   z-index: 1;
 }
-/* line 255, ../sass/screen.scss */
+/* line 256, ../sass/screen.scss */
 #deck-dock > div > div {
   position: absolute;
   cursor: pointer;
@@ -445,16 +448,16 @@ a {
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
-/* line 267, ../sass/screen.scss */
+/* line 268, ../sass/screen.scss */
 #deck-dock #answered {
   z-index: 999 !important;
 }
-/* line 269, ../sass/screen.scss */
+/* line 270, ../sass/screen.scss */
 #deck-dock #answered .deck-container {
   z-index: 999;
 }
 
-/* line 275, ../sass/screen.scss */
+/* line 276, ../sass/screen.scss */
 .card-container {
   -webkit-transition-property: -webkit-transform, height, width;
   -moz-transition-property: -moz-transform, height, width;
@@ -469,7 +472,7 @@ a {
   -o-transition-timing-function: ease-in-out;
   transition-timing-function: ease-in-out;
 }
-/* line 282, ../sass/screen.scss */
+/* line 283, ../sass/screen.scss */
 .card-container .front {
   -webkit-background-size: 100%;
   -moz-background-size: 100%;
@@ -477,7 +480,7 @@ a {
   background-size: 100%;
   background-repeat: no-repeat;
 }
-/* line 286, ../sass/screen.scss */
+/* line 287, ../sass/screen.scss */
 .card-container .front, .card-container .back {
   -webkit-transition-property: -webkit-transform, height, width;
   -moz-transition-property: -moz-transform, height, width;
@@ -492,15 +495,15 @@ a {
   -o-transition-timing-function: ease-in-out;
   transition-timing-function: ease-in-out;
 }
-/* line 290, ../sass/screen.scss */
+/* line 291, ../sass/screen.scss */
 .card-container .front .solution, .card-container .back .solution {
   width: 100px;
 }
-/* line 295, ../sass/screen.scss */
+/* line 296, ../sass/screen.scss */
 .card-container .back-content {
   display: none;
 }
-/* line 303, ../sass/screen.scss */
+/* line 304, ../sass/screen.scss */
 .card-container.current .front {
   -webkit-transform: rotateY(-180deg);
   -moz-transform: rotateY(-180deg);
@@ -508,7 +511,7 @@ a {
   -o-transform: rotateY(-180deg);
   transform: rotateY(-180deg);
 }
-/* line 308, ../sass/screen.scss */
+/* line 309, ../sass/screen.scss */
 .card-container.current .back {
   z-index: 99;
   -webkit-transform: rotateY(0deg);
@@ -517,16 +520,16 @@ a {
   -o-transform: rotateY(0deg);
   transform: rotateY(0deg);
 }
-/* line 327, ../sass/screen.scss */
+/* line 328, ../sass/screen.scss */
 .card-container.wrong {
   background: #FF3366;
 }
-/* line 331, ../sass/screen.scss */
+/* line 332, ../sass/screen.scss */
 .card-container.correct {
   background: #A2E67E;
 }
 
-/* line 345, ../sass/screen.scss */
+/* line 346, ../sass/screen.scss */
 .wrapper {
   overflow: hidden;
   position: relative;
@@ -535,7 +538,7 @@ a {
   height: 410px;
 }
 
-/* line 353, ../sass/screen.scss */
+/* line 354, ../sass/screen.scss */
 .step-nav-bar {
   width: 978px;
   position: relative;
@@ -551,13 +554,13 @@ a {
   border-radius: 8px;
   vertical-align: baseline;
 }
-/* line 363, ../sass/screen.scss */
+/* line 364, ../sass/screen.scss */
 .step-nav-bar .active {
   background-color: #aaa;
   color: white;
   text-shadow: -1px -1px 0 black;
 }
-/* line 368, ../sass/screen.scss */
+/* line 369, ../sass/screen.scss */
 .step-nav-bar .step-nav {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
@@ -569,16 +572,16 @@ a {
   width: 326px;
   float: left;
 }
-/* line 376, ../sass/screen.scss */
+/* line 377, ../sass/screen.scss */
 .step-nav-bar #step-1 {
   border-radius: 8px 0px 0px 8px;
 }
-/* line 379, ../sass/screen.scss */
+/* line 380, ../sass/screen.scss */
 .step-nav-bar #step-3 {
   border-radius: 0px 8px 8px 0px;
 }
 
-/* line 384, ../sass/screen.scss */
+/* line 385, ../sass/screen.scss */
 .create {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
@@ -590,12 +593,12 @@ a {
   height: 410px;
   margin: 0 auto;
 }
-/* line 391, ../sass/screen.scss */
+/* line 392, ../sass/screen.scss */
 .create.active {
   left: 0px;
 }
 
-/* line 398, ../sass/screen.scss */
+/* line 399, ../sass/screen.scss */
 .display {
   width: 380px;
   height: 380px;
@@ -618,7 +621,7 @@ a {
   box-shadow: 0 7px 10px rgba(0, 0, 0, 0.4);
   position: relative;
 }
-/* line 411, ../sass/screen.scss */
+/* line 412, ../sass/screen.scss */
 .display h2 {
   font-size: 25px;
   margin-top: 15px;
@@ -629,16 +632,16 @@ a {
   color: white;
   text-shadow: 1px 1px #AAA;
 }
-/* line 422, ../sass/screen.scss */
+/* line 423, ../sass/screen.scss */
 .display .display-inner {
   padding: 20px;
 }
-/* line 427, ../sass/screen.scss */
+/* line 428, ../sass/screen.scss */
 .display .card-section {
   text-align: center;
   margin: 20px;
 }
-/* line 432, ../sass/screen.scss */
+/* line 433, ../sass/screen.scss */
 .display .choose-deck {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #cccccc), color-stop(100%, #dddddd));
   background: -webkit-linear-gradient(#cccccc, #dddddd);
@@ -660,7 +663,7 @@ a {
   display: block;
   text-align: center;
 }
-/* line 446, ../sass/screen.scss */
+/* line 447, ../sass/screen.scss */
 .display .choose-deck:hover {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #cccccc));
   background: -webkit-linear-gradient(#dddddd, #cccccc);
@@ -668,7 +671,7 @@ a {
   background: -o-linear-gradient(#dddddd, #cccccc);
   background: linear-gradient(#dddddd, #cccccc);
 }
-/* line 450, ../sass/screen.scss */
+/* line 451, ../sass/screen.scss */
 .display .choose-deck:active {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #cccccc));
   background: -webkit-linear-gradient(#dddddd, #cccccc);
@@ -678,7 +681,7 @@ a {
   border: 2px inset;
 }
 
-/* line 456, ../sass/screen.scss */
+/* line 457, ../sass/screen.scss */
 .deck-holder {
   background: none;
   left: 0px;
@@ -686,7 +689,7 @@ a {
   overflow: visible;
 }
 
-/* line 462, ../sass/screen.scss */
+/* line 463, ../sass/screen.scss */
 .deck-preview {
   width: 100%;
   -webkit-transform-style: preserve-3d;
@@ -700,7 +703,7 @@ a {
   -o-perspective: 800px;
   perspective: 800px;
 }
-/* line 467, ../sass/screen.scss */
+/* line 468, ../sass/screen.scss */
 .deck-preview .deck-container {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
@@ -710,14 +713,14 @@ a {
   width: 90px;
   height: 90px;
 }
-/* line 472, ../sass/screen.scss */
+/* line 473, ../sass/screen.scss */
 .deck-preview .deck-container .deck {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
   -o-transition: all 0.5s ease-in-out;
   transition: all 0.5s ease-in-out;
 }
-/* line 474, ../sass/screen.scss */
+/* line 475, ../sass/screen.scss */
 .deck-preview .deck-container .deck .front {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
@@ -725,7 +728,7 @@ a {
   transition: all 0.5s ease-in-out;
   background-size: 100% !important;
 }
-/* line 478, ../sass/screen.scss */
+/* line 479, ../sass/screen.scss */
 .deck-preview .deck-container .deck .back {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
@@ -740,14 +743,14 @@ a {
   width: 380px;
   padding: 0px;
 }
-/* line 487, ../sass/screen.scss */
+/* line 488, ../sass/screen.scss */
 .deck-preview .selected {
   top: 0px;
   left: 0px;
   height: 380px;
   width: 380px;
 }
-/* line 493, ../sass/screen.scss */
+/* line 494, ../sass/screen.scss */
 .deck-preview .choose-deck {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #dddddd));
   background: -webkit-linear-gradient(#ffffff, #dddddd);
@@ -768,7 +771,7 @@ a {
   display: block;
   text-align: center;
 }
-/* line 506, ../sass/screen.scss */
+/* line 507, ../sass/screen.scss */
 .deck-preview .choose-deck:hover {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #ffffff));
   background: -webkit-linear-gradient(#dddddd, #ffffff);
@@ -776,14 +779,14 @@ a {
   background: -o-linear-gradient(#dddddd, #ffffff);
   background: linear-gradient(#dddddd, #ffffff);
 }
-/* line 510, ../sass/screen.scss */
+/* line 511, ../sass/screen.scss */
 .deck-preview .chosen {
   left: -3px;
   top: -3px;
   border: 3px outset yellow;
 }
 
-/* line 517, ../sass/screen.scss */
+/* line 518, ../sass/screen.scss */
 #colorpicker {
   width: 195px;
   margin: 10px auto;

@@ -1,3 +1,7 @@
+//	Use modernizer to get proper 
+//	vendor prefixes
+////////////////////////////////////////
+
 var transitionEndEvents = {
 		'WebkitTransition' : 'webkitTransitionEnd',
 		'MozTransition'    : 'transitionend',
@@ -10,14 +14,30 @@ var transformPrefix = domToCss(Modernizr.prefixed('transform'));
 var transitionPrefix = domToCss(domTransitionProperty);
 var transitionEndEvent = transitionEndEvents[domTransitionProperty];
 
+
+//  Initialize Sounds
+////////////////////////////////////////
+
+var a = document.createElement('audio');
+var ext = !!(a.canPlayType && a.canPlayType('audio/mpeg;')) ? '.mp3' : '.ogg';
+
+var click = new Audio("/app!common/sounds/click" + ext);
+var shortShuffle = new Audio("/app!common/sounds/shuffling-cards-5.wav");
+var longShuffle = new Audio("/app!common/sounds/shuffling-cards-3.wav");
+var wrong = new Audio("/app!common/sounds/wrong" + ext);
+var right = new Audio("/app!common/sounds/right" + ext);
+var playSound = new Audio("/app!common/sounds/switch" + ext);
+
 route('/deck/browse',function() {
 	
 	Template.deck_browse.decks = function() {
 		var decks;
 
 		Meteor.defer(function(){
-			if(decks.count())
+			if(decks.count()) {
 				deal($('#deck-grid'), 600);
+				longShuffle.play();
+			}
 		});
 
 	  decks = Decks.find({});
@@ -25,13 +45,14 @@ route('/deck/browse',function() {
 	};
 
 	Template.deck_browse.events = {
-
 	 	'click .deck': function(e) {
 		  	var el = $(e.target).closest('.deck-container');
 		  	$('.deck-container').not(el).removeClass('view-more');
 		  	el.toggleClass('view-more');
+		  	click.play();
 	  	},
 	  	'click .play': function(e) {
+	  		playSound.play();
 	  		e.stopPropagation();
 	  		var el = $(e.target).closest('.deck-container');
 	  		el.addClass('close').css(transformPrefix, 'translate3d(0, 0, 0)').find('.front').css(transformPrefix, 'rotateY(0)').end().find('.back').css(transformPrefix, 'rotateY(180deg)');
@@ -79,6 +100,7 @@ route('/deck/play/:name', function(ctx){
 			unanswered.width(unanswered.parent().width() - answered.width() - 20);
 
 			deal($('#deck-dock'), 0);
+			shortShuffle.play();
 			featureCard(unanswered.children().eq(0), 0);
 			
 			$("#playground").slideDown(1000, function(){
@@ -87,6 +109,7 @@ route('/deck/play/:name', function(ctx){
 			});
   		},
   		'click #unanswered .card': function(e) {
+  			click.play();
 	  		var el = $(e.target).closest('.card-container');
 	  		working_card = (el.attr('data') - 1);
 	  		MathJax.Hub.Queue(["Typeset", MathJax.Hub, el.find('.question').get(0)]);
@@ -122,7 +145,6 @@ route('/deck/play/:name', function(ctx){
 
 	  			return skipCoords;
 	  		}
-
 	  	},
 	  	'mouseenter #unanswered .card-container': function(e) {
 	  		var el = $(e.currentTarget);
@@ -135,13 +157,18 @@ route('/deck/play/:name', function(ctx){
 	  		if(e.which === 13)
 	  		{
 	  			el = $('#playground .card-container');
-	  			el.animateInsert('prepend', $('#answered')).removeClass('current');
+	  			el.animateInsert('prepend', $('#answered'), checkResults).removeClass('current');
 	  			el.removeClass('current');
 
 	  			var result = parseInt(e.target.value, 10) === parseInt(problems[working_card].solution, 10);	
 	  			results.push(result);
-	  			if(!result)
-	  				$('#bar, #bar .fill').effect('highlight', {color: '#E54429'});
+	  			if(!result) {
+	  				$('#bar, #bar .fill').stop(true, false).effect('highlight', {color: '#E54429'});
+	  				wrong.play();
+	  			}
+	  			else {
+	  				right.play();
+	  			}
 	  			problems[working_card].answered = 1;
 
   				$('#unanswered .card').eq(0).click();
@@ -150,9 +177,6 @@ route('/deck/play/:name', function(ctx){
 
   				count = updateMeta();
 
-  				if(results.length == totalCards) {
-  					renderView('deck_results');	
-		  		}
 	  		}
 	  		else if(e.which === 37)
 	  			$('#unanswered .card-container:last-child .card').click();
@@ -160,6 +184,11 @@ route('/deck/play/:name', function(ctx){
 	  			$('#unanswered .card-container .card').eq(0).click();
 
 	  		$('#playground .solution').focus();	
+
+	  		function checkResults(){
+				if(results.length == totalCards) 
+					renderView('deck_results');	
+			}
 	  	}
   	}
 
@@ -185,5 +214,6 @@ route('/deck/play/:name', function(ctx){
 		return thisCount;
 	}
 	
+
 	renderView('deck_play');
 });

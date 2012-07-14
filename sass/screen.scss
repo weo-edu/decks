@@ -187,21 +187,22 @@ $playWidth: 555px;
 			@include transform(rotateY(0deg));
 		}
 	}
-
+	h3 {
+		font-size: 50px;
+		line-height: 1.5em;
+		color: #999;
+		@include text-shadow(-1px -1px 0 #333);
+		text-align: center;
+	}
 	#play-area {
 		float: left;
 		width: 555px;
 		height: 400px;
-		h3 {
-			font-size: 50px;
-			line-height: 1.5em;
-			color: #777;
-			text-align: center;
-		}
-
 		.question {
-			font-size: 30px;
-			line-height: 1.5em;
+			color: #999;
+			@include text-shadow(-1px -1px 0 #333);
+			font-size: 60px;
+			line-height: 1.2em;
 			text-align: center;
 		}
 	}
