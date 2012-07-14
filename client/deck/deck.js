@@ -67,7 +67,7 @@ route('/deck/play/:name', function(ctx){
 	var problems = [];
 	var results = [];
 	var count = 0;
-	var deck = Decks.findOne({name: name});
+	var deck;
 
  	Template.deck_play.deck = function() {
  		if(!deck){
