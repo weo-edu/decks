@@ -48,23 +48,23 @@
 </template>	
 
 <template name="card_preview">
-	<div class="display color-update">
-		<div>
-			{{>card_play}}
-			<!-- <div  class="choose-deck create-button">Create</div> -->
-		</div>
-	</div>
+	<section id="flippable" class="display">
+		<article id="box" class="color-update display">
+				{{>card_play}}
+				<!-- <div  class="choose-deck create-button">Create</div> -->
+		</article>
+	</section>
 </template>
 
 <template name="color_picker">
 	<div class="display color-picker">
-		<h2>Design Your Card</h2>
+		<h2 >Design Your Card</h2>
 		<div class="card-section">
 			<h3>Graphic: </h3>
 			<input type="file" id="file" name="file" tabindex="-1" multiple />
 		</div>
 		<div class="card-section">
-			<h3>Background Color:</h3>
+			<h3 class="to-change">Background Color:</h3>
 			<form><input type="hidden" id="color" name="color" value="#123456" /></form>
 			<div id="colorpicker"></div>
 		</div>
@@ -152,19 +152,29 @@
 
 
 <template name="card_play">
-	{{#with card}}
-	<h2>{{name}}</h2>
-	<div class="display-inner">
-		<div class="card">
-			{{#if graphic}}
-				<img src='{{graphic}}' />
-			{{/if}}
-			<div class='question'>
-				{{question}}
+	<section class="front">
+		<div class="selectable">
+			{{#with card}}
+			<h2 class="secondary-color">{{name}}</h2>
+			<div class="display-inner">
+				<div class="card">
+					{{#if graphic}}
+						<img src='{{graphic}}' />
+					{{/if}}
+					<div class='question'>
+						{{question}}
+					</div>
+					<p>Solution:</p>
+					<div for='answer'>{{answer}}</div>
+				</div>
 			</div>
-			<p>Solution:</p>
-			<div for='answer'>{{answer}}</div>
+			{{/with}}
 		</div>
-	</div>
-	{{/with}}
+	</section>
+	<section class="back" style="background-color:red">
+	</section>
+	<section class="top"></section>
+	<section class="bottom"></section>
+	<section class="left"></section>
+	<section class="right"></section>
 </template>

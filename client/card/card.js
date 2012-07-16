@@ -35,6 +35,7 @@ function focusOn(el)
 			session.set('msg', 'Create Card');
 			break;
 		case 'step-3':
+			deal($('.deck-preview'),400, 'grid');
 			session.set('msg', 'Insert in Decks');
 			break;
 		default:
@@ -53,6 +54,15 @@ function deckInsert(callback){
 		});
 		console.log(Decks.findOne({_id:el.id}))
 	});
+}
+
+function colorSelect(el)
+{
+ 	$.farbtastic('#colorpicker').linkTo(el);
+ 	if (el == ".secondary-color")
+ 		$('.to-change').text('Banner Color:')
+ 	else
+ 		$('.to-change').text('Background Color:');
 }
 
 	var watchErrors = function(){
@@ -207,6 +217,15 @@ function deckInsert(callback){
 		}
 	}
 
+	Template.card_play.events = {
+		'click' : function(event) {
+			var el = '.'+$(event.target).attr('class');
+			if(el != '.secondary-color')
+				el = '.color-update';
+			colorSelect(el);
+		}
+	}
+
 	Template.card_play.card = function(){
 		var c = card.all();
 		var prob = problem.all();
@@ -246,6 +265,9 @@ function deckInsert(callback){
 	}
 	Template.deck_preview.deck = function(){
 		Meteor.defer(function() {
+			mytrackball = new Traqball({
+				stage: 'flippable'
+			});
 			$('#colorpicker').farbtastic('.color-update');
 			console.log('file', $('#file'));
 			$('#file').fileupload({
