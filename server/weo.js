@@ -685,5 +685,10 @@ Meteor.startup(function() {
 	]
 	_.each(decks,function(deck) {
 		//Decks.insert(deck);
-	})
+	});
+
+	Meteor.publish('Decks', function(){
+		var decks = Decks.find({});
+		return decks;
+	});
 });
