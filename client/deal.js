@@ -68,7 +68,7 @@
 			callback();
 			return;
 		}
-					
+		
 		var dealInterval = setInterval(function(){
 			var el = container.children().eq(idx);
 			el.css(transformPrefix, 'translate3d(' + rot[idx].x + 'px,'+ rot[idx].y +'px,' + rot[idx].z +'px)');

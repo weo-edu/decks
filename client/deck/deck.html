@@ -33,9 +33,9 @@
 		</div>
 	</div>
 	<div id='deck-dock'>
-
-		<div id='answered'> 
-			{{#with deck}}
+		{{#if deck}}
+		{{#with deck}}
+		<div id='answered'>
 			<div class='deck-container'>
 				<div class="deck">
 						<div class='front' style='background-image: url(/{{graphic}});'>
@@ -46,14 +46,15 @@
 						</div>
 				</div>
 			</div>
-			{{/with}}
 		</div>
 
 		<div id='unanswered'>
-			{{#iter deck.cards}}
+			{{#iter cards}}
 				{{> deck_card}}
 			{{/iter}}
 		</div>
+		{{/with}}
+		{{/if}}
 	</div>
 </template>
 
