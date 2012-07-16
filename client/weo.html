@@ -7,9 +7,18 @@
 </head>
 
 <body>
+	<div id='greeting'>{{> greeting}}</div>
 	<div id='mute-button'>MUTE</div>
 	<div id='content'>
 		
 	</div>
 </body>
 
+
+<template name='greeting'>
+	{{#if currentUser}}
+		Hi, {{currentUser.username}}
+	{{else}}
+		Hi, guest
+	{{/if}}
+</template>
