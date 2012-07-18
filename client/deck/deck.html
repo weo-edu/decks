@@ -1,9 +1,17 @@
 <template name="deck_browse">
+	{{#if currentUser}}
+	{{#if currentUser.decks}}
+	<div id='my-decks'>
+		{{#iter mydecks}}
+			{{> deck_view}}
+		{{/iter}}
+	</div>
+	{{/if}}
+	{{/if}}
 	<div id='deck-grid'>
 		{{#iter decks}}
 			{{> deck_view}}
 		{{/iter}}
-		
 	</div>
 	<!-- <h2 id='decks-title'>Decks To Play</h2> -->
 </template>

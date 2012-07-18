@@ -22,7 +22,10 @@ $('#mute-button').live('click', function(){
 });
 
 route('/deck/browse',function() {
-	
+	Template.deck_browse.mydecks = function(){
+		return Decks.find({_id: {$in: Meteor.user().decks}});
+	};
+
 	Template.deck_browse.decks = function() {
 		var decks;
 
@@ -80,7 +83,7 @@ route('/deck/play/:name', function(ctx){
 					problems[i] = problemize(deck.cards[i].problem);
 					deck.cards[i].question = problems[i].html;
 				}
-
+				console.log('test', Meteor.deps.Context.current);
 				Meteor.defer(function(){
 		  			var answered = $('#answered');
 					var unanswered = $('#unanswered');
