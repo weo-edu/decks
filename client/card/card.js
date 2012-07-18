@@ -4,7 +4,9 @@ route('/card/create', function() {
 	var card = new _Session({
 		name:'Name',
 		graphic: null,
-		problem:{}
+		problem:{},
+		'main-color':'#ccc',
+		'sec-color':'#333'
 	});
 	var problem = new _Session({
 		template: 'Template',
@@ -118,17 +120,6 @@ function colorSelect(el)
 				}
 			}
 		},
-		'click .create-button' : function(event){
-			var el = $(event.target);
-			var c = card.all()
-			session.set('submit','true');
-			el.text('Insert');
-			el.removeClass('create-button');
-			Cards.insert(c, function(){
-				console.log(Cards.findOne(c));
-			});
-			animateCreator();
-		},
 		'mouseover .error' : function(event){
 			var el = $(event.target);
 			var id = $(event.target).attr('id');
@@ -205,6 +196,11 @@ function colorSelect(el)
 					focusOn($('#step-2'));
 					break;
 				case 'Create Card':
+					var col1, col2;
+					col1 = $('#color-update').val();
+					col2 = $('#secondary-color').val()
+					card.set('main-color', col1);
+					card.set('sec-color', col2);
 					Cards.insert(card.all());
 					focusOn($('#step-3'));
 					break;
@@ -265,9 +261,9 @@ function colorSelect(el)
 	}
 	Template.deck_preview.deck = function(){
 		Meteor.defer(function() {
-			mytrackball = new Traqball({
-				stage: 'flippable'
-			});
+			// mytrackball = new Traqball({
+			// 	stage: 'flippable'
+			// });
 			$('#colorpicker').farbtastic('.color-update');
 			console.log('file', $('#file'));
 			$('#file').fileupload({

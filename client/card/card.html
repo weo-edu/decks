@@ -50,8 +50,7 @@
 <template name="card_preview">
 	<section id="flippable" class="display">
 		<article id="box" class="color-update display">
-				{{>card_play}}
-				<!-- <div  class="choose-deck create-button">Create</div> -->
+			{{>card_play}}
 		</article>
 	</section>
 </template>
@@ -65,7 +64,8 @@
 		</div>
 		<div class="card-section">
 			<h3 class="to-change">Background Color:</h3>
-			<form><input type="hidden" id="color" name="color" value="#123456" /></form>
+			<input type="hidden" id="color-update" class="color-update" name="color-update" value="#123456" />
+			<input type="hidden" id="secondary-color"class="secondary-color" name="secondary-color" value="#123456"/>
 			<div id="colorpicker"></div>
 		</div>
 	</div>
@@ -152,29 +152,29 @@
 
 
 <template name="card_play">
-	<section class="front">
-		<div class="selectable">
-			{{#with card}}
-			<h2 class="secondary-color">{{name}}</h2>
-			<div class="display-inner">
-				<div class="card">
-					{{#if graphic}}
-						<img src='{{graphic}}' />
-					{{/if}}
-					<div class='question'>
-						{{question}}
+	{{#with card}}
+		<section id="front" class="side large-side color-update" style="background-color:{{main-color}}">
+			<div class="selectable">
+				<h2 class="secondary-color" style="background-color:{{sec-color}}">{{name}}</h2>
+					<div class="display-inner">
+					<div class="card">
+						{{#if graphic}}
+							<img src='{{graphic}}' />
+						{{/if}}
+						<div class='question'>
+							{{question}}
+						</div>
+						<p>Solution:</p>
+						<div for='answer'>{{answer}}</div>
 					</div>
-					<p>Solution:</p>
-					<div for='answer'>{{answer}}</div>
 				</div>
 			</div>
-			{{/with}}
-		</div>
+		</section>
+	{{/with}}
+	<section id="back" class="side large-side color-update">
 	</section>
-	<section class="back" style="background-color:red">
-	</section>
-	<section class="top"></section>
-	<section class="bottom"></section>
-	<section class="left"></section>
-	<section class="right"></section>
+	<section id="top" class="side top-side color-update"></section>
+	<section id="bottom" class="side top-side color-update"></section>
+	<section id="left" class="side side-side color-update"></section>
+	<section id="right" class="side side-side color-update"></section>
 </template>

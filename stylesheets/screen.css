@@ -487,6 +487,113 @@ a {
   background: #A2E67E;
 }
 
+.ipad {
+  width: 1024px;
+  height: 672px;
+  background-color: #ccc;
+}
+.ipad section#viewport {
+  margin: 0 auto;
+  width: 166.667px;
+  height: 250px;
+  -webkit-perspective: 700px;
+  -moz-perspective: 700px;
+  -ms-perspective: 700px;
+  -o-perspective: 700px;
+  perspective: 700px;
+  -webkit-perspective-origin: 50% 50%;
+  -moz-perspective-origin: 50% 50%;
+  -ms-perspective-origin: 50% 50%;
+  -o-perspective-origin: 50% 50%;
+  perspective-origin: 50% 50%;
+}
+.ipad article#box {
+  width: 166.667px;
+  height: 250px;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  position: absolute;
+}
+.ipad #box section {
+  cursor: move;
+  -webkit-transform-style: flat;
+  -moz-transform-style: flat;
+  -ms-transform-style: flat;
+  -o-transform-style: flat;
+  transform-style: flat;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+  backface-visibility: hidden;
+  position: absolute;
+  background-color: grey;
+  outline: 1px solid #555;
+  -webkit-box-shadow: inset 0px 0px 10px #333333;
+  -moz-box-shadow: inset 0px 0px 10px #333333;
+  box-shadow: inset 0px 0px 10px #333333;
+}
+.ipad #front, .ipad #back {
+  width: 166.667px;
+  height: 250px;
+  -webkit-transform: translate3d(0px, 0px, 27.778px);
+  -moz-transform: translate3d(0px, 0px, 27.778px);
+  -ms-transform: translate3d(0px, 0px, 27.778px);
+  -o-transform: translate3d(0px, 0px, 27.778px);
+  transform: translate3d(0px, 0px, 27.778px);
+}
+.ipad #back {
+  -webkit-transform: rotateY(180deg) translate3d(0px, 0px, 27.778px);
+  -moz-transform: rotateY(180deg) translate3d(0px, 0px, 27.778px);
+  -ms-transform: rotateY(180deg) translate3d(0px, 0px, 27.778px);
+  -o-transform: rotateY(180deg) translate3d(0px, 0px, 27.778px);
+  transform: rotateY(180deg) translate3d(0px, 0px, 27.778px);
+}
+.ipad #top, .ipad #bottom {
+  width: 166.667px;
+  height: 55.556px;
+  -webkit-transform: rotateX(90deg) translate3d(0px, 0px, 27.778px);
+  -moz-transform: rotateX(90deg) translate3d(0px, 0px, 27.778px);
+  -ms-transform: rotateX(90deg) translate3d(0px, 0px, 27.778px);
+  -o-transform: rotateX(90deg) translate3d(0px, 0px, 27.778px);
+  transform: rotateX(90deg) translate3d(0px, 0px, 27.778px);
+}
+.ipad #bottom {
+  -webkit-transform: rotateX(-90deg) translate3d(0px, 0px, 222.222px);
+  -moz-transform: rotateX(-90deg) translate3d(0px, 0px, 222.222px);
+  -ms-transform: rotateX(-90deg) translate3d(0px, 0px, 222.222px);
+  -o-transform: rotateX(-90deg) translate3d(0px, 0px, 222.222px);
+  transform: rotateX(-90deg) translate3d(0px, 0px, 222.222px);
+}
+.ipad #left, .ipad #right {
+  width: 55.556px;
+  height: 250px;
+  -webkit-transform: rotateY(-90deg) translate3d(0px, 0px, 27.778px);
+  -moz-transform: rotateY(-90deg) translate3d(0px, 0px, 27.778px);
+  -ms-transform: rotateY(-90deg) translate3d(0px, 0px, 27.778px);
+  -o-transform: rotateY(-90deg) translate3d(0px, 0px, 27.778px);
+  transform: rotateY(-90deg) translate3d(0px, 0px, 27.778px);
+}
+.ipad #right {
+  -webkit-transform: rotateY(90deg) translate3d(0px, 0px, 138.889px);
+  -moz-transform: rotateY(90deg) translate3d(0px, 0px, 138.889px);
+  -ms-transform: rotateY(90deg) translate3d(0px, 0px, 138.889px);
+  -o-transform: rotateY(90deg) translate3d(0px, 0px, 138.889px);
+  transform: rotateY(90deg) translate3d(0px, 0px, 138.889px);
+}
+
+#card-title {
+  cursor: pointer;
+  text-align: center;
+  font-size: 40px;
+  margin: 30px 0;
+  color: #999;
+  text-shadow: 1px 1px #333333;
+}
+
 .wrapper {
   overflow: hidden;
   position: relative;
@@ -744,6 +851,10 @@ a {
   margin: 10px auto;
 }
 
+#template-preview {
+  overflow: visible;
+}
+
 #flippable {
   -webkit-perspective: 700px;
   -moz-perspective: 700px;
@@ -757,6 +868,7 @@ a {
   perspective-origin: 50% 50%;
 }
 #flippable #box {
+  overflow: visible;
   -webkit-transform-style: preserve-3d;
   -moz-transform-style: preserve-3d;
   -ms-transform-style: preserve-3d;
@@ -775,49 +887,62 @@ a {
   -o-backface-visibility: hidden;
   backface-visibility: hidden;
 }
-#flippable #box .front, #flippable #box .back, #flippable #box .top, #flippable #box .bottom, #flippable #box .left, #flippable #box .right {
-  -webkit-transform: translate3d(0px, 0px, 150px);
-  -moz-transform: translate3d(0px, 0px, 150px);
-  -ms-transform: translate3d(0px, 0px, 150px);
-  -o-transform: translate3d(0px, 0px, 150px);
-  transform: translate3d(0px, 0px, 150px);
+#flippable #box .side {
   height: 380px;
   width: 380px;
-  background-color: grey;
   position: absolute;
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
 }
-#flippable #box .back {
-  -webkit-transform: rotateY(180deg) translate3d(0px, 0px, 150px);
-  -moz-transform: rotateY(180deg) translate3d(0px, 0px, 150px);
-  -ms-transform: rotateY(180deg) translate3d(0px, 0px, 150px);
-  -o-transform: rotateY(180deg) translate3d(0px, 0px, 150px);
-  transform: rotateY(180deg) translate3d(0px, 0px, 150px);
+#flippable #box .top-side {
+  width: 380px;
+  height: 4px;
 }
-#flippable #box .top {
-  -webkit-transform: rotateX(90deg) translate3d(0px, 0px, 150px);
-  -moz-transform: rotateX(90deg) translate3d(0px, 0px, 150px);
-  -ms-transform: rotateX(90deg) translate3d(0px, 0px, 150px);
-  -o-transform: rotateX(90deg) translate3d(0px, 0px, 150px);
-  transform: rotateX(90deg) translate3d(0px, 0px, 150px);
+#flippable #box .side-side {
+  width: 4px;
+  height: 380px;
 }
-#flippable #box .bottom {
-  -webkit-transform: rotateX(-90deg) translate3d(0px, 0px, 150px);
-  -moz-transform: rotateX(-90deg) translate3d(0px, 0px, 150px);
-  -ms-transform: rotateX(-90deg) translate3d(0px, 0px, 150px);
-  -o-transform: rotateX(-90deg) translate3d(0px, 0px, 150px);
-  transform: rotateX(-90deg) translate3d(0px, 0px, 150px);
+#flippable #box #front {
+  -webkit-transform: translate3d(0px, 0px, 2px);
+  -moz-transform: translate3d(0px, 0px, 2px);
+  -ms-transform: translate3d(0px, 0px, 2px);
+  -o-transform: translate3d(0px, 0px, 2px);
+  transform: translate3d(0px, 0px, 2px);
 }
-#flippable #box .left {
-  -webkit-transform: rotateY(-90deg) translate3d(0px, 0px, 150px);
-  -moz-transform: rotateY(-90deg) translate3d(0px, 0px, 150px);
-  -ms-transform: rotateY(-90deg) translate3d(0px, 0px, 150px);
-  -o-transform: rotateY(-90deg) translate3d(0px, 0px, 150px);
-  transform: rotateY(-90deg) translate3d(0px, 0px, 150px);
+#flippable #box #back {
+  -webkit-transform: rotateY(180deg) translate3d(0px, 0px, 2px);
+  -moz-transform: rotateY(180deg) translate3d(0px, 0px, 2px);
+  -ms-transform: rotateY(180deg) translate3d(0px, 0px, 2px);
+  -o-transform: rotateY(180deg) translate3d(0px, 0px, 2px);
+  transform: rotateY(180deg) translate3d(0px, 0px, 2px);
 }
-#flippable #box .right {
-  -webkit-transform: rotateY(90deg) translate3d(0px, 0px, 150px);
-  -moz-transform: rotateY(90deg) translate3d(0px, 0px, 150px);
-  -ms-transform: rotateY(90deg) translate3d(0px, 0px, 150px);
-  -o-transform: rotateY(90deg) translate3d(0px, 0px, 150px);
-  transform: rotateY(90deg) translate3d(0px, 0px, 150px);
+#flippable #box #top {
+  -webkit-transform: rotateX(90deg) translate3d(0px, 0px, 2px);
+  -moz-transform: rotateX(90deg) translate3d(0px, 0px, 2px);
+  -ms-transform: rotateX(90deg) translate3d(0px, 0px, 2px);
+  -o-transform: rotateX(90deg) translate3d(0px, 0px, 2px);
+  transform: rotateX(90deg) translate3d(0px, 0px, 2px);
+}
+#flippable #box #bottom {
+  -webkit-transform: rotateX(-90deg) translate3d(0px, 0px, 378px);
+  -moz-transform: rotateX(-90deg) translate3d(0px, 0px, 378px);
+  -ms-transform: rotateX(-90deg) translate3d(0px, 0px, 378px);
+  -o-transform: rotateX(-90deg) translate3d(0px, 0px, 378px);
+  transform: rotateX(-90deg) translate3d(0px, 0px, 378px);
+}
+#flippable #box #left {
+  -webkit-transform: rotateY(-90deg) translate3d(0px, 0px, 2px);
+  -moz-transform: rotateY(-90deg) translate3d(0px, 0px, 2px);
+  -ms-transform: rotateY(-90deg) translate3d(0px, 0px, 2px);
+  -o-transform: rotateY(-90deg) translate3d(0px, 0px, 2px);
+  transform: rotateY(-90deg) translate3d(0px, 0px, 2px);
+}
+#flippable #box #right {
+  -webkit-transform: rotateY(90deg) translate3d(0px, 0px, 378px);
+  -moz-transform: rotateY(90deg) translate3d(0px, 0px, 378px);
+  -ms-transform: rotateY(90deg) translate3d(0px, 0px, 378px);
+  -o-transform: rotateY(90deg) translate3d(0px, 0px, 378px);
+  transform: rotateY(90deg) translate3d(0px, 0px, 378px);
 }
