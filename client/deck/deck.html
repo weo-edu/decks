@@ -1,9 +1,17 @@
 <template name="deck_browse">
+	{{#if currentUser}}
+	{{#if currentUser.decks}}
+	<div id='my-decks'>
+		{{#iter mydecks}}
+			{{> deck_view}}
+		{{/iter}}
+	</div>
+	{{/if}}
+	{{/if}}
 	<div id='deck-grid'>
 		{{#iter decks}}
 			{{> deck_view}}
 		{{/iter}}
-		
 	</div>
 	<!-- <h2 id='decks-title'>Decks To Play</h2> -->
 </template>
@@ -33,7 +41,6 @@
 		</div>
 	</div>
 	<div id='deck-dock'>
-		{{#if deck}}
 		{{#with deck}}
 		<div id='answered'>
 			<div class='deck-container'>
@@ -47,14 +54,16 @@
 				</div>
 			</div>
 		</div>
-
-		<div id='unanswered'>
-			{{#iter cards}}
-				{{> deck_card}}
-			{{/iter}}
-		</div>
+		{{> unanswered}}
 		{{/with}}
-		{{/if}}
+	</div>
+</template>
+
+<template name="unanswered">
+	<div id='unanswered'>
+		{{#iter cards}}
+			{{> deck_card}}
+		{{/iter}}
 	</div>
 </template>
 
