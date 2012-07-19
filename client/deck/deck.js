@@ -72,8 +72,7 @@ route('/deck/play/:name', function(ctx){
 	var count = 0;
 
 	function animateDecks(){
-		console.log('deferred once');
-			var answered = $('#answered');
+		var answered = $('#answered');
 		var unanswered = $('#unanswered');
 
 		answered.width(answered.children().width());
