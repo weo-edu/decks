@@ -530,7 +530,7 @@ a {
   -o-backface-visibility: hidden;
   backface-visibility: hidden;
   position: absolute;
-  background-color: grey;
+  background-color: tomato;
   outline: 1px solid #555;
   -webkit-box-shadow: inset 0px 0px 10px #333333;
   -moz-box-shadow: inset 0px 0px 10px #333333;
