@@ -41,7 +41,6 @@
 		</div>
 	</div>
 	<div id='deck-dock'>
-		{{#if deck}}
 		{{#with deck}}
 		<div id='answered'>
 			<div class='deck-container'>
@@ -55,14 +54,18 @@
 				</div>
 			</div>
 		</div>
-
-		<div id='unanswered'>
-			{{#iter cards}}
-				{{> deck_card}}
-			{{/iter}}
-		</div>
+		{{> unanswered}}
 		{{/with}}
-		{{/if}}
+		{{deck}}
+		{{deck}}
+	</div>
+</template>
+
+<template name="unanswered">
+	<div id='unanswered'>
+		{{#iter cards}}
+			{{> deck_card}}
+		{{/iter}}
 	</div>
 </template>
 
