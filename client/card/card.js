@@ -4,7 +4,9 @@ route('/card/create', function() {
 	var card = new _Session({
 		name:'Name',
 		graphic: null,
-		problem:{}
+		problem:{},
+		'main-color':'#ccc',
+		'sec-color':'#333'
 	});
 	var problem = new _Session({
 		template: 'Template',
@@ -35,6 +37,7 @@ function focusOn(el)
 			session.set('msg', 'Create Card');
 			break;
 		case 'step-3':
+			deal($('.deck-preview'),400, 'grid');
 			session.set('msg', 'Insert in Decks');
 			break;
 		default:
@@ -53,6 +56,15 @@ function deckInsert(callback){
 		});
 		console.log(Decks.findOne({_id:el.id}))
 	});
+}
+
+function colorSelect(el)
+{
+ 	$.farbtastic('#colorpicker').linkTo(el);
+ 	if (el == ".secondary-color")
+ 		$('.to-change').text('Banner Color:')
+ 	else
+ 		$('.to-change').text('Background Color:');
 }
 
 	var watchErrors = function(){
@@ -107,17 +119,6 @@ function deckInsert(callback){
 					watchErrors(el, id);
 				}
 			}
-		},
-		'click .create-button' : function(event){
-			var el = $(event.target);
-			var c = card.all()
-			session.set('submit','true');
-			el.text('Insert');
-			el.removeClass('create-button');
-			Cards.insert(c, function(){
-				console.log(Cards.findOne(c));
-			});
-			animateCreator();
 		},
 		'mouseover .error' : function(event){
 			var el = $(event.target);
@@ -195,6 +196,11 @@ function deckInsert(callback){
 					focusOn($('#step-2'));
 					break;
 				case 'Create Card':
+					var col1, col2;
+					col1 = $('#color-update').val();
+					col2 = $('#secondary-color').val()
+					card.set('main-color', col1);
+					card.set('sec-color', col2);
 					Cards.insert(card.all());
 					focusOn($('#step-3'));
 					break;
@@ -204,6 +210,15 @@ function deckInsert(callback){
 					});
 					break;
 			}
+		}
+	}
+
+	Template.card_play.events = {
+		'click' : function(event) {
+			var el = '.'+$(event.target).attr('class');
+			if(el != '.secondary-color')
+				el = '.color-update';
+			colorSelect(el);
 		}
 	}
 
@@ -246,6 +261,9 @@ function deckInsert(callback){
 	}
 	Template.deck_preview.deck = function(){
 		Meteor.defer(function() {
+			// mytrackball = new Traqball({
+			// 	stage: 'flippable'
+			// });
 			$('#colorpicker').farbtastic('.color-update');
 			console.log('file', $('#file'));
 			$('#file').fileupload({
