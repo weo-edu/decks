@@ -1,23 +1,37 @@
 <template name="deck_create">
 	<div class="ipad">
 		{{>deck_spin}}
+		{{>preset_buttons}}
 	</div>
+</template>
+
+<template name="preset_buttons">
+	<div id="front-view" class="quick-button">Front</div>
+	<div id="top-view" class="quick-button">Top</div>
+	<div id="back-view" class="quick-button">Back</div>
+	<div id="side-view" class="quick-button">Side</div>
 </template>
 
 <template name="deck_spin">
 	<section id="viewport" tag="{{create_spin}}">
 	 <article id="box">
 	 <section id="front">
+	 	front
 	 </section>
 	 <section id="top">
+	 	top
 	 </section>
 	 <section id="bottom">
+	 	bottom
 	 </section>
 	 <section id="back">
+	 	back
 	 </section>
 	 <section id="left">
+	 	left
 	 </section>
 	 <section id="right">
+	 	right
 	 </section>
 	 </article>
 	</section>
