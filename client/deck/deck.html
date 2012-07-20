@@ -11,11 +11,12 @@
 <template name="deck_view">
 	<div id='deck-{{idx}}' class='deck-container'>
 		<div class="deck deck-{{idx}}">
-				<div class='front' style='background-image: url(/{{graphic}});'>
+				<div class='front' style='background-image: url(/{{graphic}}); background-color:{{primary_color}}'>
 					<!-- <img src="/{{graphic}}" /> -->
 				</div>
 				<div class='back'>
 					<div class="deck-title">{{name}}</div>
+					<div class="deck-description">{{description}}</div>
 					<div rel='/deck/play/{{name}}' class='play'>PLAY</div>
 				</div>
 		</div>
@@ -38,7 +39,7 @@
 		<div id='answered'>
 			<div class='deck-container'>
 				<div class="deck">
-						<div class='front' style='background-image: url(/{{graphic}});'>
+						<div class='front' style='background-image: url(/{{graphic}}); background-color:{{primary_color}};'>
 						</div>
 						<div class='back'>
 							<div class="deck-title">{{name}}</div>

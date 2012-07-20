@@ -9,6 +9,17 @@ route('/deck/create', function() {
 },
 transEndEventName = transEndEventNames[ Modernizr.prefixed('transition') ];
 
+	var session = new _Session();
+	var deck = new _Session({
+		id: Meteor.user(),
+		name: 'Title',
+		categories: ['Categories'],
+		description: 'Description',
+		primary_color: '#123456',
+		secondary_color: '#123456'
+	});
+	var error = new _Session();
+
 	function setView(el, event)
 	{
 		var exp1 = /-view/;
@@ -61,6 +72,41 @@ transEndEventName = transEndEventNames[ Modernizr.prefixed('transition') ];
 		return '';
 		});
 	}
+
+	Template.creator.events = {
+		'keyup .instant_update' : function(event){
+			var el = $(event.target);
+			var id = $(event.target).attr('id');
+			var val = el.val();
+
+			if (!deck.equals(id,val))
+			{
+				deck.set(id, val);
+			}
+		},
+		'click .color' : function(event){
+			var up = $(event.target).attr('name');
+			//$('#colorpicker').farbtastic('#'+up);
+		}
+	}
+
+	Template.insert.events = {
+		'click' : function(event)
+		{
+			var d = deck.all();
+			Decks.insert(d, function(err, id){
+				console.log(err);
+				console.log(id);
+				console.log('Inserted: ' + Decks.findOne({_id:id}));
+			});
+		}
+	}
+
+	Template.deck_info.deck = function(){
+		var d = deck.all();
+		return d;
+	}
+
 	Template.preset_buttons.events = {
 		'click .quick-button' : function(event){
 			var el = $(event.target)
@@ -68,4 +114,5 @@ transEndEventName = transEndEventNames[ Modernizr.prefixed('transition') ];
 		}
 	}
 	view.render('deck_create');
+
 });

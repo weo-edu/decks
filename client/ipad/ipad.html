@@ -1,9 +1,35 @@
 <template name="deck_create">
 	<div class="ipad">
-		{{>deck_spin}}
-		{{>preset_buttons}}
+	{{>creator}}
+	<div id="colorpicker"></div>
+	{{>deck_spin}}
+	{{>preset_buttons}}
+	{{>insert}}
 	</div>
 </template>
+
+<template name="creator">
+	<div>
+		<p>Title:</p><input id="name" class="instant_update" type="text" name="important" />
+	</div>
+	<div>
+		<p>Categories: </p>
+		<input id="categories" type="text" class="instant_update" name="template"/> 
+	</div>
+	<div>
+		<p>Description: </p>
+		<textArea class="instant_update" id="description" type="text" name="solution"/>
+	</div>
+	<div>
+		<p>Primary Color: </p>
+		<input class="instant_update color" type="text" id="primary_color" name="primary_color" value="primary_color"/>
+	</div>
+	<div>
+		<p>Secondary Color: </p>
+		<input class="instant_update color" id="secondary_color" type="text" name="solution" value="secondary_color"/>
+	</div>
+</template>
+
 
 <template name="preset_buttons">
 	<div id="front-view" class="quick-button">Front</div>
@@ -15,24 +41,43 @@
 <template name="deck_spin">
 	<section id="viewport" tag="{{create_spin}}">
 	 <article id="box">
-	 <section id="front">
-	 	front
-	 </section>
-	 <section id="top">
-	 	top
-	 </section>
-	 <section id="bottom">
-	 	bottom
-	 </section>
-	 <section id="back">
-	 	back
-	 </section>
-	 <section id="left">
-	 	left
-	 </section>
-	 <section id="right">
-	 	right
-	 </section>
+	 	{{>deck_info}}
 	 </article>
 	</section>
+</template>
+
+<template name="deck_info">
+	{{#with deck}}
+{{#markdown}}
+<section id="front" style="background-color:{{primary_color}}">
+
+front
+#{{name}}
+{{description}}
+</section>
+<section id="top">
+top
+#{{name}}
+</section>
+<section id="bottom">
+bottom
+</section>
+<section id="back">
+back
+##{{categories}}
+</section>
+<section id="left">
+left
+</section>
+<section id="right">
+right
+</section>
+{{/markdown}}
+	{{/with}}
+</template>
+
+<template name="insert">
+	<div class="quick-button center">
+	 <h1 style="text-align:center; font-size:50px">Insert</h1> 
+	</div>
 </template>
