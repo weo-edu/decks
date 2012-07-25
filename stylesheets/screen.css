@@ -3,6 +3,7 @@
  * In this file you should write your main styles. (or centralize your imports)
  * Import this file using the following HTML or equivalent:
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+/* line 17, ../../../../../../var/lib/gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -24,37 +25,45 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
+/* line 22, ../../../../../../var/lib/gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 html {
   line-height: 1;
 }
 
+/* line 24, ../../../../../../var/lib/gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 ol, ul {
   list-style: none;
 }
 
+/* line 26, ../../../../../../var/lib/gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
+/* line 28, ../../../../../../var/lib/gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
 
+/* line 30, ../../../../../../var/lib/gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 q, blockquote {
   quotes: none;
 }
+/* line 103, ../../../../../../var/lib/gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 q:before, q:after, blockquote:before, blockquote:after {
   content: "";
   content: none;
 }
 
+/* line 32, ../../../../../../var/lib/gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 a img {
   border: none;
 }
 
+/* line 116, ../../../../../../var/lib/gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
   display: block;
 }
@@ -67,27 +76,32 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   font-style: normal;
 }
 
+/* line 47, ../../common/public/sass/mixins.scss */
 body {
   font-family: Arial;
   background: #EEE;
   height: 100%;
 }
 
+/* line 55, ../../common/public/sass/mixins.scss */
 h1, h2, h3, h4, h5 {
   font-family: HighlandsRegular;
   text-transform: uppercase;
 }
 
+/* line 61, ../../common/public/sass/mixins.scss */
 #content {
   width: 980px;
   margin: 0 auto;
   position: relative;
 }
 
+/* line 67, ../../common/public/sass/mixins.scss */
 a {
   text-decoration: none;
 }
 
+/* line 25, ../sass/screen.scss */
 #mute-button {
   position: absolute;
   top: 10px;
@@ -96,14 +110,17 @@ a {
   cursor: pointer;
   text-decoration: line-through;
 }
+/* line 32, ../sass/screen.scss */
 #mute-button.muted {
   text-decoration: none;
 }
 
+/* line 38, ../sass/screen.scss */
 #content {
   padding-top: 40px;
 }
 
+/* line 43, ../sass/screen.scss */
 #deck-grid {
   -webkit-transition: height 0.7s ease-out;
   -moz-transition: height 0.7s ease-out;
@@ -111,6 +128,7 @@ a {
   transition: height 0.7s ease-out;
   position: relative;
 }
+/* line 50, ../sass/screen.scss */
 #deck-grid .deck-container {
   -webkit-perspective: 800px;
   -moz-perspective: 800px;
@@ -131,6 +149,7 @@ a {
   position: absolute;
 }
 
+/* line 60, ../sass/screen.scss */
 #decks-title {
   text-align: center;
   font-size: 40px;
@@ -138,6 +157,7 @@ a {
   color: #999;
 }
 
+/* line 69, ../sass/screen.scss */
 .card-container, .deck-container {
   height: 150px;
   width: 150px;
@@ -153,6 +173,7 @@ a {
   z-index: 0;
 }
 
+/* line 76, ../sass/screen.scss */
 .deck-container .deck, .deck-container .card, .card-container .deck, .card-container .card {
   height: 100%;
   width: 100%;
@@ -162,6 +183,7 @@ a {
   -o-perspective: 800px;
   perspective: 800px;
 }
+/* line 82, ../sass/screen.scss */
 .deck-container .front, .deck-container .back, .card-container .front, .card-container .back {
   -webkit-transition: all 0.25s ease-in-out;
   -moz-transition: all 0.25s ease-in-out;
@@ -187,6 +209,7 @@ a {
   background-repeat: no-repeat;
   background-position: center;
 }
+/* line 92, ../sass/screen.scss */
 .deck-container .front, .card-container .front {
   -webkit-transform: rotateX(0deg) rotateY(0deg);
   -moz-transform: rotateX(0deg) rotateY(0deg);
@@ -202,6 +225,7 @@ a {
   -o-border-radius: 8px;
   border-radius: 8px;
 }
+/* line 100, ../sass/screen.scss */
 .deck-container .back, .card-container .back {
   position: absolute;
   left: 0;
@@ -224,6 +248,7 @@ a {
   -o-transform: rotateY(180deg);
   transform: rotateY(180deg);
 }
+/* line 114, ../sass/screen.scss */
 .deck-container .back .play, .card-container .back .play {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #dddddd));
   background: -webkit-linear-gradient(#ffffff, #dddddd);
@@ -244,6 +269,7 @@ a {
   display: block;
   text-align: center;
 }
+/* line 126, ../sass/screen.scss */
 .deck-container .back .play:hover, .card-container .back .play:hover {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #ffffff));
   background: -webkit-linear-gradient(#dddddd, #ffffff);
@@ -251,6 +277,7 @@ a {
   background: -o-linear-gradient(#dddddd, #ffffff);
   background: linear-gradient(#dddddd, #ffffff);
 }
+/* line 133, ../sass/screen.scss */
 .deck-container.view-more .front, .card-container.view-more .front {
   -webkit-transform: rotateY(-180deg);
   -moz-transform: rotateY(-180deg);
@@ -258,6 +285,7 @@ a {
   -o-transform: rotateY(-180deg);
   transform: rotateY(-180deg);
 }
+/* line 136, ../sass/screen.scss */
 .deck-container.view-more .back, .card-container.view-more .back {
   z-index: 99;
   -webkit-transform: rotateY(0deg);
@@ -266,12 +294,14 @@ a {
   -o-transform: rotateY(0deg);
   transform: rotateY(0deg);
 }
+/* line 141, ../sass/screen.scss */
 .deck-container.close, .card-container.close {
   -webkit-transition: all 0.8s ease-out;
   -moz-transition: all 0.8s ease-out;
   -o-transition: all 0.8s ease-out;
   transition: all 0.8s ease-out;
 }
+/* line 143, ../sass/screen.scss */
 .deck-container.close .back, .deck-container.close .front, .card-container.close .back, .card-container.close .front {
   -webkit-transition: all 0.5s ease-out;
   -moz-transition: all 0.5s ease-out;
@@ -279,6 +309,7 @@ a {
   transition: all 0.5s ease-out;
 }
 
+/* line 157, ../sass/screen.scss */
 .stage {
   -webkit-perspective: 1000px;
   -moz-perspective: 1000px;
@@ -293,6 +324,7 @@ a {
   pointer-events: none;
 }
 
+/* line 179, ../sass/screen.scss */
 #playground {
   position: relative;
   height: 400px;
@@ -308,14 +340,17 @@ a {
   box-shadow: 0 0 10px #333333;
   padding: 20px;
 }
+/* line 187, ../sass/screen.scss */
 #playground.hide {
   display: none;
 }
+/* line 191, ../sass/screen.scss */
 #playground .card-container {
   position: absolute;
   bottom: 20px;
   left: 20px;
 }
+/* line 195, ../sass/screen.scss */
 #playground .card-container .front {
   -webkit-transform: rotateY(-180deg);
   -moz-transform: rotateY(-180deg);
@@ -323,6 +358,7 @@ a {
   -o-transform: rotateY(-180deg);
   transform: rotateY(-180deg);
 }
+/* line 198, ../sass/screen.scss */
 #playground .card-container .back {
   -webkit-transform: rotateY(0deg);
   -moz-transform: rotateY(0deg);
@@ -330,6 +366,7 @@ a {
   -o-transform: rotateY(0deg);
   transform: rotateY(0deg);
 }
+/* line 202, ../sass/screen.scss */
 #playground h3 {
   font-size: 50px;
   line-height: 1.5em;
@@ -337,11 +374,13 @@ a {
   text-shadow: -1px -1px 0 #333333;
   text-align: center;
 }
+/* line 209, ../sass/screen.scss */
 #playground #play-area {
   float: left;
   width: 555px;
   height: 400px;
 }
+/* line 213, ../sass/screen.scss */
 #playground #play-area .question {
   color: #999;
   text-shadow: -1px -1px 0 #333333;
@@ -350,6 +389,7 @@ a {
   text-align: center;
 }
 
+/* line 226, ../sass/screen.scss */
 #play-meta {
   float: right;
   width: 320px;
@@ -366,6 +406,7 @@ a {
   box-shadow: 0 0 10px #333333;
 }
 
+/* line 236, ../sass/screen.scss */
 #bar {
   float: left;
   width: 50px;
@@ -373,6 +414,7 @@ a {
   background: #CCC;
   position: relative;
 }
+/* line 242, ../sass/screen.scss */
 #bar .fill {
   height: 0;
   width: 100%;
@@ -381,12 +423,14 @@ a {
   background: #87CEEB;
 }
 
+/* line 254, ../sass/screen.scss */
 #deck-dock {
   margin-top: 20px;
   height: 150px;
   width: 100%;
   position: relative;
 }
+/* line 260, ../sass/screen.scss */
 #deck-dock > div {
   -webkit-perspective: 1000px;
   -moz-perspective: 1000px;
@@ -407,6 +451,7 @@ a {
   transition: transform 0.3s ease-in-out;
   z-index: 1;
 }
+/* line 268, ../sass/screen.scss */
 #deck-dock > div > div {
   position: absolute;
   cursor: pointer;
@@ -417,13 +462,16 @@ a {
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
+/* line 280, ../sass/screen.scss */
 #deck-dock #answered {
   z-index: 999 !important;
 }
+/* line 282, ../sass/screen.scss */
 #deck-dock #answered .deck-container {
   z-index: 999;
 }
 
+/* line 288, ../sass/screen.scss */
 .card-container {
   -webkit-transition-property: -webkit-transform, height, width;
   -moz-transition-property: -moz-transform, height, width;
@@ -438,6 +486,7 @@ a {
   -o-transition-timing-function: ease-in-out;
   transition-timing-function: ease-in-out;
 }
+/* line 295, ../sass/screen.scss */
 .card-container .front {
   -webkit-background-size: 100%;
   -moz-background-size: 100%;
@@ -445,6 +494,7 @@ a {
   background-size: 100%;
   background-repeat: no-repeat;
 }
+/* line 299, ../sass/screen.scss */
 .card-container .front, .card-container .back {
   -webkit-transition-property: -webkit-transform, height, width;
   -moz-transition-property: -moz-transform, height, width;
@@ -459,12 +509,15 @@ a {
   -o-transition-timing-function: ease-in-out;
   transition-timing-function: ease-in-out;
 }
+/* line 303, ../sass/screen.scss */
 .card-container .front .solution, .card-container .back .solution {
   width: 100px;
 }
+/* line 308, ../sass/screen.scss */
 .card-container .back-content {
   display: none;
 }
+/* line 316, ../sass/screen.scss */
 .card-container.current .front {
   -webkit-transform: rotateY(-180deg);
   -moz-transform: rotateY(-180deg);
@@ -472,6 +525,7 @@ a {
   -o-transform: rotateY(-180deg);
   transform: rotateY(-180deg);
 }
+/* line 321, ../sass/screen.scss */
 .card-container.current .back {
   z-index: 99;
   -webkit-transform: rotateY(0deg);
@@ -480,18 +534,22 @@ a {
   -o-transform: rotateY(0deg);
   transform: rotateY(0deg);
 }
+/* line 340, ../sass/screen.scss */
 .card-container.wrong {
   background: #FF3366;
 }
+/* line 344, ../sass/screen.scss */
 .card-container.correct {
   background: #A2E67E;
 }
 
+/* line 354, ../sass/screen.scss */
 .ipad {
   width: 1024px;
   height: 672px;
   background-color: #ccc;
 }
+/* line 362, ../sass/screen.scss */
 .ipad section#viewport {
   margin: 0 auto;
   width: 166.667px;
@@ -507,6 +565,7 @@ a {
   -o-perspective-origin: 50% 50%;
   perspective-origin: 50% 50%;
 }
+/* line 369, ../sass/screen.scss */
 .ipad article#box {
   width: 166.667px;
   height: 250px;
@@ -517,6 +576,7 @@ a {
   transform-style: preserve-3d;
   position: absolute;
 }
+/* line 375, ../sass/screen.scss */
 .ipad #box section {
   cursor: move;
   -webkit-transform-style: flat;
@@ -536,6 +596,7 @@ a {
   -moz-box-shadow: inset 0px 0px 10px #333333;
   box-shadow: inset 0px 0px 10px #333333;
 }
+/* line 384, ../sass/screen.scss */
 .ipad #front, .ipad #back {
   width: 166.667px;
   height: 250px;
@@ -545,6 +606,7 @@ a {
   -o-transform: translate3d(0px, 0px, 27.778px);
   transform: translate3d(0px, 0px, 27.778px);
 }
+/* line 389, ../sass/screen.scss */
 .ipad #back {
   -webkit-transform: rotateY(180deg) translate3d(0px, 0px, 27.778px);
   -moz-transform: rotateY(180deg) translate3d(0px, 0px, 27.778px);
@@ -552,6 +614,7 @@ a {
   -o-transform: rotateY(180deg) translate3d(0px, 0px, 27.778px);
   transform: rotateY(180deg) translate3d(0px, 0px, 27.778px);
 }
+/* line 392, ../sass/screen.scss */
 .ipad #top, .ipad #bottom {
   width: 166.667px;
   height: 55.556px;
@@ -561,6 +624,7 @@ a {
   -o-transform: rotateX(90deg) translate3d(0px, 0px, 27.778px);
   transform: rotateX(90deg) translate3d(0px, 0px, 27.778px);
 }
+/* line 397, ../sass/screen.scss */
 .ipad #bottom {
   -webkit-transform: rotateX(-90deg) translate3d(0px, 0px, 222.222px);
   -moz-transform: rotateX(-90deg) translate3d(0px, 0px, 222.222px);
@@ -568,6 +632,7 @@ a {
   -o-transform: rotateX(-90deg) translate3d(0px, 0px, 222.222px);
   transform: rotateX(-90deg) translate3d(0px, 0px, 222.222px);
 }
+/* line 400, ../sass/screen.scss */
 .ipad #left, .ipad #right {
   width: 55.556px;
   height: 250px;
@@ -577,6 +642,7 @@ a {
   -o-transform: rotateY(-90deg) translate3d(0px, 0px, 27.778px);
   transform: rotateY(-90deg) translate3d(0px, 0px, 27.778px);
 }
+/* line 405, ../sass/screen.scss */
 .ipad #right {
   -webkit-transform: rotateY(90deg) translate3d(0px, 0px, 138.889px);
   -moz-transform: rotateY(90deg) translate3d(0px, 0px, 138.889px);
@@ -585,6 +651,7 @@ a {
   transform: rotateY(90deg) translate3d(0px, 0px, 138.889px);
 }
 
+/* line 419, ../sass/screen.scss */
 #card-title {
   cursor: pointer;
   text-align: center;
@@ -594,6 +661,7 @@ a {
   text-shadow: 1px 1px #333333;
 }
 
+/* line 428, ../sass/screen.scss */
 .wrapper {
   overflow: hidden;
   position: relative;
@@ -602,12 +670,14 @@ a {
   height: 410px;
 }
 
+/* line 436, ../sass/screen.scss */
 .selectable {
   position: absolute;
   width: 100%;
   height: 100%;
 }
 
+/* line 442, ../sass/screen.scss */
 .step-nav-bar {
   width: 978px;
   position: relative;
@@ -623,11 +693,13 @@ a {
   border-radius: 8px;
   vertical-align: baseline;
 }
+/* line 452, ../sass/screen.scss */
 .step-nav-bar .active {
   background-color: #aaa;
   color: white;
   text-shadow: -1px -1px 0 black;
 }
+/* line 457, ../sass/screen.scss */
 .step-nav-bar .step-nav {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
@@ -639,13 +711,16 @@ a {
   width: 326px;
   float: left;
 }
+/* line 465, ../sass/screen.scss */
 .step-nav-bar #step-1 {
   border-radius: 8px 0px 0px 8px;
 }
+/* line 468, ../sass/screen.scss */
 .step-nav-bar #step-3 {
   border-radius: 0px 8px 8px 0px;
 }
 
+/* line 473, ../sass/screen.scss */
 .create {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
@@ -657,10 +732,12 @@ a {
   height: 410px;
   margin: 0 auto;
 }
+/* line 480, ../sass/screen.scss */
 .create.active {
   left: 0px;
 }
 
+/* line 487, ../sass/screen.scss */
 .display {
   width: 380px;
   height: 380px;
@@ -679,6 +756,7 @@ a {
   box-shadow: 0 7px 10px rgba(0, 0, 0, 0.4);
   position: relative;
 }
+/* line 500, ../sass/screen.scss */
 .display h2 {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
@@ -693,13 +771,16 @@ a {
   color: white;
   text-shadow: 1px 1px #AAA;
 }
+/* line 512, ../sass/screen.scss */
 .display .display-inner {
   padding: 20px;
 }
+/* line 517, ../sass/screen.scss */
 .display .card-section {
   text-align: center;
   margin: 20px;
 }
+/* line 522, ../sass/screen.scss */
 .display .choose-deck {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #cccccc), color-stop(100%, #dddddd));
   background: -webkit-linear-gradient(#cccccc, #dddddd);
@@ -721,6 +802,7 @@ a {
   display: block;
   text-align: center;
 }
+/* line 536, ../sass/screen.scss */
 .display .choose-deck:hover {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #cccccc));
   background: -webkit-linear-gradient(#dddddd, #cccccc);
@@ -728,6 +810,7 @@ a {
   background: -o-linear-gradient(#dddddd, #cccccc);
   background: linear-gradient(#dddddd, #cccccc);
 }
+/* line 540, ../sass/screen.scss */
 .display .choose-deck:active {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #cccccc));
   background: -webkit-linear-gradient(#dddddd, #cccccc);
@@ -737,6 +820,7 @@ a {
   border: 2px inset;
 }
 
+/* line 546, ../sass/screen.scss */
 #flippable {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
@@ -751,6 +835,7 @@ a {
   margin: 0px;
 }
 
+/* line 553, ../sass/screen.scss */
 .deck-holder {
   background: none;
   left: 0px;
@@ -758,6 +843,7 @@ a {
   overflow: visible;
 }
 
+/* line 559, ../sass/screen.scss */
 .deck-preview {
   width: 100%;
   -webkit-transform-style: preserve-3d;
@@ -771,6 +857,7 @@ a {
   -o-perspective: 800px;
   perspective: 800px;
 }
+/* line 564, ../sass/screen.scss */
 .deck-preview .deck-container {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
@@ -780,12 +867,14 @@ a {
   width: 90px;
   height: 90px;
 }
+/* line 569, ../sass/screen.scss */
 .deck-preview .deck-container .deck {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
   -o-transition: all 0.5s ease-in-out;
   transition: all 0.5s ease-in-out;
 }
+/* line 571, ../sass/screen.scss */
 .deck-preview .deck-container .deck .front {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
@@ -793,6 +882,7 @@ a {
   transition: all 0.5s ease-in-out;
   background-size: 100% !important;
 }
+/* line 575, ../sass/screen.scss */
 .deck-preview .deck-container .deck .back {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
@@ -807,12 +897,14 @@ a {
   width: 380px;
   padding: 0px;
 }
+/* line 584, ../sass/screen.scss */
 .deck-preview .selected {
   top: 0px;
   left: 0px;
   height: 380px;
   width: 380px;
 }
+/* line 590, ../sass/screen.scss */
 .deck-preview .choose-deck {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #dddddd));
   background: -webkit-linear-gradient(#ffffff, #dddddd);
@@ -833,6 +925,7 @@ a {
   display: block;
   text-align: center;
 }
+/* line 603, ../sass/screen.scss */
 .deck-preview .choose-deck:hover {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #ffffff));
   background: -webkit-linear-gradient(#dddddd, #ffffff);
@@ -840,21 +933,25 @@ a {
   background: -o-linear-gradient(#dddddd, #ffffff);
   background: linear-gradient(#dddddd, #ffffff);
 }
+/* line 607, ../sass/screen.scss */
 .deck-preview .chosen {
   left: -3px;
   top: -3px;
   border: 3px outset yellow;
 }
 
+/* line 614, ../sass/screen.scss */
 #colorpicker {
   width: 195px;
   margin: 10px auto;
 }
 
+/* line 619, ../sass/screen.scss */
 #template-preview {
   overflow: visible;
 }
 
+/* line 623, ../sass/screen.scss */
 #flippable {
   -webkit-perspective: 700px;
   -moz-perspective: 700px;
@@ -867,6 +964,7 @@ a {
   -o-perspective-origin: 50% 50%;
   perspective-origin: 50% 50%;
 }
+/* line 626, ../sass/screen.scss */
 #flippable #box {
   overflow: visible;
   -webkit-transform-style: preserve-3d;
@@ -875,6 +973,7 @@ a {
   -o-transform-style: preserve-3d;
   transform-style: preserve-3d;
 }
+/* line 629, ../sass/screen.scss */
 #flippable #box section {
   -webkit-transform-style: flat;
   -moz-transform-style: flat;
@@ -887,6 +986,7 @@ a {
   -o-backface-visibility: hidden;
   backface-visibility: hidden;
 }
+/* line 633, ../sass/screen.scss */
 #flippable #box .side {
   height: 380px;
   width: 380px;
@@ -896,14 +996,17 @@ a {
   -o-transition: all 0.5s ease-in-out;
   transition: all 0.5s ease-in-out;
 }
+/* line 639, ../sass/screen.scss */
 #flippable #box .top-side {
   width: 380px;
   height: 4px;
 }
+/* line 643, ../sass/screen.scss */
 #flippable #box .side-side {
   width: 4px;
   height: 380px;
 }
+/* line 647, ../sass/screen.scss */
 #flippable #box #front {
   -webkit-transform: translate3d(0px, 0px, 2px);
   -moz-transform: translate3d(0px, 0px, 2px);
@@ -911,6 +1014,7 @@ a {
   -o-transform: translate3d(0px, 0px, 2px);
   transform: translate3d(0px, 0px, 2px);
 }
+/* line 650, ../sass/screen.scss */
 #flippable #box #back {
   -webkit-transform: rotateY(180deg) translate3d(0px, 0px, 2px);
   -moz-transform: rotateY(180deg) translate3d(0px, 0px, 2px);
@@ -918,6 +1022,7 @@ a {
   -o-transform: rotateY(180deg) translate3d(0px, 0px, 2px);
   transform: rotateY(180deg) translate3d(0px, 0px, 2px);
 }
+/* line 653, ../sass/screen.scss */
 #flippable #box #top {
   -webkit-transform: rotateX(90deg) translate3d(0px, 0px, 2px);
   -moz-transform: rotateX(90deg) translate3d(0px, 0px, 2px);
@@ -925,6 +1030,7 @@ a {
   -o-transform: rotateX(90deg) translate3d(0px, 0px, 2px);
   transform: rotateX(90deg) translate3d(0px, 0px, 2px);
 }
+/* line 656, ../sass/screen.scss */
 #flippable #box #bottom {
   -webkit-transform: rotateX(-90deg) translate3d(0px, 0px, 378px);
   -moz-transform: rotateX(-90deg) translate3d(0px, 0px, 378px);
@@ -932,6 +1038,7 @@ a {
   -o-transform: rotateX(-90deg) translate3d(0px, 0px, 378px);
   transform: rotateX(-90deg) translate3d(0px, 0px, 378px);
 }
+/* line 659, ../sass/screen.scss */
 #flippable #box #left {
   -webkit-transform: rotateY(-90deg) translate3d(0px, 0px, 2px);
   -moz-transform: rotateY(-90deg) translate3d(0px, 0px, 2px);
@@ -939,6 +1046,7 @@ a {
   -o-transform: rotateY(-90deg) translate3d(0px, 0px, 2px);
   transform: rotateY(-90deg) translate3d(0px, 0px, 2px);
 }
+/* line 662, ../sass/screen.scss */
 #flippable #box #right {
   -webkit-transform: rotateY(90deg) translate3d(0px, 0px, 378px);
   -moz-transform: rotateY(90deg) translate3d(0px, 0px, 378px);
