@@ -28,21 +28,21 @@
 	<div id="template-preview" class="display">
 		<h2>Template Your Card</h2>
 		<div class="display-inner">
-			<div>
-				<p>Name:</p><input id="name" class="instant_update" type="text" name="important" />
-			</div>
-			<h3>Problem</h3>
-			<div>
-				<p>Template: </p>
-				<input id="template" type="text" class="instant_update" name="template"/> 
-				{{>template_errors}}
-			</div>
-			<div>
-				<p>Solution: </p>
-				<input class="instant_update" id="solution" type="text" name="solution"/>
-				{{>solution_errors}}
-			</div>
-			{{>rules}}
+		<div>
+		<p>Name:</p><input id="name" class="instant_update" type="text" name="important" />
+		</div>
+		<h3>Problem</h3>
+		<div>
+		<p>Template: </p>
+		<textarea id="template" type="text" class="instant_update" name="template" rows="4"/> 
+		{{>template_errors}}
+		</div>
+		<div>
+		<p>Solution: </p>
+		<input class="instant_update" id="solution" type="text" name="solution"/>
+		{{>solution_errors}}
+		</div>
+		{{>rules}}
 		</div>
 	</div>
 </template>	
@@ -98,11 +98,11 @@
 			{{#each deck}}
 				<div id="create-deck-container" class="deck-container">
 					<div class="deck" id='{{_id}}'>
-						<div class="front" id='card-image' style='background: url(/{{graphic}});'> 
+						<div class="front" id='card-image' style='background: url(/{{graphic}}); background-color:{{primary_color}}'> 
 						</div>
 						<div class='back'>
 							<div class="deck-title">{{name}}</div>
-							<div class="info">More relevant card information here</div>
+							<div class="info">{{description}}</div>
 							<div class='choose-deck'>Select</div>
 						</div>
 					</div>
@@ -116,14 +116,14 @@
 	<div class="display-inner">
 		<h2>Select Deck to Add To</h2>
 		Decks:
-			{{#each deck}}
-				<div class="deck-container">
-					<div class="deck">
-						<p>{{name}}</p>
-						<img src="/{{graphic}}"/>
-					</div>
+		{{#each deck}}
+			<div class="deck-container">
+				<div class="deck">
+					<p>{{name}}</p>
+					<img src="/{{graphic}}"/>
 				</div>
-			{{/each}}	
+			</div>
+		{{/each}}	
 	</div>
 </template>
 
@@ -152,29 +152,32 @@
 
 
 <template name="card_play">
-	{{#with card}}
-		<section id="front" class="side large-side color-update" style="background-color:{{main-color}}">
-			<div class="selectable">
-				<h2 class="secondary-color" style="background-color:{{sec-color}}">{{name}}</h2>
-					<div class="display-inner">
-					<div class="card">
-						{{#if graphic}}
-							<img src='{{graphic}}' />
-						{{/if}}
-						<div class='question'>
-							{{question}}
-						</div>
-						<p>Solution:</p>
-						<div for='answer'>{{answer}}</div>
-					</div>
-				</div>
-			</div>
-		</section>
-	{{/with}}
-	<section id="back" class="side large-side color-update">
-	</section>
-	<section id="top" class="side top-side color-update"></section>
-	<section id="bottom" class="side top-side color-update"></section>
-	<section id="left" class="side side-side color-update"></section>
-	<section id="right" class="side side-side color-update"></section>
+{{#with card}}
+
+<section id="front" class="side large-side color-update" style="background-color:{{main-color}}">
+<div class="selectable">
+<h2 class="secondary-color" style="background-color:{{sec-color}}">{{name}}</h2>
+<div class="display-inner">
+<div class="card">
+{{#if graphic}}
+<img src='/{{graphic}}' />
+{{/if}}
+<div class='question'>
+{{#markdown}}
+{{question}}
+{{/markdown}}
+</div>
+<p>Solution:</p>
+<div for='answer'>{{answer}}</div>
+</div>
+</div>
+</div>
+</section>
+<section id="back" class="side large-side color-update">
+</section>
+<section id="top" class="side top-side color-update"></section>
+<section id="bottom" class="side top-side color-update"></section>
+<section id="left" class="side side-side color-update"></section>
+<section id="right" class="side side-side color-update"></section>
+{{/with}}
 </template>

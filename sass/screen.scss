@@ -372,13 +372,16 @@ $playWidth: 555px;
 	 @include transform-style(preserve-3d);
 	 position:absolute;
 	}
+	.transition{
+		@include transition(all .5s ease-in-out);
+	}
 	#box section{
 		cursor:move;
 		@include transform-style(flat);
 		@include backface-visibility(hidden);
 		position:absolute;
 		background-color:tomato;
-		outline:1px solid #555;
+		//outline:1px solid #555;
 		@include box-shadow(inset 0px 0px 10px #333)
 	}
 	#front, #back{

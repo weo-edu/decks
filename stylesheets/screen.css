@@ -576,7 +576,14 @@ a {
   transform-style: preserve-3d;
   position: absolute;
 }
-/* line 375, ../sass/screen.scss */
+
+.ipad .transition {
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+}
+
 .ipad #box section {
   cursor: move;
   -webkit-transform-style: flat;
@@ -591,7 +598,6 @@ a {
   backface-visibility: hidden;
   position: absolute;
   background-color: tomato;
-  outline: 1px solid #555;
   -webkit-box-shadow: inset 0px 0px 10px #333333;
   -moz-box-shadow: inset 0px 0px 10px #333333;
   box-shadow: inset 0px 0px 10px #333333;
