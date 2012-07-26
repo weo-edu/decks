@@ -1,33 +1,36 @@
 <template name="deck_create">
 	<div class="ipad">
-	{{>creator}}
-	<div id="colorpicker"></div>
-	{{>deck_spin}}
-	{{>preset_buttons}}
-	{{>insert}}
+		<h1 class="title">DECK CREATOR</h1>
+		{{>creator}}
+		<div id="colorpicker"></div>
+		{{>deck_spin}}
 	</div>
 </template>
 
 <template name="creator">
-	<div>
-		<p>Title:</p><input id="name" class="instant_update" type="text" name="important" />
+	<div id="deck-input" class="input-area">
+		<div class="field-wrapper">
+		<div class="field">
+			<div class="text">Title:</div><input id="name" class="instant_update" type="text" name="important" />
+		</div>
+		<div class="field">
+			<div class="text">Categories:</div>
+			<input id="categories" type="text" class="instant_update" name="template"/> 
+		</div>
+		<div id="description-field" class="field">
+			<div class="text">Description:</div>
+			<textArea class="instant_update" id="description" type="text" name="solution"/>
+		</div>
+		<div class="field">
+			<div class="text">Primary Color:</div>
+			<input class="instant_update color" type="text" id="primary_color" name="primary_color" value=""/>
+		</div>
+		<div class="field">
+			<div class="text">Secondary Color:</div>
+			<input class="instant_update color" id="secondary_color" type="text" name="solution" value=""/>
+		</div>
 	</div>
-	<div>
-		<p>Categories: </p>
-		<input id="categories" type="text" class="instant_update" name="template"/> 
-	</div>
-	<div>
-		<p>Description: </p>
-		<textArea class="instant_update" id="description" type="text" name="solution"/>
-	</div>
-	<div>
-		<p>Primary Color: </p>
-		<input class="instant_update color" type="text" id="primary_color" name="primary_color" value="primary_color"/>
-	</div>
-	<div>
-		<p>Secondary Color: </p>
-		<input class="instant_update color" id="secondary_color" type="text" name="solution" value="secondary_color"/>
-	</div>
+</div>
 </template>
 
 
@@ -39,38 +42,38 @@
 </template>
 
 <template name="deck_spin">
-	<section id="viewport" tag="{{create_spin}}">
-	 <article id="box">
-	 	{{>deck_info}}
-	 </article>
-	</section>
+	<div class="deck-position">
+		<div class="deck-shadow">
+			<section id="viewport" tag="{{create_spin}}">
+			 <article id="box">
+			 	{{>deck_info}}
+			 </article>
+			</section>
+			<div class="drop-shadow"></div>
+		</div>
+	</div>
 </template>
 
 <template name="deck_info">
-	{{#with deck}}
+{{#with deck}}
 {{#markdown}}
 <section id="front" style="background-color:{{primary_color}}">
-
-front
 #{{name}}
 {{description}}
 </section>
 <section id="top">
-top
 #{{name}}
 </section>
 <section id="bottom">
-bottom
 </section>
 <section id="back">
-back
-##{{categories}}
+{{#each categories}}
+##{{this}}
+{{/each}}
 </section>
 <section id="left">
-left
 </section>
 <section id="right">
-right
 </section>
 {{/markdown}}
 	{{/with}}

@@ -62,9 +62,7 @@ input {
 	height:100%;
 	width:100%;
 }
-.instant_update{
-	width:100%;
-}
+
 .selected{
 	border-color:green;
 }

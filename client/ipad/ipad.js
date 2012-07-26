@@ -8,6 +8,7 @@ route('/deck/create', function() {
     'transition'       : 'transitionend'
 },
 transEndEventName = transEndEventNames[ Modernizr.prefixed('transition') ];
+var transformPrefix = domToCss(Modernizr.prefixed('transform'));
 
 	var session = new _Session();
 	var deck = new _Session({
@@ -15,10 +16,34 @@ transEndEventName = transEndEventNames[ Modernizr.prefixed('transition') ];
 		name: 'Title',
 		categories: ['Categories'],
 		description: 'Description',
-		primary_color: '#123456',
+		primary_color: '#ccc',
 		secondary_color: '#123456'
 	});
-	var error = new _Session();
+
+var spin = 0;
+	Meteor.setInterval(function(){
+		var box = $('#box');
+		var view = $('#viewport');
+		spin += 360;
+		//box.addClass('transition');
+			// box.bind(transEndEventName, function(){
+			// 	var newconfig_obj = {
+			// 		stage: 'viewport',
+			// 		axis:[1, 0, 0],
+			// 		angle:-2
+			// 	};
+			// 	updateTraqBall(newconfig_obj);
+			// })
+			// var config_obj = {
+			// 	stage : 'viewport',
+			// 	axis:[0, 0 , 0],
+			// 	angle:3.14
+			// }
+			//updateTraqBall(config_obj);
+			view.css(transformPrefix, 'rotate3d(0,1,0,'+spin+'deg)');
+		//box.animate(transformPrefix,'rotate3d(1,1,0,0.5rad)');
+	}, 5000);
+
 
 	function setView(el, event)
 	{
@@ -64,11 +89,13 @@ transEndEventName = transEndEventNames[ Modernizr.prefixed('transition') ];
 
 	Template.deck_spin.create_spin = function() {
 		Meteor.defer(function(){
-			mytrackball = new Traqball({
-				stage: 'viewport',
-				axis: [0, 1, 0],
-				angle: 7.160481569315857
-			});
+			var box = $('#box');
+			box.css(transformPrefix,'rotate3d(1,0,0,-0.5rad)');
+			// mytrackball = new Traqball({
+			// 	stage: 'viewport',
+			// 	axis: [1, 0, 0],
+			// 	angle: -0.5
+			// });
 		return '';
 		});
 	}
@@ -81,6 +108,13 @@ transEndEventName = transEndEventNames[ Modernizr.prefixed('transition') ];
 
 			if (!deck.equals(id,val))
 			{
+				if(id == 'categories')
+				{
+					val = val.split(',');
+					_.each(val, function(el, idx){
+						val[idx] = val[idx].trim();
+					});
+				}
 				deck.set(id, val);
 			}
 		},
