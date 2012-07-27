@@ -503,6 +503,16 @@ a {
   background: #A2E67E;
 }
 
+@-webkit-keyframes infinite-spinning {
+  from {
+    -webkit-transform: rotate3d(0, 1, 0, 0deg);
+  }
+
+  to {
+    -webkit-transform: rotate3d(0, 1, 0, 100000deg);
+  }
+}
+
 .input-area {
   position: relative;
   height: 592px;
@@ -582,10 +592,15 @@ a {
   position: relative;
 }
 .ipad .deck-position .deck-shadow {
-  top: 140px;
+  top: 110px;
   width: 200px;
   margin: 0 auto;
   position: relative;
+  -webkit-perspective: 700px;
+  -moz-perspective: 700px;
+  -ms-perspective: 700px;
+  -o-perspective: 700px;
+  perspective: 700px;
 }
 .ipad .deck-position .drop-shadow {
   margin: 20px auto;
@@ -598,31 +613,36 @@ a {
   border-radius: 50% 60% 45% 50%;
   background-color: rgba(0, 0, 0, 0.2);
 }
+.ipad .deck-position .spin-button {
+  top: -50px;
+  position: relative;
+  padding: 5px;
+  font-family: 'WisdomScript';
+  text-align: center;
+  width: 28%;
+  margin: 0 auto;
+  font-size: 25px;
+  background-color: rgba(0, 0, 0, 0.63);
+  box-shadow: 0 0px 10px 9px rgba(0, 0, 0, 0.63);
+  cursor: pointer;
+  color: tomato;
+}
 .ipad section#viewport {
-  -webkit-transition: all 5s linear;
-  -moz-transition: all 5s linear;
-  -o-transition: all 5s linear;
-  transition: all 5s linear;
   position: relative;
   top: 25%;
   margin: 0 auto;
   width: 200px;
   height: 300px;
+  -webkit-perspective: none;
+  -moz-perspective: none;
+  -ms-perspective: none;
+  -o-perspective: none;
+  perspective: none;
   -webkit-transform-style: preserve-3d;
   -moz-transform-style: preserve-3d;
   -ms-transform-style: preserve-3d;
   -o-transform-style: preserve-3d;
   transform-style: preserve-3d;
-  -webkit-perspective: 700px;
-  -moz-perspective: 700px;
-  -ms-perspective: 700px;
-  -o-perspective: 700px;
-  perspective: 700px;
-  -webkit-perspective-origin: 50% 50%;
-  -moz-perspective-origin: 50% 50%;
-  -ms-perspective-origin: 50% 50%;
-  -o-perspective-origin: 50% 50%;
-  perspective-origin: 50% 50%;
 }
 .ipad article#box {
   width: 200px;
@@ -635,10 +655,10 @@ a {
   position: absolute;
 }
 .ipad .transition {
-  -webkit-transition: all 0.5s ease-in-out;
-  -moz-transition: all 0.5s ease-in-out;
-  -o-transition: all 0.5s ease-in-out;
-  transition: all 0.5s ease-in-out;
+  -webkit-transition: all 5s ease-in-out;
+  -moz-transition: all 5s ease-in-out;
+  -o-transition: all 5s ease-in-out;
+  transition: all 5s ease-in-out;
 }
 .ipad #box section {
   cursor: move;

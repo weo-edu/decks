@@ -7,6 +7,7 @@
 @import "compass/css3";
 @import url("http://fonts.googleapis.com/css?family=Fresca");
 @import "mixins";
+//@import "animation";
 
 
 //	DECKS GRID
@@ -350,11 +351,26 @@ $playWidth: 555px;
 
 //	DECKS CREATOR
 ////////////////////////////
+$spin:100000deg;
+$time:(100000s/70);
+
+
+@-webkit-keyframes infinite-spinning {
+		from {
+			-webkit-transform: rotate3d(0,1,0,0deg);
+		}
+		to {
+			-webkit-transform: rotate3d(0,1,0,$spin);
+		}
+	}
+
 $ipadheight:672px;
 $ipadwidth:1024px;
 $imgheight:592px;
 $imgwidth:637px;
 $height:36px;
+
+
 .input-area{
 	position: relative;
 	height: $imgheight;
@@ -432,10 +448,11 @@ $height:36px;
 		height:100%;
 		position:relative;
 		.deck-shadow{
-			top: 140px;
+			top: 110px;
 			width: 200px;
 			margin: 0 auto;
 			position: relative;
+			@include perspective(700px);
 		}
 		.drop-shadow{
 			margin: 20px auto;
@@ -444,17 +461,30 @@ $height:36px;
 			@include border-radius(50% 60% 45% 50%);
 			background-color: transparentize(#000, 0.8);
 		}
+		.spin-button{
+			top: -50px;
+		position: relative;
+			padding: 5px;
+			font-family: 'WisdomScript';
+			text-align: center;
+			width: 28%;
+			margin: 0 auto;
+			font-size: 25px;
+			background-color: rgba(0, 0, 0, 0.63);
+			box-shadow: 0 0px 10px 9px rgba(0, 0, 0, 0.63);
+			cursor: pointer;
+			color: tomato;
+		}
 	}
 	section#viewport{
-		@include transition(all 5s linear);
+		//-webkit-animation:infinite-spinning $time linear;
 		position:relative;
 		top:25%;
 		margin:0 auto;
 		width:$width;
 		height:$size;
+		@include perspective(none);
 		@include transform-style(preserve-3d);
-		@include perspective(700px);
-		@include perspective-origin(50% 50%);
 	}
 	article#box{
 		width:$width;
@@ -463,7 +493,7 @@ $height:36px;
 	 position:absolute;
 	}
 	.transition{
-		@include transition(all .5s ease-in-out);
+		@include transition(all 5s ease-in-out);
 	}
 	#box section{
 		cursor:move;

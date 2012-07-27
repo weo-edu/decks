@@ -6,9 +6,11 @@ route('/deck/create', function() {
     'OTransition'      : 'oTransitionEnd',
     'msTransition'     : 'MSTransitionEnd',
     'transition'       : 'transitionend'
-},
-transEndEventName = transEndEventNames[ Modernizr.prefixed('transition') ];
+};
+
+var domTransitionProperty = Modernizr.prefixed('transition');
 var transformPrefix = domToCss(Modernizr.prefixed('transform'));
+var transitionPrefix = domToCss(domTransitionProperty);
 
 	var session = new _Session();
 	var deck = new _Session({
@@ -20,67 +22,49 @@ var transformPrefix = domToCss(Modernizr.prefixed('transform'));
 		secondary_color: '#123456'
 	});
 
+
 var spin = 0;
-	Meteor.setInterval(function(){
-		var box = $('#box');
-		var view = $('#viewport');
-		spin += 360;
-		//box.addClass('transition');
-			// box.bind(transEndEventName, function(){
-			// 	var newconfig_obj = {
-			// 		stage: 'viewport',
-			// 		axis:[1, 0, 0],
-			// 		angle:-2
-			// 	};
-			// 	updateTraqBall(newconfig_obj);
-			// })
-			// var config_obj = {
-			// 	stage : 'viewport',
-			// 	axis:[0, 0 , 0],
-			// 	angle:3.14
-			// }
-			//updateTraqBall(config_obj);
-			view.css(transformPrefix, 'rotate3d(0,1,0,'+spin+'deg)');
-		//box.animate(transformPrefix,'rotate3d(1,1,0,0.5rad)');
-	}, 5000);
+var a = Meteor.setInterval(function(){
+		
+	}, 1000);
 
 
-	function setView(el, event)
-	{
-		var exp1 = /-view/;
-		var box = $('#box');
-		var view = el.attr('id');
-		var config_obj = {
-			stage : 'viewport'
-		};
-		box.addClass('transition');
-		box.bind(transEndEventName,	function() {
-				//alert('finished transition');
-				$(this)	.removeClass('transition');
-			});
-		mytrackball.disable();
-		view = view.replace(exp1, '');
-		switch(view)
-		{
-			case 'front':
-				config_obj.axis = [0.1,1,0];
-				config_obj.angle = 0.3;
-				break;
-			case 'top':
-				config_obj.axis = [1,0,0]
-				config_obj.angle = -1.77;
-			break;
-			case 'back':
-				config_obj.axis=[0,1,0.01];
-				config_obj.angle = 2.74;
-			break;
-			case 'side':
-				config_obj.axis = [0,1,0]
-				config_obj.angle = 1.77
-			break;
-		}
-		updateTraqBall(config_obj);
-	}
+	// function setView(el, event)
+	// {
+	// 	var exp1 = /-view/;
+	// 	var box = $('#box');
+	// 	var view = el.attr('id');
+	// 	var config_obj = {
+	// 		stage : 'viewport'
+	// 	};
+	// 	box.addClass('transition');
+	// 	box.bind(transEndEventName,	function() {
+	// 			//alert('finished transition');
+	// 			$(this)	.removeClass('transition');
+	// 		});
+	// 	mytrackball.disable();
+	// 	view = view.replace(exp1, '');
+	// 	switch(view)
+	// 	{
+	// 		case 'front':
+	// 			config_obj.axis = [0.1,1,0];
+	// 			config_obj.angle = 0.3;
+	// 			break;
+	// 		case 'top':
+	// 			config_obj.axis = [1,0,0]
+	// 			config_obj.angle = -1.77;
+	// 		break;
+	// 		case 'back':
+	// 			config_obj.axis=[0,1,0.01];
+	// 			config_obj.angle = 2.74;
+	// 		break;
+	// 		case 'side':
+	// 			config_obj.axis = [0,1,0]
+	// 			config_obj.angle = 1.77
+	// 		break;
+	// 	}
+	// 	updateTraqBall(config_obj);
+	// }
 
 	function updateTraqBall(config_obj)
 	{
@@ -91,11 +75,12 @@ var spin = 0;
 		Meteor.defer(function(){
 			var box = $('#box');
 			box.css(transformPrefix,'rotate3d(1,0,0,-0.5rad)');
-			// mytrackball = new Traqball({
-			// 	stage: 'viewport',
-			// 	axis: [1, 0, 0],
-			// 	angle: -0.5
-			// });
+			mytrackball = new Traqball({
+				stage: 'viewport',
+				axis: [1, 0, 0],
+				angle: -0.5,
+				perspective: 'none'
+			});
 		return '';
 		});
 	}
@@ -133,6 +118,26 @@ var spin = 0;
 				console.log(id);
 				console.log('Inserted: ' + Decks.findOne({_id:id}));
 			});
+		}
+	}
+
+	Template.deck_spin.events = {
+		'mousedown #viewport' : function(event)
+		{
+			var el = $(event.target);
+			var tar = el.closest('#viewport');
+			var status = tar.css('-webkit-animation-play-state');
+			//status == 'running' ? tar.css('-webkit-animation-play-state', 'paused') : tar.css('-webkit-animation-play-state', 'running');
+		},
+		'click .spin-button' : function(event)
+		{
+			var tar = $('#viewport');
+			var anim = 'infinite-spinning 1600s linear';
+			var state = '-webkit-animation-play-state';
+			var status = tar.css(state);
+			status == 'running' ? tar.css(state, 'paused') : tar.css(state, 'running');
+			tar.css('-webkit-animation', anim);
+			console.log(status);
 		}
 	}
 
