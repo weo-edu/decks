@@ -8,6 +8,7 @@ route('/deck/create', function() {
     'transition'       : 'transitionend'
 };
 
+var transEndEventName = transEndEventNames[Modernizr.prefixed('transition')];
 var domTransitionProperty = Modernizr.prefixed('transition');
 var transformPrefix = domToCss(Modernizr.prefixed('transform'));
 var transitionPrefix = domToCss(domTransitionProperty);
@@ -71,18 +72,45 @@ var a = Meteor.setInterval(function(){
 		mytrackball.setup(config_obj);
 	}
 
+
+function floatingDeck(dist, time, ease){
+	Meteor.setInterval(function(){
+		var box = $('#box');
+		var shadow = $('.drop-shadow');
+		box.animate({top:'-'+dist}, time, ease, function(){
+			$(this).animate({top:dist}, time, ease);
+		});
+		shadow.animate({height:'-='+dist, width:'-='+dist}, time, ease, function(){
+			$(this).animate({height:'+='+dist, width:'+='+dist}, time, ease);
+		});
+	},time*2)
+}
+
+// Meteor.setInterval(function(){
+// 	var box = $('#box');
+// 	var shadow = $('.drop-shadow');
+// 	var top = box.css('top');
+// 	var newtop = top-10;
+// 	box.css('top', '-6px');
+// 	box.bind(transEndEventName, function(){
+// 		var box = $('#box');
+// 		box.css('top', '6px');
+// 	})
+// },1600)
+
 	Template.deck_spin.create_spin = function() {
 		Meteor.defer(function(){
 			var box = $('#box');
-			box.css(transformPrefix,'rotate3d(1,0,0,-0.5rad)');
-			mytrackball = new Traqball({
-				stage: 'viewport',
-				axis: [1, 0, 0],
-				angle: -0.5,
-				perspective: 'none'
-			});
-		return '';
+			floatingDeck('13px', 1200, 'easeInOutSine');
+			box.css(transformPrefix,'rotate3d(1,0,0,-20deg)');
+			// mytrackball = new Traqball({
+			// 	stage: 'viewport',
+			// 	axis: [1, 0, 0],
+			// 	angle: -0.5,
+			// 	perspective: 'none'
+			// });
 		});
+		return '';
 	}
 
 	Template.creator.events = {
@@ -132,11 +160,13 @@ var a = Meteor.setInterval(function(){
 		'click .spin-button' : function(event)
 		{
 			var tar = $('#viewport');
+			var shad = $('.drop-shadow');
 			var anim = 'infinite-spinning 1600s linear';
 			var state = '-webkit-animation-play-state';
 			var status = tar.css(state);
 			status == 'running' ? tar.css(state, 'paused') : tar.css(state, 'running');
 			tar.css('-webkit-animation', anim);
+			//shad.css('-webkit-animation', anim);
 			console.log(status);
 		}
 	}

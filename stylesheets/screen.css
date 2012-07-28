@@ -592,8 +592,8 @@ a {
   position: relative;
 }
 .ipad .deck-position .deck-shadow {
-  top: 110px;
-  width: 200px;
+  top: 70px;
+  width: 220.69px;
   margin: 0 auto;
   position: relative;
   -webkit-perspective: 700px;
@@ -603,15 +603,21 @@ a {
   perspective: 700px;
 }
 .ipad .deck-position .drop-shadow {
-  margin: 20px auto;
-  height: 45px;
-  width: 130px;
-  -webkit-border-radius: 50% 60% 45% 50%;
-  -moz-border-radius: 50% 60% 45% 50%;
-  -ms-border-radius: 50% 60% 45% 50%;
-  -o-border-radius: 50% 60% 45% 50%;
-  border-radius: 50% 60% 45% 50%;
-  background-color: rgba(0, 0, 0, 0.2);
+  margin: 5px auto;
+  height: 49.042px;
+  width: 122.605px;
+  -webkit-border-radius: 30% 45% 25% 30%;
+  -moz-border-radius: 30% 45% 25% 30%;
+  -ms-border-radius: 30% 45% 25% 30%;
+  -o-border-radius: 30% 45% 25% 30%;
+  border-radius: 30% 45% 25% 30%;
+  background-color: rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 0px 20px 12px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 0px 20px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0px 20px 12px rgba(0, 0, 0, 0.3);
+  position: relative;
+  bottom: -340px;
+  -webkit-transform: rotateX(90deg);
 }
 .ipad .deck-position .spin-button {
   top: -50px;
@@ -631,8 +637,8 @@ a {
   position: relative;
   top: 25%;
   margin: 0 auto;
-  width: 200px;
-  height: 300px;
+  width: 220.69px;
+  height: 320px;
   -webkit-perspective: none;
   -moz-perspective: none;
   -ms-perspective: none;
@@ -645,8 +651,8 @@ a {
   transform-style: preserve-3d;
 }
 .ipad article#box {
-  width: 200px;
-  height: 300px;
+  width: 220.69px;
+  height: 320px;
   -webkit-transform-style: preserve-3d;
   -moz-transform-style: preserve-3d;
   -ms-transform-style: preserve-3d;
@@ -655,10 +661,10 @@ a {
   position: absolute;
 }
 .ipad .transition {
-  -webkit-transition: all 5s ease-in-out;
-  -moz-transition: all 5s ease-in-out;
-  -o-transition: all 5s ease-in-out;
-  transition: all 5s ease-in-out;
+  -webkit-transition: all 0.8s ease-in-out;
+  -moz-transition: all 0.8s ease-in-out;
+  -o-transition: all 0.8s ease-in-out;
+  transition: all 0.8s ease-in-out;
 }
 .ipad #box section {
   cursor: move;
@@ -681,55 +687,55 @@ a {
   box-shadow: inset 0px 0px 15px #555555;
 }
 .ipad #box section h1, .ipad #box section h2, .ipad #box section h3 {
-  padding: 16.667px;
+  padding: 18.391px;
 }
 .ipad #front, .ipad #back {
-  width: 200px;
-  height: 300px;
-  -webkit-transform: translate3d(0px, 0px, 33.333px);
-  -moz-transform: translate3d(0px, 0px, 33.333px);
-  -ms-transform: translate3d(0px, 0px, 33.333px);
-  -o-transform: translate3d(0px, 0px, 33.333px);
-  transform: translate3d(0px, 0px, 33.333px);
+  width: 220.69px;
+  height: 320px;
+  -webkit-transform: translate3d(0px, 0px, 36.782px);
+  -moz-transform: translate3d(0px, 0px, 36.782px);
+  -ms-transform: translate3d(0px, 0px, 36.782px);
+  -o-transform: translate3d(0px, 0px, 36.782px);
+  transform: translate3d(0px, 0px, 36.782px);
 }
 .ipad #back {
-  -webkit-transform: rotateY(180deg) translate3d(0px, 0px, 32.333px);
-  -moz-transform: rotateY(180deg) translate3d(0px, 0px, 32.333px);
-  -ms-transform: rotateY(180deg) translate3d(0px, 0px, 32.333px);
-  -o-transform: rotateY(180deg) translate3d(0px, 0px, 32.333px);
-  transform: rotateY(180deg) translate3d(0px, 0px, 32.333px);
+  -webkit-transform: rotateY(180deg) translate3d(0px, 0px, 35.782px);
+  -moz-transform: rotateY(180deg) translate3d(0px, 0px, 35.782px);
+  -ms-transform: rotateY(180deg) translate3d(0px, 0px, 35.782px);
+  -o-transform: rotateY(180deg) translate3d(0px, 0px, 35.782px);
+  transform: rotateY(180deg) translate3d(0px, 0px, 35.782px);
 }
 .ipad #top, .ipad #bottom {
-  width: 200px;
-  height: 66.667px;
-  -webkit-transform: rotateX(90deg) translate3d(0px, 0px, 32.333px);
-  -moz-transform: rotateX(90deg) translate3d(0px, 0px, 32.333px);
-  -ms-transform: rotateX(90deg) translate3d(0px, 0px, 32.333px);
-  -o-transform: rotateX(90deg) translate3d(0px, 0px, 32.333px);
-  transform: rotateX(90deg) translate3d(0px, 0px, 32.333px);
+  width: 220.69px;
+  height: 73.563px;
+  -webkit-transform: rotateX(90deg) translate3d(0px, 0px, 35.782px);
+  -moz-transform: rotateX(90deg) translate3d(0px, 0px, 35.782px);
+  -ms-transform: rotateX(90deg) translate3d(0px, 0px, 35.782px);
+  -o-transform: rotateX(90deg) translate3d(0px, 0px, 35.782px);
+  transform: rotateX(90deg) translate3d(0px, 0px, 35.782px);
 }
 .ipad #bottom {
-  -webkit-transform: rotateX(-90deg) translate3d(0px, 0px, 266.667px);
-  -moz-transform: rotateX(-90deg) translate3d(0px, 0px, 266.667px);
-  -ms-transform: rotateX(-90deg) translate3d(0px, 0px, 266.667px);
-  -o-transform: rotateX(-90deg) translate3d(0px, 0px, 266.667px);
-  transform: rotateX(-90deg) translate3d(0px, 0px, 266.667px);
+  -webkit-transform: rotateX(-90deg) translate3d(0px, 0px, 283.218px);
+  -moz-transform: rotateX(-90deg) translate3d(0px, 0px, 283.218px);
+  -ms-transform: rotateX(-90deg) translate3d(0px, 0px, 283.218px);
+  -o-transform: rotateX(-90deg) translate3d(0px, 0px, 283.218px);
+  transform: rotateX(-90deg) translate3d(0px, 0px, 283.218px);
 }
 .ipad #left, .ipad #right {
-  width: 66.667px;
-  height: 300px;
-  -webkit-transform: rotateY(-90deg) translate3d(0px, 0px, 33.333px);
-  -moz-transform: rotateY(-90deg) translate3d(0px, 0px, 33.333px);
-  -ms-transform: rotateY(-90deg) translate3d(0px, 0px, 33.333px);
-  -o-transform: rotateY(-90deg) translate3d(0px, 0px, 33.333px);
-  transform: rotateY(-90deg) translate3d(0px, 0px, 33.333px);
+  width: 73.563px;
+  height: 320px;
+  -webkit-transform: rotateY(-90deg) translate3d(0px, 0px, 36.782px);
+  -moz-transform: rotateY(-90deg) translate3d(0px, 0px, 36.782px);
+  -ms-transform: rotateY(-90deg) translate3d(0px, 0px, 36.782px);
+  -o-transform: rotateY(-90deg) translate3d(0px, 0px, 36.782px);
+  transform: rotateY(-90deg) translate3d(0px, 0px, 36.782px);
 }
 .ipad #right {
-  -webkit-transform: rotateY(90deg) translate3d(0px, 0px, 166.667px);
-  -moz-transform: rotateY(90deg) translate3d(0px, 0px, 166.667px);
-  -ms-transform: rotateY(90deg) translate3d(0px, 0px, 166.667px);
-  -o-transform: rotateY(90deg) translate3d(0px, 0px, 166.667px);
-  transform: rotateY(90deg) translate3d(0px, 0px, 166.667px);
+  -webkit-transform: rotateY(90deg) translate3d(0px, 0px, 183.908px);
+  -moz-transform: rotateY(90deg) translate3d(0px, 0px, 183.908px);
+  -ms-transform: rotateY(90deg) translate3d(0px, 0px, 183.908px);
+  -o-transform: rotateY(90deg) translate3d(0px, 0px, 183.908px);
+  transform: rotateY(90deg) translate3d(0px, 0px, 183.908px);
 }
 
 #card-title {

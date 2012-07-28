@@ -253,15 +253,16 @@ if(Meteor.is_client){
             // We already calculated the z-vector-component on mousedown and the z-vector-component during mouse-movement. 
             // We will use them to retrieve the current rotation-axis 
             // (the normal-vector perpendiular to mouseDownVect and mouseMoveVect).
-            axis[0] = 0;
+            axis[0] = mouseDownVect[1]*mouseMoveVect[2]-mouseDownVect[2]*mouseMoveVect[1];
             axis[1] = mouseDownVect[2]*mouseMoveVect[0]-mouseDownVect[0]*mouseMoveVect[2];
-            axis[2] = 0;
+            axis[2] = mouseDownVect[0]*mouseMoveVect[1]-mouseDownVect[1]*mouseMoveVect[0];
             axis	= normalize(axis);
              
             // Now that we have the normal, we need the angle of the rotation.
             // Easy to find by calculating the angle between mouseDownVect and mouseMoveVect:
             angle = calcAngle(mouseDownVect, mouseMoveVect);
-            
+            // axis[0] = 0;
+            // axis[2] = 0;
             //Only one thing left to do: Update the position of the box by applying a new transform:
             // 2 transforms will be applied: the current rotation 3d and the start-matrix 
             THIS.box.style[cssPref+"Transform"] = "rotate3d("+ axis+","+angle+"rad) matrix3d("+startMatrix+")";

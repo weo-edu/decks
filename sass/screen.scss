@@ -424,8 +424,8 @@ $height:36px;
 	}
 }
 .ipad{
-	$size:300px;
-	$width:$size/1.5;
+	$size:320px;
+	$width:$size/1.45;
 	$depth:$width/3;
 	$offset:$depth/2;
 
@@ -448,22 +448,26 @@ $height:36px;
 		height:100%;
 		position:relative;
 		.deck-shadow{
-			top: 110px;
-			width: 200px;
+			top: 70px;
+			width: $width;
 			margin: 0 auto;
 			position: relative;
 			@include perspective(700px);
 		}
 		.drop-shadow{
-			margin: 20px auto;
-			height: 45px;
-			width: 130px;
-			@include border-radius(50% 60% 45% 50%);
-			background-color: transparentize(#000, 0.8);
+			margin: 5px auto;
+			height: $depth/1.5;
+			width: $width/1.8;
+			@include border-radius(30% 45% 25% 30%);
+			background-color: transparentize(#000, 0.7); 
+			@include box-shadow(0 0px 20px 12px transparentize(#000, 0.7));
+			position: relative;
+			bottom: -340px;
+			-webkit-transform: rotateX(90deg);
 		}
 		.spin-button{
 			top: -50px;
-		position: relative;
+			position: relative;
 			padding: 5px;
 			font-family: 'WisdomScript';
 			text-align: center;
@@ -493,7 +497,7 @@ $height:36px;
 	 position:absolute;
 	}
 	.transition{
-		@include transition(all 5s ease-in-out);
+		@include transition(all .8s ease-in-out);
 	}
 	#box section{
 		cursor:move;
