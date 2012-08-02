@@ -16,124 +16,200 @@ var transitionPrefix = domToCss(domTransitionProperty);
 	var session = new _Session();
 	var deck = new _Session({
 		id: Meteor.user(),
-		name: 'Title',
-		categories: ['Categories'],
-		description: 'Description',
-		primary_color: '#ccc',
-		secondary_color: '#123456'
+		name: 'TITLE',
+		categories: [''],
+		description: 'EXAMPLE TEXT',
+		graphic:null,
+		background_color: '',
+		secondary_color: '',
 	});
+	var display_title = new _Session({
+		display: 'false'
+	})
 
-
-var spin = 0;
-var a = Meteor.setInterval(function(){
-		
-	}, 1000);
-
-
-	// function setView(el, event)
-	// {
-	// 	var exp1 = /-view/;
-	// 	var box = $('#box');
-	// 	var view = el.attr('id');
-	// 	var config_obj = {
-	// 		stage : 'viewport'
-	// 	};
-	// 	box.addClass('transition');
-	// 	box.bind(transEndEventName,	function() {
-	// 			//alert('finished transition');
-	// 			$(this)	.removeClass('transition');
-	// 		});
-	// 	mytrackball.disable();
-	// 	view = view.replace(exp1, '');
-	// 	switch(view)
-	// 	{
-	// 		case 'front':
-	// 			config_obj.axis = [0.1,1,0];
-	// 			config_obj.angle = 0.3;
-	// 			break;
-	// 		case 'top':
-	// 			config_obj.axis = [1,0,0]
-	// 			config_obj.angle = -1.77;
-	// 		break;
-	// 		case 'back':
-	// 			config_obj.axis=[0,1,0.01];
-	// 			config_obj.angle = 2.74;
-	// 		break;
-	// 		case 'side':
-	// 			config_obj.axis = [0,1,0]
-	// 			config_obj.angle = 1.77
-	// 		break;
-	// 	}
-	// 	updateTraqBall(config_obj);
-	// }
-
-	function updateTraqBall(config_obj)
+function darken(from, elem, amount){
+	var color = from;
+	var cur_color = $(elem).css('color');
+	var per = 255 * (amount/100);
+	var old_colors = [];
+	if(color && cur_color)
 	{
-		mytrackball.setup(config_obj);
+		cur_color = chopRGB(cur_color);
+		var colors = chopRGB(color);
+		old_colors = _.clone(colors);
+		_.each(colors, function(el, id, key){
+			if(checkBlack(old_colors))
+				var new_color = 255;
+			else
+				var new_color = el - per;
+			el =	new_color >= 0 ? new_color : 0;
+			colors[id] = el;
+		})
+	
+		var comp = compareColors(colors, old_colors);
+			if(comp >= 25)
+			{
+				_.each(elem, function(elm, id){
+					$(elm).css('color', 'rgba('+colors[0]+','+colors[1]+','+colors[2]+', 1)');
+				});
+			}
+		// }
 	}
+}
 
+function checkBlack(ele){
+	var tot = 0;
+	_.each(ele, function(el, id){
+		tot += el;
+	})
+	if (tot <= 50)
+		return true;
+	else
+		return false;
+}
 
-function floatingDeck(dist, time, ease){
-	Meteor.setInterval(function(){
+function compareColors(ele, comp){
+	var tot = 0;
+	_.each(ele, function(el, id){
+		tot += Math.abs(el-comp[id]);
+	})
+	return tot;
+}
+
+function chopRGB(ele){
+	if(ele){
+		var elem = ele;
+		elem = elem.split(',');
+		var exp = /[a-z()]/g;
+		_.each(elem, function(el, id){
+			el = el.trim();
+			el = el.replace(exp, '');
+			el = parseInt(el);
+			elem[id] = el;
+		})
+		return elem;
+	}
+}
+
+function textColor(){
+	var color = $('#box section').children('.deck-title').css('background-color');
+	var h2 = $('#box section').children('h2');
+	var p = $('#box section').children('p');
+	darken(color, h2, 70);
+}
+
+function floatingObj(dist, time, ease){
+	//textColor();
+	var shadow_height = $('.drop-shadow').height();
+	var shadow_width = $('.drop-shadow').width();
 		var box = $('#box');
 		var shadow = $('.drop-shadow');
 		box.animate({top:'-'+dist}, time, ease, function(){
 			$(this).animate({top:dist}, time, ease);
 		});
 		shadow.animate({height:'-='+dist, width:'-='+dist}, time, ease, function(){
-			$(this).animate({height:'+='+dist, width:'+='+dist}, time, ease);
+			$(this).animate({height:'+='+dist, width:'+='+dist}, time, ease, function(){
+			$(this).css({height:shadow_height, width:shadow_width});
+			floatingObj(dist,time,ease);
+			});
 		});
-	},time*2)
 }
 
-// Meteor.setInterval(function(){
-// 	var box = $('#box');
-// 	var shadow = $('.drop-shadow');
-// 	var top = box.css('top');
-// 	var newtop = top-10;
-// 	box.css('top', '-6px');
-// 	box.bind(transEndEventName, function(){
-// 		var box = $('#box');
-// 		box.css('top', '6px');
-// 	})
-// },1600)
+function switchPages(tar){
+	var move = $(tar).width();
+	var move_in = $('.input-area').not(tar);
+	$(tar).animate({left:-move}, 900, 'easeOutExpo', function(){
+		$(move_in).animate({left:'0px'}, 1500, 'easeOutBounce');
+		$(this).css('left', '-800px');
+	})
+}
+
+function selectOptions(max){
+	for(var i=2; i<=max; i++)
+	{
+		$('#grade_level').append('<option val='+i+'>'+i+'</option');
+	}
+}
 
 	Template.deck_spin.create_spin = function() {
 		Meteor.defer(function(){
 			var box = $('#box');
-			floatingDeck('13px', 1200, 'easeInOutSine');
-			box.css(transformPrefix,'rotate3d(1,0,0,-20deg)');
-			// mytrackball = new Traqball({
-			// 	stage: 'viewport',
-			// 	axis: [1, 0, 0],
-			// 	angle: -0.5,
-			// 	perspective: 'none'
-			// });
+			selectOptions(12);
+			var view = $('#viewport');
+			$('#file').fileupload({
+		    	url: "/upload",
+		    	type: "POST",
+		    	dataType: 'json',
+		    	multipart: true,
+		    	done: function(e,data) {
+		    		console.log('done');
+		    		deck.set("graphic","upload/"+data.result.path);
+			    }
+		    });
+			mytrackball = new Traqball({
+				stage: 'deck-shadow',
+				axis: [1, 0, 0],
+				angle: 0,
+				perspective: '700'
+			});
+			floatingObj('10px', 1500, 'easeInOutSine');
+			//view.css(transformPrefix,'rotate3d(1, -.8, 0, -25deg)');
 		});
 		return '';
 	}
 
+	function inputData(event){
+		var el = $(event.target);
+		var id = $(event.target).attr('id');
+		var val = el.val();
+
+		if (!deck.equals(id,val))
+		{
+			if(id == 'categories')
+			{
+				val = val.split(',');
+				_.each(val, function(el, idx){
+					val[idx] = val[idx].trim();
+				});
+			}
+			deck.set(id, val);
+			if(id == 'primary_color')
+				textColor(el, id, val);
+		}
+	}
+
 	Template.creator.events = {
 		'keyup .instant_update' : function(event){
-			var el = $(event.target);
-			var id = $(event.target).attr('id');
-			var val = el.val();
-
-			if (!deck.equals(id,val))
-			{
-				if(id == 'categories')
-				{
-					val = val.split(',');
-					_.each(val, function(el, idx){
-						val[idx] = val[idx].trim();
-					});
-				}
-				deck.set(id, val);
-			}
+			inputData(event);
 		},
 		'click .color' : function(event){
 			var up = $(event.target).attr('name');
 			//$('#colorpicker').farbtastic('#'+up);
+		},
+		'click #more-inputs' : function(event){
+			var tar = $(event.target).closest('.input-area')
+			switchPages(tar);
+		}
+	}
+
+	Template.look_creator.events = {
+		'keyup .instant_update' : function(event){
+			inputData(event);
+		},
+		'click #prev-inputs' : function(event){
+			var tar = $(event.target).closest('.input-area');
+			switchPages(tar);
+		},
+		'click #display-title' : function(event){
+			el = $(event.target);
+			if($(el+':checked').length == 0)
+				display_title.set('display', 'false');
+			else
+				display_title.set('display', 'true');
+		},
+		'click .upload' : function(event){
+			event.preventDefault();
+			$('#file').click();
 		}
 	}
 
@@ -174,6 +250,9 @@ function floatingDeck(dist, time, ease){
 	Template.deck_info.deck = function(){
 		var d = deck.all();
 		return d;
+	}
+	Template.deck_info.display = function(){
+		return display_title.equals('display', 'true') ? 'true' : '';
 	}
 
 	Template.preset_buttons.events = {

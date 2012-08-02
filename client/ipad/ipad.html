@@ -2,6 +2,7 @@
 	<div class="ipad">
 		<h1 class="title">DECK CREATOR</h1>
 		{{>creator}}
+		{{>look_creator}}
 		<div id="colorpicker"></div>
 		{{>deck_spin}}
 	</div>
@@ -10,27 +11,52 @@
 <template name="creator">
 	<div id="deck-input" class="input-area">
 		<div class="field-wrapper">
-		<div class="field">
-			<div class="text">Title:</div><input id="name" class="instant_update" type="text" name="important" />
-		</div>
-		<div class="field">
-			<div class="text">Categories:</div>
-			<input id="categories" type="text" class="instant_update" name="template"/> 
-		</div>
-		<div id="description-field" class="field">
-			<div class="text">Description:</div>
-			<textArea class="instant_update" id="description" type="text" name="solution"/>
-		</div>
-		<div class="field">
-			<div class="text">Primary Color:</div>
-			<input class="instant_update color" type="text" id="primary_color" name="primary_color" value=""/>
-		</div>
-		<div class="field">
-			<div class="text">Secondary Color:</div>
-			<input class="instant_update color" id="secondary_color" type="text" name="solution" value=""/>
-		</div>
+			<div class="field">
+				<div class="text">Title:</div><input id="name" class="instant_update" type="text" name="important" />
+			</div>
+			<div class="field">
+				<div class="text">Categories:</div>
+				<input id="categories" type="text" class="instant_update" name="template"/> 
+			</div>
+			<div id="description-field" class="field">
+				<div class="text">Description:</div>
+				<textArea class="instant_update" id="description" type="text" name="solution"/>
+			</div>
+			<div class="field">
+				<div class="text">Grade Level:</div>
+				<select class="instant_update" type="text" id="grade_level" name="grade_level">
+				</select>
+			</div>
+			<div id="more-inputs" class="button"></div>
 	</div>
 </div>
+</template>
+
+<template name="look_creator">
+	<div id="look-input" class="input-area">
+		<div class="field-wrapper">
+			<div class="field">
+				<div class="text">Display Title:</div>
+				<input type="checkbox" id="display-title"></input>
+			</div>
+			<div class="field">
+				<div class="text">Upload Picture:</div>
+				<div class="instant_update">
+					<div class="upload">Browse</div>
+					<input type="file" id="file" name="file" tabindex="-1"  style="display:none;" multiple />
+				</div>
+			</div>
+			<div class="field">
+				<div class="text">Background Color:</div>
+				<input class="instant_update color" id="background_color" type="text" value=""/>
+			</div>
+			<div class="field">
+				<div class="text">Border Color:</div>
+				<input class="instant_update color" id="secondary_color" type="text" value=""/>
+			</div>
+		</div>
+		<div id="prev-inputs" class="button"></div>
+	</div>
 </template>
 
 
@@ -43,8 +69,8 @@
 
 <template name="deck_spin">
 	<div class="deck-position">
-		<div class="deck-shadow">
-			<div class="spin-button">Spin</div>
+		<div class="deck-shadow" id="deck-shadow">
+			<!-- <div class="spin-button">Spin</div> -->
 			<section id="viewport" tag="{{create_spin}}">
 			 <article id="box" >
 			 	{{>deck_info}}
@@ -55,29 +81,30 @@
 	</div>
 </template>
 
+<template name="name">
+</template>
+
 <template name="deck_info">
 {{#with deck}}
-{{#markdown}}
-<section id="front" style="background-color:{{primary_color}}">
-#{{name}}
-{{description}}
+<section id="front" style="background-color:{{background_color}}; outline-color:{{secondary_color}};">
+	{{#if display}}
+		<h2 class="deck-title" style="background-color:{{secondary_color}}; color:{{background_color}}">{{name}}</h2>
+	{{/if}}
+	{{#if graphic}}
+		<img class="full-image" src='/{{graphic}}' />
+	{{/if}}
 </section>
-<section id="top">
-#{{name}}
+<section id="top" style="background-color:{{background_color}}; outline-color:{{secondary_color}};">
 </section>
-<section id="bottom">
+<section id="bottom" style="background-color:{{background_color}}; outline-color:{{secondary_color}};">
 </section>
-<section id="back">
-{{#each categories}}
-##{{this}}
-{{/each}}
+<section id="back" style="background-color:{{background_color}}; outline-color:{{secondary_color}};">
 </section>
-<section id="left">
+<section id="left" style="background-color:{{background_color}}; outline-color:{{secondary_color}};">
 </section>
-<section id="right">
+<section id="right" style="background-color:{{background_color}}; outline-color:{{secondary_color}};">
 </section>
-{{/markdown}}
-	{{/with}}
+{{/with}}
 </template>
 
 <template name="insert">

@@ -75,7 +75,7 @@ function colorSelect(el)
 					if(ele == 'rules')
 					{
 						if(msg.length == 0)
-							$('#rules').children().children('.error').removeClass('error');
+							$('#rules').children().children().children('.error').removeClass('error');
 						else
 							{
 							_.each(msg, function(mssg, elem){
@@ -102,6 +102,25 @@ function colorSelect(el)
 		};
 		update();
 	}
+
+// function floatingObj(dist, time, ease, obj){
+// 	//textColor();
+// 	var shadow_height = $('.drop-shadow').height();
+// 	var shadow_width = $('.drop-shadow').width();
+// 		var box = obj;
+// 		var shadow = $('.drop-shadow');
+// 		box.animate({top:'-='+dist}, time, ease, function(){
+// 			$(this).animate({top:'+='+dist}, time, ease,function(){
+// 				floatingObj(dist,time,ease, box);
+// 			});
+// 		});
+// 		shadow.animate({height:'-='+dist, width:'-='+dist}, time, ease, function(){
+// 			$(this).animate({height:'+='+dist, width:'+='+dist}, time, ease, function(){
+// 			$(this).css({height:shadow_height, width:shadow_width});
+// 			// floatingObj(dist,time,ease, box);
+// 			});
+// 		});
+// }
 
 	var events = {
 		'keyup .instant_update' : function(event){
@@ -137,7 +156,7 @@ function colorSelect(el)
 	Template.rules.events = {
 		'keyup .instant_update': function(event) {
 			var el = $(event.target);
-			var idx = el.parents('#rules').children().children('.rule-input').index(el);
+			var idx = el.closest('#rules').children().children().children('.rule-input').index(el);
 			var rules = _.clone(problem.get('rules'));
 
 			rules[idx] = el.val();
@@ -188,31 +207,6 @@ function colorSelect(el)
 		}
 	}
 
-	Template.section_title.events = {
-		'click' : function() {
-			switch(session.get('msg'))
-			{
-				case 'Continue':
-					focusOn($('#step-2'));
-					break;
-				case 'Create Card':
-					var col1, col2;
-					col1 = $('#color-update').val();
-					col2 = $('#secondary-color').val()
-					card.set('main-color', col1);
-					card.set('sec-color', col2);
-					Cards.insert(card.all());
-					focusOn($('#step-3'));
-					break;
-				case 'Insert in Decks':
-					deckInsert(function(){
-						alert('succesful insert');
-					});
-					break;
-			}
-		}
-	}
-
 	Template.card_play.events = {
 		'click' : function(event) {
 			var el = '.'+$(event.target).attr('class');
@@ -259,29 +253,28 @@ function colorSelect(el)
 	Template.rule_input.idx = function(){
 		return $('#rules').children().length;
 	}
+
+	Template.rule_input.idx_adj = function(){
+		return $('#rules').children().length + 1;
+	}
+
 	Template.deck_preview.deck = function(){
 		Meteor.defer(function() {
-			// mytrackball = new Traqball({
-			// 	stage: 'flippable'
-			// });
-		$('textarea').resizable({disabled:true});
-			$('#colorpicker').farbtastic('.color-update');
+			//floatingObj('10px', 1500, 'easeInOutSine', $('.deck-shadow'));
+			//$('#colorpicker').farbtastic('.color-update');
 			console.log('file', $('#file'));
-			$('#file').fileupload({
-		    	url: "/upload",
-		    	type: "POST",
-		    	dataType: 'json',
-		    	multipart: true,
-		    	done: function(e,data) {
-		    		console.log('done');
-		    		card.set("graphic","upload/"+data.result.path);
-			    }
-		    });
+			// $('#file').fileupload({
+		 //    	url: "/upload",
+		 //    	type: "POST",
+		 //    	dataType: 'json',
+		 //    	multipart: true,
+		 //    	done: function(e,data) {
+		 //    		console.log('done');
+		 //    		card.set("graphic","upload/"+data.result.path);
+			//     }
+		 //    });
 			});
 		return Decks.find({});
-	}
-	Template.section_title.title = function(){
-		return session.get('msg');
 	}
 
 	//watchErrors();

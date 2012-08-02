@@ -40,9 +40,6 @@ input {
 	display: inline-block;
 }
 
-.error{
-	border-color:red;
-}
 .card img {
 	height:40%;
 	width:100%;
@@ -69,15 +66,10 @@ input {
 #rules{
 	display: inline-block;
 }
-#rule-container{
-	margin: 0 auto;
-	overflow-y: auto;
-}
-
 
 .display-inner{
 	margin: auto;
-	width: 70%;
+	width: 100%;
 }
 .error-message {
 	padding:2px;

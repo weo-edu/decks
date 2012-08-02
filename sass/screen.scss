@@ -35,11 +35,6 @@ $size: 150px;
 	}
 }
 
-#content
-{
-	padding-top: 40px;
-}
-
 #deck-grid
 {	
 	// padding: 20px;
@@ -372,19 +367,32 @@ $height:36px;
 
 
 .input-area{
-	position: relative;
+	position: absolute;
 	height: $imgheight;
 	width: $imgwidth;
 	background-color: transparent;
 	background-image: url("/create-form.png");
 	float: left;
-	.field-wrapper{
-		margin: 20% 0px;
+}
+#card-inner{
+	#rule-container{
+	margin: 0 auto;
+	overflow-x:hidden;
+	overflow-y: auto;
+	height:175px;
+	margin-top:5px;
+	}
+	#rules{
+		width:100%;
+	}
+}
+.field-wrapper{
+		margin: 19% 0px;
 		div, input{
-			height:36px;
 			font-size:18px;
+			//line-height:36px;
 		}
-		input, textarea{
+		input, textarea, option, select{
 			text-indent:10px;
 			font-size:18px;
 			background-color: transparentize(#000, 0.75);
@@ -396,6 +404,21 @@ $height:36px;
 			width:370px;
 			height:$height;
 			margin:15px auto;
+			.upload{
+				cursor: pointer;
+				height: $height;
+				width: auto;
+				border: 0px;
+				@include border-radius(5px);
+				text-align: center;
+				line-height: 35px;
+				padding: 0px 9px;
+				@include box-shadow(0 0px 15px 3px #000);
+				background-color: transparentize(#000, 0.75);
+			}
+			.error{
+					@include box-shadow(inset 0 0 15px red);
+			}
 		}
 		.text{
 			font-family:'WisdomScript';
@@ -412,7 +435,6 @@ $height:36px;
 			}
 		}
 	}
-}
 .instant_update{
 	height:$height;
 	width:60%;
@@ -428,7 +450,10 @@ $height:36px;
 	$width:$size/1.45;
 	$depth:$width/3;
 	$offset:$depth/2;
+	$color:lighten(#599adf, 35);
 
+	position:relative;
+	overflow:hidden;
 	@include ipad();
 	background-position:bottom;
 	background-color:transparent;
@@ -442,13 +467,36 @@ $height:36px;
 		padding:0px 20px;
 		font-family:'MayonaiseCondRegular';
 	}
+	#look-input{
+		left:-800px;
+	}	
+	.button{
+		cursor:pointer;
+		height: 30px;
+		margin: 0 auto;
+		width: 30px;
+		background-size: 100%;
+		position: absolute;
+		bottom: 93px;
+	}
+	#more-inputs{
+		right:95px;
+		background-image:url('/right_arrow.gif');
+	}
+	#prev-inputs{
+		right:none;
+		left:95px;
+		background-image:url('/left_arrow.gif');
+	}
 	.deck-position{
 		float:left;
 		width:$ipadwidth - $imgwidth;
-		height:100%;
-		position:relative;
+		height: 100%;
+		right: 0px;
+		position: absolute;
 		.deck-shadow{
-			top: 70px;
+			font-family:'KatanaRegular';
+			top: 95px;
 			width: $width;
 			margin: 0 auto;
 			position: relative;
@@ -460,10 +508,10 @@ $height:36px;
 			width: $width/1.8;
 			@include border-radius(30% 45% 25% 30%);
 			background-color: transparentize(#000, 0.7); 
-			@include box-shadow(0 0px 20px 12px transparentize(#000, 0.7));
+			@include box-shadow(0 0px 20px 12px transparentize(#000, 0.70));
+			@include transform(rotateX(90deg) translate3d(0px,0px,0px));
 			position: relative;
-			bottom: -340px;
-			-webkit-transform: rotateX(90deg);
+			bottom: -360px;
 		}
 		.spin-button{
 			top: -50px;
@@ -505,25 +553,49 @@ $height:36px;
 		@include transform-style(flat);
 		@include backface-visibility(hidden);
 		position:absolute;
-		background-color:tomato;
-		outline:1px solid transparentize(#555, 0.2);
-		@include box-shadow(inset 0px 0px 15px #555);
+		background-color:transparentize(darken(#3276c1,2), 0.5);
+		outline:2px solid lighten(#599adf, 10);
+		// @include box-shadow(inset 0px 0px 30px #3FA9F5);
 		h1, h2, h3{
+			font-family:'MayonaiseCondRegular';
+			font-size:35px;
 			padding:$offset/2;
+			z-index:1;
+			//color:lighten($color,20);
+		}
+		p{
+			color:darken($color, 82);
+			font-size:20px;
+			line-height:25px;
 		}
 	}
 	#front, #back{
 	 width:$width;
 	 height: $size;
 	 @include transform(translate3d(0px, 0px, $offset));
+	 img{
+	 	left:0px;
+	 	top: 0px;
+		z-index: 0;
+		position: absolute;
+		height: $size;
+		width: $width;
+	 }
+	 h1,h2,h3,p{
+		position:relative;
+	}
+	.deck-title{
+		padding:10px;
+		margin:10px auto;
+	}
 	}
 	#back{
-		@include transform(rotateY(180deg) translate3d(0px, 0px, $offset - 1));
+		@include transform(rotateY(180deg) translate3d(0px, 0px, $offset));
 	}
 	#top, #bottom{
 	 width:$width;
 	 height: $depth;
-	 @include transform(rotateX(90deg) translate3d(0px, 0px, $offset - 1));
+	 @include transform(rotateX(90deg) translate3d(0px, 0px, $offset));
 	}
 	#bottom{
 		@include transform(rotateX(-90deg) translate3d(0px, 0px, $size - $offset));
@@ -613,6 +685,30 @@ $cardmargin:15px;
 	}
 }
 
+.choose-deck
+{
+	@include background(linear-gradient(#ccc, #DDD));
+	cursor: pointer;
+	@include border-radius(5px);
+	// border: 8px solid #FF3366;
+	border:2px solid transparent;
+	position: relative;
+	margin: auto;
+	width: 100px;
+	color: #333;
+	padding: 5px;
+	display: block;
+	text-align: center;
+	&:hover
+	{
+		@include background(linear-gradient(#DDD, #ccc));
+	}
+	&:active
+	{
+		@include background(linear-gradient(#DDD, #ccc));
+		border:2px inset;
+	}
+}
 
 .display
 {
@@ -639,39 +735,10 @@ $cardmargin:15px;
 		color: white;
 		text-shadow: 1px 1px #AAA;
 	}
-	.display-inner
-	{
-		padding:20px;
-
-	}
 	.card-section
 	{
 		text-align:center;
 		margin:20px;
-	}
-	.choose-deck
-	{
-		@include background(linear-gradient(#ccc, #DDD));
-		cursor: pointer;
-		@include border-radius(5px);
-		// border: 8px solid #FF3366;
-		border:2px solid transparent;
-		position: relative;
-		margin: auto;
-		width: 100px;
-		color: #333;
-		padding: 5px;
-		display: block;
-		text-align: center;
-		&:hover
-		{
-			@include background(linear-gradient(#DDD, #ccc));
-		}
-		&:active
-		{
-			@include background(linear-gradient(#DDD, #ccc));
-			border:2px inset;
-		}
 	}
 }
 #flippable{
