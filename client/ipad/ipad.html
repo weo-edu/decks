@@ -18,7 +18,7 @@
 				<div class="text">Categories:</div>
 				<input id="categories" type="text" class="instant_update" name="template"/> 
 			</div>
-			<div id="description-field" class="field">
+			<div class="textarea-field field">
 				<div class="text">Description:</div>
 				<textArea class="instant_update" id="description" type="text" name="solution"/>
 			</div>
@@ -42,7 +42,7 @@
 			<div class="field">
 				<div class="text">Upload Picture:</div>
 				<div class="instant_update">
-					<div class="upload">Browse</div>
+					<div id="upload" class="upload">Browse</div>
 					<input type="file" id="file" name="file" tabindex="-1"  style="display:none;" multiple />
 				</div>
 			</div>
@@ -53,6 +53,9 @@
 			<div class="field">
 				<div class="text">Border Color:</div>
 				<input class="instant_update color" id="secondary_color" type="text" value=""/>
+			</div>
+			<div class="field">
+				<div id="insert" class="upload">Insert</div>
 			</div>
 		</div>
 		<div id="prev-inputs" class="button"></div>

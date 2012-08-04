@@ -2,11 +2,12 @@ route('/card/create', function() {
 	var transformPrefix = domToCss(Modernizr.prefixed('transform'));
 	var session = new _Session();
 	var card = new _Session({
-		name:'Name',
+		name:'',
 		graphic: null,
 		problem:{},
-		'main-color':'#ccc',
-		'sec-color':'#333'
+		'main-color':'',
+		'sec-color':'',
+		tags:[]
 	});
 	var problem = new _Session({
 		template: 'Template',
@@ -60,7 +61,7 @@ function deckInsert(callback){
 
 function colorSelect(el)
 {
- 	$.farbtastic('#colorpicker').linkTo(el);
+ 	//$.farbtastic('#colorpicker').linkTo(el);
  	if (el == ".secondary-color")
  		$('.to-change').text('Banner Color:')
  	else
@@ -103,6 +104,17 @@ function colorSelect(el)
 		update();
 	}
 
+function switchPages(tar){
+	var move = $(tar).width();
+	var move_in = $('.input-area').not(tar);
+	$(tar).animate({left:-move}, 900, 'easeOutExpo', function(){
+		$(move_in).animate({left:'0px'}, 1500, 'easeOutBounce', function(){
+			$('#card').toggleClass('flip');
+		});
+		$(this).css('left', '-800px');
+	})
+}
+
 // function floatingObj(dist, time, ease, obj){
 // 	//textColor();
 // 	var shadow_height = $('.drop-shadow').height();
@@ -122,9 +134,8 @@ function colorSelect(el)
 // 		});
 // }
 
-	var events = {
-		'keyup .instant_update' : function(event){
-			var el = $(event.target);
+	function instantUpdate(event){
+		var el = $(event.target);
 			var id = $(event.target).attr('id');
 			var val = el.val();
 
@@ -132,26 +143,66 @@ function colorSelect(el)
 			{
 				if(id == 'name')
 					card.set('name', val);
+				else if(id == 'tags')
+				{
+					val = val.split(',');
+					_.each(val, function(el, idx){
+						val[idx] = el.trim();
+					});
+					card.set(id, val);
+				}
 				else{
 					problem.set(id,val);
 					card.set('problem',problem.all());
 					watchErrors(el, id);
 				}
 			}
+			watchOverflow(id);
+	}
+
+	function watchOverflow(id)
+	{
+		var show = '#' + id + '-show';
+		var oflow = '#' + id + '-overflow';
+		var oflow_h = $(oflow).height();
+		var show_h = $(show).height();
+		if(oflow_h > show_h){
+			$(show).addClass('over');
+		}
+		//else
+			//$(show).removeClass('over');
+	}
+
+
+	var events = {
+		'keyup .instant_update' : function(event){
+			instantUpdate(event);
 		},
 		'mouseover .error' : function(event){
 			var el = $(event.target);
 			var id = $(event.target).attr('id');
 			err_msg = el.parent().children('.error-message');
 		},
-		'click .step-nav' : function(event) {
-			el = $(event.target);
-			focusOn(el);
+		'click #more-inputs' : function(event){
+			var tar = $(event.target).closest('.input-area')
+			switchPages(tar);
+		},
+		'click #prev-inputs' : function(event){
+			var tar = $(event.target).closest('.input-area')
+			switchPages(tar);
+		},
+		'click #upload' : function(){
+			$('#file').click();
 		}
 	};
 
 	Template.card_create.events = events;
 
+	// Template.color_picker.events = {
+	// 	'mouseup #colorpicker' : function(event){
+	// 		// event.stopPropagation();
+		
+	// }
 
 	Template.rules.events = {
 		'keyup .instant_update': function(event) {
@@ -216,7 +267,38 @@ function colorSelect(el)
 		}
 	}
 
-	Template.card_play.card = function(){
+
+	Template.back.card = function(){
+		var c = card.all();
+		var prob = problem.all();
+		var p = problemize(prob);
+		c.question = p.html;
+		c.answer = p.solution;
+		var e = {
+			template: '',
+			solution: '',
+			rules: _.map(c.rules,function(rule) {return '';})
+		};
+
+		_.each(p.errors,function(err) {
+			if (err.part == 'rule') {
+				console.log('rule error',err.idx);
+				e.rules[err.idx] = err.message;
+			}
+				
+			else
+				e[err.part] = err.message;
+		});
+
+		_.each(e,function(val,key) {
+			error.set(key,val);
+		})
+
+ 
+		return c;
+	}
+
+	Template.front.card = function(){
 		var c = card.all();
 		var prob = problem.all();
 		var p = problemize(prob);
@@ -261,18 +343,30 @@ function colorSelect(el)
 	Template.deck_preview.deck = function(){
 		Meteor.defer(function() {
 			//floatingObj('10px', 1500, 'easeInOutSine', $('.deck-shadow'));
-			//$('#colorpicker').farbtastic('.color-update');
+			$('.color-change').change(function(){
+				var name = $(this).attr('name');
+				var val = $(this).val();
+				card.set(name, val)
+			});
+			var picker = $.farbtastic('#colorpicker');
+			picker.linkTo(onColorChange);
+			function onColorChange(color){
+				card.set('main-color',color);
+			}
+			// $('#colorpicker').farbtastic(function(color){
+			// 	card.set('main-color',color);
+			// });
 			console.log('file', $('#file'));
-			// $('#file').fileupload({
-		 //    	url: "/upload",
-		 //    	type: "POST",
-		 //    	dataType: 'json',
-		 //    	multipart: true,
-		 //    	done: function(e,data) {
-		 //    		console.log('done');
-		 //    		card.set("graphic","upload/"+data.result.path);
-			//     }
-		 //    });
+			$('#file').fileupload({
+		    	url: "/upload",
+		    	type: "POST",
+		    	dataType: 'json',
+		    	multipart: true,
+		    	done: function(e,data) {
+		    		console.log('done');
+		    		card.set("graphic","upload/"+data.result.path);
+			    }
+		    });
 			});
 		return Decks.find({});
 	}

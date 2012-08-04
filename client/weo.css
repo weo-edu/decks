@@ -67,10 +67,6 @@ input {
 	display: inline-block;
 }
 
-.display-inner{
-	margin: auto;
-	width: 100%;
-}
 .error-message {
 	padding:2px;
 	margin-left:5px;

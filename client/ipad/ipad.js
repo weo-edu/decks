@@ -159,9 +159,9 @@ function selectOptions(max){
 	}
 
 	function inputData(event){
-		var el = $(event.target);
-		var id = $(event.target).attr('id');
-		var val = el.val();
+		var elem = $(event.target);
+		var id = elem.attr('id');
+		var val = elem.val();
 
 		if (!deck.equals(id,val))
 		{
@@ -169,17 +169,20 @@ function selectOptions(max){
 			{
 				val = val.split(',');
 				_.each(val, function(el, idx){
-					val[idx] = val[idx].trim();
+					val[idx] = el.trim();
 				});
 			}
 			deck.set(id, val);
 			if(id == 'primary_color')
-				textColor(el, id, val);
+				textColor(elem, id, val);
 		}
 	}
 
 	Template.creator.events = {
 		'keyup .instant_update' : function(event){
+			inputData(event);
+		},
+		'mouseup select' : function(event){
 			inputData(event);
 		},
 		'click .color' : function(event){
@@ -207,9 +210,15 @@ function selectOptions(max){
 			else
 				display_title.set('display', 'true');
 		},
-		'click .upload' : function(event){
+		'click #upload' : function(event){
 			event.preventDefault();
 			$('#file').click();
+		},
+		'click #insert' : function(){
+			Decks.insert(deck.all(), function(err, id){
+				console.log(err);
+				console.log(id);
+			});
 		}
 	}
 
