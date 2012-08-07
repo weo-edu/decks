@@ -768,10 +768,10 @@ a {
   line-height: 36px;
   text-align: right;
 }
-.field-wrapper #description-field {
+.field-wrapper .textarea-field {
   height: 90px;
 }
-.field-wrapper #description-field textarea {
+.field-wrapper .textarea-field textarea {
   padding-top: 5px;
   height: 90px;
 }
