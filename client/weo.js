@@ -1,8 +1,11 @@
 //
 route('/', function(ctx, next) {
-  // route.redirect('/card/create');
-  // route.redirect('/deck/browse');
-  route.redirect('/deck/create');
+<<<<<<< HEAD
+  route.redirect('/deck/start');
+=======
+
+  route.redirect('/deck/browse');
+>>>>>>> origin/ipad
 });
 
 Meteor.startup(function() {

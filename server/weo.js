@@ -687,6 +687,7 @@ Meteor.startup(function() {
 		// Decks.insert(deck);
 	});
 
+
 	Meteor.publish('Decks', function(){
 		var decks = Decks.find({});
 		return decks;
