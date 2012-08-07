@@ -22,10 +22,9 @@ var transitionPrefix = domToCss(domTransitionProperty);
 		graphic:null,
 		background_color: '',
 		secondary_color: '',
+		display_title: ''
 	});
-	var display_title = new _Session({
-		display: 'false'
-	})
+
 
 function darken(from, elem, amount){
 	var color = from;
@@ -115,12 +114,42 @@ function floatingObj(dist, time, ease){
 		});
 }
 
+function validate(){
+	var to_check = $('.active .validate');
+	var rtrn;
+	_.each(to_check, function(el, id){
+		el = $(el);
+		if(el.attr('id') == 'file')
+		{
+			if(!el.attr('img'))
+			{
+				el.addClass('error');
+				el.siblings('.upload').addClass('error');
+			}
+			else
+				el.removeClass('error');
+		}
+		else
+		{
+			if(el.val().length == 0)
+			{
+				el.addClass('error');
+			}
+			else
+				el.removeClass('error');
+		}
+	});
+	if(to_check.hasClass('error'))
+		return false;
+	else return true;
+}
+
 function switchPages(tar){
 	var move = $(tar).width();
 	var move_in = $('.input-area').not(tar);
 	$(tar).animate({left:-move}, 900, 'easeOutExpo', function(){
-		$(move_in).animate({left:'0px'}, 1500, 'easeOutBounce');
-		$(this).css('left', '-800px');
+		$(move_in).toggleClass('active').animate({left:'0px'}, 1500, 'easeOutBounce');
+		$(this).toggleClass('active').css('left', '-800px');
 	})
 }
 
@@ -181,6 +210,7 @@ function selectOptions(max){
 	Template.creator.events = {
 		'keyup .instant_update' : function(event){
 			inputData(event);
+			validate();
 		},
 		'mouseup select' : function(event){
 			inputData(event);
@@ -191,7 +221,11 @@ function selectOptions(max){
 		},
 		'click #more-inputs' : function(event){
 			var tar = $(event.target).closest('.input-area')
-			switchPages(tar);
+			if(validate())
+				switchPages(tar);
+		},
+		'focusOut .instant_update' :function(event){
+			// validate();
 		}
 	}
 
@@ -206,20 +240,32 @@ function selectOptions(max){
 		'click #display-title' : function(event){
 			el = $(event.target);
 			if($(el+':checked').length == 0)
-				display_title.set('display', 'false');
+				deck.set('display_title', '');
 			else
-				display_title.set('display', 'true');
+				deck.set('display_title', 'true');
 		},
 		'click #upload' : function(event){
 			event.preventDefault();
 			$('#file').click();
 		},
 		'click #insert' : function(){
-			Decks.insert(deck.all(), function(err, id){
-				console.log(err);
-				console.log(id);
-			});
+			if(validate())
+			{
+				Decks.insert(deck.all(), function(err, id){
+					console.log(err);
+					console.log(id);
+					if(!err){
+						alert('Succesful Insert');
+						switchPages($(event.target).closest('.input-area'));
+					}
+				});
+			}
 		}
+	}
+
+	function reset(){
+		deck = new _Session();
+		$('input').val('');
 	}
 
 	Template.insert.events = {
@@ -256,12 +302,14 @@ function selectOptions(max){
 		}
 	}
 
+	Template.input.graphic = function(){
+		return deck.get('graphic');
+	}
+
 	Template.deck_info.deck = function(){
 		var d = deck.all();
+		$('#file').attr('img', d.graphic);
 		return d;
-	}
-	Template.deck_info.display = function(){
-		return display_title.equals('display', 'true') ? 'true' : '';
 	}
 
 	Template.preset_buttons.events = {
