@@ -13,8 +13,8 @@ var domTransitionProperty = Modernizr.prefixed('transition');
 var transformPrefix = domToCss(Modernizr.prefixed('transform'));
 var transitionPrefix = domToCss(domTransitionProperty);
 
-	var session = new _Session();
-	var deck = new _Session({
+
+	var freshDeck = {
 		id: Meteor.user(),
 		name: 'TITLE',
 		categories: [''],
@@ -22,10 +22,14 @@ var transitionPrefix = domToCss(domTransitionProperty);
 		graphic:null,
 		background_color: '',
 		secondary_color: '',
-	});
-	var display_title = new _Session({
-		display: 'false'
-	})
+		display_title: '',
+		grade_level: ''
+	};
+
+	var session = new _Session();
+	var deck = new _Session(freshDeck);
+
+	
 
 function darken(from, elem, amount){
 	var color = from;
@@ -115,12 +119,45 @@ function floatingObj(dist, time, ease){
 		});
 }
 
+function validate(){
+	var to_check = $('.active .validate');
+	var rtrn;
+	_.each(to_check, function(el, id){
+		el = $(el);
+		if(el.attr('id') == 'file')
+		{
+			if(!el.attr('img'))
+			{
+				el.addClass('error');
+				el.siblings('.upload').addClass('error');
+			}
+			else
+			{
+				el.removeClass('error');
+				el.siblings('.upload').removeClass('error');
+			}
+		}
+		else
+		{
+			if(el.val().length == 0)
+			{
+				el.addClass('error');
+			}
+			else
+				el.removeClass('error');
+		}
+	});
+	if(to_check.hasClass('error'))
+		return false;
+	else return true;
+}
+
 function switchPages(tar){
 	var move = $(tar).width();
 	var move_in = $('.input-area').not(tar);
 	$(tar).animate({left:-move}, 900, 'easeOutExpo', function(){
-		$(move_in).animate({left:'0px'}, 1500, 'easeOutBounce');
-		$(this).css('left', '-800px');
+		$(move_in).toggleClass('active').animate({left:'0px'}, 1500, 'easeOutBounce');
+		$(this).toggleClass('active').css('left', '-800px');
 	})
 }
 
@@ -159,9 +196,12 @@ function selectOptions(max){
 	}
 
 	function inputData(event){
-		var el = $(event.target);
-		var id = $(event.target).attr('id');
-		var val = el.val();
+		var elem = $(event.target);
+		var id = elem.attr('id');
+		var val = elem.val();
+
+		if(elem.hasClass('error'))
+			validate();
 
 		if (!deck.equals(id,val))
 		{
@@ -169,17 +209,20 @@ function selectOptions(max){
 			{
 				val = val.split(',');
 				_.each(val, function(el, idx){
-					val[idx] = val[idx].trim();
+					val[idx] = el.trim();
 				});
 			}
 			deck.set(id, val);
 			if(id == 'primary_color')
-				textColor(el, id, val);
+				textColor(elem, id, val);
 		}
 	}
 
 	Template.creator.events = {
 		'keyup .instant_update' : function(event){
+			inputData(event);
+		},
+		'mouseup select' : function(event){
 			inputData(event);
 		},
 		'click .color' : function(event){
@@ -188,7 +231,11 @@ function selectOptions(max){
 		},
 		'click #more-inputs' : function(event){
 			var tar = $(event.target).closest('.input-area')
-			switchPages(tar);
+			if(validate())
+				switchPages(tar);
+		},
+		'focusOut .instant_update' :function(event){
+			// validate();
 		}
 	}
 
@@ -203,27 +250,41 @@ function selectOptions(max){
 		'click #display-title' : function(event){
 			el = $(event.target);
 			if($(el+':checked').length == 0)
-				display_title.set('display', 'false');
+				deck.set('display_title', '');
 			else
-				display_title.set('display', 'true');
+				deck.set('display_title', 'true');
 		},
-		'click .upload' : function(event){
+		'click #upload' : function(event){
 			event.preventDefault();
 			$('#file').click();
+		},
+		'click #insert' : function(){
+			if(validate())
+			{
+				Decks.insert(deck.all(), function(err, id){
+					console.log(err);
+					console.log(id);
+					if(!err){
+						alert('Succesful Insert');
+						switchPages($(event.target).closest('.input-area'));
+						reset();
+					}
+				});
+			}
 		}
 	}
 
-	Template.insert.events = {
-		'click' : function(event)
-		{
-			var d = deck.all();
-			Decks.insert(d, function(err, id){
-				console.log(err);
-				console.log(id);
-				console.log('Inserted: ' + Decks.findOne({_id:id}));
-			});
-		}
+	function reset(){
+		
+		switchPages('.active')
+		_.each(deck.all(), function(el, id, third){
+			deck.set(id, freshDeck.id);
+		})
+		$('input').val('');
+		$('textarea').val('')
+		$('input').removeClass('error');
 	}
+
 
 	Template.deck_spin.events = {
 		'mousedown #viewport' : function(event)
@@ -247,12 +308,14 @@ function selectOptions(max){
 		}
 	}
 
+	Template.input.graphic = function(){
+		return deck.get('graphic');
+	}
+
 	Template.deck_info.deck = function(){
 		var d = deck.all();
+		$('#file').attr('img', d.graphic);
 		return d;
-	}
-	Template.deck_info.display = function(){
-		return display_title.equals('display', 'true') ? 'true' : '';
 	}
 
 	Template.preset_buttons.events = {
