@@ -1,8 +1,6 @@
 //
 route('/', function(ctx, next) {
-
   route.redirect('/deck/start');
-
 });
 
 Meteor.startup(function() {
