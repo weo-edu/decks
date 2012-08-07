@@ -40,9 +40,6 @@ input {
 	display: inline-block;
 }
 
-.error{
-	border-color:red;
-}
 .card img {
 	height:40%;
 	width:100%;
@@ -62,30 +59,17 @@ input {
 	height:100%;
 	width:100%;
 }
-.instant_update{
-	width:100%;
-}
+
 .selected{
 	border-color:green;
 }
 #rules{
 	display: inline-block;
 }
-#rule-container{
-	margin: 0 auto;
-	overflow-y: auto;
-}
-
-#card-title{
-	text-align: center;
-	font-size: 40px;
-	margin: 30px 0;
-	color: #999;
-}
 
 .display-inner{
 	margin: auto;
-	width: 70%;
+	width: 100%;
 }
 .error-message {
 	padding:2px;

@@ -4,7 +4,9 @@ route('/card/create', function() {
 	var card = new _Session({
 		name:'Name',
 		graphic: null,
-		problem:{}
+		problem:{},
+		'main-color':'#ccc',
+		'sec-color':'#333'
 	});
 	var problem = new _Session({
 		template: 'Template',
@@ -35,6 +37,7 @@ function focusOn(el)
 			session.set('msg', 'Create Card');
 			break;
 		case 'step-3':
+			deal($('.deck-preview'),400, 'grid');
 			session.set('msg', 'Insert in Decks');
 			break;
 		default:
@@ -55,6 +58,15 @@ function deckInsert(callback){
 	});
 }
 
+function colorSelect(el)
+{
+ 	$.farbtastic('#colorpicker').linkTo(el);
+ 	if (el == ".secondary-color")
+ 		$('.to-change').text('Banner Color:')
+ 	else
+ 		$('.to-change').text('Background Color:');
+}
+
 	var watchErrors = function(){
 		var update = function(){
 			Meteor.defer(function(){
@@ -63,7 +75,7 @@ function deckInsert(callback){
 					if(ele == 'rules')
 					{
 						if(msg.length == 0)
-							$('#rules').children().children('.error').removeClass('error');
+							$('#rules').children().children().children('.error').removeClass('error');
 						else
 							{
 							_.each(msg, function(mssg, elem){
@@ -91,6 +103,25 @@ function deckInsert(callback){
 		update();
 	}
 
+// function floatingObj(dist, time, ease, obj){
+// 	//textColor();
+// 	var shadow_height = $('.drop-shadow').height();
+// 	var shadow_width = $('.drop-shadow').width();
+// 		var box = obj;
+// 		var shadow = $('.drop-shadow');
+// 		box.animate({top:'-='+dist}, time, ease, function(){
+// 			$(this).animate({top:'+='+dist}, time, ease,function(){
+// 				floatingObj(dist,time,ease, box);
+// 			});
+// 		});
+// 		shadow.animate({height:'-='+dist, width:'-='+dist}, time, ease, function(){
+// 			$(this).animate({height:'+='+dist, width:'+='+dist}, time, ease, function(){
+// 			$(this).css({height:shadow_height, width:shadow_width});
+// 			// floatingObj(dist,time,ease, box);
+// 			});
+// 		});
+// }
+
 	var events = {
 		'keyup .instant_update' : function(event){
 			var el = $(event.target);
@@ -107,17 +138,6 @@ function deckInsert(callback){
 					watchErrors(el, id);
 				}
 			}
-		},
-		'click .create-button' : function(event){
-			var el = $(event.target);
-			var c = card.all()
-			session.set('submit','true');
-			el.text('Insert');
-			el.removeClass('create-button');
-			Cards.insert(c, function(){
-				console.log(Cards.findOne(c));
-			});
-			animateCreator();
 		},
 		'mouseover .error' : function(event){
 			var el = $(event.target);
@@ -136,7 +156,7 @@ function deckInsert(callback){
 	Template.rules.events = {
 		'keyup .instant_update': function(event) {
 			var el = $(event.target);
-			var idx = el.parents('#rules').children().children('.rule-input').index(el);
+			var idx = el.closest('#rules').children().children().children('.rule-input').index(el);
 			var rules = _.clone(problem.get('rules'));
 
 			rules[idx] = el.val();
@@ -187,23 +207,12 @@ function deckInsert(callback){
 		}
 	}
 
-	Template.section_title.events = {
-		'click' : function() {
-			switch(session.get('msg'))
-			{
-				case 'Continue':
-					focusOn($('#step-2'));
-					break;
-				case 'Create Card':
-					Cards.insert(card.all());
-					focusOn($('#step-3'));
-					break;
-				case 'Insert in Decks':
-					deckInsert(function(){
-						alert('succesful insert');
-					});
-					break;
-			}
+	Template.card_play.events = {
+		'click' : function(event) {
+			var el = '.'+$(event.target).attr('class');
+			if(el != '.secondary-color')
+				el = '.color-update';
+			colorSelect(el);
 		}
 	}
 
@@ -244,27 +253,136 @@ function deckInsert(callback){
 	Template.rule_input.idx = function(){
 		return $('#rules').children().length;
 	}
+
+	Template.rule_input.idx_adj = function(){
+		return $('#rules').children().length + 1;
+	}
+
 	Template.deck_preview.deck = function(){
 		Meteor.defer(function() {
-			$('#colorpicker').farbtastic('.color-update');
+			//floatingObj('10px', 1500, 'easeInOutSine', $('.deck-shadow'));
+			//$('#colorpicker').farbtastic('.color-update');
 			console.log('file', $('#file'));
-			$('#file').fileupload({
-		    	url: "/upload",
-		    	type: "POST",
-		    	dataType: 'json',
-		    	multipart: true,
-		    	done: function(e,data) {
-		    		console.log('done');
-		    		card.set("graphic","/upload/"+data.result.path);
-			    }
-		    });
+			// $('#file').fileupload({
+		 //    	url: "/upload",
+		 //    	type: "POST",
+		 //    	dataType: 'json',
+		 //    	multipart: true,
+		 //    	done: function(e,data) {
+		 //    		console.log('done');
+		 //    		card.set("graphic","upload/"+data.result.path);
+			//     }
+		 //    });
 			});
 		return Decks.find({});
 	}
-	Template.section_title.title = function(){
-		return session.get('msg');
-	}
 
 	//watchErrors();
+
+	///////////////////////////////////////////
+	//////////Better Markdown//////////////////
+	///////////////////////////////////////////
+
+	Handlebars.registerHelper('better_markdown', function(fn) {
+  var converter = new Showdown.converter();
+  var input = fn(this);
+
+  ///////
+  // Make Markdown *actually* skip over block-level elements when
+  // processing a string.
+  //
+  // Official Markdown doesn't descend into
+  // block elements written out as HTML (divs, tables, etc.), BUT
+  // it doesn't skip them properly either.  It assumes they are
+  // either pretty-printed with their contents indented, or, failing
+  // that, it just scans for a close tag with the same name, and takes
+  // it regardless of whether it is the right one.  As a hack to work
+  // around Markdown's hacks, we find the block-level elements
+  // using a proper recursive method and rewrite them to be indented
+  // with the final close tag on its own line.
+  ///////
+
+  // Open-block tag should be at beginning of line,
+  // and not, say, in a string literal in example code, or in a pre block.
+  // Tag must be followed by a non-word-char so that we match whole tag, not
+  // eg P for PRE.  All regexes we wish to use when scanning must have
+  // 'g' flag so that they respect (and set) lastIndex.
+  // Assume all tags are lowercase.
+  var rOpenBlockTag = /^\s{0,2}<(p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math|ins|del)(?=\W)/mg;
+  var rTag = /<(\/?\w+)/g;
+  var idx = 0;
+  var newParts = [];
+  var blockBuf = [];
+  // helper function to execute regex `r` starting at idx and putting
+  // the end index back into idx; accumulate the intervening string
+  // into an array; and return the regex's first capturing group.
+  var rcall = function(r, inBlock) {
+    var lastIndex = idx;
+    r.lastIndex = lastIndex;
+    var match = r.exec(input);
+    var result = null;
+    if (! match) {
+      idx = input.length;
+    } else {
+      idx = r.lastIndex;
+      result = match[1];
+    }
+    (inBlock ? blockBuf : newParts).push(input.substring(lastIndex, idx));
+    return result;
+  };
+
+  input = input.replace(/<!--.*?-->/g, '\n\n$&\n\n');
+
+  var hashedBlocks = {};
+  var numHashedBlocks = 0;
+
+  var nestedTags = [];
+  while (idx < input.length) {
+    var blockTag = rcall(rOpenBlockTag, false);
+    if (blockTag) {
+      nestedTags.push(blockTag);
+      while (nestedTags.length) {
+        var tag = rcall(rTag, true);
+        if (! tag) {
+          throw new Error("Expected </"+nestedTags[nestedTags.length-1]+
+                          "> but found end of string");
+        } else if (tag.charAt(0) === '/') {
+          // close tag
+          var tagToPop = tag.substring(1);
+          var tagPopped = nestedTags.pop();
+          if (tagPopped !== tagToPop)
+            throw new Error(("Mismatched close tag, expected </"+tagPopped+
+                             "> but found </"+tagToPop+">: "+
+                             input.substr(idx-50,50)+"{HERE}"+
+                             input.substr(idx,50)).replace(/\n/g,'\\n'));
+        } else {
+          // open tag
+          nestedTags.push(tag);
+        }
+      }
+      var newBlock = blockBuf.join('');
+      var openTagFinish = newBlock.indexOf('>') + 1;
+      var closeTagLoc = newBlock.lastIndexOf('<');
+
+      var key = ++numHashedBlocks;
+      hashedBlocks[key] = newBlock.slice(openTagFinish, closeTagLoc);
+      newParts.push(newBlock.slice(0, openTagFinish),
+                    '!!!!HTML:'+key+'!!!!',
+                    newBlock.slice(closeTagLoc));
+      blockBuf.length = 0;
+    }
+  }
+
+  var newInput = newParts.join('');
+  var output = converter.makeHtml(newInput);
+
+  output = output.replace(/!!!!HTML:(.*?)!!!!/g, function(z, a) {
+    return hashedBlocks[a];
+  });
+
+  return output;
+});
+
+
 	view.render('card_create');
 });
