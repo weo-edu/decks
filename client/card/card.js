@@ -139,6 +139,7 @@ function switchPages(tar){
 			var id = $(event.target).attr('id');
 			var val = el.val();
 
+
 			if (!card.equals(id,val))
 			{
 				if(id == 'name')

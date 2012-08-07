@@ -13,8 +13,8 @@ var domTransitionProperty = Modernizr.prefixed('transition');
 var transformPrefix = domToCss(Modernizr.prefixed('transform'));
 var transitionPrefix = domToCss(domTransitionProperty);
 
-	var session = new _Session();
-	var deck = new _Session({
+
+	var freshDeck = {
 		id: Meteor.user(),
 		name: 'TITLE',
 		categories: [''],
@@ -22,9 +22,14 @@ var transitionPrefix = domToCss(domTransitionProperty);
 		graphic:null,
 		background_color: '',
 		secondary_color: '',
-		display_title: ''
-	});
+		display_title: '',
+		grade_level: ''
+	};
 
+	var session = new _Session();
+	var deck = new _Session(freshDeck);
+
+	
 
 function darken(from, elem, amount){
 	var color = from;
@@ -127,7 +132,10 @@ function validate(){
 				el.siblings('.upload').addClass('error');
 			}
 			else
+			{
 				el.removeClass('error');
+				el.siblings('.upload').removeClass('error');
+			}
 		}
 		else
 		{
@@ -192,6 +200,9 @@ function selectOptions(max){
 		var id = elem.attr('id');
 		var val = elem.val();
 
+		if(elem.hasClass('error'))
+			validate();
+
 		if (!deck.equals(id,val))
 		{
 			if(id == 'categories')
@@ -210,7 +221,6 @@ function selectOptions(max){
 	Template.creator.events = {
 		'keyup .instant_update' : function(event){
 			inputData(event);
-			validate();
 		},
 		'mouseup select' : function(event){
 			inputData(event);
@@ -257,6 +267,7 @@ function selectOptions(max){
 					if(!err){
 						alert('Succesful Insert');
 						switchPages($(event.target).closest('.input-area'));
+						reset();
 					}
 				});
 			}
@@ -264,21 +275,16 @@ function selectOptions(max){
 	}
 
 	function reset(){
-		deck = new _Session();
+		
+		switchPages('.active')
+		_.each(deck.all(), function(el, id, third){
+			deck.set(id, freshDeck.id);
+		})
 		$('input').val('');
+		$('textarea').val('')
+		$('input').removeClass('error');
 	}
 
-	Template.insert.events = {
-		'click' : function(event)
-		{
-			var d = deck.all();
-			Decks.insert(d, function(err, id){
-				console.log(err);
-				console.log(id);
-				console.log('Inserted: ' + Decks.findOne({_id:id}));
-			});
-		}
-	}
 
 	Template.deck_spin.events = {
 		'mousedown #viewport' : function(event)
