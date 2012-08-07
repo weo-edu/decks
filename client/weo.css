@@ -3,7 +3,7 @@ body {
 	font-family: arial;
 }
 
-.deck {
+/*.deck {
 	z-index:2;
 	cursor: pointer;
 }
@@ -11,7 +11,7 @@ body {
 .deck img {
 	width: 200px;
 	height: 250px;
-}
+}*/
 
 .deck-title {
 	text-align: center;

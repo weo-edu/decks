@@ -5,12 +5,180 @@
 
 @import "compass/reset";
 @import "compass/css3";
-@import url("http://fonts.googleapis.com/css?family=Fresca");
 @import "mixins";
+
+//	START SCREEN
+////////////////////////////
+
+.container {
+	height: 100%;
+}
+
+#weo-start {
+	@include transform(translate3d(0,0,0));
+	// font-family: "WisdomScript";
+	// display: none;
+	// visibility: hidden;
+}
+
+#start-screen {
+	background: url(/img/startBg.png) center center;
+	height: 100%;
+}
+
+#deckFlow
+{
+	z-index: 9999;
+	cursor: move;
+	@include transition(all .4s ease-out);
+	display: none;
+	position: absolute;
+	right: 30px;
+	top: 180px;
+	height: 370px;
+	width: 650px;
+	@include perspective(700px);
+	-moz-perspective-origin: 150% 50%;
+	@include transform-style(preserve-3d);
+	@include transform(translateZ(99999px));
+	&.offstage {
+		@include transform(scale(2));
+		@include opacity(0);
+	}
+	.deck{
+		// @include transition(all 1s ease-out);
+		// &.current {
+		// 	img {
+		// 		top: -20px;
+		// 		&.float {
+		// 			top: 25px;
+		// 		}
+		// 	}
+		// }
+		// outline: 1px dashed tomato;
+		position: absolute;
+		width: 218px;
+		height: 370px;
+		.shadow {
+			width: 140px;
+			left: 39px;
+			height: 25px;
+			@include border-radius(45% 50% 50% 55%);
+			background: transparentize(#333, .85);
+			position: absolute;
+			bottom: 0px;
+			&.float {
+				width: 150px;
+				left: 34px;
+				height: 25px;
+			}
+		}
+		img {
+			position: absolute;
+			top: 0;
+			&.float {
+				top: 15px;
+			}
+		}
+
+	}
+}
+
+#scene {
+	img {
+		position: absolute;
+	}
+	.sign {
+		top: 0px;
+		&.offstage {
+			top: -300px;
+		}
+	}
+	.mountain-back {
+		left: 180px;
+		bottom: 240px;
+		&.offstage {
+			left: -1200px;
+		}
+	}
+	.mountain-mid {
+		left: -350px;
+		bottom: 120px;
+		&.offstage {
+			left: -2000px;
+		}
+	}
+	.mountain-front {
+		bottom: 150px;
+		left: -100px;
+		&.offstage {
+			left: -2000px;
+		}
+	}
+	.temple {
+		bottom: 150px;
+		left: 30px;
+		&.offstage {
+			left: -450px;
+		}
+	}
+	.ground {
+		bottom: 0;
+		&.offstage {
+			bottom: -500px;
+		}
+	}
+	.guru {
+		bottom: 150px;
+		left: 70px;
+		&.offstage {
+			bottom: -350px;
+		}
+	}
+
+	
+}
 
 
 //	DECKS GRID
 ////////////////////////////
+
+
+#browse-screen {
+	height: 100%;
+	background: url(../img/browseBg.jpg) center center no-repeat;
+
+	.awning {
+		$height: 55px;
+		height: $height;
+		background: url("/app!common/textures/blue-scale.png");
+		@include box-shadow(0 3px 15px #333);
+		font-family: 'Fresca';
+		font-size: 40px;
+		color: #EEE;
+		line-height: $height;
+		padding: 0 20px;
+	}
+}
+
+#deck-grid {
+	$height: 180px;
+	$width: 140px;
+	
+	height: $height;
+	width: 900px;
+
+	margin: 150px auto 0;
+	@include transform-style(flat);
+	.deck {
+		cursor: pointer;
+		width: $width;
+		height: $height;
+		position: absolute;
+		background-position: center center;
+	}
+}
+
 
 $size: 150px;
 
@@ -36,25 +204,24 @@ $size: 150px;
 
 #content
 {
-	padding-top: 40px;
+	@include ipad;
+	background: #FFF;
+	overflow: hidden;
 }
 
-#deck-grid
-{	
-	// padding: 20px;
-	// @include block;
-	@include transition(height .7s ease-out);
-	// overflow: hidden;
-	position: relative;
-	.deck-container
-	{
-		@include perspective(800px);
-		@include transform-style(preserve-3d);
-		@include transform(rotateY(120deg) scale(0.001));
-		cursor: pointer;
-		position: absolute;
-	}
-}
+// #deck-grid
+// {	
+// 	@include transition(height .7s ease-out);
+// 	position: relative;
+// 	.deck-container
+// 	{
+// 		@include perspective(800px);
+// 		@include transform-style(preserve-3d);
+// 		@include transform(rotateY(120deg) scale(0.001));
+// 		cursor: pointer;
+// 		position: absolute;
+// 	}
+// }
 
 #decks-title
 {
