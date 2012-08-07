@@ -26,8 +26,7 @@ var transitionPrefix = domToCss(domTransitionProperty);
 		grade_level: ''
 	};
 
-	var session = new _Session();
-	var deck = new _Session(freshDeck);
+	var deck = new Reactive.Store('deck', freshDeck);
 
 	
 
@@ -306,10 +305,6 @@ function selectOptions(max){
 			//shad.css('-webkit-animation', anim);
 			console.log(status);
 		}
-	}
-
-	Template.input.graphic = function(){
-		return deck.get('graphic');
 	}
 
 	Template.deck_info.deck = function(){
