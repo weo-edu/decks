@@ -203,7 +203,7 @@ $size: 150px;
 	}
 }
 
-<<<<<<< HEAD
+
 #content
 {
 	@include ipad;
@@ -211,26 +211,10 @@ $size: 150px;
 	overflow: hidden;
 }
 
-// #deck-grid
-// {	
-// 	@include transition(height .7s ease-out);
-// 	position: relative;
-// 	.deck-container
-// 	{
-// 		@include perspective(800px);
-// 		@include transform-style(preserve-3d);
-// 		@include transform(rotateY(120deg) scale(0.001));
-// 		cursor: pointer;
-// 		position: absolute;
-// 	}
-// }
-=======
+
 #deck-grid
 {	
-	// padding: 20px;
-	// @include block;
 	@include transition(height .7s ease-out);
-	// overflow: hidden;
 	position: relative;
 	.deck-container
 	{
@@ -241,7 +225,6 @@ $size: 150px;
 		position: absolute;
 	}
 }
->>>>>>> origin/ipad
 
 #decks-title
 {

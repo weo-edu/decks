@@ -23,7 +23,7 @@ app.get('/upload/*',express.static(process.cwd()+"/.meteor/"));
 
 
 Meteor.startup(function() {
-	// Decks.remove({});
+	Decks.remove({});
 	var decks = [
 		{
 			name: 'arithmetic',
