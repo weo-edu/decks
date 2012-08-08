@@ -1,24 +1,22 @@
 route('/card/create', function() {
 	var transformPrefix = domToCss(Modernizr.prefixed('transform'));
-	var session = new _Session();
-	var card = new _Session({
+	var card = new Reactive.Store('card', {
 		name:'Name',
 		graphic: null,
 		problem:{},
 		'main-color':'#ccc',
 		'sec-color':'#333'
 	});
-	var problem = new _Session({
+	var problem = new Reactive.Store('problem', {
 		template: 'Template',
 		solution: '',
 		rules: []
 	})
-	var error = new _Session({
+	var error = new Reactive.Store('error', {
 		template: '',
 		solution: '',
 		rules: []
 	});
-	session.set('msg', 'Continue');
 
 
 function focusOn(el)
