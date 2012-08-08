@@ -691,4 +691,6 @@ Meteor.startup(function() {
 		var decks = Decks.find({});
 		return decks;
 	});
+
+	Observer.start();
 });
