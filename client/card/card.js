@@ -1,59 +1,25 @@
 route('/card/create', function() {
 	var transformPrefix = domToCss(Modernizr.prefixed('transform'));
-	var session = new _Session();
-	var card = new _Session({
-		name:'Name',
+	var card = new Reactive.Store('card', {
+		name:'',
 		graphic: null,
-		problem:{}
+		problem:{},
+		'main-color':'',
+		'sec-color':'',
+		tags:[]
 	});
-	var problem = new _Session({
+	var problem = new Reactive.Store('problem', {
 		template: 'Template',
 		solution: '',
 		rules: []
 	})
-	var error = new _Session({
+	var error = new Reactive.Store('error', {
 		template: '',
 		solution: '',
 		rules: []
 	});
-	session.set('msg', 'Continue');
 
 
-function focusOn(el)
-{
-	var elem = '#' + el.attr('id') + '-cont';
-	$('.step-nav').removeClass('active');
-	el.addClass('active');
-	$('.create').removeClass('active');
-	$(elem).addClass('active');
-	switch(el.attr('id'))
-	{
-		case 'step-1':
-			session.set('msg', 'Continue');
-			break;
-		case 'step-2':
-			session.set('msg', 'Create Card');
-			break;
-		case 'step-3':
-			session.set('msg', 'Insert in Decks');
-			break;
-		default:
-			session.set('msg', 'Continue');
-			break;
-	}
-}
-
-function deckInsert(callback){
-	callback = callback || function(){};
-	var x = $('.chosen').children();
-	console.log(x);
-	_.each(x, function(el){
-		Decks.update({_id:el.id}, {$addToSet: {cards:card.all()}}, function(){
-			callback();
-		});
-		console.log(Decks.findOne({_id:el.id}))
-	});
-}
 
 	var watchErrors = function(){
 		var update = function(){
@@ -62,73 +28,79 @@ function deckInsert(callback){
 				_.each(err, function(msg, ele){
 					if(ele == 'rules')
 					{
-						if(msg.length == 0)
-							$('#rules').children().children('.error').removeClass('error');
-						else
-							{
-							_.each(msg, function(mssg, elem){
-								var num = $('#rules').children().index() - elem;
-								var el = '#rules-' + num.toString();
-								if(mssg)
-									$(el).addClass('error');
-								else
-									$(el).removeClass('error');
-							})
-						}
+						$('#rules').children().children().children('.error').removeClass('error');
+						_.each(msg, function(mssg, elem){
+							var num = $('#rules').children().index() - elem;
+							var el = '#rules-' + num.toString();
+							$(el).addClass('error');
+						})
 					}
 					else
 					{
 						var el = '#' + ele;
-						if(msg)
-							$(el).addClass('error');
-						else
-							$(el).removeClass('error');
+						$(el).addClass('error');
 					}
-					//console.log(test);	
 				}); 
 			});
 		};
 		update();
 	}
 
-	var events = {
-		'keyup .instant_update' : function(event){
-			var el = $(event.target);
+
+	function instantUpdate(event){
+		var el = $(event.target);
 			var id = $(event.target).attr('id');
 			var val = el.val();
+
 
 			if (!card.equals(id,val))
 			{
 				if(id == 'name')
 					card.set('name', val);
+				else if(id == 'tags')
+				{
+					val = val.split(',');
+					_.each(val, function(el, idx){
+						val[idx] = el.trim();
+					});
+					card.set(id, val);
+				}
 				else{
 					problem.set(id,val);
 					card.set('problem',problem.all());
 					watchErrors(el, id);
 				}
 			}
+	}
+
+
+	var events = {
+		'keyup .instant_update' : function(event){
+			instantUpdate(event);
 		},
-		'click .create-button' : function(event){
-			var el = $(event.target);
-			var c = card.all()
-			session.set('submit','true');
-			el.text('Insert');
-			el.removeClass('create-button');
-			Cards.insert(c, function(){
-				console.log(Cards.findOne(c));
-			});
-			animateCreator();
+	'click .button' : function(event){
+			var tar = $(event.target).closest('.input-area')
+			if(validate())
+				switchPages(tar);
 		},
-		'mouseover .error' : function(event){
-			var el = $(event.target);
-			var id = $(event.target).attr('id');
-			err_msg = el.parent().children('.error-message');
-		},
-		'click .step-nav' : function(event) {
-			el = $(event.target);
-			focusOn(el);
+		'click #upload' : function(){
+			$('#file').click();
 		}
 	};
+
+	Template.template_preview.events = {
+		'click #create' : function(event){
+			if(validate())
+				Cards.insert(card.all(), function(err, id){
+					if(!err)
+					{
+						alert('Succesful Creation');
+						var to_reset = [card, problem, error]
+						reset(to_reset);
+					}
+				})
+		}
+	}
 
 	Template.card_create.events = events;
 
@@ -136,7 +108,7 @@ function deckInsert(callback){
 	Template.rules.events = {
 		'keyup .instant_update': function(event) {
 			var el = $(event.target);
-			var idx = el.parents('#rules').children().children('.rule-input').index(el);
+			var idx = el.closest('#rules').children().children().children('.rule-input').index(el);
 			var rules = _.clone(problem.get('rules'));
 
 			rules[idx] = el.val();
@@ -149,6 +121,8 @@ function deckInsert(callback){
 			$('#rules').prepend(Meteor.ui.render(function() {
 				return Template.rule_input();
 			}));
+			if($('#rules').height() <= $('#rule-container').height())
+				$('#bottom-button').css('top', $('#rules').height());
 			var rules = problem.get('rules');
 			rules.unshift('');
 			problem.set('rules', rules)
@@ -156,58 +130,9 @@ function deckInsert(callback){
 		}
 	}
 
-	Template.deck_preview.events = {
-		'click .deck' : function(event){
-			el = $(event.target);
-			cont = $(event.target).closest('.deck-container');
-			cont.removeClass('last-selected')
-			if(cont.hasClass('chosen') && !cont.hasClass('view-more'))
-				cont.toggleClass('chosen');
-			else{
-				cont.toggleClass('selected');
-				if(cont.hasClass('selected'))
-				{
-					cont.parent().children().not('.selected').hide();
-					cont.css(transformPrefix, 'translate3d(0,0,0)');
-					cont.addClass('view-more');
-				}
-				else
-				{ 
-					cont.addClass('last-selected');
-					deal($('.deck-preview'),200, 'grid');
-					cont.removeClass('view-more');
-					cont.parent().children().fadeIn(400);
-				}
-			}
-			return false;
-		},
-		'click .choose-deck' : function(event){
-			el = $(event.target).closest('.deck-container');
-			el.toggleClass('chosen');
-		}
-	}
 
-	Template.section_title.events = {
-		'click' : function() {
-			switch(session.get('msg'))
-			{
-				case 'Continue':
-					focusOn($('#step-2'));
-					break;
-				case 'Create Card':
-					Cards.insert(card.all());
-					focusOn($('#step-3'));
-					break;
-				case 'Insert in Decks':
-					deckInsert(function(){
-						alert('succesful insert');
-					});
-					break;
-			}
-		}
-	}
 
-	Template.card_play.card = function(){
+	function getCard(){
 		var c = card.all();
 		var prob = problem.all();
 		var p = problemize(prob);
@@ -237,16 +162,36 @@ function deckInsert(callback){
 		return c;
 	}
 
-	Template.card_create.button = function() {
-		return session.equals('submit','true') ? 'insert' : 'create';
+
+	Template.back.card = function(){
+		return getCard();
+	}
+
+	Template.front.card = function(){
+		return getCard();
 	}
 
 	Template.rule_input.idx = function(){
 		return $('#rules').children().length;
 	}
-	Template.deck_preview.deck = function(){
+
+	Template.rule_input.idx_adj = function(){
+		return $('#rules').children().length + 1;
+	}
+
+	Template.card_create.defer = function(){
 		Meteor.defer(function() {
-			$('#colorpicker').farbtastic('.color-update');
+			//floatingObj('10px', 1500, 'easeInOutSine', $('.deck-shadow'));
+			$('.color-change').change(function(){
+				var name = $(this).attr('name');
+				var val = $(this).val();
+				card.set(name, val)
+			});
+			var picker = $.farbtastic('#colorpicker');
+			picker.linkTo(onColorChange);
+			function onColorChange(color){
+				card.set('main-color',color);
+			}
 			console.log('file', $('#file'));
 			$('#file').fileupload({
 		    	url: "/upload",
@@ -255,16 +200,12 @@ function deckInsert(callback){
 		    	multipart: true,
 		    	done: function(e,data) {
 		    		console.log('done');
-		    		card.set("graphic","/upload/"+data.result.path);
+		    		$('#file').attr('img', data.result.path);
+		    		card.set("graphic","upload/"+data.result.path);
 			    }
 		    });
 			});
-		return Decks.find({});
+		return 'done';
 	}
-	Template.section_title.title = function(){
-		return session.get('msg');
-	}
-
-	//watchErrors();
 	view.render('card_create');
 });

@@ -23,7 +23,7 @@ app.get('/upload/*',express.static(process.cwd()+"/.meteor/"));
 
 
 Meteor.startup(function() {
-	//Decks.remove({});
+	Decks.remove({});
 	var decks = [
 		{
 			name: 'arithmetic',
@@ -684,8 +684,9 @@ Meteor.startup(function() {
 
 	]
 	_.each(decks,function(deck) {
-		//Decks.insert(deck);
+		// Decks.insert(deck);
 	});
+
 
 	Meteor.publish('Decks', function(){
 		var decks = Decks.find({});
