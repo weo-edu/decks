@@ -73,19 +73,12 @@ function colorSelect(el)
 				_.each(err, function(msg, ele){
 					if(ele == 'rules')
 					{
-						if(msg.length == 0)
 							$('#rules').children().children().children('.error').removeClass('error');
-						else
-							{
 							_.each(msg, function(mssg, elem){
 								var num = $('#rules').children().index() - elem;
 								var el = '#rules-' + num.toString();
-								if(mssg)
-									$(el).addClass('error');
-								else
-									$(el).removeClass('error');
+								$(el).addClass('error');
 							})
-						}
 					}
 					else
 					{
@@ -102,16 +95,7 @@ function colorSelect(el)
 		update();
 	}
 
-function switchPages(tar){
-	var move = $(tar).width();
-	var move_in = $('.input-area').not(tar);
-	$(tar).animate({left:-move}, 900, 'easeOutExpo', function(){
-		$(move_in).animate({left:'0px'}, 1500, 'easeOutBounce', function(){
-			$('#card').toggleClass('flip');
-		});
-		$(this).css('left', '-800px');
-	})
-}
+
 
 // function floatingObj(dist, time, ease, obj){
 // 	//textColor();
@@ -156,20 +140,6 @@ function switchPages(tar){
 					watchErrors(el, id);
 				}
 			}
-			watchOverflow(id);
-	}
-
-	function watchOverflow(id)
-	{
-		var show = '#' + id + '-show';
-		var oflow = '#' + id + '-overflow';
-		var oflow_h = $(oflow).height();
-		var show_h = $(show).height();
-		if(oflow_h > show_h){
-			$(show).addClass('over');
-		}
-		//else
-			//$(show).removeClass('over');
 	}
 
 
@@ -184,11 +154,13 @@ function switchPages(tar){
 		},
 		'click #more-inputs' : function(event){
 			var tar = $(event.target).closest('.input-area')
-			switchPages(tar);
+			if(validate())
+				switchPages(tar);
 		},
 		'click #prev-inputs' : function(event){
 			var tar = $(event.target).closest('.input-area')
-			switchPages(tar);
+			if(validate())
+				switchPages(tar);
 		},
 		'click #upload' : function(){
 			$('#file').click();
@@ -266,8 +238,7 @@ function switchPages(tar){
 		}
 	}
 
-
-	Template.back.card = function(){
+	function getCard(){
 		var c = card.all();
 		var prob = problem.all();
 		var p = problemize(prob);
@@ -297,34 +268,13 @@ function switchPages(tar){
 		return c;
 	}
 
+
+	Template.back.card = function(){
+		return getCard();
+	}
+
 	Template.front.card = function(){
-		var c = card.all();
-		var prob = problem.all();
-		var p = problemize(prob);
-		c.question = p.html;
-		c.answer = p.solution;
-		var e = {
-			template: '',
-			solution: '',
-			rules: _.map(c.rules,function(rule) {return '';})
-		};
-
-		_.each(p.errors,function(err) {
-			if (err.part == 'rule') {
-				console.log('rule error',err.idx);
-				e.rules[err.idx] = err.message;
-			}
-				
-			else
-				e[err.part] = err.message;
-		});
-
-		_.each(e,function(val,key) {
-			error.set(key,val);
-		})
-
- 
-		return c;
+		return getCard();
 	}
 
 	Template.card_create.button = function() {
@@ -363,6 +313,7 @@ function switchPages(tar){
 		    	multipart: true,
 		    	done: function(e,data) {
 		    		console.log('done');
+		    		$('#file').attr('img', data.result.path);
 		    		card.set("graphic","upload/"+data.result.path);
 			    }
 		    });

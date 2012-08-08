@@ -10,13 +10,13 @@
 	<div id="template-input" class="input-area">
 		<div id="card-inner" class="display-inner field-wrapper">
 		<div class="textarea-field field">
-			<div class="text">Template: </div>
-			<textarea id="template" type="text" class="instant_update back-part" name="template" rows="4"/> 
+			<div class="text">Template*: </div>
+			<textarea id="template" type="text" class="instant_update back-part validate" name="template" rows="4"/> 
 		{{>template_errors}}
 		</div>
 		<div class="field">
-			<div class="text">Solution: </div>
-			<input class="instant_update back-part" id="solution" type="text" name="solution"/>
+			<div class="text">Solution*: </div>
+			<input class="instant_update back-part validate" id="solution" type="text" name="solution"/>
 		{{>solution_errors}}
 		</div>
 		{{>rules}}
@@ -34,7 +34,7 @@
 </template>
 
 <template name="color_picker">
-	<div id="color-picker" class="input-area">
+	<div id="color-picker" class="input-area active">
 		<div class="field-wrapper">
 			<div class="field">
 				<div class="text">Name:</div>
@@ -45,10 +45,10 @@
 				<input type="text" class="instant_update" id="tags" name="tags"/>
 			</div>
 			<div class="field">
-				<div class="text">Graphic:</div>
+				<div class="text">Graphic*:</div>
 				<div class="instant_update">
 					<div id="upload" class="upload">Browse</div>	
-					<input type="file" id="file" name="file" tabindex="-1" style="display:none;" multiple />
+					<input type="file" id="file" class="validate" name="file" tabindex="-1" img='' style="display:none;" multiple />
 				</div>
 			</div>
 			<div class="card-section">

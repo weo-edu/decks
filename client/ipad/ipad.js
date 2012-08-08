@@ -16,13 +16,13 @@ var transitionPrefix = domToCss(domTransitionProperty);
 
 	var freshDeck = {
 		id: Meteor.user(),
-		name: 'TITLE',
+		name: '',
 		categories: [''],
-		description: 'EXAMPLE TEXT',
+		description: '',
 		graphic:null,
 		background_color: '',
 		secondary_color: '',
-		display_title: '',
+		display_title: false,
 		grade_level: ''
 	};
 
@@ -118,47 +118,8 @@ function floatingObj(dist, time, ease){
 		});
 }
 
-function validate(){
-	var to_check = $('.active .validate');
-	var rtrn;
-	_.each(to_check, function(el, id){
-		el = $(el);
-		if(el.attr('id') == 'file')
-		{
-			if(!el.attr('img'))
-			{
-				el.addClass('error');
-				el.siblings('.upload').addClass('error');
-			}
-			else
-			{
-				el.removeClass('error');
-				el.siblings('.upload').removeClass('error');
-			}
-		}
-		else
-		{
-			if(el.val().length == 0)
-			{
-				el.addClass('error');
-			}
-			else
-				el.removeClass('error');
-		}
-	});
-	if(to_check.hasClass('error'))
-		return false;
-	else return true;
-}
 
-function switchPages(tar){
-	var move = $(tar).width();
-	var move_in = $('.input-area').not(tar);
-	$(tar).animate({left:-move}, 900, 'easeOutExpo', function(){
-		$(move_in).toggleClass('active').animate({left:'0px'}, 1500, 'easeOutBounce');
-		$(this).toggleClass('active').css('left', '-800px');
-	})
-}
+
 
 function selectOptions(max){
 	for(var i=2; i<=max; i++)
@@ -178,6 +139,7 @@ function selectOptions(max){
 		    	dataType: 'json',
 		    	multipart: true,
 		    	done: function(e,data) {
+		    		$('#file').attr('img', data.result.path);
 		    		console.log('done');
 		    		deck.set("graphic","upload/"+data.result.path);
 			    }
@@ -249,9 +211,9 @@ function selectOptions(max){
 		'click #display-title' : function(event){
 			el = $(event.target);
 			if($(el+':checked').length == 0)
-				deck.set('display_title', '');
+				deck.set('display_title', false);
 			else
-				deck.set('display_title', 'true');
+				deck.set('display_title', true);
 		},
 		'click #upload' : function(event){
 			event.preventDefault();
@@ -309,7 +271,6 @@ function selectOptions(max){
 
 	Template.deck_info.deck = function(){
 		var d = deck.all();
-		$('#file').attr('img', d.graphic);
 		return d;
 	}
 
