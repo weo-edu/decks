@@ -1,8 +1,7 @@
 <template name="card_create">
-	<div class="ipad">
+	<div class="ipad" defer='{{defer}}'>
 		<h1 class="title">CARD CREATOR</h1>
 			{{>step_container_1}}
-			{{>step_container_3}}
 	</div>
 </template>
 
@@ -12,14 +11,15 @@
 		<div class="textarea-field field">
 			<div class="text">Template*: </div>
 			<textarea id="template" type="text" class="instant_update back-part validate" name="template" rows="4"/> 
-		{{>template_errors}}
 		</div>
 		<div class="field">
 			<div class="text">Solution*: </div>
 			<input class="instant_update back-part validate" id="solution" type="text" name="solution"/>
-		{{>solution_errors}}
 		</div>
 		{{>rules}}
+		<div id="bottom-button" class="field">
+			<div id="create" class="upload">Create</div>
+		</div>
 		</div>
 		<div class="button" id="prev-inputs"></div>
 	</div>
@@ -68,38 +68,6 @@
 		{{>card_preview}}
 </template>
 
-<template name="step_container_2">
-	<div class="create" id="step-2-cont">
-		{{>color_picker}}
-	</div>
-</template>
-
-<template name="step_container_3">
-	<div class = "create" id="step-3-cont">
-		{{>deck_preview}}
-	</div>
-</template>
-
-<template name="deck_preview">
-	<div class="deck-holder display">
-		<div class="deck-preview">
-			{{#each deck}}
-				<div id="create-deck-container" class="deck-container">
-					<div class="deck" id='{{_id}}'>
-						<div class="front" id='card-image' style='background: url(/{{graphic}}); background-color:{{primary_color}}'> 
-						</div>
-						<div class='back'>
-							<div class="deck-title">{{name}}</div>
-							<div class="info">{{description}}</div>
-							<div class='choose-deck'>Select</div>
-						</div>
-					</div>
-				</div>
-			{{/each}}
-		</div>
-	</div>
-</template>
-
 <template name="card_deck_list">
 	<div class="display-inner">
 		<h2>Select Deck to Add To</h2>
@@ -115,13 +83,6 @@
 	</div>
 </template>
 
-<template name="template_errors">
-		<div id='template-error-message' class='error-message'>{{error}}</div>
-</template>
-
-<template name="solution_errors">
-	<div id='solution-error-message' class='error-message'>{{error}}</div>
-</template>
 
 <template name="rules">
 	<div class="field">

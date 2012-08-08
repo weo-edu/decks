@@ -551,11 +551,15 @@ $height:36px;
 	margin: 0 auto;
 	overflow-x:hidden;
 	overflow-y: auto;
-	height:170px;
+	height:118px;
 	margin-top:5px;
 	}
 	#rules{
 		width:100%;
+	}
+	#bottom-button{
+		position:relative;
+		margin:25px auto;
 	}
 }
 .field-wrapper{
@@ -576,6 +580,10 @@ $height:36px;
 			width:370px;
 			height:$height;
 			margin:15px auto;
+			#add-rule{
+				width:275px;
+				margin: 0 auto;
+			}
 			.upload{
 				cursor: pointer;
 				height: $height;

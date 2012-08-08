@@ -710,11 +710,15 @@ a {
   margin: 0 auto;
   overflow-x: hidden;
   overflow-y: auto;
-  height: 170px;
+  height: 118px;
   margin-top: 5px;
 }
 #card-inner #rules {
   width: 100%;
+}
+#card-inner #bottom-button {
+  position: relative;
+  margin: 25px auto;
 }
 
 .field-wrapper {
@@ -737,6 +741,10 @@ a {
   width: 370px;
   height: 36px;
   margin: 15px auto;
+}
+.field-wrapper .field #add-rule {
+  width: 275px;
+  margin: 0 auto;
 }
 .field-wrapper .field .upload {
   cursor: pointer;

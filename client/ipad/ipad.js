@@ -28,78 +28,6 @@ var transitionPrefix = domToCss(domTransitionProperty);
 
 	var deck = new Reactive.Store('deck', freshDeck);
 
-	
-
-function darken(from, elem, amount){
-	var color = from;
-	var cur_color = $(elem).css('color');
-	var per = 255 * (amount/100);
-	var old_colors = [];
-	if(color && cur_color)
-	{
-		cur_color = chopRGB(cur_color);
-		var colors = chopRGB(color);
-		old_colors = _.clone(colors);
-		_.each(colors, function(el, id, key){
-			if(checkBlack(old_colors))
-				var new_color = 255;
-			else
-				var new_color = el - per;
-			el =	new_color >= 0 ? new_color : 0;
-			colors[id] = el;
-		})
-	
-		var comp = compareColors(colors, old_colors);
-			if(comp >= 25)
-			{
-				_.each(elem, function(elm, id){
-					$(elm).css('color', 'rgba('+colors[0]+','+colors[1]+','+colors[2]+', 1)');
-				});
-			}
-		// }
-	}
-}
-
-function checkBlack(ele){
-	var tot = 0;
-	_.each(ele, function(el, id){
-		tot += el;
-	})
-	if (tot <= 50)
-		return true;
-	else
-		return false;
-}
-
-function compareColors(ele, comp){
-	var tot = 0;
-	_.each(ele, function(el, id){
-		tot += Math.abs(el-comp[id]);
-	})
-	return tot;
-}
-
-function chopRGB(ele){
-	if(ele){
-		var elem = ele;
-		elem = elem.split(',');
-		var exp = /[a-z()]/g;
-		_.each(elem, function(el, id){
-			el = el.trim();
-			el = el.replace(exp, '');
-			el = parseInt(el);
-			elem[id] = el;
-		})
-		return elem;
-	}
-}
-
-function textColor(){
-	var color = $('#box section').children('.deck-title').css('background-color');
-	var h2 = $('#box section').children('h2');
-	var p = $('#box section').children('p');
-	darken(color, h2, 70);
-}
 
 function floatingObj(dist, time, ease){
 	//textColor();
@@ -117,7 +45,6 @@ function floatingObj(dist, time, ease){
 			});
 		});
 }
-
 
 
 
@@ -223,63 +150,22 @@ function selectOptions(max){
 			if(validate())
 			{
 				Decks.insert(deck.all(), function(err, id){
-					console.log(err);
-					console.log(id);
 					if(!err){
 						alert('Succesful Insert');
 						switchPages($(event.target).closest('.input-area'));
-						reset();
+						reset(deck);
 					}
 				});
 			}
 		}
 	}
 
-	function reset(){
-		
-		switchPages('.active')
-		_.each(deck.all(), function(el, id, third){
-			deck.set(id, freshDeck.id);
-		})
-		$('input').val('');
-		$('textarea').val('')
-		$('input').removeClass('error');
-	}
-
-
-	Template.deck_spin.events = {
-		'mousedown #viewport' : function(event)
-		{
-			var el = $(event.target);
-			var tar = el.closest('#viewport');
-			var status = tar.css('-webkit-animation-play-state');
-			//status == 'running' ? tar.css('-webkit-animation-play-state', 'paused') : tar.css('-webkit-animation-play-state', 'running');
-		},
-		'click .spin-button' : function(event)
-		{
-			var tar = $('#viewport');
-			var shad = $('.drop-shadow');
-			var anim = 'infinite-spinning 1600s linear';
-			var state = '-webkit-animation-play-state';
-			var status = tar.css(state);
-			status == 'running' ? tar.css(state, 'paused') : tar.css(state, 'running');
-			tar.css('-webkit-animation', anim);
-			//shad.css('-webkit-animation', anim);
-			console.log(status);
-		}
-	}
 
 	Template.deck_info.deck = function(){
 		var d = deck.all();
 		return d;
 	}
-
-	Template.preset_buttons.events = {
-		'click .quick-button' : function(event){
-			var el = $(event.target)
-			setView(el, event);
-		}
-	}
+	
 	view.render('deck_create');
 
 });
