@@ -640,15 +640,19 @@ $height:36px;
 	margin: 0 auto;
 	overflow-x:hidden;
 	overflow-y: auto;
-	height:175px;
+	height:118px;
 	margin-top:5px;
 	}
 	#rules{
 		width:100%;
 	}
+	#bottom-button{
+		position:relative;
+		margin:25px auto;
+	}
 }
 .field-wrapper{
-		margin: 19% 0px;
+		margin: 18% 0px;
 		div, input{
 			font-size:18px;
 			//line-height:36px;
@@ -665,6 +669,10 @@ $height:36px;
 			width:370px;
 			height:$height;
 			margin:15px auto;
+			#add-rule{
+				width:275px;
+				margin: 0 auto;
+			}
 			.upload{
 				cursor: pointer;
 				height: $height;
@@ -707,6 +715,7 @@ $height:36px;
 	}
 }
 .ipad{
+
 	$size:320px;
 	$width:$size/1.45;
 	$depth:$width/3;
@@ -719,76 +728,7 @@ $height:36px;
 	background-position:bottom;
 	background-color:transparent;
 	background-image:url('/create-bg.jpg');
-	.title{
-		background-color:#3FA9F5;
-		height:75px;
-		color:white;
-		font-size:50px;
-		line-height:75px;
-		padding:0px 20px;
-		font-family:'MayonaiseCondRegular';
-	}
-	#look-input{
-		left:-800px;
-	}	
-	.button{
-		cursor:pointer;
-		height: 30px;
-		margin: 0 auto;
-		width: 30px;
-		background-size: 100%;
-		position: absolute;
-		bottom: 93px;
-	}
-	#more-inputs{
-		right:95px;
-		background-image:url('/right_arrow.gif');
-	}
-	#prev-inputs{
-		right:none;
-		left:95px;
-		background-image:url('/left_arrow.gif');
-	}
-	.deck-position{
-		float:left;
-		width:$ipadwidth - $imgwidth;
-		height: 100%;
-		right: 0px;
-		position: absolute;
-		.deck-shadow{
-			font-family:'KatanaRegular';
-			top: 95px;
-			width: $width;
-			margin: 0 auto;
-			position: relative;
-			@include perspective(700px);
-		}
-		.drop-shadow{
-			margin: 5px auto;
-			height: $depth/1.5;
-			width: $width/1.8;
-			@include border-radius(30% 45% 25% 30%);
-			background-color: transparentize(#000, 0.7); 
-			@include box-shadow(0 0px 20px 12px transparentize(#000, 0.70));
-			@include transform(rotateX(90deg) translate3d(0px,0px,0px));
-			position: relative;
-			bottom: -360px;
-		}
-		.spin-button{
-			top: -50px;
-			position: relative;
-			padding: 5px;
-			font-family: 'WisdomScript';
-			text-align: center;
-			width: 28%;
-			margin: 0 auto;
-			font-size: 25px;
-			background-color: rgba(0, 0, 0, 0.63);
-			box-shadow: 0 0px 10px 9px rgba(0, 0, 0, 0.63);
-			cursor: pointer;
-			color: tomato;
-		}
-	}
+
 	section#viewport{
 		//-webkit-animation:infinite-spinning $time linear;
 		position:relative;
@@ -830,11 +770,12 @@ $height:36px;
 			line-height:25px;
 		}
 	}
+
 	#front, #back{
 	 width:$width;
 	 height: $size;
 	 @include transform(translate3d(0px, 0px, $offset));
-	 img{
+	 .full-image{
 	 	left:0px;
 	 	top: 0px;
 		z-index: 0;
@@ -869,12 +810,167 @@ $height:36px;
 	#right{
 		@include transform(rotateY(90deg) translate3d(0px, 0px, $width - $offset));
 	}
+	.title{
+		background-color:#3FA9F5;
+		height:75px;
+		color:white;
+		font-size:50px;
+		line-height:75px;
+		padding:0px 20px;
+		font-family:'MayonaiseCondRegular';
+	}
+	#look-input, #template-input{
+		left:-800px;
+	}	
+	.button{
+		cursor:pointer;
+		height: 30px;
+		margin: 0 auto;
+		width: 30px;
+		background-size: 100%;
+		position: absolute;
+		bottom: 93px;
+	}
+	#more-inputs{
+		right:95px;
+		background-image:url('/right_arrow.gif');
+	}
+	#prev-inputs{
+		right:none;
+		left:95px;
+		background-image:url('/left_arrow.gif');
+	}
+	.deck-position{
+		float:left;
+		width:$ipadwidth - $imgwidth;
+		height: 100%;
+		right: 0px;
+		position: absolute;
+		.deck-shadow{
+			font-family:'arial';
+			top: 95px;
+			width: $width;
+			margin: 0 auto;
+			position: relative;
+			@include perspective(700px);
+		}
+		.drop-shadow{
+			margin: 5px auto;
+			height: $depth/1.5;
+			width: $width/1.8;
+			@include border-radius(30% 45% 25% 30%);
+			background-color: transparentize(#000, 0.7); 
+			@include box-shadow(0 0px 20px 12px transparentize(#000, 0.70));
+			@include transform(rotateX(90deg) translate3d(0px,0px,0px));
+			position: relative;
+			bottom: -360px;
+		}
+		.spin-button{
+			top: -50px;
+			position: relative;
+			padding: 5px;
+			font-family: 'WisdomScript';
+			text-align: center;
+			width: 28%;
+			margin: 0 auto;
+			font-size: 25px;
+			background-color: rgba(0, 0, 0, 0.63);
+			box-shadow: 0 0px 10px 9px rgba(0, 0, 0, 0.63);
+			cursor: pointer;
+			color: tomato;
+		}
+	}
+	
+	#card{
+		width:$width;
+		height: $size;
+		$margin:15px;
+		$inner_height:$size - $margin*2;
+		$font:$inner-height * (1/10);
+		@include border-radius(8px);
+		@include transform-style(preserve-3d);
+		@include transform(rotateY(0deg));
+		@include transition(all .5s ease-in-out);
+		background-color:black;
+		&.flip{
+			@include transform(rotateY(180deg));
+		}
+		.overflowing{
+			display:none;
+			position:absolute;
+			z-index:2;
+		}
+		#front,#back{
+			@include transform(rotateY(0deg) translate3d(0,0,2px));
+			@include transform-style(flat);
+			@include backface-visibility(hidden);
+			position:absolute;
+		}
+		#back{
+			@include transform(rotateY(180deg) translate3d(0,0,2px));
+		}
+		.display-inner{
+			margin: $margin;
+			width: $width - $margin*2;
+			height:$inner_height;
+			position:absolute;
+			background-color:#123456;
+			outline:2px outset darkGoldenrod;
+			.elem{
+				@include transition(all .5s ease-in-out);
+			}
+			h1,h2,h3,h4,h5{
+				text-align: center;
+				background-color: #123456;
+				color: white;
+				font-size:$font;
+				height:10%;
+				overflow:hidden;
+				white-space:nowrap;
+			}
+			img{
+				border-bottom: 2px outset darkGoldenrod;
+			}
+			img, .fill{
+				width:100%;
+				height:65%;
+			}
+			.full{
+				height:75%;
+			}
+			.text{
+				text-align: center;
+				overflow:hidden;
+			}
+			.question{
+				position:absolute;
+				top:5%;
+				left:0px;
+				width:100%;
+				max-height: 30%;
+				font-weight:bold;
+			}
+			.solution{
+				position:absolute;
+				top:90%;
+				width:100%;
+				height:15%;
+				font-weight:normal;
+			}
+		}
+	}
 }
 
 
 //	CARD CREATOR
 ////////////////////////////
 
+.tags{
+	text-decoration:underline;
+	color:blue;
+	font-weight: 700;
+	margin: 0px 5px;
+}
 
 $cardsize:380px;
 $cardmargin:15px;
@@ -996,10 +1092,17 @@ $cardmargin:15px;
 		color: white;
 		text-shadow: 1px 1px #AAA;
 	}
-	.card-section
-	{
+}
+.card-section
+{
+	text-align:center;
+	margin:10px;
+	h2{
+		@include transition(all .5s ease-in-out);
 		text-align:center;
-		margin:20px;
+		font-family:WisdomScript;
+		font-size:30px;
+		margin: 40px auto;
 	}
 }
 #flippable{
