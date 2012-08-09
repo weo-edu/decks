@@ -16,18 +16,23 @@ var transitionPrefix = domToCss(domTransitionProperty);
 
 	var freshDeck = {
 		id: Meteor.user(),
-		name: '',
-		categories: [''],
+		title: '',
+		tags: [''],
 		description: '',
-		graphic:null,
-		background_color: '',
-		secondary_color: '',
-		display_title: false,
-		grade_level: ''
+		render:{},
+		gradePrior: ''
 	};
 
 	var deck = new Reactive.Store('deck', freshDeck);
-
+	var render = new Reactive.Store('render', {
+		image:null,
+		displayTitle: false,
+		colorScheme: {}
+	})
+	var colorscheme = new Reactive.Store('colorscheme', {
+		primary: '',
+		secondary: ''
+	})
 
 function floatingObj(dist, time, ease){
 	//textColor();
@@ -51,7 +56,7 @@ function floatingObj(dist, time, ease){
 function selectOptions(max){
 	for(var i=2; i<=max; i++)
 	{
-		$('#grade_level').append('<option val='+i+'>'+i+'</option');
+		$('#gradePrior').append('<option val='+i+'>'+i+'</option');
 	}
 }
 
@@ -68,7 +73,8 @@ function selectOptions(max){
 		    	done: function(e,data) {
 		    		$('#file').attr('img', data.result.path);
 		    		console.log('done');
-		    		deck.set("graphic","upload/"+data.result.path);
+		    		render.set('image',"upload/"+data.result.path);
+		    		deck.set('render', render.all());
 			    }
 		    });
 			mytrackball = new Traqball({
@@ -91,6 +97,13 @@ function selectOptions(max){
 		if(elem.hasClass('error'))
 			validate();
 
+		if(elem.hasClass('color'))
+			{
+				colorscheme.set(id, val);
+				render.set('colorScheme', colorscheme.all())
+				id = 'render';
+				val = render.all();
+			}
 		if (!deck.equals(id,val))
 		{
 			if(id == 'categories')
@@ -101,8 +114,6 @@ function selectOptions(max){
 				});
 			}
 			deck.set(id, val);
-			if(id == 'primary_color')
-				textColor(elem, id, val);
 		}
 	}
 
@@ -135,12 +146,13 @@ function selectOptions(max){
 			var tar = $(event.target).closest('.input-area');
 			switchPages(tar);
 		},
-		'click #display-title' : function(event){
+		'click #displayTitle' : function(event){
 			el = $(event.target);
 			if($(el+':checked').length == 0)
-				deck.set('display_title', false);
+				render.set('displayTitle', false);
 			else
-				deck.set('display_title', true);
+				render.set('displayTitle', true);
+			deck.set('render', render.all());
 		},
 		'click #upload' : function(event){
 			event.preventDefault();
@@ -165,7 +177,7 @@ function selectOptions(max){
 		var d = deck.all();
 		return d;
 	}
-	
+
 	view.render('deck_create');
 
 });

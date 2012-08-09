@@ -12,11 +12,11 @@
 	<div id="deck-input" class="input-area active">
 		<div class="field-wrapper">
 			<div class="field">
-				<div class="text">Title*:</div><input id="name" class="instant_update validate" type="text" name="important" />
+				<div class="text">Title*:</div><input id="title" class="instant_update validate" type="text" name="important" />
 			</div>
 			<div class="field">
 				<div class="text">Categories:</div>
-				<input id="categories" type="text" class="instant_update" name="template"/> 
+				<input id="tags" type="text" class="instant_update" name="template"/> 
 			</div>
 			<div class="textarea-field field">
 				<div class="text">Description:</div>
@@ -24,7 +24,7 @@
 			</div>
 			<div class="field">
 				<div class="text">Grade Level:</div>
-				<select class="instant_update" type="text" id="grade_level" name="grade_level">
+				<select class="instant_update" type="text" id="gradePrior" name="gradePrior">
 				</select>
 			</div>
 			<div id="more-inputs" class="button"></div>
@@ -37,7 +37,7 @@
 		<div class="field-wrapper">
 			<div class="field">
 				<div class="text">Display Title:</div>
-				<input type="checkbox" id="display-title"></input>
+				<input type="checkbox" id="displayTitle"></input>
 			</div>
 			<div class="field">
 				<div class="text">Upload Picture*:</div>
@@ -48,11 +48,11 @@
 			</div>
 			<div class="field">
 				<div class="text">Background Color:</div>
-				<input class="instant_update color validate" id="background_color" type="text" value=""/>
+				<input class="instant_update color validate" id="primary" type="text" value=""/>
 			</div>
 			<div class="field">
 				<div class="text">Border Color:</div>
-				<input class="instant_update color validate" id="secondary_color" type="text" value=""/>
+				<input class="instant_update color validate" id="secondary" type="text" value=""/>
 			</div>
 			<div class="field">
 				<div id="insert" class="upload">Insert</div>
@@ -80,23 +80,23 @@
 
 <template name="deck_info">
 {{#with deck}}
-<section id="front" style="background-color:{{background_color}}; outline-color:{{secondary_color}};">
-	{{#if display_title}}
-		<h2 class="deck-title" style="background-color:{{secondary_color}}; color:{{background_color}}">{{name}}</h2>
+<section id="front" style="background-color:{{render.colorScheme.primary}}; outline-color:{{render.colorScheme.secondary}};">
+	{{#if render.displayTitle}}
+		<h2 class="deck-title" style="background-color:{{render.colorScheme.secondary}}; color:{{render.colorScheme.primary}}">{{title}}</h2>
 	{{/if}}
-	{{#if graphic}}
-		<img class="full-image" src='/{{graphic}}' />
+	{{#if render.image}}
+		<img class="full-image" src='/{{render.image}}' />
 	{{/if}}
 </section>
-<section id="top" style="background-color:{{background_color}}; outline-color:{{secondary_color}};">
+<section id="top" style="background-color:{{render.colorScheme.colorScheme.primary}}; outline-color:{{render.colorScheme.secondary}};">
 </section>
-<section id="bottom" style="background-color:{{background_color}}; outline-color:{{secondary_color}};">
+<section id="bottom" style="background-color:{{render.colorScheme.primary}}; outline-color:{{render.colorScheme.secondary}};">
 </section>
-<section id="back" style="background-color:{{background_color}}; outline-color:{{secondary_color}};">
+<section id="back" style="background-color:{{render.colorScheme.primary}}; outline-color:{{render.colorScheme.secondary}};">
 </section>
-<section id="left" style="background-color:{{background_color}}; outline-color:{{secondary_color}};">
+<section id="left" style="background-color:{{render.colorScheme.primary}}; outline-color:{{render.colorScheme.secondary}};">
 </section>
-<section id="right" style="background-color:{{background_color}}; outline-color:{{secondary_color}};">
+<section id="right" style="background-color:{{render.colorScheme.primary}}; outline-color:{{render.colorScheme.secondary}};">
 </section>
 {{/with}}
 </template>
