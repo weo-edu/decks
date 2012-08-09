@@ -3,71 +3,6 @@
  * In this file you should write your main styles. (or centralize your imports)
  * Import this file using the following HTML or equivalent:
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
-/* line 17, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font: inherit;
-  font-size: 100%;
-  vertical-align: baseline;
-}
-
-/* line 22, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
-html {
-  line-height: 1;
-}
-
-/* line 24, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
-ol, ul {
-  list-style: none;
-}
-
-/* line 26, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-
-/* line 28, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
-caption, th, td {
-  text-align: left;
-  font-weight: normal;
-  vertical-align: middle;
-}
-
-/* line 30, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
-q, blockquote {
-  quotes: none;
-}
-/* line 103, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
-q:before, q:after, blockquote:before, blockquote:after {
-  content: "";
-  content: none;
-}
-
-/* line 32, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
-a img {
-  border: none;
-}
-
-/* line 116, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
-article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
-  display: block;
-}
-
 @font-face {
   font-family: 'HighlandsRegular';
   src: url("/app!common/fonts/highlands-regular-webfont.eot");
@@ -117,12 +52,20 @@ a {
   text-decoration: none;
 }
 
-/* line 14, ../sass/screen.scss */
+/* line 12, ../sass/screen.scss */
 .container {
   height: 100%;
 }
 
-/* line 18, ../sass/screen.scss */
+/* line 17, ../sass/screen.scss */
+#content {
+  width: 1024px;
+  height: 672px;
+  background: #FFF;
+  overflow: hidden;
+}
+
+/* line 23, ../sass/screen.scss */
 #weo-start {
   -webkit-transform: translate3d(0, 0, 0);
   -moz-transform: translate3d(0, 0, 0);
@@ -131,13 +74,13 @@ a {
   transform: translate3d(0, 0, 0);
 }
 
-/* line 25, ../sass/screen.scss */
+/* line 30, ../sass/screen.scss */
 #start-screen {
   background: url(/img/startBg.png) center center;
   height: 100%;
 }
 
-/* line 31, ../sass/screen.scss */
+/* line 36, ../sass/screen.scss */
 #deckFlow {
   z-index: 9999;
   cursor: move;
@@ -168,7 +111,7 @@ a {
   -o-transform: translateZ(99999px);
   transform: translateZ(99999px);
 }
-/* line 45, ../sass/screen.scss */
+/* line 50, ../sass/screen.scss */
 #deckFlow.offstage {
   -webkit-transform: scale(2);
   -moz-transform: scale(2);
@@ -178,13 +121,13 @@ a {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
 }
-/* line 49, ../sass/screen.scss */
+/* line 54, ../sass/screen.scss */
 #deckFlow .deck {
   position: absolute;
-  width: 218px;
+  width: 210px;
   height: 370px;
 }
-/* line 63, ../sass/screen.scss */
+/* line 58, ../sass/screen.scss */
 #deckFlow .deck .shadow {
   width: 140px;
   left: 39px;
@@ -198,94 +141,93 @@ a {
   position: absolute;
   bottom: 0px;
 }
-/* line 71, ../sass/screen.scss */
+/* line 66, ../sass/screen.scss */
 #deckFlow .deck .shadow.float {
   width: 150px;
   left: 34px;
   height: 25px;
 }
-/* line 77, ../sass/screen.scss */
+/* line 72, ../sass/screen.scss */
 #deckFlow .deck img {
   position: absolute;
   top: 0;
 }
-/* line 80, ../sass/screen.scss */
+/* line 75, ../sass/screen.scss */
 #deckFlow .deck img.float {
   top: 15px;
 }
 
-/* line 89, ../sass/screen.scss */
+/* line 84, ../sass/screen.scss */
 #scene img {
   position: absolute;
 }
-/* line 92, ../sass/screen.scss */
+/* line 87, ../sass/screen.scss */
 #scene .sign {
   top: 0px;
 }
-/* line 94, ../sass/screen.scss */
+/* line 89, ../sass/screen.scss */
 #scene .sign.offstage {
   top: -300px;
 }
-/* line 98, ../sass/screen.scss */
+/* line 93, ../sass/screen.scss */
 #scene .mountain-back {
   left: 180px;
   bottom: 240px;
 }
-/* line 101, ../sass/screen.scss */
+/* line 96, ../sass/screen.scss */
 #scene .mountain-back.offstage {
   left: -1200px;
 }
-/* line 105, ../sass/screen.scss */
+/* line 100, ../sass/screen.scss */
 #scene .mountain-mid {
   left: -350px;
   bottom: 120px;
 }
-/* line 108, ../sass/screen.scss */
+/* line 103, ../sass/screen.scss */
 #scene .mountain-mid.offstage {
   left: -2000px;
 }
-/* line 112, ../sass/screen.scss */
+/* line 107, ../sass/screen.scss */
 #scene .mountain-front {
   bottom: 150px;
   left: -100px;
 }
-/* line 115, ../sass/screen.scss */
+/* line 110, ../sass/screen.scss */
 #scene .mountain-front.offstage {
   left: -2000px;
 }
-/* line 119, ../sass/screen.scss */
+/* line 114, ../sass/screen.scss */
 #scene .temple {
   bottom: 150px;
   left: 30px;
 }
-/* line 122, ../sass/screen.scss */
+/* line 117, ../sass/screen.scss */
 #scene .temple.offstage {
   left: -450px;
 }
-/* line 126, ../sass/screen.scss */
+/* line 121, ../sass/screen.scss */
 #scene .ground {
   bottom: 0;
 }
-/* line 128, ../sass/screen.scss */
+/* line 123, ../sass/screen.scss */
 #scene .ground.offstage {
   bottom: -500px;
 }
-/* line 132, ../sass/screen.scss */
+/* line 127, ../sass/screen.scss */
 #scene .guru {
   bottom: 150px;
   left: 70px;
 }
-/* line 135, ../sass/screen.scss */
+/* line 130, ../sass/screen.scss */
 #scene .guru.offstage {
   bottom: -350px;
 }
 
-/* line 148, ../sass/screen.scss */
+/* line 143, ../sass/screen.scss */
 #browse-screen {
-  height: 100%;
-  background: url(../img/browseBg.jpg) center center no-repeat;
+  width: 3072px;
 }
-/* line 152, ../sass/screen.scss */
+/* line 145, ../sass/screen.scss */
 #browse-screen .awning {
   height: 55px;
   background: url("/app!common/textures/blue-scale.png");
@@ -298,11 +240,29 @@ a {
   line-height: 55px;
   padding: 0 20px;
 }
+/* line 157, ../sass/screen.scss */
+#browse-screen .play-placeholder {
+  margin-left: -100%;
+  float: left;
+  height: 100%;
+  background: url(../img/browseBg.jpg) center center no-repeat;
+  width: 1024px;
+  height: 672px;
+}
+/* line 164, ../sass/screen.scss */
+#browse-screen .browse {
+  float: left;
+  height: 100%;
+  background: url(../img/browseBg.jpg) center center no-repeat;
+  width: 1024px;
+  height: 672px;
+}
 
-/* line 165, ../sass/screen.scss */
+/* line 172, ../sass/screen.scss */
 #deck-grid {
-  height: 180px;
-  width: 900px;
+  height: 220px;
+  width: 850px;
+  visibility: hidden;
   margin: 150px auto 0;
   -webkit-transform-style: flat;
   -moz-transform-style: flat;
@@ -310,1017 +270,131 @@ a {
   -o-transform-style: flat;
   transform-style: flat;
 }
-/* line 174, ../sass/screen.scss */
-#deck-grid .deck {
-  cursor: pointer;
-  width: 140px;
-  height: 180px;
-  position: absolute;
-  background-position: center center;
-}
-
-/* line 194, ../sass/screen.scss */
-#mute-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  height: 30px;
-  cursor: pointer;
-  text-decoration: line-through;
-}
-/* line 201, ../sass/screen.scss */
-#mute-button.muted {
-  text-decoration: none;
-}
-
-/* line 207, ../sass/screen.scss */
-#content {
-  width: 1024px;
-  height: 672px;
-  background: #FFF;
-  overflow: hidden;
-}
-
-/* line 214, ../sass/screen.scss */
-#deck-grid {
-  -webkit-transition: height 0.7s ease-out;
-  -moz-transition: height 0.7s ease-out;
-  -o-transition: height 0.7s ease-out;
-  transition: height 0.7s ease-out;
-  position: relative;
-}
-/* line 218, ../sass/screen.scss */
+/* line 181, ../sass/screen.scss */
 #deck-grid .deck-container {
-  -webkit-perspective: 800px;
-  -moz-perspective: 800px;
-  -ms-perspective: 800px;
-  -o-perspective: 800px;
-  perspective: 800px;
-  -webkit-transform-style: preserve-3d;
-  -moz-transform-style: preserve-3d;
-  -ms-transform-style: preserve-3d;
-  -o-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-  -webkit-transform: rotateY(120deg) scale(0.001);
-  -moz-transform: rotateY(120deg) scale(0.001);
-  -ms-transform: rotateY(120deg) scale(0.001);
-  -o-transform: rotateY(120deg) scale(0.001);
-  transform: rotateY(120deg) scale(0.001);
   cursor: pointer;
-  position: absolute;
-}
-
-/* line 228, ../sass/screen.scss */
-#decks-title {
-  text-align: center;
-  font-size: 40px;
-  margin: 30px 0;
-  color: #999;
-}
-
-/* line 237, ../sass/screen.scss */
-.card-container, .deck-container {
-  height: 150px;
   width: 150px;
-  -webkit-transition: all 0.4s ease-out;
-  -moz-transition: all 0.4s ease-out;
-  -o-transition: all 0.4s ease-out;
-  transition: all 0.4s ease-out;
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  -ms-border-radius: 8px;
-  -o-border-radius: 8px;
-  border-radius: 8px;
-  z-index: 0;
+  height: 220px;
+  float: left;
+  background-position: center center;
+  position: relative;
+}
+/* line 188, ../sass/screen.scss */
+#deck-grid .deck-container .shadow {
+  position: absolute;
+  bottom: 5px;
+  -webkit-border-radius: 45% 45% 65% 65%;
+  -moz-border-radius: 45% 45% 65% 65%;
+  -ms-border-radius: 45% 45% 65% 65%;
+  -o-border-radius: 45% 45% 65% 65%;
+  border-radius: 45% 45% 65% 65%;
+  background: rgba(51, 51, 51, 0.3);
+  width: 95px;
+  height: 18px;
+  left: 25px;
 }
 
-/* line 244, ../sass/screen.scss */
-.deck-container .deck, .deck-container .card, .card-container .deck, .card-container .card {
-  height: 100%;
-  width: 100%;
-  -webkit-perspective: 800px;
-  -moz-perspective: 800px;
-  -ms-perspective: 800px;
-  -o-perspective: 800px;
-  perspective: 800px;
+/* line 200, ../sass/screen.scss */
+.dialog {
+  width: 700px;
 }
-/* line 250, ../sass/screen.scss */
-.deck-container .front, .deck-container .back, .card-container .front, .card-container .back {
-  -webkit-transition: all 0.25s ease-in-out;
-  -moz-transition: all 0.25s ease-in-out;
-  -o-transition: all 0.25s ease-in-out;
-  transition: all 0.25s ease-in-out;
-  -webkit-transform-style: preserve-3d;
-  -moz-transform-style: preserve-3d;
-  -ms-transform-style: preserve-3d;
-  -o-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-  -webkit-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  -ms-backface-visibility: hidden;
-  -o-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -webkit-box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.6), 0 0 7px #333333;
-  -moz-box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.6), 0 0 7px #333333;
-  box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.6), 0 0 7px #333333;
-  -webkit-background-size: 100%;
-  -moz-background-size: 100%;
-  -o-background-size: 100%;
-  background-size: 100%;
-  background-repeat: no-repeat;
-  background-position: center;
+/* line 202, ../sass/screen.scss */
+.dialog .content {
+  padding: 0;
 }
-/* line 260, ../sass/screen.scss */
-.deck-container .front, .card-container .front {
-  -webkit-transform: rotateX(0deg) rotateY(0deg);
-  -moz-transform: rotateX(0deg) rotateY(0deg);
-  -ms-transform: rotateX(0deg) rotateY(0deg);
-  -o-transform: rotateX(0deg) rotateY(0deg);
-  transform: rotateX(0deg) rotateY(0deg);
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  -ms-border-radius: 8px;
-  -o-border-radius: 8px;
-  border-radius: 8px;
-}
-/* line 268, ../sass/screen.scss */
-.deck-container .back, .card-container .back {
-  position: absolute;
-  left: 0;
-  padding: 10px;
-  width: 130px;
-  height: 130px;
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  -ms-border-radius: 8px;
-  -o-border-radius: 8px;
-  border-radius: 8px;
-  font: 16px/1.2em sans-serif;
+/* line 205, ../sass/screen.scss */
+.dialog h2 {
+  background: #333;
   color: #FFF;
-  background: rgba(0, 0, 0, 0.3);
-  background: url("/app!common/textures/low_contrast_linen.png");
-  bottom: 0;
-  -webkit-transform: rotateY(180deg);
-  -moz-transform: rotateY(180deg);
-  -ms-transform: rotateY(180deg);
-  -o-transform: rotateY(180deg);
-  transform: rotateY(180deg);
-}
-/* line 282, ../sass/screen.scss */
-.deck-container .back .play, .card-container .back .play {
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #dddddd));
-  background: -webkit-linear-gradient(#ffffff, #dddddd);
-  background: -moz-linear-gradient(#ffffff, #dddddd);
-  background: -o-linear-gradient(#ffffff, #dddddd);
-  background: linear-gradient(#ffffff, #dddddd);
-  cursor: pointer;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -o-border-radius: 5px;
-  border-radius: 5px;
-  position: absolute;
-  bottom: 10px;
-  width: 100px;
-  color: #333;
-  padding: 5px;
-  display: block;
-  text-align: center;
-}
-/* line 294, ../sass/screen.scss */
-.deck-container .back .play:hover, .card-container .back .play:hover {
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #ffffff));
-  background: -webkit-linear-gradient(#dddddd, #ffffff);
-  background: -moz-linear-gradient(#dddddd, #ffffff);
-  background: -o-linear-gradient(#dddddd, #ffffff);
-  background: linear-gradient(#dddddd, #ffffff);
-}
-/* line 301, ../sass/screen.scss */
-.deck-container.view-more .front, .card-container.view-more .front {
-  -webkit-transform: rotateY(-180deg);
-  -moz-transform: rotateY(-180deg);
-  -ms-transform: rotateY(-180deg);
-  -o-transform: rotateY(-180deg);
-  transform: rotateY(-180deg);
-}
-/* line 304, ../sass/screen.scss */
-.deck-container.view-more .back, .card-container.view-more .back {
-  z-index: 99;
-  -webkit-transform: rotateY(0deg);
-  -moz-transform: rotateY(0deg);
-  -ms-transform: rotateY(0deg);
-  -o-transform: rotateY(0deg);
-  transform: rotateY(0deg);
-}
-/* line 309, ../sass/screen.scss */
-.deck-container.close, .card-container.close {
-  -webkit-transition: all 0.8s ease-out;
-  -moz-transition: all 0.8s ease-out;
-  -o-transition: all 0.8s ease-out;
-  transition: all 0.8s ease-out;
-}
-/* line 311, ../sass/screen.scss */
-.deck-container.close .back, .deck-container.close .front, .card-container.close .back, .card-container.close .front {
-  -webkit-transition: all 0.5s ease-out;
-  -moz-transition: all 0.5s ease-out;
-  -o-transition: all 0.5s ease-out;
-  transition: all 0.5s ease-out;
-}
-
-/* line 325, ../sass/screen.scss */
-.stage {
-  -webkit-perspective: 1000px;
-  -moz-perspective: 1000px;
-  -ms-perspective: 1000px;
-  -o-perspective: 1000px;
-  perspective: 1000px;
-  -webkit-transform-style: preserve-3d;
-  -moz-transform-style: preserve-3d;
-  -ms-transform-style: preserve-3d;
-  -o-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-  pointer-events: none;
-}
-
-/* line 347, ../sass/screen.scss */
-#playground {
-  position: relative;
-  height: 400px;
-  margin-top: 30px;
-  background: url("/app!common/textures/45degreee_fabric.png");
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  -ms-border-radius: 8px;
-  -o-border-radius: 8px;
-  border-radius: 8px;
-  -webkit-box-shadow: 0 0 10px #333333;
-  -moz-box-shadow: 0 0 10px #333333;
-  box-shadow: 0 0 10px #333333;
-  padding: 20px;
-}
-/* line 355, ../sass/screen.scss */
-#playground.hide {
-  display: none;
-}
-/* line 359, ../sass/screen.scss */
-#playground .card-container {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-}
-/* line 363, ../sass/screen.scss */
-#playground .card-container .front {
-  -webkit-transform: rotateY(-180deg);
-  -moz-transform: rotateY(-180deg);
-  -ms-transform: rotateY(-180deg);
-  -o-transform: rotateY(-180deg);
-  transform: rotateY(-180deg);
-}
-/* line 366, ../sass/screen.scss */
-#playground .card-container .back {
-  -webkit-transform: rotateY(0deg);
-  -moz-transform: rotateY(0deg);
-  -ms-transform: rotateY(0deg);
-  -o-transform: rotateY(0deg);
-  transform: rotateY(0deg);
-}
-/* line 370, ../sass/screen.scss */
-#playground h3 {
-  font-size: 50px;
-  line-height: 1.5em;
-  color: #999;
-  text-shadow: -1px -1px 0 #333333;
-  text-align: center;
-}
-/* line 377, ../sass/screen.scss */
-#playground #play-area {
-  float: left;
-  width: 555px;
-  height: 400px;
-}
-/* line 381, ../sass/screen.scss */
-#playground #play-area .question {
-  color: #999;
-  text-shadow: -1px -1px 0 #333333;
-  font-size: 60px;
-  line-height: 1.2em;
-  text-align: center;
-}
-
-/* line 394, ../sass/screen.scss */
-#play-meta {
-  float: right;
-  width: 320px;
-  height: 360px;
-  padding: 20px;
-  background: #FFF;
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  -ms-border-radius: 8px;
-  -o-border-radius: 8px;
-  border-radius: 8px;
-  -webkit-box-shadow: 0 0 10px #333333;
-  -moz-box-shadow: 0 0 10px #333333;
-  box-shadow: 0 0 10px #333333;
-}
-
-/* line 404, ../sass/screen.scss */
-#bar {
-  float: left;
-  width: 50px;
-  height: 100%;
-  background: #CCC;
-  position: relative;
-}
-/* line 410, ../sass/screen.scss */
-#bar .fill {
-  height: 0;
-  width: 100%;
-  position: absolute;
-  bottom: 0;
-  background: #87CEEB;
-}
-
-/* line 422, ../sass/screen.scss */
-#deck-dock {
-  margin-top: 20px;
-  height: 150px;
-  width: 100%;
-  position: relative;
-}
-/* line 428, ../sass/screen.scss */
-#deck-dock > div {
-  -webkit-perspective: 1000px;
-  -moz-perspective: 1000px;
-  -ms-perspective: 1000px;
-  -o-perspective: 1000px;
-  perspective: 1000px;
-  -webkit-transform-style: preserve-3d;
-  -moz-transform-style: preserve-3d;
-  -ms-transform-style: preserve-3d;
-  -o-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-  position: absolute;
-  width: 150px;
-  height: 150px;
-  -webkit-transition: -webkit-transform 0.3s ease-in-out;
-  -moz-transition: -moz-transform 0.3s ease-in-out;
-  -o-transition: -o-transform 0.3s ease-in-out;
-  transition: transform 0.3s ease-in-out;
-  z-index: 1;
-}
-/* line 436, ../sass/screen.scss */
-#deck-dock > div > div {
-  position: absolute;
-  cursor: pointer;
-  width: 150px;
-  height: 150px;
-  -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
-}
-/* line 448, ../sass/screen.scss */
-#deck-dock #answered {
-  z-index: 999 !important;
-}
-/* line 450, ../sass/screen.scss */
-#deck-dock #answered .deck-container {
-  z-index: 999;
-}
-
-/* line 456, ../sass/screen.scss */
-.card-container {
-  -webkit-transition-property: -webkit-transform, height, width;
-  -moz-transition-property: -moz-transform, height, width;
-  -o-transition-property: -o-transform, height, width;
-  transition-property: transform, height, width;
-  -webkit-transition-duration: 0.5s;
-  -moz-transition-duration: 0.5s;
-  -o-transition-duration: 0.5s;
-  transition-duration: 0.5s;
-  -webkit-transition-timing-function: ease-in-out;
-  -moz-transition-timing-function: ease-in-out;
-  -o-transition-timing-function: ease-in-out;
-  transition-timing-function: ease-in-out;
-}
-/* line 463, ../sass/screen.scss */
-.card-container .front {
-  -webkit-background-size: 100%;
-  -moz-background-size: 100%;
-  -o-background-size: 100%;
-  background-size: 100%;
-  background-repeat: no-repeat;
-}
-/* line 467, ../sass/screen.scss */
-.card-container .front, .card-container .back {
-  -webkit-transition-property: -webkit-transform, height, width;
-  -moz-transition-property: -moz-transform, height, width;
-  -o-transition-property: -o-transform, height, width;
-  transition-property: transform, height, width;
-  -webkit-transition-duration: 0.5s;
-  -moz-transition-duration: 0.5s;
-  -o-transition-duration: 0.5s;
-  transition-duration: 0.5s;
-  -webkit-transition-timing-function: ease-in-out;
-  -moz-transition-timing-function: ease-in-out;
-  -o-transition-timing-function: ease-in-out;
-  transition-timing-function: ease-in-out;
-}
-/* line 471, ../sass/screen.scss */
-.card-container .front .solution, .card-container .back .solution {
-  width: 100px;
-}
-/* line 476, ../sass/screen.scss */
-.card-container .back-content {
-  display: none;
-}
-/* line 484, ../sass/screen.scss */
-.card-container.current .front {
-  -webkit-transform: rotateY(-180deg);
-  -moz-transform: rotateY(-180deg);
-  -ms-transform: rotateY(-180deg);
-  -o-transform: rotateY(-180deg);
-  transform: rotateY(-180deg);
-}
-/* line 489, ../sass/screen.scss */
-.card-container.current .back {
-  z-index: 99;
-  -webkit-transform: rotateY(0deg);
-  -moz-transform: rotateY(0deg);
-  -ms-transform: rotateY(0deg);
-  -o-transform: rotateY(0deg);
-  transform: rotateY(0deg);
-}
-/* line 508, ../sass/screen.scss */
-.card-container.wrong {
-  background: #FF3366;
-}
-/* line 512, ../sass/screen.scss */
-.card-container.correct {
-  background: #A2E67E;
-}
-
-@-webkit-keyframes infinite-spinning {
-  /* line 526, ../sass/screen.scss */
-  from {
-    -webkit-transform: rotate3d(0, 1, 0, 0deg);
-  }
-
-  /* line 529, ../sass/screen.scss */
-  to {
-    -webkit-transform: rotate3d(0, 1, 0, 100000deg);
-  }
-}
-
-/* line 558, ../sass/screen.scss */
-.ipad #card {
-  width: 220.69px;
-  height: 320px;
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  -ms-border-radius: 8px;
-  -o-border-radius: 8px;
-  border-radius: 8px;
-  -webkit-transform-style: preserve-3d;
-  -moz-transform-style: preserve-3d;
-  -ms-transform-style: preserve-3d;
-  -o-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-  -webkit-transform: rotateY(0deg);
-  -moz-transform: rotateY(0deg);
-  -ms-transform: rotateY(0deg);
-  -o-transform: rotateY(0deg);
-  transform: rotateY(0deg);
-  -webkit-transition: all 0.5s ease-in-out;
-  -moz-transition: all 0.5s ease-in-out;
-  -o-transition: all 0.5s ease-in-out;
-  transition: all 0.5s ease-in-out;
-  background-color: black;
-}
-/* line 569, ../sass/screen.scss */
-.ipad #card.flip {
-  -webkit-transform: rotateY(180deg);
-  -moz-transform: rotateY(180deg);
-  -ms-transform: rotateY(180deg);
-  -o-transform: rotateY(180deg);
-  transform: rotateY(180deg);
-}
-/* line 572, ../sass/screen.scss */
-.ipad #card .overflowing {
-  display: none;
-  position: absolute;
-  z-index: 2;
-}
-/* line 577, ../sass/screen.scss */
-.ipad #card #front, .ipad #card #back {
-  -webkit-transform: rotateY(0deg) translate3d(0, 0, 2px);
-  -moz-transform: rotateY(0deg) translate3d(0, 0, 2px);
-  -ms-transform: rotateY(0deg) translate3d(0, 0, 2px);
-  -o-transform: rotateY(0deg) translate3d(0, 0, 2px);
-  transform: rotateY(0deg) translate3d(0, 0, 2px);
-  -webkit-transform-style: flat;
-  -moz-transform-style: flat;
-  -ms-transform-style: flat;
-  -o-transform-style: flat;
-  transform-style: flat;
-  -webkit-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  -ms-backface-visibility: hidden;
-  -o-backface-visibility: hidden;
-  backface-visibility: hidden;
-  position: absolute;
-}
-/* line 583, ../sass/screen.scss */
-.ipad #card #back {
-  -webkit-transform: rotateY(180deg) translate3d(0, 0, 2px);
-  -moz-transform: rotateY(180deg) translate3d(0, 0, 2px);
-  -ms-transform: rotateY(180deg) translate3d(0, 0, 2px);
-  -o-transform: rotateY(180deg) translate3d(0, 0, 2px);
-  transform: rotateY(180deg) translate3d(0, 0, 2px);
-}
-/* line 586, ../sass/screen.scss */
-.ipad #card .display-inner {
-  margin: 15px;
-  width: 190.69px;
-  height: 290px;
-  position: absolute;
-  background-color: #123456;
-  outline: 2px outset darkGoldenrod;
-}
-/* line 593, ../sass/screen.scss */
-.ipad #card .display-inner .elem {
-  -webkit-transition: all 0.5s ease-in-out;
-  -moz-transition: all 0.5s ease-in-out;
-  -o-transition: all 0.5s ease-in-out;
-  transition: all 0.5s ease-in-out;
-}
-/* line 596, ../sass/screen.scss */
-.ipad #card .display-inner h1, .ipad #card .display-inner h2, .ipad #card .display-inner h3, .ipad #card .display-inner h4, .ipad #card .display-inner h5 {
-  text-align: center;
-  background-color: #123456;
-  color: white;
-  font-size: 29px;
-  height: 10%;
-  overflow: hidden;
-  white-space: nowrap;
-}
-/* line 605, ../sass/screen.scss */
-.ipad #card .display-inner img {
-  border-bottom: 2px outset darkGoldenrod;
-}
-/* line 608, ../sass/screen.scss */
-.ipad #card .display-inner img, .ipad #card .display-inner .fill {
-  width: 100%;
-  height: 65%;
-}
-/* line 612, ../sass/screen.scss */
-.ipad #card .display-inner .full {
-  height: 75%;
-}
-/* line 615, ../sass/screen.scss */
-.ipad #card .display-inner .text {
-  text-align: center;
-  overflow: hidden;
-}
-/* line 619, ../sass/screen.scss */
-.ipad #card .display-inner .question {
-  position: absolute;
-  top: 5%;
-  left: 0px;
-  width: 100%;
-  max-height: 30%;
-  font-weight: bold;
-}
-/* line 627, ../sass/screen.scss */
-.ipad #card .display-inner .solution {
-  position: absolute;
-  top: 90%;
-  width: 100%;
-  height: 15%;
-  font-weight: normal;
-}
-
-/* line 642, ../sass/screen.scss */
-.tags {
-  text-decoration: underline;
-  color: blue;
-  font-weight: 700;
-  margin: 0px 5px;
-}
-
-/* line 653, ../sass/screen.scss */
-#card-title {
-  cursor: pointer;
-  text-align: center;
-  font-size: 40px;
-  margin: 30px 0;
-  color: #999;
-  text-shadow: 1px 1px #333333;
-}
-
-/* line 662, ../sass/screen.scss */
-.wrapper {
-  overflow: hidden;
-  position: relative;
-  margin: 0 auto;
-  width: 820px;
-  height: 410px;
-}
-
-/* line 670, ../sass/screen.scss */
-.selectable {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-
-/* line 676, ../sass/screen.scss */
-.step-nav-bar {
-  width: 978px;
-  position: relative;
-  height: 30px;
-  text-align: center;
-  -webkit-box-shadow: 0 0 10px #333333;
-  -moz-box-shadow: 0 0 10px #333333;
-  box-shadow: 0 0 10px #333333;
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  -ms-border-radius: 8px;
-  -o-border-radius: 8px;
-  border-radius: 8px;
-  vertical-align: baseline;
-}
-/* line 686, ../sass/screen.scss */
-.step-nav-bar .active {
-  background-color: #aaa;
-  color: white;
-  text-shadow: -1px -1px 0 black;
-}
-/* line 691, ../sass/screen.scss */
-.step-nav-bar .step-nav {
-  -webkit-transition: all 0.5s ease-in-out;
-  -moz-transition: all 0.5s ease-in-out;
-  -o-transition: all 0.5s ease-in-out;
-  transition: all 0.5s ease-in-out;
-  cursor: pointer;
-  height: 30px;
-  line-height: 30px;
-  width: 326px;
-  float: left;
-}
-/* line 699, ../sass/screen.scss */
-.step-nav-bar #step-1 {
-  border-radius: 8px 0px 0px 8px;
-}
-/* line 702, ../sass/screen.scss */
-.step-nav-bar #step-3 {
-  border-radius: 0px 8px 8px 0px;
-}
-
-/* line 707, ../sass/screen.scss */
-.create {
-  -webkit-transition: all 0.5s ease-in-out;
-  -moz-transition: all 0.5s ease-in-out;
-  -o-transition: all 0.5s ease-in-out;
-  transition: all 0.5s ease-in-out;
-  left: 1000px;
-  position: absolute;
-  width: 820px;
-  height: 410px;
-  margin: 0 auto;
-}
-/* line 714, ../sass/screen.scss */
-.create.active {
-  left: 0px;
-}
-
-/* line 720, ../sass/screen.scss */
-.choose-deck {
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #cccccc), color-stop(100%, #dddddd));
-  background: -webkit-linear-gradient(#cccccc, #dddddd);
-  background: -moz-linear-gradient(#cccccc, #dddddd);
-  background: -o-linear-gradient(#cccccc, #dddddd);
-  background: linear-gradient(#cccccc, #dddddd);
-  cursor: pointer;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -o-border-radius: 5px;
-  border-radius: 5px;
-  border: 2px solid transparent;
-  position: relative;
-  margin: auto;
-  width: 100px;
-  color: #333;
-  padding: 5px;
-  display: block;
-  text-align: center;
-}
-/* line 734, ../sass/screen.scss */
-.choose-deck:hover {
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #cccccc));
-  background: -webkit-linear-gradient(#dddddd, #cccccc);
-  background: -moz-linear-gradient(#dddddd, #cccccc);
-  background: -o-linear-gradient(#dddddd, #cccccc);
-  background: linear-gradient(#dddddd, #cccccc);
-}
-/* line 738, ../sass/screen.scss */
-.choose-deck:active {
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #cccccc));
-  background: -webkit-linear-gradient(#dddddd, #cccccc);
-  background: -moz-linear-gradient(#dddddd, #cccccc);
-  background: -o-linear-gradient(#dddddd, #cccccc);
-  background: linear-gradient(#dddddd, #cccccc);
-  border: 2px inset;
-}
-
-/* line 745, ../sass/screen.scss */
-.display {
-  width: 380px;
-  height: 380px;
-  margin: 15px;
-  z-index: 0;
-  float: left;
-  overflow: auto;
-  background: rgba(255, 255, 255, 0.8);
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  -ms-border-radius: 8px;
-  -o-border-radius: 8px;
-  border-radius: 8px;
-  -webkit-box-shadow: 0 7px 10px rgba(0, 0, 0, 0.4);
-  -moz-box-shadow: 0 7px 10px rgba(0, 0, 0, 0.4);
-  box-shadow: 0 7px 10px rgba(0, 0, 0, 0.4);
-  position: relative;
-}
-/* line 758, ../sass/screen.scss */
-.display h2 {
-  -webkit-transition: all 0.5s ease-in-out;
-  -moz-transition: all 0.5s ease-in-out;
-  -o-transition: all 0.5s ease-in-out;
-  transition: all 0.5s ease-in-out;
-  font-size: 25px;
-  margin-top: 15px;
-  text-align: center;
-  text-decoration: underline;
-  padding: 5px;
-  background-color: #333;
-  color: white;
-  text-shadow: 1px 1px #AAA;
-}
-
-/* line 771, ../sass/screen.scss */
-.card-section {
-  text-align: center;
-  margin: 10px;
-}
-/* line 774, ../sass/screen.scss */
-.card-section h2 {
-  -webkit-transition: all 0.5s ease-in-out;
-  -moz-transition: all 0.5s ease-in-out;
-  -o-transition: all 0.5s ease-in-out;
-  transition: all 0.5s ease-in-out;
-  text-align: center;
-  font-family: WisdomScript;
+  padding: 0 10px;
   font-size: 30px;
-  margin: 40px auto;
-}
-
-/* line 782, ../sass/screen.scss */
-#flippable {
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  -ms-border-radius: 0;
-  -o-border-radius: 0;
-  border-radius: 0;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-  overflow: visible;
-  background: transparent;
-  margin: 0px;
-}
-
-/* line 789, ../sass/screen.scss */
-.deck-holder {
-  background: none;
-  left: 0px;
-  box-shadow: none;
-  overflow: visible;
-}
-
-/* line 795, ../sass/screen.scss */
-.deck-preview {
-  width: 100%;
-  -webkit-transform-style: preserve-3d;
-  -moz-transform-style: preserve-3d;
-  -ms-transform-style: preserve-3d;
-  -o-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-  -webkit-perspective: 800px;
-  -moz-perspective: 800px;
-  -ms-perspective: 800px;
-  -o-perspective: 800px;
-  perspective: 800px;
-}
-/* line 800, ../sass/screen.scss */
-.deck-preview .deck-container {
-  -webkit-transition: all 0.5s ease-in-out;
-  -moz-transition: all 0.5s ease-in-out;
-  -o-transition: all 0.5s ease-in-out;
-  transition: all 0.5s ease-in-out;
-  position: absolute;
-  width: 90px;
-  height: 90px;
-}
-/* line 805, ../sass/screen.scss */
-.deck-preview .deck-container .deck {
-  -webkit-transition: all 0.5s ease-in-out;
-  -moz-transition: all 0.5s ease-in-out;
-  -o-transition: all 0.5s ease-in-out;
-  transition: all 0.5s ease-in-out;
-}
-/* line 807, ../sass/screen.scss */
-.deck-preview .deck-container .deck .front {
-  -webkit-transition: all 0.5s ease-in-out;
-  -moz-transition: all 0.5s ease-in-out;
-  -o-transition: all 0.5s ease-in-out;
-  transition: all 0.5s ease-in-out;
-  background-size: 100% !important;
-}
-/* line 811, ../sass/screen.scss */
-.deck-preview .deck-container .deck .back {
-  -webkit-transition: all 0.5s ease-in-out;
-  -moz-transition: all 0.5s ease-in-out;
-  -o-transition: all 0.5s ease-in-out;
-  transition: all 0.5s ease-in-out;
-  -webkit-perspective: 800;
-  -moz-perspective: 800;
-  -ms-perspective: 800;
-  -o-perspective: 800;
-  perspective: 800;
-  height: 380px;
-  width: 380px;
-  padding: 0px;
-}
-/* line 820, ../sass/screen.scss */
-.deck-preview .selected {
-  top: 0px;
-  left: 0px;
-  height: 380px;
-  width: 380px;
-}
-/* line 826, ../sass/screen.scss */
-.deck-preview .choose-deck {
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #dddddd));
-  background: -webkit-linear-gradient(#ffffff, #dddddd);
-  background: -moz-linear-gradient(#ffffff, #dddddd);
-  background: -o-linear-gradient(#ffffff, #dddddd);
-  background: linear-gradient(#ffffff, #dddddd);
-  cursor: pointer;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -o-border-radius: 5px;
-  border-radius: 5px;
-  position: absolute;
-  bottom: 10px;
-  width: 100px;
-  color: #333;
-  padding: 5px;
-  display: block;
+  line-height: 1.5em;
   text-align: center;
 }
-/* line 839, ../sass/screen.scss */
-.deck-preview .choose-deck:hover {
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #ffffff));
-  background: -webkit-linear-gradient(#dddddd, #ffffff);
-  background: -moz-linear-gradient(#dddddd, #ffffff);
-  background: -o-linear-gradient(#dddddd, #ffffff);
-  background: linear-gradient(#dddddd, #ffffff);
+/* line 213, ../sass/screen.scss */
+.dialog .close {
+  top: 8px;
+  right: 8px;
+  color: #EEE;
+  border-color: #EEE;
+  background: #222;
 }
-/* line 843, ../sass/screen.scss */
-.deck-preview .chosen {
-  left: -3px;
-  top: -3px;
-  border: 3px outset yellow;
+/* line 219, ../sass/screen.scss */
+.dialog .close:hover {
+  color: #FFF;
+  border-color: #FFF;
 }
-
-/* line 850, ../sass/screen.scss */
-#colorpicker {
-  width: 195px;
-  margin: 10px auto;
+/* line 225, ../sass/screen.scss */
+.dialog .deck-image {
+  padding: 30px;
+  float: left;
+  width: 250px;
+  height: 300px;
+  background: #dddddd url(/img/deckBurst.png) 14px -4px no-repeat;
 }
-
-/* line 855, ../sass/screen.scss */
-#template-preview {
-  overflow: visible;
+/* line 231, ../sass/screen.scss */
+.dialog .deck-image .deck {
+  float: none;
+  margin: 20px auto 0;
+  height: 240px;
+  width: 142px;
+  display: block;
 }
-
-/* line 859, ../sass/screen.scss */
-#flippable {
-  -webkit-perspective: 700px;
-  -moz-perspective: 700px;
-  -ms-perspective: 700px;
-  -o-perspective: 700px;
-  perspective: 700px;
-  -webkit-perspective-origin: 50% 50%;
-  -moz-perspective-origin: 50% 50%;
-  -ms-perspective-origin: 50% 50%;
-  -o-perspective-origin: 50% 50%;
-  perspective-origin: 50% 50%;
+/* line 238, ../sass/screen.scss */
+.dialog .deck-image p {
+  font-size: 30px;
+  font-family: MayonaiseCondRegular;
+  text-align: center;
 }
-/* line 862, ../sass/screen.scss */
-#flippable #box {
-  overflow: visible;
-  -webkit-transform-style: preserve-3d;
-  -moz-transform-style: preserve-3d;
-  -ms-transform-style: preserve-3d;
-  -o-transform-style: preserve-3d;
-  transform-style: preserve-3d;
+/* line 245, ../sass/screen.scss */
+.dialog .deck-meta {
+  float: right;
+  padding: 30px;
+  width: 330px;
 }
-/* line 865, ../sass/screen.scss */
-#flippable #box section {
-  -webkit-transform-style: flat;
-  -moz-transform-style: flat;
-  -ms-transform-style: flat;
-  -o-transform-style: flat;
-  transform-style: flat;
-  -webkit-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  -ms-backface-visibility: hidden;
-  -o-backface-visibility: hidden;
-  backface-visibility: hidden;
+/* line 249, ../sass/screen.scss */
+.dialog .deck-meta .meta {
+  clear: both;
+  min-height: 30px;
+  margin-bottom: 10px;
 }
-/* line 869, ../sass/screen.scss */
-#flippable #box .side {
-  height: 380px;
-  width: 380px;
+/* line 254, ../sass/screen.scss */
+.dialog .deck-meta h3 {
+  font-family: Fresca;
+  font-size: 25px;
+  float: left;
+  width: 140px;
+  line-height: 14px;
+}
+/* line 261, ../sass/screen.scss */
+.dialog .deck-meta p {
+  float: left;
+  width: 180px;
+  font-size: 20px;
+  font-family: fresca;
+}
+/* line 267, ../sass/screen.scss */
+.dialog .deck-meta .clear {
+  clear: both;
+}
+/* line 270, ../sass/screen.scss */
+.dialog .deck-meta .play-button {
+  cursor: pointer;
+  width: 160px;
+  height: 80px;
+  float: right;
+  clear: both;
+  background: url(/img/playButton.png);
   position: absolute;
-  -webkit-transition: all 0.5s ease-in-out;
-  -moz-transition: all 0.5s ease-in-out;
-  -o-transition: all 0.5s ease-in-out;
-  transition: all 0.5s ease-in-out;
+  bottom: 10px;
+  right: 10px;
+  margin: 0;
 }
-/* line 875, ../sass/screen.scss */
-#flippable #box .top-side {
-  width: 380px;
-  height: 4px;
+/* line 281, ../sass/screen.scss */
+.dialog .deck-meta .play-button:hover {
+  background-position: 0px 81px;
 }
-/* line 879, ../sass/screen.scss */
-#flippable #box .side-side {
-  width: 4px;
-  height: 380px;
-}
-/* line 883, ../sass/screen.scss */
-#flippable #box #front {
-  -webkit-transform: translate3d(0px, 0px, 2px);
-  -moz-transform: translate3d(0px, 0px, 2px);
-  -ms-transform: translate3d(0px, 0px, 2px);
-  -o-transform: translate3d(0px, 0px, 2px);
-  transform: translate3d(0px, 0px, 2px);
-}
-/* line 886, ../sass/screen.scss */
-#flippable #box #back {
-  -webkit-transform: rotateY(180deg) translate3d(0px, 0px, 2px);
-  -moz-transform: rotateY(180deg) translate3d(0px, 0px, 2px);
-  -ms-transform: rotateY(180deg) translate3d(0px, 0px, 2px);
-  -o-transform: rotateY(180deg) translate3d(0px, 0px, 2px);
-  transform: rotateY(180deg) translate3d(0px, 0px, 2px);
-}
-/* line 889, ../sass/screen.scss */
-#flippable #box #top {
-  -webkit-transform: rotateX(90deg) translate3d(0px, 0px, 2px);
-  -moz-transform: rotateX(90deg) translate3d(0px, 0px, 2px);
-  -ms-transform: rotateX(90deg) translate3d(0px, 0px, 2px);
-  -o-transform: rotateX(90deg) translate3d(0px, 0px, 2px);
-  transform: rotateX(90deg) translate3d(0px, 0px, 2px);
-}
-/* line 892, ../sass/screen.scss */
-#flippable #box #bottom {
-  -webkit-transform: rotateX(-90deg) translate3d(0px, 0px, 378px);
-  -moz-transform: rotateX(-90deg) translate3d(0px, 0px, 378px);
-  -ms-transform: rotateX(-90deg) translate3d(0px, 0px, 378px);
-  -o-transform: rotateX(-90deg) translate3d(0px, 0px, 378px);
-  transform: rotateX(-90deg) translate3d(0px, 0px, 378px);
-}
-/* line 895, ../sass/screen.scss */
-#flippable #box #left {
-  -webkit-transform: rotateY(-90deg) translate3d(0px, 0px, 2px);
-  -moz-transform: rotateY(-90deg) translate3d(0px, 0px, 2px);
-  -ms-transform: rotateY(-90deg) translate3d(0px, 0px, 2px);
-  -o-transform: rotateY(-90deg) translate3d(0px, 0px, 2px);
-  transform: rotateY(-90deg) translate3d(0px, 0px, 2px);
-}
-/* line 898, ../sass/screen.scss */
-#flippable #box #right {
-  -webkit-transform: rotateY(90deg) translate3d(0px, 0px, 378px);
-  -moz-transform: rotateY(90deg) translate3d(0px, 0px, 378px);
-  -ms-transform: rotateY(90deg) translate3d(0px, 0px, 378px);
-  -o-transform: rotateY(90deg) translate3d(0px, 0px, 378px);
-  transform: rotateY(90deg) translate3d(0px, 0px, 378px);
+/* line 284, ../sass/screen.scss */
+.dialog .deck-meta .play-button:active {
+  bottom: 9px;
 }
