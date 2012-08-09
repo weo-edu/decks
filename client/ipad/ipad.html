@@ -82,11 +82,12 @@
 {{#with deck}}
 <section id="front" style="background-color:{{render.colorScheme.primary}}; outline-color:{{render.colorScheme.secondary}};">
 	{{#if render.displayTitle}}
-		<h2 class="deck-title" style="background-color:{{render.colorScheme.secondary}}; color:{{render.colorScheme.primary}}">{{title}}</h2>
+		<h2 class="deck-title" style="background-color:{{render.colorScheme.secondary}}; color:{{render.colorScheme.primary}}">{{title}}, {{gradePrior}}</h2>
 	{{/if}}
 	{{#if render.image}}
 		<img class="full-image" src='/{{render.image}}' />
 	{{/if}}
+
 </section>
 <section id="top" style="background-color:{{render.colorScheme.colorScheme.primary}}; outline-color:{{render.colorScheme.secondary}};">
 </section>

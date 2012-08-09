@@ -121,8 +121,9 @@ function selectOptions(max){
 		'keyup .instant_update' : function(event){
 			inputData(event);
 		},
-		'mouseup select' : function(event){
+		'change select' : function(event){
 			inputData(event);
+			console.log('change');
 		},
 		'mousedown select' : function(){
 			$('#init-select').remove();
