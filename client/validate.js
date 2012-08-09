@@ -16,6 +16,11 @@ function validate(){
 				el.siblings('.upload').removeClass('error');
 			}
 		}
+		else if(el.attr('id') == 'init-select')
+			if(el.val() == 'Select')
+				el.addClass('error');
+			else
+				el.removeClass('error');
 		else
 		{
 			if(!el.val())
@@ -43,26 +48,15 @@ function switchPages(tar){
 }
 
 
-function dig(el)
-{
-	var top = el;
-	_.each(el, function(elem, id, list){
-		console.log('elem:' +	elem);
-		console.log('id:' + id);
-		console.log('list:' + list);
-	});
-}
+
 
 function reset(obj){
 	
 	switchPages('.active');
 	if(_.isArray(obj))
 		_.each(obj, function(el){
-			dig(el);
+			console.log(el);
 		})
-	else
-		dig(obj);
-
 	$('input').val('');
 	$('textarea').val('')
 	$('input').removeClass('error');

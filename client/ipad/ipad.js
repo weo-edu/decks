@@ -124,6 +124,9 @@ function selectOptions(max){
 		'mouseup select' : function(event){
 			inputData(event);
 		},
+		'mousedown select' : function(){
+			$('#init-select').remove();
+		},
 		'click .color' : function(event){
 			var up = $(event.target).attr('name');
 			//$('#colorpicker').farbtastic('#'+up);
@@ -165,7 +168,9 @@ function selectOptions(max){
 					if(!err){
 						alert('Succesful Insert');
 						switchPages($(event.target).closest('.input-area'));
-						reset(deck);
+						var to_reset = [deck, render, colorscheme];
+						reset(to_reset);
+						console.log(Decks.findOne({_id:id}));
 					}
 				});
 			}
