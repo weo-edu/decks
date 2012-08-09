@@ -48,15 +48,17 @@ function switchPages(tar){
 }
 
 
+function dig(el)
+{
+	_.each(el, function(elem){
+		if(_.isString)
+			return elem;
+	})
+}
 
-
-function reset(obj){
+function reset(){
 	
 	switchPages('.active');
-	if(_.isArray(obj))
-		_.each(obj, function(el){
-			console.log(el);
-		})
 	$('input').val('');
 	$('textarea').val('')
 	$('input').removeClass('error');

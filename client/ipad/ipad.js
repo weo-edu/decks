@@ -14,26 +14,29 @@ var transformPrefix = domToCss(Modernizr.prefixed('transform'));
 var transitionPrefix = domToCss(domTransitionProperty);
 
 
-	var freshDeck = {
+
+		freshDeck = new Object({
 		id: Meteor.user(),
 		title: '',
 		tags: [''],
 		description: '',
 		render:{},
 		gradePrior: ''
-	};
+	});
 
 	var deck = new Reactive.Store('deck', freshDeck);
 	var render = new Reactive.Store('render', {
 		image:null,
 		displayTitle: false,
 		colorScheme: {}
-	})
+	});
 	var colorscheme = new Reactive.Store('colorscheme', {
 		primary: '',
 		secondary: ''
-	})
+	});
 
+
+	
 function floatingObj(dist, time, ease){
 	//textColor();
 	var shadow_height = $('.drop-shadow').height();
@@ -169,8 +172,9 @@ function selectOptions(max){
 					if(!err){
 						alert('Succesful Insert');
 						switchPages($(event.target).closest('.input-area'));
-						var to_reset = [deck, render, colorscheme];
-						reset(to_reset);
+						
+						reset();
+						deck.clear();
 						console.log(Decks.findOne({_id:id}));
 					}
 				});
