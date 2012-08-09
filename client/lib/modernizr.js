@@ -1272,3 +1272,19 @@ function domToCss(property) {
 
   return css;
 }
+
+//  Use modernizer to get proper 
+//  vendor prefixes
+////////////////////////////////////////
+
+var transitionEndEvents = {
+    'WebkitTransition' : 'webkitTransitionEnd',
+    'MozTransition'    : 'transitionend',
+    'OTransition'      : 'oTransitionEnd',
+    'msTransition'     : 'MSTransitionEnd',
+    'transition'       : 'transitionend'
+  };
+var domTransitionProperty = Modernizr.prefixed('transition');
+var transformPrefix = domToCss(Modernizr.prefixed('transform'));
+var transitionPrefix = domToCss(domTransitionProperty);
+var transitionEndEvent = transitionEndEvents[domTransitionProperty];
