@@ -1,0 +1,64 @@
+<template name="deck_play">
+	<div id='playground'>
+		<div id='play-area'></div>
+		<div id='play-meta'>
+			<div id='bar'>
+				<div class='fill'></div>
+			</div>
+		</div>
+	</div>
+	<div id='deck-dock'>
+		{{#with deck}}
+		<div id='answered'>
+			<div class='deck-container'>
+				<div class="deck">
+						<div class='front' style='background-image: url(/{{graphic}}); background-color:{{primary_color}};'>
+						</div>
+						<div class='back'>
+							<div class="deck-title">{{name}}</div>
+							<div rel='/deck/play/{{name}}' class='play'>PAY</div>
+						</div>
+				</div>
+			</div>
+		</div>
+		{{> unanswered}}
+		{{/with}}
+	</div>
+</template>
+
+<template name="unanswered">
+	<div id='unanswered'>
+		{{#iter cards}}
+			{{> deck_card}}
+		{{/iter}}
+	</div>
+</template>
+
+<template name="deck_card">
+	<div data='{{idx}}' class='card-container'>
+	<div class='card'>
+		<div class='front' style='background-image: url(/{{graphic}});'></div>
+
+		<div class='back' style='background-color: {{main-color}}'>
+			<div class='back-content'>
+				<h3>{{name}}</h3>
+				<div class='question'>
+					{{question}}
+				</div>
+			</div>
+			<label for='answer'>Answer</label>
+			<input type='text' name='solution' class='solution' />
+
+		</div>
+	</div>
+</div>
+	
+</template>
+
+<template name="deck_results">
+	<div id='playground'>
+		<h3>Results</h3>
+		You got {{correct}} out of {{total}} right!
+		<a href='/deck/browse'>Decks</a>
+	</div>
+</template>
