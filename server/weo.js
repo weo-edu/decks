@@ -684,7 +684,7 @@ Meteor.startup(function() {
 
 	]
 	_.each(decks,function(deck) {
-		// Decks.insert(deck);
+		 Decks.insert(deck);
 	});
 
 
