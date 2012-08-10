@@ -1,0 +1,142 @@
+<template name="deck_create">
+	<div class="deck-create-screen">
+		<h1 class="title">DECK CREATOR</h1>
+		{{>creator2}}
+		{{>look_creator2}}
+		<div id="colorpicker"></div>
+		{{>deck_spin}}
+	</div>
+</template>
+
+<template name="creator">
+	<div id="deck-input" class="input-area active">
+		<div class="field-wrapper">
+			<div class="field">
+				<div class="text">Title*:</div><input id="title" class="instant_update validate" type="text" name="important" />
+			</div>
+			<div class="field">
+				<div class="text">Categories:</div>
+				<input id="tags" type="text" class="instant_update" name="template"/> 
+			</div>
+			<div class="textarea-field field">
+				<div class="text">Description:</div>
+				<textarea class="instant_update" id="description" type="text" name="solution"/>
+			</div>
+			<div class="field">
+				<div class="text">Grade Level:</div>
+				<select class="instant_update validate" type="text" id="gradePrior" name="gradePrior">
+					<option id="init-select" class="validate" value=''>Select</option>
+				</select>
+			</div>
+			<div id="more-inputs" class="button"></div>
+	</div>
+</div>
+</template>
+
+<template name="creator2">
+	<div class="input-area active {{isActive}}">
+		<div class="field-wrapper">
+			{{{form "deck_input_info" template="deck_form"}}}
+			<div id="more-inputs" class="button"></div>
+		</div>
+	</div>
+</template>
+
+<template name="deck_form">
+	{{{input "deck_title" field="title" placeholder="title" cls="field" }}}
+	{{{input "deck_tags" field="tags" placeholder="categories" cls="field"}}}
+	{{{textarea "deck_description" field="description" placeholder="description" cls="field" }}}
+</template>
+
+<template name="look_creator2">
+	<div class="input-area {{isActive}}" id="look-input">
+		<div class="field-wrapper">
+			{{{form "render_input_info" template="look_form"}}}
+			<div id="prev-inputs" class="button"></div>
+		</div>
+	</div>
+</template>
+
+<template name="look_form">
+	{{{input "deck_load" type="file" placeholder="file" cls="field" label="Image:"}}}
+	{{{input "deck_image" field="image" cls="field upload_val"}}}
+	{{{input "deck_primary" field="primary_color" cls="field" label="Background Color:"}}}
+	{{{input "deck_secondary" field="secondary_color" cls="field" label="Secondary Color:"}}}
+</template>
+
+<template name="look_creator">
+	<div id="look-input" class="input-area">
+		<div class="field-wrapper">
+			<div class="field">
+				<div class="text">Display Title:</div>
+				<input type="checkbox" id="displayTitle"></input>
+			</div>
+			<div class="field">
+				<div class="text">Upload Picture*:</div>
+				<div class="instant_update">
+					<div id="upload" class="upload">Browse</div>
+					<input type="file" id="file" name="file" tabindex="-1" img="" class="validate" style="display:none;" multiple />
+				</div>
+			</div>
+			<div class="field">
+				<div class="text">Background Color:</div>
+				<input class="instant_update color validate" id="primary" type="text" value=""/>
+			</div>
+			<div class="field">
+				<div class="text">Border Color:</div>
+				<input class="instant_update color validate" id="secondary" type="text" value=""/>
+			</div>
+			<div class="field">
+				<div id="insert" class="upload">Insert</div>
+			</div>
+		</div>
+		<div id="prev-inputs" class="button"></div>
+	</div>
+</template>
+
+
+<template name="deck_spin">
+	<div class="deck-position">
+		<div class="deck-shadow" id="deck-shadow">
+			<!-- <div class="spin-button">Spin</div> -->
+			<section id="viewport" tag="{{create_spin}}">
+			 <article id="box" >
+			 	{{> deck_render}}
+			 </article>
+			 <div class="drop-shadow"></div>
+			</section>
+		</div>
+	</div>
+</template>
+
+
+<template name="deck_render">
+{{#with render}}
+	<section id="front" style="background-color:{{primary_color}}; outline-color:{{secondary_color}};">
+		{{#if displayTitle}}
+			<h2 class="deck-title" style="background-color:{{seconday_color}}; color:{{primary_color}}">{{title}}</h2>
+		{{/if}}
+		{{#if image}}
+			<img class="full-image" src='/{{image}}' />
+		{{/if}}
+	</section>
+	<section id="top" style="background-color:{{primary_color}}; outline-color:{{seconday_color}};">
+	</section>
+	<section id="bottom" style="background-color:{{primary_color}}; outline-color:{{seconday_color}};">
+	</section>
+	<section id="back" style="background-color:{{primary_color}}; outline-color:{{seconday_color}};">
+	</section>
+	<section id="left" style="background-color:{{primary_color}}; outline-color:{{seconday_color}};">
+	</section>
+	<section id="right" style="background-color:{{primary_color}}; outline-color:{{seconday_color}};">
+</section>
+{{/with}}
+</template>
+
+<template name="insert">
+	<div class="quick-button center">
+	 <h1 style="text-align:center; font-size:50px">Insert</h1> 
+	</div>
+</template>
+
+
