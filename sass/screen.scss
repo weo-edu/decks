@@ -3,8 +3,6 @@
  * Import this file using the following HTML or equivalent:
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
 
-@import "compass/reset";
-@import "compass/css3";
 @import "mixins";
 //@import "animation";
 
@@ -143,9 +141,7 @@
 
 
 #browse-screen {
-	height: 100%;
-		background: url(../img/browseBg.jpg) center center no-repeat;
-		@include ipad;
+	width: 3072px;
 	.awning {
 		$height: 55px;
 		height: $height;
@@ -156,6 +152,20 @@
 		color: #EEE;
 		line-height: $height;
 		padding: 0 20px;
+	}
+
+	.play-placeholder{
+		margin-left: -100%;
+		float: left;
+		height: 100%;
+		background: url(../img/browseBg.jpg) center center no-repeat;
+		@include ipad;
+	}
+	.browse{
+		float: left;
+		height: 100%;
+		background: url(../img/browseBg.jpg) center center no-repeat;
+		@include ipad;
 	}
 }
 
@@ -236,10 +246,10 @@
 		float: right;
 		padding: 30px;
 		width: 330px;
-		div {
+		.meta {
 			clear: both;
-			min-height: 40px;
-			margin-bottom: 20px;
+			min-height: 30px;
+			margin-bottom: 10px;
 		}
 		h3 {
 			font-family: Fresca;;
@@ -253,6 +263,9 @@
 			width: 180px;
 			font-size: 20px;
 			font-family: fresca;
+		}
+		.clear {
+			clear: both;
 		}
 		.play-button {
 			cursor: pointer;
@@ -273,7 +286,6 @@
 			}
 		}
 	}
-	
 }
 
 

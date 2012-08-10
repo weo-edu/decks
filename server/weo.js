@@ -23,10 +23,48 @@ app.get('/upload/*',express.static(process.cwd()+"/.meteor/"));
 
 
 Meteor.startup(function() {
-	// Decks.remove({});
-	var decks = [];
+	Decks.remove({});
+	var decks = [
+    {
+        title: 'word arithmetic',
+        render: {
+        	image: 'arithmetic-4.png',
+        	colorScheme: {
+        		primary: 'goldenRod',
+        		secondary: 'tomato'
+        	}
+        },
+        cards: [
+            {
+                    name: 'word addition',
+                    graphic: 'addition.gif',
+                    problem: {
+                            template: 'What is {{a}} plus {{b}}?',
+                            solution: 'a + b'
+                    }
+            },
+            {
+                    name: 'word subtraction',
+                    graphic: 'subtraction.jpeg',
+                    problem: {
+                            template: 'What is {{a}} minus {{b}}?',
+                            solution: 'a - b'
+                    }
+            },
+            {
+                    name: 'word multiplication',
+                    graphic: 'multiplication.jpg',
+                    problem: {
+                            template: 'What is {{a}} times {{b}}?',
+                            solution: 'a * b'
+                    }
+            }
+        ]
+    }
+
+	];
 	_.each(decks,function(deck) {
-		// Decks.insert(deck);
+		Decks.insert(deck);
 	});
 
 
