@@ -187,11 +187,11 @@ route('/card/create', function() {
 				var val = $(this).val();
 				card.set(name, val)
 			});
-			var picker = $.farbtastic('#colorpicker');
-			picker.linkTo(onColorChange);
-			function onColorChange(color){
-				card.set('main-color',color);
-			}
+			// var picker = $.farbtastic('#colorpicker');
+			// picker.linkTo(onColorChange);
+			// function onColorChange(color){
+			// 	card.set('main-color',color);
+			// }
 			console.log('file', $('#file'));
 			$('#file').fileupload({
 		    	url: "/upload",
