@@ -60,15 +60,118 @@ Meteor.startup(function() {
                     }
             }
         ]
+    },
+        {
+        title: 'word arithmetic',
+        render: {
+            image: 'arithmetic-4.png',
+            colorScheme: {
+                primary: 'goldenRod',
+                secondary: 'tomato'
+            }
+        },
+        cards: [
+            {
+                    name: 'word addition',
+                    graphic: 'addition.gif',
+                    problem: {
+                            template: 'What is {{a}} plus {{b}}?',
+                            solution: 'a + b'
+                    }
+            },
+            {
+                    name: 'word subtraction',
+                    graphic: 'subtraction.jpeg',
+                    problem: {
+                            template: 'What is {{a}} minus {{b}}?',
+                            solution: 'a - b'
+                    }
+            },
+            {
+                    name: 'word multiplication',
+                    graphic: 'multiplication.jpg',
+                    problem: {
+                            template: 'What is {{a}} times {{b}}?',
+                            solution: 'a * b'
+                    }
+            }
+        ]
+    },
+        {
+        title: 'word arithmetic',
+        render: {
+            image: 'arithmetic-4.png',
+            colorScheme: {
+                primary: 'goldenRod',
+                secondary: 'tomato'
+            }
+        },
+        cards: [
+            {
+                    name: 'word addition',
+                    graphic: 'addition.gif',
+                    problem: {
+                            template: 'What is {{a}} plus {{b}}?',
+                            solution: 'a + b'
+                    }
+            },
+            {
+                    name: 'word subtraction',
+                    graphic: 'subtraction.jpeg',
+                    problem: {
+                            template: 'What is {{a}} minus {{b}}?',
+                            solution: 'a - b'
+                    }
+            },
+            {
+                    name: 'word multiplication',
+                    graphic: 'multiplication.jpg',
+                    problem: {
+                            template: 'What is {{a}} times {{b}}?',
+                            solution: 'a * b'
+                    }
+            }
+        ]
+    },
+        {
+        title: 'word arithmetic',
+        render: {
+            image: 'arithmetic-4.png',
+            colorScheme: {
+                primary: 'goldenRod',
+                secondary: 'tomato'
+            }
+        },
+        cards: [
+            {
+                    name: 'word addition',
+                    graphic: 'addition.gif',
+                    problem: {
+                            template: 'What is {{a}} plus {{b}}?',
+                            solution: 'a + b'
+                    }
+            },
+            {
+                    name: 'word subtraction',
+                    graphic: 'subtraction.jpeg',
+                    problem: {
+                            template: 'What is {{a}} minus {{b}}?',
+                            solution: 'a - b'
+                    }
+            },
+            {
+                    name: 'word multiplication',
+                    graphic: 'multiplication.jpg',
+                    problem: {
+                            template: 'What is {{a}} times {{b}}?',
+                            solution: 'a * b'
+                    }
+            }
+        ]
     }
-
 	];
 	_.each(decks,function(deck) {
-<<<<<<< HEAD
-		 Decks.insert(deck);
-=======
 		Decks.insert(deck);
->>>>>>> 7b0797f07bf90229a4a3933ee7dd2e5d97e4175c
 	});
 
 
