@@ -141,7 +141,9 @@
 
 
 #browse-screen {
-	width: 3072px;
+	width: 1024px * 2;
+	position: absolute;
+	left: -1024px;
 	.awning {
 		$height: 55px;
 		height: $height;
@@ -154,17 +156,16 @@
 		padding: 0 20px;
 	}
 
-	.play-placeholder{
-		margin-left: -100%;
+	.select-placeholder{
 		float: left;
 		height: 100%;
-		background: url(../img/browseBg.jpg) center center no-repeat;
+		background: url(/img/woodBg.jpg) center center no-repeat;
 		@include ipad;
 	}
 	.browse{
 		float: left;
 		height: 100%;
-		background: url(../img/browseBg.jpg) center center no-repeat;
+		background: url(/img/browseBg.jpg) center center no-repeat;
 		@include ipad;
 	}
 }
@@ -175,9 +176,11 @@
 	
 	height: $height;
 	width: 850px;
-	visibility: hidden;
 	margin: 150px auto 0;
 	@include transform-style(flat);
+	.shelf-wrapper {
+		visibility: hidden;
+	}
 	.deck-container {
 		cursor: pointer;
 		width: $width;
@@ -286,6 +289,11 @@
 			}
 		}
 	}
+}
+
+#playground {
+	@include ipad;
+	background: url(/img/browseBg.jpg) center center no-repeat;
 }
 
 
