@@ -58,6 +58,46 @@ Meteor.startup(function() {
                             template: 'What is {{a}} times {{b}}?',
                             solution: 'a * b'
                     }
+            },
+            {
+                    name: 'word addition',
+                    graphic: 'addition.gif',
+                    problem: {
+                            template: 'What is {{a}} plus {{b}}?',
+                            solution: 'a + b'
+                    }
+            },
+            {
+                    name: 'word subtraction',
+                    graphic: 'subtraction.jpeg',
+                    problem: {
+                            template: 'What is {{a}} minus {{b}}?',
+                            solution: 'a - b'
+                    }
+            },
+            {
+                    name: 'word multiplication',
+                    graphic: 'multiplication.jpg',
+                    problem: {
+                            template: 'What is {{a}} times {{b}}?',
+                            solution: 'a * b'
+                    }
+            },
+            {
+                    name: 'word addition',
+                    graphic: 'addition.gif',
+                    problem: {
+                            template: 'What is {{a}} plus {{b}}?',
+                            solution: 'a + b'
+                    }
+            },
+            {
+                    name: 'word subtraction',
+                    graphic: 'subtraction.jpeg',
+                    problem: {
+                            template: 'What is {{a}} minus {{b}}?',
+                            solution: 'a - b'
+                    }
             }
         ]
     },

@@ -3,6 +3,71 @@
  * In this file you should write your main styles. (or centralize your imports)
  * Import this file using the following HTML or equivalent:
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+/* line 17, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+/* line 22, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html {
+  line-height: 1;
+}
+
+/* line 24, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+ol, ul {
+  list-style: none;
+}
+
+/* line 26, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 28, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+/* line 30, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q, blockquote {
+  quotes: none;
+}
+/* line 103, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+/* line 32, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+a img {
+  border: none;
+}
+
+/* line 116, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+  display: block;
+}
+
 @font-face {
   font-family: 'HighlandsRegular';
   src: url("/app!common/fonts/highlands-regular-webfont.eot");
@@ -27,27 +92,27 @@
   font-style: normal;
 }
 
-/* line 72, ../../common/public/sass/mixins.scss */
+/* line 74, ../../common/public/sass/mixins.scss */
 body {
   font-family: Arial;
   background: #EEE;
   height: 100%;
 }
 
-/* line 80, ../../common/public/sass/mixins.scss */
+/* line 82, ../../common/public/sass/mixins.scss */
 h1, h2, h3, h4, h5 {
-  font-family: HighlandsRegular;
+  font-family: Fresca;
   text-transform: uppercase;
 }
 
-/* line 86, ../../common/public/sass/mixins.scss */
+/* line 88, ../../common/public/sass/mixins.scss */
 #content {
   width: 1024px;
   margin: 0 auto;
   position: relative;
 }
 
-/* line 92, ../../common/public/sass/mixins.scss */
+/* line 94, ../../common/public/sass/mixins.scss */
 a {
   text-decoration: none;
 }
@@ -225,9 +290,11 @@ a {
 
 /* line 143, ../sass/screen.scss */
 #browse-screen {
-  width: 3072px;
+  width: 2048px;
+  position: absolute;
+  left: -1024px;
 }
-/* line 145, ../sass/screen.scss */
+/* line 147, ../sass/screen.scss */
 #browse-screen .awning {
   height: 55px;
   background: url("/app!common/textures/blue-scale.png");
@@ -240,29 +307,27 @@ a {
   line-height: 55px;
   padding: 0 20px;
 }
-/* line 157, ../sass/screen.scss */
-#browse-screen .play-placeholder {
-  margin-left: -100%;
+/* line 159, ../sass/screen.scss */
+#browse-screen .select-placeholder {
   float: left;
   height: 100%;
-  background: url(../img/browseBg.jpg) center center no-repeat;
+  background: url(/img/woodBg.jpg) center center no-repeat;
   width: 1024px;
   height: 672px;
 }
-/* line 164, ../sass/screen.scss */
+/* line 165, ../sass/screen.scss */
 #browse-screen .browse {
   float: left;
   height: 100%;
-  background: url(../img/browseBg.jpg) center center no-repeat;
+  background: url(/img/browseBg.jpg) center center no-repeat;
   width: 1024px;
   height: 672px;
 }
 
-/* line 172, ../sass/screen.scss */
+/* line 173, ../sass/screen.scss */
 #deck-grid {
   height: 220px;
   width: 850px;
-  visibility: hidden;
   margin: 150px auto 0;
   -webkit-transform-style: flat;
   -moz-transform-style: flat;
@@ -271,6 +336,10 @@ a {
   transform-style: flat;
 }
 /* line 181, ../sass/screen.scss */
+#deck-grid .shelf-wrapper {
+  visibility: hidden;
+}
+/* line 184, ../sass/screen.scss */
 #deck-grid .deck-container {
   cursor: pointer;
   width: 150px;
@@ -279,7 +348,7 @@ a {
   background-position: center center;
   position: relative;
 }
-/* line 188, ../sass/screen.scss */
+/* line 191, ../sass/screen.scss */
 #deck-grid .deck-container .shadow {
   position: absolute;
   bottom: 5px;
@@ -294,15 +363,15 @@ a {
   left: 25px;
 }
 
-/* line 200, ../sass/screen.scss */
+/* line 203, ../sass/screen.scss */
 .dialog {
   width: 700px;
 }
-/* line 202, ../sass/screen.scss */
+/* line 205, ../sass/screen.scss */
 .dialog .content {
   padding: 0;
 }
-/* line 205, ../sass/screen.scss */
+/* line 208, ../sass/screen.scss */
 .dialog h2 {
   background: #333;
   color: #FFF;
@@ -311,7 +380,7 @@ a {
   line-height: 1.5em;
   text-align: center;
 }
-/* line 213, ../sass/screen.scss */
+/* line 216, ../sass/screen.scss */
 .dialog .close {
   top: 8px;
   right: 8px;
@@ -319,12 +388,12 @@ a {
   border-color: #EEE;
   background: #222;
 }
-/* line 219, ../sass/screen.scss */
+/* line 222, ../sass/screen.scss */
 .dialog .close:hover {
   color: #FFF;
   border-color: #FFF;
 }
-/* line 225, ../sass/screen.scss */
+/* line 228, ../sass/screen.scss */
 .dialog .deck-image {
   padding: 30px;
   float: left;
@@ -332,7 +401,7 @@ a {
   height: 300px;
   background: #dddddd url(/img/deckBurst.png) 14px -4px no-repeat;
 }
-/* line 231, ../sass/screen.scss */
+/* line 234, ../sass/screen.scss */
 .dialog .deck-image .deck {
   float: none;
   margin: 20px auto 0;
@@ -340,25 +409,25 @@ a {
   width: 142px;
   display: block;
 }
-/* line 238, ../sass/screen.scss */
+/* line 241, ../sass/screen.scss */
 .dialog .deck-image p {
   font-size: 30px;
   font-family: MayonaiseCondRegular;
   text-align: center;
 }
-/* line 245, ../sass/screen.scss */
+/* line 248, ../sass/screen.scss */
 .dialog .deck-meta {
   float: right;
   padding: 30px;
   width: 330px;
 }
-/* line 249, ../sass/screen.scss */
+/* line 252, ../sass/screen.scss */
 .dialog .deck-meta .meta {
   clear: both;
   min-height: 30px;
   margin-bottom: 10px;
 }
-/* line 254, ../sass/screen.scss */
+/* line 257, ../sass/screen.scss */
 .dialog .deck-meta h3 {
   font-family: Fresca;
   font-size: 25px;
@@ -366,18 +435,18 @@ a {
   width: 140px;
   line-height: 14px;
 }
-/* line 261, ../sass/screen.scss */
+/* line 264, ../sass/screen.scss */
 .dialog .deck-meta p {
   float: left;
   width: 180px;
   font-size: 20px;
   font-family: fresca;
 }
-/* line 267, ../sass/screen.scss */
+/* line 270, ../sass/screen.scss */
 .dialog .deck-meta .clear {
   clear: both;
 }
-/* line 270, ../sass/screen.scss */
+/* line 273, ../sass/screen.scss */
 .dialog .deck-meta .play-button {
   cursor: pointer;
   width: 160px;
@@ -390,11 +459,18 @@ a {
   right: 10px;
   margin: 0;
 }
-/* line 281, ../sass/screen.scss */
+/* line 284, ../sass/screen.scss */
 .dialog .deck-meta .play-button:hover {
   background-position: 0px 81px;
 }
-/* line 284, ../sass/screen.scss */
+/* line 287, ../sass/screen.scss */
 .dialog .deck-meta .play-button:active {
   bottom: 9px;
+}
+
+/* line 294, ../sass/screen.scss */
+#playground {
+  width: 1024px;
+  height: 672px;
+  background: url(/img/browseBg.jpg) center center no-repeat;
 }
