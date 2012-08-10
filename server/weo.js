@@ -4,6 +4,7 @@ var express = require('express');
 var fs = require('fs');
 var path = require('path');
 
+console.log(express.version);
 
 app.post('/upload', function(req,res) {
 	console.log('upload');
