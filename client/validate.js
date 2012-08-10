@@ -56,9 +56,12 @@ function dig(el)
 	})
 }
 
-function reset(){
+function reset(obj){
 	
 	switchPages('.active');
+	_.each(obj, function(el){
+		el.clear();
+	})
 	$('input').val('');
 	$('textarea').val('')
 	$('input').removeClass('error');

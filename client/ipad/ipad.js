@@ -170,12 +170,8 @@ function selectOptions(max){
 			{
 				Decks.insert(deck.all(), function(err, id){
 					if(!err){
-						alert('Succesful Insert');
-						switchPages($(event.target).closest('.input-area'));
-						
-						reset();
-						deck.clear();
-						console.log(Decks.findOne({_id:id}));
+						to_reset = [deck, render, colorscheme];
+						reset(to_reset);
 					}
 				});
 			}
