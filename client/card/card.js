@@ -75,9 +75,7 @@ route('/card/create', function() {
 
 
 	var events = {
-		'keyup .instant_update' : function(event){
-			instantUpdate(event);
-		},
+
 	'click .button' : function(event){
 			var tar = $(event.target).closest('.input-area')
 			if(validate())
@@ -106,17 +104,17 @@ route('/card/create', function() {
 
 
 	Template.rules.events = {
-		'keyup .instant_update': function(event) {
-			var el = $(event.target);
-			var idx = el.closest('#rules').children().children().children('.rule-input').index(el);
-			var rules = _.clone(problem.get('rules'));
+		// 'keyup .instant_update': function(event) {
+		// 	var el = $(event.target);
+		// 	var idx = el.closest('#rules').children().children().children('.rule-input').index(el);
+		// 	var rules = _.clone(problem.get('rules'));
 
-			rules[idx] = el.val();
-			problem.set('rules',rules);
-			card.set('problem',problem.all())
-			watchErrors();
-			return false;
-		},
+		// 	rules[idx] = el.val();
+		// 	problem.set('rules',rules);
+		// 	card.set('problem',problem.all())
+		// 	watchErrors();
+		// 	return false;
+		// },
 		'click #add-rule': function(event) {
 			$('#rules').prepend(Meteor.ui.render(function() {
 				return Template.rule_input();
@@ -162,14 +160,17 @@ route('/card/create', function() {
 		return c;
 	}
 
+	Template.front.card = function(){
+		return ui.get('card_look_info').getFields();
+	}
 
 	Template.back.card = function(){
-		return getCard();
+		return ui.get('card_input_info').getFields();
 	}
 
-	Template.front.card = function(){
-		return getCard();
-	}
+	// Template.front.card = function(){
+	// 	return getCard();
+	// }
 
 	Template.rule_input.idx = function(){
 		return $('#rules').children().length;
@@ -182,26 +183,25 @@ route('/card/create', function() {
 	Template.card_create.defer = function(){
 		Meteor.defer(function() {
 			//floatingObj('10px', 1500, 'easeInOutSine', $('.deck-shadow'));
-			$('.color-change').change(function(){
-				var name = $(this).attr('name');
-				var val = $(this).val();
-				card.set(name, val)
-			});
+			// $('.color-change').change(function(){
+			// 	var name = $(this).attr('name');
+			// 	var val = $(this).val();
+			// 	card.set(name, val)
+			// });
 			// var picker = $.farbtastic('#colorpicker');
 			// picker.linkTo(onColorChange);
 			// function onColorChange(color){
 			// 	card.set('main-color',color);
 			// }
 			console.log('file', $('#file'));
-			$('#file').fileupload({
+			$('#card_load').fileupload({
 		    	url: "/upload",
 		    	type: "POST",
 		    	dataType: 'json',
 		    	multipart: true,
 		    	done: function(e,data) {
 		    		console.log('done');
-		    		$('#file').attr('img', data.result.path);
-		    		card.set("graphic","upload/"+data.result.path);
+		    		ui.get('card_image').value("upload/"+data.result.path)
 			    }
 		    });
 			});

@@ -4,12 +4,14 @@ var express = require('express');
 var fs = require('fs');
 var path = require('path');
 
+console.log(express.version);
 
 app.post('/upload', function(req,res) {
-	console.log('upload');
-	var file = req.files.file.path;
+	console.log('upload',req.files);
+    var upload = req.files.files[0];
+	var file = upload.path;
 	var fileSlice = file.slice('/tmp/'.length);
-	var ext = req.files.file.name;
+	var ext = upload.name;
 	ext = path.extname('./'+ext);
 	fs.rename(file, process.cwd()+'/.meteor/upload/'+fileSlice+ext);
 	console.log('send');

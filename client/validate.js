@@ -36,6 +36,7 @@ function validate(){
 	else return true;
 }
 
+// lets make this more meteory
 function switchPages(tar){
 	var move = $(tar).width();
 	var move_in = $('.input-area').not(tar);
