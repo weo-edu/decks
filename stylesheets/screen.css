@@ -336,10 +336,6 @@ a {
   transform-style: flat;
 }
 /* line 181, ../sass/screen.scss */
-#deck-grid .shelf-wrapper {
-  visibility: hidden;
-}
-/* line 184, ../sass/screen.scss */
 #deck-grid .deck-container {
   cursor: pointer;
   width: 150px;
@@ -348,7 +344,7 @@ a {
   background-position: center center;
   position: relative;
 }
-/* line 191, ../sass/screen.scss */
+/* line 188, ../sass/screen.scss */
 #deck-grid .deck-container .shadow {
   position: absolute;
   bottom: 5px;
@@ -363,15 +359,15 @@ a {
   left: 25px;
 }
 
-/* line 203, ../sass/screen.scss */
+/* line 200, ../sass/screen.scss */
 .dialog {
   width: 700px;
 }
-/* line 205, ../sass/screen.scss */
+/* line 202, ../sass/screen.scss */
 .dialog .content {
   padding: 0;
 }
-/* line 208, ../sass/screen.scss */
+/* line 205, ../sass/screen.scss */
 .dialog h2 {
   background: #333;
   color: #FFF;
@@ -380,7 +376,7 @@ a {
   line-height: 1.5em;
   text-align: center;
 }
-/* line 216, ../sass/screen.scss */
+/* line 213, ../sass/screen.scss */
 .dialog .close {
   top: 8px;
   right: 8px;
@@ -388,12 +384,12 @@ a {
   border-color: #EEE;
   background: #222;
 }
-/* line 222, ../sass/screen.scss */
+/* line 219, ../sass/screen.scss */
 .dialog .close:hover {
   color: #FFF;
   border-color: #FFF;
 }
-/* line 228, ../sass/screen.scss */
+/* line 225, ../sass/screen.scss */
 .dialog .deck-image {
   padding: 30px;
   float: left;
@@ -401,7 +397,7 @@ a {
   height: 300px;
   background: #dddddd url(/img/deckBurst.png) 14px -4px no-repeat;
 }
-/* line 234, ../sass/screen.scss */
+/* line 231, ../sass/screen.scss */
 .dialog .deck-image .deck {
   float: none;
   margin: 20px auto 0;
@@ -409,25 +405,25 @@ a {
   width: 142px;
   display: block;
 }
-/* line 241, ../sass/screen.scss */
+/* line 238, ../sass/screen.scss */
 .dialog .deck-image p {
   font-size: 30px;
   font-family: MayonaiseCondRegular;
   text-align: center;
 }
-/* line 248, ../sass/screen.scss */
+/* line 245, ../sass/screen.scss */
 .dialog .deck-meta {
   float: right;
   padding: 30px;
   width: 330px;
 }
-/* line 252, ../sass/screen.scss */
+/* line 249, ../sass/screen.scss */
 .dialog .deck-meta .meta {
   clear: both;
   min-height: 30px;
   margin-bottom: 10px;
 }
-/* line 257, ../sass/screen.scss */
+/* line 254, ../sass/screen.scss */
 .dialog .deck-meta h3 {
   font-family: Fresca;
   font-size: 25px;
@@ -435,19 +431,20 @@ a {
   width: 140px;
   line-height: 14px;
 }
-/* line 264, ../sass/screen.scss */
+/* line 261, ../sass/screen.scss */
 .dialog .deck-meta p {
   float: left;
   width: 180px;
   font-size: 20px;
   font-family: fresca;
 }
-/* line 270, ../sass/screen.scss */
+/* line 267, ../sass/screen.scss */
 .dialog .deck-meta .clear {
   clear: both;
 }
-/* line 273, ../sass/screen.scss */
-.dialog .deck-meta .play-button {
+
+/* line 275, ../sass/screen.scss */
+.play-button {
   cursor: pointer;
   width: 160px;
   height: 80px;
@@ -459,12 +456,12 @@ a {
   right: 10px;
   margin: 0;
 }
-/* line 284, ../sass/screen.scss */
-.dialog .deck-meta .play-button:hover {
+/* line 286, ../sass/screen.scss */
+.play-button:hover {
   background-position: 0px 81px;
 }
-/* line 287, ../sass/screen.scss */
-.dialog .deck-meta .play-button:active {
+/* line 289, ../sass/screen.scss */
+.play-button:active {
   bottom: 9px;
 }
 

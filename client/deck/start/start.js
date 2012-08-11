@@ -22,7 +22,7 @@ route('/deck/start',function() {
 			floatDecks();
 			setTimeout(function() {
 				startAnimation();
-			}, 1000);
+			}, 600);
 		},
 		'click .deck': function(e) {
 			el = $(e.currentTarget);

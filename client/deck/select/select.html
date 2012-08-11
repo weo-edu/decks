@@ -1,54 +1,31 @@
 <template name='cards_select'>
 	<div id='select-screen'>
-		<div id='players-area'>
-			<div class='usr-1'>
-				{{> usr}}
+		<div class='scene'>
+			<div id='players-area'>
+				<div class='usr-1'>
+					{{> usr}}
+				</div>
+				{{#with deck}}
+					{{> chosen_deck_view}}
+				{{/with}}
+
+				<div class='usr-2'>
+					{{> usr}}
+				</div>
 			</div>
 			{{#with deck}}
-				<div class='deck'>
-					<svg class="deck">
-						<defs>
-						    <filter id="innerbevel" x0="-50%" y0="-50%" width="200%" height="200%">
-								<feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
-								<feOffset in='blur' dy="-5" dx="-5"/>
-								<feComposite in2="SourceAlpha" operator="arithmetic"
-										k2="-1" k3="1" result="hlDiff"/>
-								<feFlood flood-color="black" flood-opacity=".6"/>
-								<feComposite in2="hlDiff" operator="in"/>
-								<feComposite in2="SourceGraphic" operator="over" result="withGlow"/>
-
-								<feOffset in="blur" dy="5" dx="5"/>
-								<feComposite in2="SourceAlpha" operator="arithmetic"
-										k2="-1" k3="1" result="shadowDiff"/>
-								<feFlood flood-color="black" flood-opacity=".6"/>
-								<feComposite in2="shadowDiff" operator="in"/>
-								<feComposite in2="withGlow" operator="over"/>
-							</filter>
-					  	</defs>
-						<polygon points='8,3 130,0 140,7 0,10' fill='{{render.colorScheme.primary}}' stroke='{{render.colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)' />
-						<polygon points='0,10 140,7 130,172, 12,180' fill='{{render.colorScheme.primary}}' stroke='{{render.colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)'/>
-						<image x="45" y="70" width="48px" height="48px"
-				         xlink:href="/{{render.image}}"></image>
-				         <text x="30" y="50" width="48px" height="48px">{{title}}</text>
-					</svg>
-				</div>
+				{{> card_selection}}
+				<div class='play-button' rel='{{title}}'></div>
 			{{/with}}
-
-			<div class='usr-2'>
-				{{> usr}}
-			</div>
 		</div>
-		{{#with deck}}
-			{{> card_selection}}
-		{{/with}}
 	</div>
 </template>
 
 <template name='card_selection'>
-	<div class='card-grid'>
+	<div id='card-grid'>
 		<div class='shelf-wrapper'>
 		{{#iter cards}}
-			<div class='card' style='background-image: url(/{{graphic}}); background-color: {{../render.colorScheme.primary}}'>
+			<div class='card' style='background-image: url(/{{graphic}}); background-color: {{../render.colorScheme.secondary}}'>
 				{{name}}
 			</div>
 		{{/iter}}
@@ -57,6 +34,38 @@
 </template>
 
 <template name='usr'>
-	<div class='avatar-tmb'></div>
-	<p>User</p>
+	<div class='usr'>
+		<div class='avatar-tmb'></div>
+		<p>User</p>
+	</div>
+</template>
+
+<template name='chosen_deck_view'>
+	<div class='deck'>
+		<svg class="deck">
+			<defs>
+			    <filter id="innerbevel" x0="-50%" y0="-50%" width="200%" height="200%">
+					<feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
+					<feOffset in='blur' dy="-5" dx="-5"/>
+					<feComposite in2="SourceAlpha" operator="arithmetic"
+							k2="-1" k3="1" result="hlDiff"/>
+					<feFlood flood-color="black" flood-opacity=".6"/>
+					<feComposite in2="hlDiff" operator="in"/>
+					<feComposite in2="SourceGraphic" operator="over" result="withGlow"/>
+
+					<feOffset in="blur" dy="5" dx="5"/>
+					<feComposite in2="SourceAlpha" operator="arithmetic"
+							k2="-1" k3="1" result="shadowDiff"/>
+					<feFlood flood-color="black" flood-opacity=".6"/>
+					<feComposite in2="shadowDiff" operator="in"/>
+					<feComposite in2="withGlow" operator="over"/>
+				</filter>
+		  	</defs>
+			<polygon points='8,3 130,0 140,7 0,10' fill='{{render.colorScheme.primary}}' stroke='{{render.colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)' />
+			<polygon points='0,10 140,7 130,172, 12,180' fill='{{render.colorScheme.primary}}' stroke='{{render.colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)'/>
+			<image x="45" y="70" width="48px" height="48px"
+	         xlink:href="/{{render.image}}"></image>
+	         <text x="30" y="50" width="48px" height="48px">{{title}}</text>
+		</svg>
+	</div>
 </template>

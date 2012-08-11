@@ -1,4 +1,29 @@
-<template name="deck_play">
+<template name='deck_play'>
+	<div id='deck-play-screen'>
+		<div id='problem-container'>
+			{{> problem_container}}
+			{{{input "answer" }}}
+		</div>
+		<div id='players-area'>
+				<div class='usr-1'>
+					{{> usr}}
+				</div>
+				{{#with deck}}
+					{{> chosen_deck_view}}
+				{{/with}}
+
+				<div class='usr-2'>
+					{{> usr}}
+				</div>
+			</div>
+	</div>
+</template>
+
+<template name='problem_container'>
+	<div id='problem'></div>
+</template>
+
+<!-- <template name="deck_play">
 	<div id='playground'>
 		<div id='play-area'></div>
 		<div id='play-meta'>
@@ -61,4 +86,4 @@
 		You got {{correct}} out of {{total}} right!
 		<a href='/deck/browse'>Decks</a>
 	</div>
-</template>
+</template> -->

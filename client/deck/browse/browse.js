@@ -1,7 +1,10 @@
 route('/deck/browse',function() {
 	Template.decks.decks = function() {
 		
-			shelf($('#deck-grid'));
+			// shelf($('#deck-grid'));
+			Meteor.defer(function() {
+				$('#deck-grid').layout({margin: 20});
+			})
 		
 		return Decks.find({});
 	}
@@ -15,24 +18,12 @@ route('/deck/browse',function() {
 	};
 
 	Template.deck_browse.decks = function() {
-		var decks;
-		// Meteor.defer(function(){
-		// 	if(decks.count()) {
-		// 		// deal($('#deck-grid'), 0, 'fit');
-		// 		// playSound('shuffling-cards-3', muted);
-		// 	}
-		// });
-
-	  decks = Decks.find({});
-	  return decks;
+		var decks = Decks.find({});
+		return decks;
 	};
 
 	Template.deck_browse.events = {
-		'render': function() {
-			shelf($('#deck-grid'));
-		},
 	 	'click .deck-container': function(e) {
-	 		console.log(this);
 	 		var dialog = ui.get('deck_more');
 	 		dialog.context(this);
 	 		dialog.closable().overlay().show().center();
@@ -41,7 +32,7 @@ route('/deck/browse',function() {
 	  		var self = this;
 	  		var dialog = ui.get('deck_more');
 	  		dialog.hide();
-	  		$('#browse-screen').animate({left: 0}, 400, 'easeOutBack', function(){
+	  		$('#browse-screen').animate({left: 0}, 400, 'easeInOutExpo', function(){
 				route('/deck/select/' + self.title);
 	  		});
 	  	}
