@@ -7,7 +7,7 @@ var path = require('path');
 console.log(express.version);
 
 app.post('/upload', function(req,res) {
-	console.log('upload',req.files.files[0]);
+	console.log('upload',req.files);
     var upload = req.files.files[0];
 	var file = upload.path;
 	var fileSlice = file.slice('/tmp/'.length);

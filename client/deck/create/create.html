@@ -1,5 +1,5 @@
 <template name="deck_create">
-	<div class="deck-create-screen">
+	<div class="deck-create screen create-screen">
 		<h1 class="title">DECK CREATOR</h1>
 		{{>creator2}}
 		{{>look_creator2}}
@@ -34,7 +34,7 @@
 </template>
 
 <template name="creator2">
-	<div class="input-area active {{isActive}}">
+	<div class="input-area {{isActive}}" id="data-input">
 		<div class="field-wrapper">
 			{{{form "deck_input_info" template="deck_form"}}}
 			<div id="more-inputs" class="button"></div>
@@ -58,7 +58,7 @@
 </template>
 
 <template name="look_form">
-	{{{input "deck_load" type="file" placeholder="file" cls="field" label="Image:"}}}
+	{{{input "deck_load" type="file" placeholder="file" cls="field" label="Image:" multiple="true"}}}
 	{{{input "deck_image" field="image" cls="field upload_val"}}}
 	{{{input "deck_primary" field="primary_color" cls="field" label="Background Color:"}}}
 	{{{input "deck_secondary" field="secondary_color" cls="field" label="Secondary Color:"}}}
@@ -120,15 +120,15 @@
 			<img class="full-image" src='/{{image}}' />
 		{{/if}}
 	</section>
-	<section id="top" style="background-color:{{primary_color}}; outline-color:{{seconday_color}};">
+	<section id="top" style="background-color:{{primary_color}}; outline-color:{{secondary_color}};">
 	</section>
-	<section id="bottom" style="background-color:{{primary_color}}; outline-color:{{seconday_color}};">
+	<section id="bottom" style="background-color:{{primary_color}}; outline-color:{{secondary_color}};">
 	</section>
-	<section id="back" style="background-color:{{primary_color}}; outline-color:{{seconday_color}};">
+	<section id="back" style="background-color:{{primary_color}}; outline-color:{{secondary_color}};">
 	</section>
-	<section id="left" style="background-color:{{primary_color}}; outline-color:{{seconday_color}};">
+	<section id="left" style="background-color:{{primary_color}}; outline-color:{{secondary_color}};">
 	</section>
-	<section id="right" style="background-color:{{primary_color}}; outline-color:{{seconday_color}};">
+	<section id="right" style="background-color:{{primary_color}}; outline-color:{{secondary_color}};">
 </section>
 {{/with}}
 </template>

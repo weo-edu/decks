@@ -13,6 +13,9 @@ var domTransitionProperty = Modernizr.prefixed('transition');
 var transformPrefix = domToCss(Modernizr.prefixed('transform'));
 var transitionPrefix = domToCss(domTransitionProperty);
 
+	var current_page = new Reactive.Store('current_page', {
+		active: 'data-input'
+	})
 	
 function floatingObj(dist, time, ease){
 	//textColor();
@@ -84,14 +87,6 @@ Template.look_creator.events = {
 		var tar = $(event.target).closest('.input-area');
 		switchPages(tar);
 	},
-	'click #displayTitle' : function(event){
-		el = $(event.target);
-		if($(el+':checked').length == 0)
-			render.set('displayTitle', false);
-		else
-			render.set('displayTitle', true);
-		deck.set('render', render.all());
-	},
 	'click #upload' : function(event){
 		event.preventDefault();
 		$('#file').click();
@@ -111,6 +106,10 @@ Template.look_creator.events = {
 
 Template.deck_render.render = function() {
 	return ui.get('render_input_info').getFields()
+}
+
+Template.creator2.isActive = function(){
+	
 }
 
 view.render('deck_create');
