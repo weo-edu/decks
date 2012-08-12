@@ -1,25 +1,15 @@
+//////////////////////////////////
+////////////////XXX add iteration option to uikit
+
+
 route('/card/create', function() {
 	var transformPrefix = domToCss(Modernizr.prefixed('transform'));
-	var card = new Reactive.Store('card', {
-		name:'',
-		graphic: null,
-		problem:{},
-		'main-color':'',
-		'sec-color':'',
-		tags:[]
-	});
-	var problem = new Reactive.Store('problem', {
-		template: 'Template',
-		solution: '',
-		rules: []
-	})
-	var error = new Reactive.Store('error', {
-		template: '',
-		solution: '',
-		rules: []
-	});
 
-
+	var error = new Reactive.Store('error',{
+		template:'',
+		solution:'',
+		rules:[]
+	});
 
 	var watchErrors = function(){
 		var update = function(){
@@ -103,7 +93,7 @@ route('/card/create', function() {
 	Template.card_create.events = events;
 
 
-	Template.rules.events = {
+	Template.rules_form.events = {
 		// 'keyup .instant_update': function(event) {
 		// 	var el = $(event.target);
 		// 	var idx = el.closest('#rules').children().children().children('.rule-input').index(el);
@@ -121,10 +111,6 @@ route('/card/create', function() {
 			}));
 			if($('#rules').height() <= $('#rule-container').height())
 				$('#bottom-button').css('top', $('#rules').height());
-			var rules = problem.get('rules');
-			rules.unshift('');
-			problem.set('rules', rules)
-			card.set('problem', problem.all());
 		}
 	}
 
@@ -136,28 +122,7 @@ route('/card/create', function() {
 		var p = problemize(prob);
 		c.question = p.html;
 		c.answer = p.solution;
-		var e = {
-			template: '',
-			solution: '',
-			rules: _.map(c.rules,function(rule) {return '';})
-		};
 
-		_.each(p.errors,function(err) {
-			if (err.part == 'rule') {
-				console.log('rule error',err.idx);
-				e.rules[err.idx] = err.message;
-			}
-				
-			else
-				e[err.part] = err.message;
-		});
-
-		_.each(e,function(val,key) {
-			error.set(key,val);
-		})
-
- 
-		return c;
 	}
 
 	Template.front.card = function(){
@@ -165,7 +130,33 @@ route('/card/create', function() {
 	}
 
 	Template.back.card = function(){
-		return ui.get('card_input_info').getFields();
+		var c = ui.get('card_input_info').getFields();
+		var p = problemize(c);
+		c.question = p.html;
+		c.answer = p.solution;
+		var e = {
+			template: '',
+			solution: '',
+			rules: _.map(c.rules,function(rule) {return '';})
+			};
+
+	_.each(p.errors,function(err) {
+		if (err.part == 'rule') {
+			console.log('rule error',err.idx);
+			e.rules[err.idx] = err.message;
+		}
+			
+		else
+			e[err.part] = err.message;
+		});
+
+		_.each(e,function(val,key) {
+			error.set(key,val);
+		})
+
+		watchErrors();
+ 
+		return c;
 	}
 
 	// Template.front.card = function(){

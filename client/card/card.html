@@ -16,7 +16,7 @@
 <template name="card_form">
 	{{{textarea "card_template" field="template" placeholder="{{a}} to make a variable" cls="field" label="Problem:"}}}
 	{{{input "card_solution" field="solution" placeholder="a to use variable a" cls="field" label="Solution:"}}}
-	{{>rules}}
+	{{>rules_form}}
 </template>
 
 <template name="card_look_input">
@@ -116,23 +116,23 @@
 </template>
 
 
-<template name="rules">
-	<div class="field">
-		<div id="add-rule" class="upload">Add Rule</div>
-			<div id="rule-container">
-				<ul id='rules'>
-				</ul>
-			</div>
+<template name="rules_form">
+	{{{form "rules_input_info" template="rule_input"}}}
+	<div id="add-rule" class="upload">Add Rule</div>
+	<div id="rule-container">
+	<ul id='rules'></ul>
 	</div>
 </template>
 
 
+
 <template name="rule_input">
 	<li id="rule-{{idx}}" class="rule-cont">
-		<div class="field">
+		{{{input "rules-{{idx}}" field="rules-{{idx}}" cls="field"}}}
+		<!-- <div class="field">
 			<div class="text">rule-{{idx_adj}}:</div>
 			<input id="rules-{{idx}}" class="instant_update rule-input"/>
-		</div>
+		</div> -->
 	</li>
 </template>
 
