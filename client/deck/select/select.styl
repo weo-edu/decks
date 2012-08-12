@@ -1,0 +1,85 @@
+@import "nib";
+@import "../common/common.styl"
+
+#select-screen {
+	ipad();
+	background: url('/img/woodBg.jpg') center center no-repeat;
+
+
+	.deck {
+		width: 142px;
+		height: 182px;
+	}
+}
+
+
+#players-area {
+	float: left;
+	padding: 20px;
+	height: 100%;
+	width: 216px;
+	.deck {
+		width: 142px;
+		height: 182px;
+	}
+}
+
+#card-grid {
+	float: right;
+	width: 768px;
+	height: 100%;
+	// background: rgba(tomato, .1);
+}
+
+.card {
+	border-radius: 5px;
+	border: 10px solid #FFF;
+	width: 130px;
+	height: 180px;
+	float: left;
+	background-position: center center;
+	background-repeat: no-repeat;
+	box-shadow: inset 1px 1px 1px rgba(#FFF, 0.4), 0 0 7px #333;
+}
+
+.scene {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+}
+
+.usr {
+	width: 100%;
+	height: 235px;
+	position: relative;
+	color: #FFF;
+	font-family: Fresca;
+	text-transform: uppercase;
+	font-size: 40px;
+	p {
+		position: absolute;
+	}
+	.avatar-tmb {
+		box-shadow: inset 0 0 10px #333;
+		background: rgba(tomato, .5);
+		size = 120px;		
+		height: size;
+		width: size;
+		position: absolute;
+	}
+}
+
+.usr-1 {
+	p {
+		top: 130px;
+	}
+}
+
+.usr-2 {
+	p {
+		top: 50px;
+	}
+	.avatar-tmb {
+		bottom: 20px;
+	}
+}

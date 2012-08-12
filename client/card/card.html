@@ -1,180 +1,192 @@
 <template name="card_create">
-	<div class="holder">
-		<div class="step-nav-bar">
-			<div class="step-nav active" id="step-1">
-				Step 1
-			</div>
-			<div class="step-nav" id="step-2">
-				Step 2
-			</div>
-			<div class="step-nav" id="step-3">
-				Step 3
-			</div>
-		</div>
-		<div class="wrapper">
+	<div class="card-create-screen create-screen" defer='{{defer}}'>
+		<h1 class="title">CARD CREATOR</h1>
 			{{>step_container_1}}
-			{{>step_container_2}}
-			{{>step_container_3}}
-		</div>
 	</div>
-	{{>section_title}}
 </template>
 
-<template name="section_title">
-	<h2 id="card-title">{{title}}</h2>
+<template name="card_info_input">
+	<div id="template-input" class="input-area {{isActive}}">
+		<div class="field-wrapper">
+			{{{form "card_input_info" template="card_form"}}}
+		</div>
+	</div>
+</template>
+
+<template name="card_form">
+	{{{textarea "card_template" field="template" placeholder="{{a}} to make a variable" cls="field" label="Problem:"}}}
+	{{{input "card_solution" field="solution" placeholder="a to use variable a" cls="field" label="Solution:"}}}
+	{{>rules}}
+</template>
+
+<template name="card_look_input">
+	<div class="input-area {{isActive}}">
+		<div class="field-wrapper">
+			{{{form "card_look_info" template="card_look"}}}
+		</div>
+		<div class="button" id="more-inputs"></div>
+	</div>
+</template>
+
+<template name="card_look">
+	{{{input "card_name" field="name" placeholder="name" cls="field"}}}
+	{{{input "card_tags" field="tags" placeholder="tags" cls="field"}}}
+	{{{input "card_load" type="file" placeholder="file" cls="field" label="Image:" multiple="true"}}}
+	{{{input "card_image" field="image" cls="field upload_val"}}}
+	{{{input "card_primary" field="primary_color" cls="field" label="Background Color:"}}}
+</template>
+
+<template name="color_picker">
+	<div id="color-picker" class="input-area active">
+		<div class="field-wrapper">
+			<div class="field">
+				<div class="text">Name:</div>
+				<input id="name" class="instant_update" type="text" name="important" />
+			</div>
+			<div class="field">
+				<div class="text">Tags:</div>
+				<input type="text" class="instant_update" id="tags" name="tags"/>
+			</div>
+			<div class="field">
+				<div class="text">Graphic*:</div>
+				<div class="instant_update">
+					<div id="upload" class="upload">Browse</div>	
+					<input type="file" id="file" name="file" tabindex="-1" img='' style="display:none;" multiple />
+				</div>
+			</div>
+			<div class="card-section">
+				<div class="to-change">Background Color:</div>
+				<input type="hidden" id="color-update" class="color-update color-change" name="main-color" value="#134256" />
+				<input type="hidden" id="secondary-color"class="secondary-color color-change" name="sec-color" value="#132634"/>
+				<div id="colorpicker"></div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <template name="template_preview">
-	<div id="template-preview" class="display">
-		<h2>Template Your Card</h2>
-		<div class="display-inner">
-			<div>
-				<p>Name:</p><input id="name" class="instant_update" type="text" name="important" />
-			</div>
-			<h3>Problem</h3>
-			<div>
-				<p>Template: </p>
-				<input id="template" type="text" class="instant_update" name="template"/> 
-				{{>template_errors}}
-			</div>
-			<div>
-				<p>Solution: </p>
-				<input class="instant_update" id="solution" type="text" name="solution"/>
-				{{>solution_errors}}
-			</div>
-			{{>rules}}
+	<div id="template-input" class="input-area">
+		<div id="card-inner" class="display-inner field-wrapper">
+		<div class="textarea-field field">
+			<div class="text">Template*: </div>
+			<textarea id="template" type="text" class="instant_update back-part validate" name="template" rows="4"/> 
 		</div>
+		<div class="field">
+			<div class="text">Solution*: </div>
+			<input class="instant_update back-part validate" id="solution" type="text" name="solution"/>
+		</div>
+		{{>rules}}
+		<div id="bottom-button" class="field">
+			<div id="create" class="upload">Create</div>
+		</div>
+		</div>
+		<div class="button" id="prev-inputs"></div>
 	</div>
 </template>	
 
 <template name="card_preview">
-	<section id="flippable" class="display">
-		<article id="box" class="color-update display">
-				{{>card_play}}
-				<!-- <div  class="choose-deck create-button">Create</div> -->
-		</article>
-	</section>
-</template>
-
-<template name="color_picker">
-	<div class="display color-picker">
-		<h2 >Design Your Card</h2>
-		<div class="card-section">
-			<h3>Graphic: </h3>
-			<input type="file" id="file" name="file" tabindex="-1" multiple />
-		</div>
-		<div class="card-section">
-			<h3 class="to-change">Background Color:</h3>
-			<form><input type="hidden" id="color" name="color" value="#123456" /></form>
-			<div id="colorpicker"></div>
+	<div class="deck-position">
+		<div class="deck-shadow">
+			{{>card_play}}
 		</div>
 	</div>
 </template>
+
+
 
 <template name="step_container_1">
-	<div class="create active" id="step-1-cont">
-		{{>template_preview}}
+		{{>card_info_input}}
+		{{>card_look_input}}
 		{{>card_preview}}
-	</div>
-</template>
-
-<template name="step_container_2">
-	<div class="create" id="step-2-cont">
-		{{>color_picker}}
-		{{>card_preview}}
-	</div>
-</template>
-
-<template name="step_container_3">
-	<div class = "create" id="step-3-cont">
-		{{>deck_preview}}
-		{{>card_preview}}
-	</div>
-</template>
-
-<template name="deck_preview">
-	<div class="deck-holder display">
-		<div class="deck-preview">
-			{{#each deck}}
-				<div id="create-deck-container" class="deck-container">
-					<div class="deck" id='{{_id}}'>
-						<div class="front" id='card-image' style='background: url(/{{graphic}});'> 
-						</div>
-						<div class='back'>
-							<div class="deck-title">{{name}}</div>
-							<div class="info">More relevant card information here</div>
-							<div class='choose-deck'>Select</div>
-						</div>
-					</div>
-				</div>
-			{{/each}}
-		</div>
-	</div>
 </template>
 
 <template name="card_deck_list">
 	<div class="display-inner">
 		<h2>Select Deck to Add To</h2>
 		Decks:
-			{{#each deck}}
-				<div class="deck-container">
-					<div class="deck">
-						<p>{{name}}</p>
-						<img src="/{{graphic}}"/>
-					</div>
+		{{#each deck}}
+			<div class="deck-container">
+				<div class="deck">
+					<p>{{name}}</p>
+					<img src="/{{graphic}}"/>
 				</div>
-			{{/each}}	
+			</div>
+		{{/each}}	
 	</div>
 </template>
 
-<template name="template_errors">
-		<div id='template-error-message' class='error-message'>{{error}}</div>
-</template>
-
-<template name="solution_errors">
-	<div id='solution-error-message' class='error-message'>{{error}}</div>
-</template>
 
 <template name="rules">
-	<div id="add-rule" class="choose-deck">Add Rule</div>
-	<div id="rule-container">
-		<ul id='rules'>
-		</ul>
+	<div class="field">
+		<div id="add-rule" class="upload">Add Rule</div>
+			<div id="rule-container">
+				<ul id='rules'>
+				</ul>
+			</div>
 	</div>
 </template>
 
 
 <template name="rule_input">
-	<li id="rule-{{idx}}">
-		<input id="rules-{{idx}}" class="instant_update rule-input"/>
+	<li id="rule-{{idx}}" class="rule-cont">
+		<div class="field">
+			<div class="text">rule-{{idx_adj}}:</div>
+			<input id="rules-{{idx}}" class="instant_update rule-input"/>
+		</div>
 	</li>
 </template>
 
+<template name="front">
+	{{#with card}}
 
-<template name="card_play">
-	<section class="front">
-		<div class="selectable">
-			{{#with card}}
-			<h2 class="secondary-color">{{name}}</h2>
-			<div class="display-inner">
-				<div class="card">
-					{{#if graphic}}
-						<img src='{{graphic}}' />
-					{{/if}}
-					<div class='question'>
-						{{question}}
-					</div>
-					<p>Solution:</p>
-					<div for='answer'>{{answer}}</div>
+	<div id="front"  style="background-color:{{primary_color}}">
+		<div class="display-inner color-update">
+			{{#if name}}
+				<h2 class="secondary-color elem">{{name}}</h2>
+				{{#if image}}
+					<img src='/{{image}}'/>
+				{{else}}
+					<div class="fill elem"></div>
+				{{/if}}
+			{{else}}
+				{{#if image}}
+					<img src='/{{image}}' class="full elem"/>
+				{{else}}
+					<div class="full elem"></div>
+				{{/if}}
+			{{/if}}
+			<div class="tags text elem">
+				{{#each tags}}
+					<li class="tags" style="display:inline;">{{this}}</li>   
+				{{/each}}
+			</div>
+		</div>
+	</div>
+	{{/with}}
+</template>
+
+<template name="back">
+	{{#with card}}
+	<div id="back" style="background-color:{{primary_color}}">
+		<div class="display-inner color-update">
+			<div id="template-show" class='question text elem'>
+				<div id="template-overflow" class='overflow'>
+{{#markdown}}
+{{question}}
+{{/markdown}}
 				</div>
 			</div>
-			{{/with}}
+			<div class='solution text elem'>
+				<div for='answer'>Solution: {{answer}}</div>
+			</div>
 		</div>
-	</section>
-	<section class="back" style="background-color:red">
-	</section>
-	<section class="top"></section>
-	<section class="bottom"></section>
-	<section class="left"></section>
-	<section class="right"></section>
+	</div>
+	{{/with}}
+</template>
+
+<template name="card_play">
+<div id="card" class="creator_card">
+	{{>front}}
+	{{>back}}
+</div>
 </template>

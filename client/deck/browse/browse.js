@@ -1,0 +1,41 @@
+route('/deck/browse',function() {
+	Template.decks.decks = function() {
+		
+			// shelf($('#deck-grid'));
+			Meteor.defer(function() {
+				$('#deck-grid').layout({margin: 20});
+			})
+		
+		return Decks.find({});
+	}
+
+	Template.decks.arrange = function(selector) {
+		
+	}
+
+	Template.deck_browse.mydecks = function(){
+		return Decks.find({_id: {$in: Meteor.user().decks}});
+	};
+
+	Template.deck_browse.decks = function() {
+		var decks = Decks.find({});
+		return decks;
+	};
+
+	Template.deck_browse.events = {
+	 	'click .deck-container': function(e) {
+	 		var dialog = ui.get('deck_more');
+	 		dialog.context(this);
+	 		dialog.closable().overlay().show().center();
+	  	},
+	  	'click .play-button': function(e) {
+	  		var self = this;
+	  		var dialog = ui.get('deck_more');
+	  		dialog.hide();
+	  		$('#browse-screen').animate({left: 0}, 400, 'easeInOutExpo', function(){
+				route('/deck/select/' + self.title);
+	  		});
+	  	}
+	}
+  	view.render('deck_browse');
+});

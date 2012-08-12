@@ -1,6 +1,6 @@
 //
 route('/', function(ctx, next) {
-  route.redirect('/card/create');
+  route.redirect('/deck/start');
 });
 
 Meteor.startup(function() {
