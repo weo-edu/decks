@@ -1,9 +1,8 @@
 route('/deck/browse',function() {
 	Template.decks.decks = function() {
-		
-			// shelf($('#deck-grid'));
+
 			Meteor.defer(function() {
-				$('#deck-grid').layout({margin: 20});
+				$('#deck-grid').layout();
 			})
 		
 		return Decks.find({});

@@ -10,6 +10,40 @@
 		width: 142px;
 		height: 182px;
 	}
+
+	h1, #chosen {
+		font: 40px/2em 'nuku';
+		color: #B3895D;
+		text-shadow: -1px -1px 0 rgba(black, .7);
+	}
+
+	.next, .prev {
+		cursor: pointer;
+		height: 43px;
+		width: 25px;
+		background-image: url('/img/arrows.png');
+		background-position: 0px 0px;
+		position: absolute;
+		right: 20px;
+		top: 290px;
+		&:hover {
+			background-position: 0px 43px;
+		}
+		&:active {
+			background-position: 0px 0px;
+		}
+	}
+
+	.next {
+		background-position: 25px 0px;
+		&:hover {
+			background-position: 25px 43px;
+		}
+		&:active {
+			background-position: 25px 0px;
+		}
+	}
+
 }
 
 
@@ -25,10 +59,8 @@
 }
 
 #card-grid {
-	float: right;
-	width: 768px;
-	height: 100%;
-	// background: rgba(tomato, .1);
+	float: left;
+	width: 700px;
 }
 
 .card {
@@ -39,7 +71,12 @@
 	float: left;
 	background-position: center center;
 	background-repeat: no-repeat;
-	box-shadow: inset 1px 1px 1px rgba(#FFF, 0.4), 0 0 7px #333;
+	transition: box-shadow .4s;
+	box-shadow: 0 0 7px #333;
+	cursor: pointer;
+	&.select {
+		box-shadow: 0 0 20px #FCEE21;
+	}
 }
 
 .scene {
@@ -81,5 +118,14 @@
 	}
 	.avatar-tmb {
 		bottom: 20px;
+	}
+}
+
+#max_cards {
+	width: 300px;
+	p {
+		padding: 20px;
+		font: 20px/1.2em 'Fresca';
+		text-align: center;
 	}
 }

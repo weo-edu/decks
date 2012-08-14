@@ -45,9 +45,11 @@ route('/deck/play/:name', function(ctx){
 		
 
 		Meteor.defer(function() {
-			$('#problem-container').animate({marginTop: 0}, 600, 'easeInOutExpo', function() {
-					$('#answer').focus();
-			});
+			$('#problem-container').addClass('show', 0);
+			// $('#problem-container').animate({marginTop: 0}, 600, 'easeInOutExpo', function() {
+			// 		$('#answer').focus();
+			// });
+			$('#answer').focus();
 			$('#problem').html(game.get('problems')[0].html);
 		});
 

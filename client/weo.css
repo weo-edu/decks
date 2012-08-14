@@ -1,17 +1,7 @@
 /* CSS declarations go here */
-body {
+/*body {
 	font-family: arial;
 }
-
-/*.deck {
-	z-index:2;
-	cursor: pointer;
-}
-
-.deck img {
-	width: 200px;
-	height: 250px;
-}*/
 
 .deck-title {
 	text-align: center;
@@ -46,7 +36,6 @@ input {
 }
 
 .card{
-	/*text-align:center;*/
 }
 
 .decks{
@@ -79,4 +68,4 @@ input {
 	border: 2px solid black;
 	position:absolute;
 	display: none;
-}
+}*/

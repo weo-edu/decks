@@ -1,0 +1,113 @@
+@import 'nib';
+@import '../common/common.styl';
+
+height = 617px;
+
+#social-screen {
+	ipad();
+	height: 100%;
+	background: url('/img/woodBg.jpg') center no-repeat;
+	.chat {
+		width: 216px;
+		height: height;
+		background: #FFF;
+		float: left;
+		padding: 20px;
+	}
+}
+
+#buddy-list {
+	width: 358px;
+	float: left;
+	height: height + 26;
+	margin-top: -26px;
+	.buddy{
+		height: 70px;
+		width: 100%;
+		background-image: url('/img/shelf.png');
+		background-position:  center top;
+		background-repeat: repeat-x;
+		padding: 40px 30px 10px;
+		cursor: pointer;
+		transition: background-color .3s;
+	}
+	.buddy-list-bg {
+		position: absolute;
+		top: 0;
+		pointer-events: none;
+	}
+
+	.avatar-tmb-small {
+		box-shadow: 0 0 10px #111, inset 0 0 0 #000;
+		background: rgba(tomato);
+		size = 70px;		
+		height: size;
+		width: size;
+		float: left;
+		display: block;
+		margin-right: 20px;
+		transition: all .3s;
+		background-image: url(/img/weo.png);
+		background-repeat: no-repeat;
+		background-size: 60px;
+		background-position: center;
+	}
+
+	p {
+		font: 30px/70px 'nuku';
+		color: #B3895D;
+		text-shadow: -1px -1px 0 rgba(black, .7);	
+	}
+
+	.active { 
+		background-color: rgba(#412312, .3);
+		.avatar-tmb-small {
+			box-shadow: 0 0 0px #333, inset 0 0 10px #000;
+		}
+	}
+}
+
+#active-friend {
+	width: 410px;
+	height: height;
+	float: left;
+	background: url('/app!common/textures/roughcloth.png');
+	box-shadow: 10px 0 20px #CCC;
+	position: relative;
+	z-index: 0;
+	.avatar {
+		margin: 0 auto 10px;
+		height: 340px;
+		width: 320px;
+		background-position: center center;
+		background-repeat: no-repeat;
+	}
+	.collection-button {
+		width: 303px;
+		height: 103px;
+		margin: 40px auto 0px;
+		background: url('/img/collection-button.png') center center no-repeat;
+		cursor: pointer;
+		&:active {
+			margin: 41px auto -1px;
+		}
+	}
+	.play-button {
+		position: static;
+		float: none;
+		margin: 10px auto 20px;
+		&:active {
+			margin: 11px auto 19px;
+		}
+	}
+}
+
+#message-box {
+	position: absolute;
+	bottom: 20px;
+	width: 196px;
+	height: 110px;
+	padding: 5px 10px;
+	font: 18px/1.2em 'Fresca';
+	resize: none;
+}

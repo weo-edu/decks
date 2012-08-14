@@ -1,0 +1,156 @@
+@import 'nib';
+@import '../common/common.styl';
+
+
+.awning {
+	height = 55px;
+	height: height;
+	background: url("/app!common/textures/blue-scale.png");
+	box-shadow(0 3px 15px #333);
+	font-family: 'Fresca';
+	font-size: 40px;
+	color: #EEE;
+	line-height: height;
+	padding: 0 20px;
+	position: relative;
+	z-index: 999;
+}
+
+#browse-screen {
+	width: 1024px * 2;
+	position: absolute;
+	left: -1024px;
+
+	.select-placeholder{
+		float: left;
+		height: 100%;
+		background: url('/img/woodBg.jpg') center center no-repeat;
+		ipad();
+	}
+	.browse{
+		float: left;
+		height: 100%;
+		background: url('/img/browseBg.jpg') center center no-repeat;
+		ipad();
+	}
+}
+
+#deck-grid {
+	height = 220px;
+	width = 150px;
+	
+	height: height;
+	width: 850px;
+	margin: 120px auto 0;
+	transform-style: flat;
+	.deck-container {
+		cursor: pointer;
+		width: width;
+		height: height;
+		float: left;
+		background-position: center center;
+		position: relative;
+		.shadow {
+			position: absolute;
+			bottom: 5px;
+			border-radius: 45% 45% 65% 65%;
+			background: rgba(#333, .3);
+			width: 95px;
+			height: 18px;
+			left: 25px;
+		}
+	}
+}
+
+.dialog {
+	width: 700px;
+	.content {
+		padding: 0;
+	}
+	h2 {
+		background: #333;
+		color: #FFF;
+		padding: 0 10px;
+		font-size: 30px;
+		line-height: 1.5em;
+		text-align: center;
+	}
+	.close {
+		top: 8px;
+		right: 8px;
+		color: #EEE;
+		border-color: #EEE;
+		background: #222;
+		&:hover {
+			color: #FFF;
+			border-color: #FFF;
+		}	
+	}
+
+	.deck-image {
+		padding: 30px;
+		float: left;
+		width: 250px;
+		height: 300px;
+		background: #DDD url('/img/deckBurst.png') 14px -4px no-repeat;
+		.deck {
+			float: none;
+			margin: 20px auto 0;
+			height: 240px;
+			width: 142px;
+			display: block;
+		}
+		p {
+			font-size: 30px;
+			font-family: MayonaiseCondRegular;
+			text-align: center;
+		}
+	}
+	.deck-meta {
+		float: right;
+		padding: 30px;
+		width: 330px;
+		.meta {
+			clear: both;
+			min-height: 30px;
+			margin-bottom: 10px;
+		}
+		h3 {
+			font-family: Fresca;;
+			font-size: 25px;
+			float: left;
+			width: 140px;
+			line-height: 14px;
+		}
+		p {
+			float: left;
+			width: 180px;
+			font-size: 20px;
+			font-family: fresca;
+		}
+		.clear {
+			clear: both;
+		}
+		
+	}
+}
+
+
+.play-button {
+	cursor: pointer;
+	width: 160px;
+	height: 80px;
+	float: right;
+	clear: both;
+	background: url('/img/playButton.png');
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	margin: 0;
+	&:hover {
+		background-position: 0px 81px;
+	}
+	&:active{
+		bottom: 9px;
+	}
+}

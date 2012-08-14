@@ -1,0 +1,52 @@
+<template name='social'>
+	<div id='social-screen'>
+		<div class='awning'>Friends</div>
+		<div id='buddy-list'>
+			{{> buddies}}
+			<img class='buddy-list-bg' src='/img/buddyList.png' />
+		</div>
+		<div id='active-friend'>
+			{{> active-friend}}
+		</div>
+		<div class='chat'>
+			{{> chat}}
+		</div>
+	</div>
+</template>
+
+<template name='buddies'>
+	<div class='buddy'>
+		<div class='avatar-tmb-small'></div>
+		<p>Name</p>
+	</div>
+	<div class='buddy'>
+		<div class='avatar-tmb-small'></div>
+		<p>Mweint</p>
+	</div>
+	<div class='buddy'>
+		<div class='avatar-tmb-small'></div>
+		<p>DARAWK</p>
+	</div>
+	<div class='buddy'>
+		<div class='avatar-tmb-small'></div>
+		<p>JOSHRTAY</p>
+	</div>
+	<div class='buddy'>
+		<div class='avatar-tmb-small'></div>
+		<p>Daniel Leavitt</p>
+	</div>
+	<div class='buddy'>
+		<div class='avatar-tmb-small'></div>
+		<p>Another name</p>
+	</div>
+</template>
+
+<template name='chat'>
+	{{{textarea "message-box" placeholder=". . ."}}}
+</template>
+
+<template name='active-friend'>
+	<div class='collection-button'></div>
+	<div class='avatar' style='background-image: url(/img/weo.png)';></div>
+	<div class='play-button'></div>
+</template>
