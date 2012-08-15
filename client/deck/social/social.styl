@@ -19,17 +19,17 @@ height = 617px;
 #buddy-list {
 	width: 358px;
 	float: left;
-	height: height + 26;
-	margin-top: -26px;
+	height: height;
 	.buddy{
 		height: 70px;
 		width: 100%;
 		background-image: url('/img/shelf.png');
-		background-position:  center top;
+		background-position:  center 102px;
 		background-repeat: repeat-x;
-		padding: 40px 30px 10px;
+		padding: 18px 30px 40px;
 		cursor: pointer;
 		transition: background-color .3s;
+		box-shadow: 0 10px 10px rgba(#000, .5);
 	}
 	.buddy-list-bg {
 		position: absolute;
@@ -38,7 +38,7 @@ height = 617px;
 	}
 
 	.avatar-tmb-small {
-		box-shadow: 0 0 10px #111, inset 0 0 0 #000;
+		box-shadow: 0 0 0px #333, inset 0 0 20px #111;
 		background: rgba(tomato);
 		size = 70px;		
 		height: size;
@@ -47,7 +47,7 @@ height = 617px;
 		display: block;
 		margin-right: 20px;
 		transition: all .3s;
-		background-image: url(/img/weo.png);
+		background-image: url('/img/weo.png');
 		background-repeat: no-repeat;
 		background-size: 60px;
 		background-position: center;
@@ -62,7 +62,7 @@ height = 617px;
 	.active { 
 		background-color: rgba(#412312, .3);
 		.avatar-tmb-small {
-			box-shadow: 0 0 0px #333, inset 0 0 10px #000;
+			box-shadow: 0 0 10px #111, inset 0 0 0 #000;
 		}
 	}
 }
