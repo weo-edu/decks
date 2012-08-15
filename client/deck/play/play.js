@@ -1,9 +1,9 @@
 route('/deck/play/:name', function(ctx){
 
- // 	var totalCards;
+ 	var totalCards;
 	// var working_card = 0;
-	// var problems = [];
-	// var results = [];
+	
+	var results = [];
 	// var count = 0;
 
 	// function animateDecks(){
@@ -30,18 +30,37 @@ route('/deck/play/:name', function(ctx){
  	Template.deck_play.deck = function() {
 		var name = ctx.params.name;
 		var deck = Decks.findOne({title: name});
-			console.log('test', deck);
-		if(deck && deck.cards.length > 0){
+
+		if(!deck) return;
+
+		var game = new Reactive.Store('game');
+		
+		if (!game.get('problems')) {
+			var problems = []
+			game.set('problems',problems);
 			totalCards = deck.cards.length;
-			var problems = [];
-			for(var i = 0; i < totalCards; i++) {
+			for(var i = 0; i < totalCards; i++)
 				problems[i] = problemize(deck.cards[i].problem);
-				deck.cards[i].question = problems[i].html;
-			}
 		}
+		
+
+		Meteor.defer(function() {
+			$('#problem-container').addClass('show', 0);
+			// $('#problem-container').animate({marginTop: 0}, 600, 'easeInOutExpo', function() {
+			// 		$('#answer').focus();
+			// });
+			$('#answer').focus();
+			$('#problem').html(game.get('problems')[0].html);
+		});
 
 
 	  	return deck;
+  	}
+
+  	Template.deck_play.events = {
+  		'click': function() {
+  			$('#answer').focus();
+  		}
   	}
 
  //  	Template.deck_play.events = {

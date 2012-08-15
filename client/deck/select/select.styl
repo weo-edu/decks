@@ -10,18 +10,57 @@
 		width: 142px;
 		height: 182px;
 	}
+
+	h1, #chosen {
+		font: 40px/2em 'nuku';
+		color: #B3895D;
+		text-shadow: -1px -1px 0 rgba(black, .7);
+	}
+
+	.next, .prev {
+		cursor: pointer;
+		height: 43px;
+		width: 25px;
+		background-image: url('/img/arrows.png');
+		background-position: 0px 0px;
+		position: absolute;
+		right: 20px;
+		top: 290px;
+		&:hover {
+			background-position: 0px 43px;
+		}
+		&:active {
+			background-position: 0px 0px;
+		}
+	}
+
+	.next {
+		background-position: 25px 0px;
+		&:hover {
+			background-position: 25px 43px;
+		}
+		&:active {
+			background-position: 25px 0px;
+		}
+	}
+
 }
 
 
 #players-area {
 	float: left;
+	padding: 20px;
+	height: 100%;
+	width: 216px;
+	.deck {
+		width: 142px;
+		height: 182px;
+	}
 }
 
-.card-grid {
-	float: right;
-	width: 800px;
-	height: 100%;
-	background: rgba(white, .2);
+#card-grid {
+	float: left;
+	width: 700px;
 }
 
 .card {
@@ -32,5 +71,62 @@
 	float: left;
 	background-position: center center;
 	background-repeat: no-repeat;
-	box-shadow: inset 1px 1px 1px rgba(#FFF, 0.4), 0 0 7px #333;
+	transition: box-shadow .4s;
+	box-shadow: 0 0 7px #333;
+	cursor: pointer;
+	&.select {
+		box-shadow: 0 0 20px #FCEE21;
+	}
+}
+
+.scene {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+}
+
+.usr {
+	width: 100%;
+	height: 235px;
+	position: relative;
+	color: #FFF;
+	font-family: Fresca;
+	text-transform: uppercase;
+	font-size: 40px;
+	p {
+		position: absolute;
+	}
+	.avatar-tmb {
+		box-shadow: inset 0 0 10px #333;
+		background: rgba(tomato, .5);
+		size = 120px;		
+		height: size;
+		width: size;
+		position: absolute;
+	}
+}
+
+.usr-1 {
+	p {
+		top: 130px;
+	}
+}
+
+.usr-2 {
+	p {
+		top: 50px;
+	}
+	.avatar-tmb {
+		bottom: 20px;
+	}
+}
+
+#max_cards {
+	width: 300px;
+	font: 20px/1.2em 'Fresca';
+	p {
+		padding: 20px;
+		font: 20px/1.2em 'Fresca';
+		text-align: center;
+	}
 }

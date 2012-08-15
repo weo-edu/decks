@@ -1,25 +1,15 @@
+//////////////////////////////////
+////////////////XXX add iteration option to uikit
+
+
 route('/card/create', function() {
 	var transformPrefix = domToCss(Modernizr.prefixed('transform'));
-	var card = new Reactive.Store('card', {
-		name:'',
-		graphic: null,
-		problem:{},
-		'main-color':'',
-		'sec-color':'',
-		tags:[]
-	});
-	var problem = new Reactive.Store('problem', {
-		template: 'Template',
-		solution: '',
-		rules: []
-	})
-	var error = new Reactive.Store('error', {
-		template: '',
-		solution: '',
-		rules: []
-	});
 
-
+	var error = new Reactive.Store('error',{
+		template:'',
+		solution:'',
+		rules:[]
+	});
 
 	var watchErrors = function(){
 		var update = function(){
@@ -75,9 +65,7 @@ route('/card/create', function() {
 
 
 	var events = {
-		'keyup .instant_update' : function(event){
-			instantUpdate(event);
-		},
+
 	'click .button' : function(event){
 			var tar = $(event.target).closest('.input-area')
 			if(validate())
@@ -105,28 +93,24 @@ route('/card/create', function() {
 	Template.card_create.events = events;
 
 
-	Template.rules.events = {
-		'keyup .instant_update': function(event) {
-			var el = $(event.target);
-			var idx = el.closest('#rules').children().children().children('.rule-input').index(el);
-			var rules = _.clone(problem.get('rules'));
+	Template.rules_form.events = {
+		// 'keyup .instant_update': function(event) {
+		// 	var el = $(event.target);
+		// 	var idx = el.closest('#rules').children().children().children('.rule-input').index(el);
+		// 	var rules = _.clone(problem.get('rules'));
 
-			rules[idx] = el.val();
-			problem.set('rules',rules);
-			card.set('problem',problem.all())
-			watchErrors();
-			return false;
-		},
+		// 	rules[idx] = el.val();
+		// 	problem.set('rules',rules);
+		// 	card.set('problem',problem.all())
+		// 	watchErrors();
+		// 	return false;
+		// },
 		'click #add-rule': function(event) {
 			$('#rules').prepend(Meteor.ui.render(function() {
 				return Template.rule_input();
 			}));
 			if($('#rules').height() <= $('#rule-container').height())
 				$('#bottom-button').css('top', $('#rules').height());
-			var rules = problem.get('rules');
-			rules.unshift('');
-			problem.set('rules', rules)
-			card.set('problem', problem.all());
 		}
 	}
 
@@ -138,38 +122,46 @@ route('/card/create', function() {
 		var p = problemize(prob);
 		c.question = p.html;
 		c.answer = p.solution;
+
+	}
+
+	Template.front.card = function(){
+		return ui.get('card_look_info').getFields();
+	}
+
+	Template.back.card = function(){
+		var c = ui.get('card_input_info').getFields();
+		var p = problemize(c);
+		c.question = p.html;
+		c.answer = p.solution;
 		var e = {
 			template: '',
 			solution: '',
 			rules: _.map(c.rules,function(rule) {return '';})
-		};
+			};
 
-		_.each(p.errors,function(err) {
-			if (err.part == 'rule') {
-				console.log('rule error',err.idx);
-				e.rules[err.idx] = err.message;
-			}
-				
-			else
-				e[err.part] = err.message;
+	_.each(p.errors,function(err) {
+		if (err.part == 'rule') {
+			console.log('rule error',err.idx);
+			e.rules[err.idx] = err.message;
+		}
+			
+		else
+			e[err.part] = err.message;
 		});
 
 		_.each(e,function(val,key) {
 			error.set(key,val);
 		})
 
+		watchErrors();
  
 		return c;
 	}
 
-
-	Template.back.card = function(){
-		return getCard();
-	}
-
-	Template.front.card = function(){
-		return getCard();
-	}
+	// Template.front.card = function(){
+	// 	return getCard();
+	// }
 
 	Template.rule_input.idx = function(){
 		return $('#rules').children().length;
@@ -182,26 +174,25 @@ route('/card/create', function() {
 	Template.card_create.defer = function(){
 		Meteor.defer(function() {
 			//floatingObj('10px', 1500, 'easeInOutSine', $('.deck-shadow'));
-			$('.color-change').change(function(){
-				var name = $(this).attr('name');
-				var val = $(this).val();
-				card.set(name, val)
-			});
+			// $('.color-change').change(function(){
+			// 	var name = $(this).attr('name');
+			// 	var val = $(this).val();
+			// 	card.set(name, val)
+			// });
 			// var picker = $.farbtastic('#colorpicker');
 			// picker.linkTo(onColorChange);
 			// function onColorChange(color){
 			// 	card.set('main-color',color);
 			// }
 			console.log('file', $('#file'));
-			$('#file').fileupload({
+			$('#card_load').fileupload({
 		    	url: "/upload",
 		    	type: "POST",
 		    	dataType: 'json',
 		    	multipart: true,
 		    	done: function(e,data) {
 		    		console.log('done');
-		    		$('#file').attr('img', data.result.path);
-		    		card.set("graphic","upload/"+data.result.path);
+		    		ui.get('card_image').value("upload/"+data.result.path)
 			    }
 		    });
 			});
