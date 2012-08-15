@@ -53,6 +53,7 @@ route('/deck/play/:name', function(ctx){
 			$('#problem').html(game.get('problems')[0].html);
 		});
 
+
 	  	return deck;
   	}
 

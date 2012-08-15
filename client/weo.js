@@ -5,6 +5,7 @@ route('/', function(ctx, next) {
 
 Meteor.startup(function() {
 	Meteor.subscribe('Decks');
+	Meteor.subscribe('Games');
 	route.start();
 });
 

@@ -12,9 +12,13 @@ utilities
 purl
 accounts
 accounts-passwords
+users
+observer
 showdown
 insecure
 uikit
+streamio
 less
 stylus
-users
+edis-cli
+edis-livedata
