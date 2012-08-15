@@ -29,15 +29,17 @@ route('/deck/play/:name', function(ctx){
 	
  	Template.deck_play.deck = function() {
 		var name = ctx.params.name;
-		var deck = Decks.findOne({name: name});
+		var deck = Decks.findOne({title: name});
+			console.log('test', deck);
 		if(deck && deck.cards.length > 0){
 			totalCards = deck.cards.length;
-
+			var problems = [];
 			for(var i = 0; i < totalCards; i++) {
 				problems[i] = problemize(deck.cards[i].problem);
 				deck.cards[i].question = problems[i].html;
 			}
 		}
+
 
 	  	return deck;
   	}

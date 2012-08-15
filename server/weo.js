@@ -21,9 +21,8 @@ app.post('/upload', function(req,res) {
 //var s = express.static(process.cwd()+"/.meteor/")
 app.get('/upload/*',express.static(process.cwd()+"/.meteor/"));
 
-
 Meteor.startup(function() {
-	Decks.remove({});
+	//Decks.remove({});
 	var decks = [
     {
         title: 'word arithmetic',
@@ -100,119 +99,11 @@ Meteor.startup(function() {
                     }
             }
         ]
-    },
-        {
-        title: 'word arithmetic',
-        render: {
-            image: 'arithmetic-4.png',
-            colorScheme: {
-                primary: 'goldenRod',
-                secondary: 'tomato'
-            }
-        },
-        cards: [
-            {
-                    name: 'word addition',
-                    graphic: 'addition.gif',
-                    problem: {
-                            template: 'What is {{a}} plus {{b}}?',
-                            solution: 'a + b'
-                    }
-            },
-            {
-                    name: 'word subtraction',
-                    graphic: 'subtraction.jpeg',
-                    problem: {
-                            template: 'What is {{a}} minus {{b}}?',
-                            solution: 'a - b'
-                    }
-            },
-            {
-                    name: 'word multiplication',
-                    graphic: 'multiplication.jpg',
-                    problem: {
-                            template: 'What is {{a}} times {{b}}?',
-                            solution: 'a * b'
-                    }
-            }
-        ]
-    },
-        {
-        title: 'word arithmetic',
-        render: {
-            image: 'arithmetic-4.png',
-            colorScheme: {
-                primary: 'goldenRod',
-                secondary: 'tomato'
-            }
-        },
-        cards: [
-            {
-                    name: 'word addition',
-                    graphic: 'addition.gif',
-                    problem: {
-                            template: 'What is {{a}} plus {{b}}?',
-                            solution: 'a + b'
-                    }
-            },
-            {
-                    name: 'word subtraction',
-                    graphic: 'subtraction.jpeg',
-                    problem: {
-                            template: 'What is {{a}} minus {{b}}?',
-                            solution: 'a - b'
-                    }
-            },
-            {
-                    name: 'word multiplication',
-                    graphic: 'multiplication.jpg',
-                    problem: {
-                            template: 'What is {{a}} times {{b}}?',
-                            solution: 'a * b'
-                    }
-            }
-        ]
-    },
-        {
-        title: 'word arithmetic',
-        render: {
-            image: 'arithmetic-4.png',
-            colorScheme: {
-                primary: 'goldenRod',
-                secondary: 'tomato'
-            }
-        },
-        cards: [
-            {
-                    name: 'word addition',
-                    graphic: 'addition.gif',
-                    problem: {
-                            template: 'What is {{a}} plus {{b}}?',
-                            solution: 'a + b'
-                    }
-            },
-            {
-                    name: 'word subtraction',
-                    graphic: 'subtraction.jpeg',
-                    problem: {
-                            template: 'What is {{a}} minus {{b}}?',
-                            solution: 'a - b'
-                    }
-            },
-            {
-                    name: 'word multiplication',
-                    graphic: 'multiplication.jpg',
-                    problem: {
-                            template: 'What is {{a}} times {{b}}?',
-                            solution: 'a * b'
-                    }
-            }
-        ]
     }
 	];
-	_.each(decks,function(deck) {
+	/*_.each(decks,function(deck) {
 		Decks.insert(deck);
-	});
+	});*/
 
 
 	Meteor.publish('Decks', function(){
@@ -221,6 +112,32 @@ Meteor.startup(function() {
 		});
 		return decks;
 	});
+
+    Meteor.publish('Games', function(){
+        return Games.find({});
+    });
+
+    function memberOfGame(g){
+        return ~doc.users.indexOf(this.uid);
+    }
+
+    Games.allow({
+        insert: function(uid, doc){
+            var err = new Error;
+            console.log(err.stack);
+            console.log('user id', uid);
+            return true;
+        },
+        update: function(uid, docs, fields, modifier){
+            return _.all(docs, memberOfGame, {uid: uid});
+        },
+        remove: function(uid, docs){
+            return _.all(docs, memberOfGame, {uid: uid});
+        },
+        fetch: function(arr){
+            return true;
+        }
+    })
 
 	Observer.start();
 });

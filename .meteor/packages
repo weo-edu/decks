@@ -20,3 +20,5 @@ uikit
 streamio
 less
 stylus
+edis-cli
+edis-livedata
