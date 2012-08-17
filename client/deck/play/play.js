@@ -86,6 +86,7 @@
 		 				Meteor.defer(function(){
 		 					$('#problem-container').addClass('show', 0);
 		 				});
+		 				
 		 				return game.problems()[idx++];
 		 			},
 		 			events: {

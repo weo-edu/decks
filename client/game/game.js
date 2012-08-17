@@ -25,10 +25,9 @@
     }, cb);
   }
 
-	Game.message = function(/* arguments */){
-		message.apply(window, arguments);
-	}
-
+  /*
+    Instantiate a new game object
+  */
 	function Game(id){
 		var self = this;
 		self.id = id;
@@ -54,6 +53,10 @@
 		return Games.findOne(this.id);
 	});
 
+
+  /*
+    Send a message to your opponent
+  */
   Game.prototype.message = function(/* arguments */){
     var self = this;
     var opponent = self.opponent();
@@ -63,11 +66,14 @@
 
     return (self.message = function(/* arguments */){
       var args = [opponent._id].concat(_.toArray(arguments));
-      return Game.message.apply(Game, args);
+      return message.apply(window, args);
     }).apply(self, arguments);
   }
 
 
+  /*
+    Get the deck for the current game
+  */
   Game.prototype.deck = function(){
     return Decks.findOne(this.game.deck);
   }
@@ -106,7 +112,47 @@
     return Cards.findOne(this.cards()[i]);
   }
 
+  Game.prototype.isCorrect = function(i){
+    var self = this;
+    return self._answers[i] === self.problems()[i].problemized.solution;
+  }
 
+  /*
+    Generate a small object representing the results
+    of the game
+  */
+  Game.prototype.results = function(){
+    var self = this;
+    var res = {
+      correct: 0, 
+      incorrect: 0, 
+      total: self._answers.length
+    };
+
+    _.each(self._answers, function(val, key){
+      res.total++;
+      if(self.isCorrect(key)) {
+        res.correct++;
+      }
+    });
+
+    res.incorrect = res.total - res.correct;
+    return res;
+  }
+
+  /*
+    Record an answer to a problem
+  */
+  Game.prototype.answer = function(i, val){
+    var self = this;
+    self._answers = self._answers || {};
+    self._answers[i] = val;
+    return self.isCorrect(i);
+  }
+
+  /*
+    Returns the lits of problemized cards
+  */
   Game.prototype.problems = function(){
     var self = this,
       problems = [];
@@ -144,8 +190,8 @@
       update['$set'][self.opponent()._id + '_cards'] = cards;
       Games.update(self.id, update);
       Meteor.deps.await_once(
-        function(){ 
-          return self.cards() && self.game[self.opponent()._id + '_cards']
+        function(){
+          return self.cards() && self.game[self.opponent()._id + '_cards'];
         },
         function(){
           self.state('play');
@@ -157,10 +203,8 @@
   }
 
   Game.prototype.opponent = function(){
-    return User.lookup(
-      _.find(this.game.users, function(uid){
-        return uid !== Meteor.user()._id; 
-      }) || Guru.goat());
+    var uid = _.without(this.game.users, Meteor.user()._id);
+    return (uid[0] && User.lookup(uid[0])) || Guru.goat();
   }
 
   /*
@@ -170,15 +214,22 @@
     also be the computer player.
   */
   Game.prototype.me = function(){
-    var self = this;
-    return _.find(self.game.users, function(uid){ return uid !== self.opponent()._id; });
+    return _.without(this.game.users, this.opponent()._id)[0] || Guru.goat()._id;
   }
+
+  /* 
+    Returns the creator of the game's user id
+  */
+  Game.prototype.creator = function(){
+    return this.creator;
+  }
+
   /*
     Returns boolean indicating whether or not the current user
     is the creator of the game
   */
   Game.prototype.mine = function(){
-    return this.game.creator === Meteor.user()._id;
+    return this.creator() === this.me();
   }
 
   /*
