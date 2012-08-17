@@ -15,30 +15,12 @@
 </template>
 
 <template name='buddies'>
-	<div class='buddy'>
-		<div class='avatar-tmb-small'></div>
-		<p>Name</p>
-	</div>
-	<div class='buddy'>
-		<div class='avatar-tmb-small'></div>
-		<p>Mweint</p>
-	</div>
-	<div class='buddy'>
-		<div class='avatar-tmb-small'></div>
-		<p>DARAWK</p>
-	</div>
-	<div class='buddy'>
-		<div class='avatar-tmb-small'></div>
-		<p>JOSHRTAY</p>
-	</div>
-	<div class='buddy'>
-		<div class='avatar-tmb-small'></div>
-		<p>Daniel Leavitt</p>
-	</div>
-	<div class='buddy'>
-		<div class='avatar-tmb-small'></div>
-		<p>Another name</p>
-	</div>
+	{{#each friends}}
+		<div class='buddy'>
+			<div class='avatar-tmb-small'></div>
+			<p>{{username}}</p>
+		</div>
+	{{/each}}
 </template>
 
 <template name='chat'>
