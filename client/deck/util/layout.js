@@ -2,8 +2,6 @@
 	Meteor.defer(function(){
 		$.fn.extend({
 			layout: function(options) {
-
-				console.log(options);
 				this.css({
 					display: 'none',
 					overflow: 'hidden'
@@ -27,8 +25,6 @@
 				items.css({
 					margin: gutter
 				});
-
-				console.log(options.rows);
 
 				slider.width((containerWidth*numSlides)/options.rows);
 

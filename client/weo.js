@@ -5,10 +5,13 @@ route('/', function(ctx, next) {
 
 Meteor.startup(function() {
 	Meteor.subscribe('Decks');
-	Meteor.subscribe('Games');
+	Meteor.subscribe('Cards');
 	route.start();
 });
 
+Handlebars.registerHelper('render', function(name){
+	return Template[name] && Template[name]();
+});
 
 function renderView(template) {
 	/*if(!Template[template])

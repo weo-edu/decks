@@ -53,10 +53,10 @@
 <template name="deck_view">
 	<div id="deck-{{idx}}" class='deck-container'>
 	<svg class="deck">
-		<polygon points='8,3 130,0 140,7 0,10' fill='{{render.colorScheme.primary}}' stroke='{{render.colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)' />
-		<polygon points='0,10 140,7 130,172, 12,180' fill='{{render.colorScheme.primary}}' stroke='{{render.colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)'/>
+		<polygon points='8,3 130,0 140,7 0,10' fill='{{colorScheme.primary}}' stroke='{{colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)' />
+		<polygon points='0,10 140,7 130,172, 12,180' fill='{{colorScheme.primary}}' stroke='{{colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)'/>
 		<image x="45" y="70" width="48px" height="48px"
-         xlink:href="/{{render.image}}"></image>
+         xlink:href="/{{image}}"></image>
          <text x="30" y="50" width="48px" height="48px">{{title}}</text>
 	</svg>
 	<div class='shadow'></div>
@@ -70,10 +70,10 @@
 	<div class='more-info'>
 		<div class='deck-image'>
 			<svg class="deck">
-				<polygon points='8,3 130,0 140,7 0,10' fill='{{render.colorScheme.primary}}' stroke='{{render.colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)' />
-				<polygon points='0,10 140,7 130,172, 12,180' fill='{{render.colorScheme.primary}}' stroke='{{render.colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)'/>
+				<polygon points='8,3 130,0 140,7 0,10' fill='{{colorScheme.primary}}' stroke='{{colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)' />
+				<polygon points='0,10 140,7 130,172, 12,180' fill='{{colorScheme.primary}}' stroke='{{colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)'/>
 				<image x="45" y="70" width="48px" height="48px"
-		         xlink:href="/{{render.image}}"></image>
+		         xlink:href="/{{image}}"></image>
 		         <text x="30" y="50" width="48px" height="48px">{{title}}</text>
 			</svg>
 			<p> UNLOCKED 1 OF 10 </p>

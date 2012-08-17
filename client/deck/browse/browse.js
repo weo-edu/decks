@@ -1,9 +1,8 @@
 route('/deck/browse',function() {
 	Template.decks.decks = function() {
-
-			Meteor.defer(function() {
-				$('#deck-grid').layout();
-			})
+		Meteor.defer(function() {
+			$('#deck-grid').layout();
+		});
 		
 		return Decks.find({});
 	}
@@ -17,8 +16,7 @@ route('/deck/browse',function() {
 	};
 
 	Template.deck_browse.decks = function() {
-		var decks = Decks.find({});
-		return decks;
+		return Decks.find({});
 	};
 
 	Template.deck_browse.events = {
@@ -31,8 +29,12 @@ route('/deck/browse',function() {
 	  		var self = this;
 	  		var dialog = ui.get('deck_more');
 	  		dialog.hide();
+
+	  		var user = prompt('Who would you like to play with?');
+	  		var deck = Decks.findOne({ title: self.title });
+	  		var game = Game.create(deck._id, user);
 	  		$('#browse-screen').animate({left: 0}, 400, 'easeInOutExpo', function(){
-				route('/deck/select/' + self.title);
+	  			route('/game/' + game.id);
 	  		});
 	  	}
 	}

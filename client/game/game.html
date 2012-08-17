@@ -1,0 +1,22 @@
+<template name="game">
+	{{{render state}}}
+</template>
+
+<template name="game_wait">
+	Waiting for other player to accept
+</template>
+
+<template name="game_select">
+	Pick your cards
+	<a id='random' href='#'>Random</a>
+</template>
+
+<template name="game_play">
+	<ul>{{#each cards}}
+		<li>{{name}}</li>
+	{{/each}}</ul>
+</template>
+
+<template name="game_finish">
+	Finish
+</template>

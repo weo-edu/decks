@@ -2,24 +2,23 @@
 	<div id='select-screen'>
 		<div class='scene'>
 			<div id='players-area'>
-				<div class='usr-1'>
-					{{> usr}}
+				<div class='user-1'>
+					{{> user currentUser}}
 				</div>
+
 				{{#with deck}}
 					{{> chosen_deck_view}}
 				{{/with}}
 
-				<div class='usr-2'>
-					{{> usr}}
+				<div class='user-2'>
+					{{> user opponent}}
 				</div>
 			</div>
-			{{#with deck}}
-				<h1>SELECT YOUR OPPONENTS CARDS</h1>
-				{{> card_selection}}
-				<div class='play-button' rel='{{title}}'></div>
-				<p id='chosen' >CHOSEN <span class='chosen'>0</span> OF 3</p>
-			{{/with}}
-		</div>
+			<h1>SELECT YOUR OPPONENTS CARDS</h1>
+			{{> card_selection cards}}
+			<div class='play-button' rel='{{title}}'></div>
+			<p id='chosen' >CHOSEN <span class='chosen'>0</span> OF 3</p>
+		</div>r
 		{{{dialog "max_cards" template="max_cards"}}}
 	</div>
 </template>
@@ -27,20 +26,22 @@
 <template name='card_selection'>
 	<div id='card-grid'>
 		<div class='shelf-wrapper'>
-		{{#iter cards}}
-			<div class='card' style='background-image: url(/{{graphic}}); background-color: {{../render.colorScheme.secondary}}'>
+		{{#each this}}
+			<div class='card' style='background-image: url(/{{graphic}}); background-color: {{deck.colorScheme.secondary}}'>
 				{{name}}
 			</div>
-		{{/iter}}
+		{{/each}}
 		</div>
 	</div>
 	<div class='next'></div>
 </template>
 
-<template name='usr'>
+<template name='user'>
 	<div class='usr'>
 		<div class='avatar-tmb'></div>
 		<p>User</p>
+		<br />
+		{{username}}
 	</div>
 </template>
 
@@ -65,10 +66,10 @@
 					<feComposite in2="withGlow" operator="over"/>
 				</filter>
 		  	</defs>
-			<polygon points='8,3 130,0 140,7 0,10' fill='{{render.colorScheme.primary}}' stroke='{{render.colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)' />
-			<polygon points='0,10 140,7 130,172, 12,180' fill='{{render.colorScheme.primary}}' stroke='{{render.colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)'/>
+			<polygon points='8,3 130,0 140,7 0,10' fill='{{colorScheme.primary}}' stroke='{{colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)' />
+			<polygon points='0,10 140,7 130,172, 12,180' fill='{{colorScheme.primary}}' stroke='{{colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)'/>
 			<image x="45" y="70" width="48px" height="48px"
-	         xlink:href="/{{render.image}}"></image>
+	         xlink:href="/{{image}}"></image>
 	         <text x="30" y="50" width="48px" height="48px">{{title}}</text>
 		</svg>
 	</div>
