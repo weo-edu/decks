@@ -9,10 +9,6 @@ Meteor.startup(function() {
 	route.start();
 });
 
-Handlebars.registerHelper('render', function(name){
-	return Template[name] && Template[name]();
-});
-
 function renderView(template) {
 	/*if(!Template[template])
 		throw new Error('Invalid template name');

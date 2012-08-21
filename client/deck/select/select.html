@@ -19,7 +19,9 @@
 			<div class='play-button' rel='{{title}}'></div>
 			<p id='chosen' >CHOSEN <span class='chosen'>0</span> OF 3</p>
 		</div>r
-		{{{dialog "max_cards" template="max_cards"}}}
+		{{#ui "dialog"}}
+			{{> max_cards}}
+		{{/ui}}
 	</div>
 </template>
 

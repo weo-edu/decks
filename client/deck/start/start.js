@@ -12,10 +12,10 @@ Meteor.startup(function() {
 });
 
 route('/deck/start',function() {
+	console.log('deck start');
 
-	Template.deck_start.events = {
-		'render': function() {
-			document.body.addEventListener('touchmove', function(e){ e.preventDefault(); });
+	Template.deck_start.render = function() {
+		document.body.addEventListener('touchmove', function(e){ e.preventDefault(); });
 			hammerTest();
 			snapToDeck($('#deckFlow .deck').eq(1));
 
@@ -23,7 +23,9 @@ route('/deck/start',function() {
 			setTimeout(function() {
 				startAnimation();
 			}, 600);
-		},
+	}
+
+	Template.deck_start.events = {
 		'click .deck': function(e) {
 			el = $(e.currentTarget);
 			// deckFlow(el);

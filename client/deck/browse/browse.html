@@ -47,7 +47,9 @@
 		{{#iter decks}}
 			{{> deck_view}}
 		{{/iter}}
-		{{{dialog "deck_more" template="deck_more"}}}
+		{{#ui "dialog"}}
+			{{> deck_more}}
+		{{/ui}}
 </template>
 
 <template name="deck_view">
@@ -65,37 +67,38 @@
 
 
 <template name="deck_more">
-
-	<h2>{{title}}</h2>
-	<div class='more-info'>
-		<div class='deck-image'>
-			<svg class="deck">
-				<polygon points='8,3 130,0 140,7 0,10' fill='{{colorScheme.primary}}' stroke='{{colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)' />
-				<polygon points='0,10 140,7 130,172, 12,180' fill='{{colorScheme.primary}}' stroke='{{colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)'/>
-				<image x="45" y="70" width="48px" height="48px"
-		         xlink:href="/{{image}}"></image>
-		         <text x="30" y="50" width="48px" height="48px">{{title}}</text>
-			</svg>
-			<p> UNLOCKED 1 OF 10 </p>
+	{{#with card}}
+		<h2>{{title}}</h2>
+		<div class='more-info'>
+			<div class='deck-image'>
+				<svg class="deck">
+					<polygon points='8,3 130,0 140,7 0,10' fill='{{colorScheme.primary}}' stroke='{{colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)' />
+					<polygon points='0,10 140,7 130,172, 12,180' fill='{{colorScheme.primary}}' stroke='{{colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)'/>
+					<image x="45" y="70" width="48px" height="48px"
+			         xlink:href="/{{image}}"></image>
+			         <text x="30" y="50" width="48px" height="48px">{{title}}</text>
+				</svg>
+				<p> UNLOCKED 1 OF 10 </p>
+			</div>
+			<div class='deck-meta'>
+				<div class='meta'>
+					<h3>DESCRIPTION:</h3>
+					<p>{{description}}</p>
+					<div class='clear'></div>
+				</div>
+				<div class='meta'>
+					<h3>Categories:</h3>
+					<p>{{tags}}</p>
+					<div class='clear'></div>
+				</div>
+				<div class='meta'>
+					<h3>Grade Level:</h3>
+					<p>{{gradePrior}}</p>
+					<div class='clear'></div>
+				</div>
+				<div rel="{{title}}" class='play-button'></div>
+			</div>
 		</div>
-		<div class='deck-meta'>
-			<div class='meta'>
-				<h3>DESCRIPTION:</h3>
-				<p>{{description}}</p>
-				<div class='clear'></div>
-			</div>
-			<div class='meta'>
-				<h3>Categories:</h3>
-				<p>{{tags}}</p>
-				<div class='clear'></div>
-			</div>
-			<div class='meta'>
-				<h3>Grade Level:</h3>
-				<p>{{gradePrior}}</p>
-				<div class='clear'></div>
-			</div>
-			<div rel="{{title}}" class='play-button'></div>
-		</div>
-	</div>
+	{{/with}}
 
 </template>
