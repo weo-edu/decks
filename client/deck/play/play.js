@@ -13,7 +13,9 @@
   			var stateTemplateMap = {
   				'await_join': 'cards_select',
   				'card_select': 'cards_select',
-  				'play': 'deck_play'
+  				'await_select': 'select_wait',
+  				'play': 'deck_play',
+  				'finished': 'game_finish'
   			};
 
   			_.extend(Template.game, {
@@ -70,14 +72,21 @@
 						}
 					}
 				});
+
+				_.extend(Template.select_wait, {
+					cards: function(){
+						game.cards() && game.state('play');
+					}
+				})
 			})();
 
 			/*
 				Deck play template helpers and events
 			*/
 			;(function(){
-				var idx = 0,
-					results = [];
+				function nextCard(){
+					Session.set('cur_problem', game.problem());
+				}
 
 				_.extend(Template.deck_play, {
 		 			opponent: _.bind(game.opponent, game),
@@ -86,12 +95,18 @@
 		 				Meteor.defer(function(){
 		 					$('#problem-container').addClass('show', 0);
 		 				});
-		 				
-		 				return game.problems()[idx++];
+
+		 				return Session.get('cur_problem') || nextCard();
 		 			},
 		 			events: {
 		 				'click': function(){
 		 					$('#answer').focus();
+		 				},
+		 				'keypress': function(e){
+		 					if(e.which === 13){
+		 						game.answer($('#answer').val());
+		 						nextCard();
+		 					}
 		 				}
 		 			}
 		 		});
