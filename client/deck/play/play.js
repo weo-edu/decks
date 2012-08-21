@@ -91,7 +91,12 @@
 		 			events: {
 		 				'click': function(){
 		 					$('#answer').focus();
+		 				},
+		 				'keypress #answer': function(e) {
+		 					if(e.which === 13)
+		 					{}
 		 				}
+
 		 			}
 		 		});
 		 	})();
