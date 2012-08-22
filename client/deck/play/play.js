@@ -64,7 +64,8 @@
   			var cards = [],
   				deck = game.deck(),
   				deck_cards = Cards.find(deck.cards).fetch(),
-  				opponent = game.opponent();
+  				opponent = game.opponent(),
+  				nCards = game.nCards();
 
 				_.extend(Template.cards_select, {
 					opponent: function(){
@@ -79,7 +80,7 @@
 						});
 						return deck;
 					},
-					cards: function(){
+					cards: function() {
 						return deck_cards;
 					},
 					message: function(name) {
@@ -92,12 +93,12 @@
 							Meteor.defer(function(){ game.problems(cards); });
 						},
 						'click .card': function(e) {
-							var self = this;
-							var el = $(e.currentTarget);
-							var container = el.parent();
-							var numSelected = container.children('.select').length;
+							var self = this,
+								el = $(e.currentTarget),
+								container = el.parent(),
+								numSelected = container.children('.select').length;
 
-							if(numSelected === 3 && ! el.hasClass('select')){
+							if(numSelected === nCards && ! el.hasClass('select')) {
 								var dialog = ui.get('max_cards');
 								dialog.context(self);
 								dialog.closable().overlay().show().center();
