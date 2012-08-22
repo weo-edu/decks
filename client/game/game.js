@@ -130,9 +130,10 @@
     return defaults.nCards;
   }
 
-  Game.prototype.isCorrect = function(id){
+  Game.prototype.isCorrect = function(id, problems){
     var self = this;
-    var problem = _.find(self.problems(), function(val, key){
+    problems = problems || self.problems();
+    var problem = _.find(problems, function(val, key){
       return val._id === id;
     });
 
@@ -143,30 +144,29 @@
     Generate a small object representing the results
     of the game
   */
-  Game.prototype.results = function() {
-    /*var self = this;
-    var res = {
-      me: {
-        correct: 0, 
-        incorrect: 0, 
-        total: self.problems().length || 0
-      },
-      opponent: {
-        correct: 0,
-        incorrect: 0,
-        total: self.problems().length || 0
-      }
-    };
+  Game.prototype.results = function(id) {
+    var self = this;
+    if(!id) {
+      return {
+        me: self.results(self.me()._id),
+        opponent: self.results(self.opponent()._id)
+      };
+    } else {
+      var problems = self.game()[id + '_problems'],
+        correct = 0;
 
-    _.each(self.problems(), function(val, key) {
-      res.total++;
-      if(self.isCorrect(key)) {
-        res.correct++;
-      }
-    });
+      _.each(problems, function(val, key) {
+        if(self.isCorrect(val._id, problems)) {
+          correct++;
+        }
+      });
 
-    res.incorrect = res.total - res.correct;*/
-    return res;
+      return {
+        correct: correct,
+        incorrect: problems.length - correct,
+        total: problems.length
+      };
+    }
   }
 
   /*
@@ -186,7 +186,9 @@
       return false;
     });
 
+    var corre
     update['$set'][self.me()._id + '_problems'] = problems;
+    update['$set'][self.me()._id + '_results'] = 
     Games.update(self.id, update);
     return self.isCorrect(problem._id);
   }

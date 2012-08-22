@@ -47,7 +47,7 @@
   				'card_select': 'cards_select',
   				'await_select': 'select_wait',
   				'play': 'deck_play',
-  				'results': 'game_finish'
+  				'results': 'play_results'
   			};
 
   			_.extend(Template.game, {
@@ -144,7 +144,7 @@
 		 				},
 		 				'keypress': function(e) {
 		 					if(e.which === 13){
-		 						game.answer($('#answer').val());
+		 						game.answer(parseInt($('#answer').val(), 10));
 		 						nextCard();
 		 						Meteor.defer(function(){ $('#answer').focus(); });
 		 					}
@@ -157,11 +157,11 @@
 		 		Results
 		 	*/
 		 	;(function() {
-		 		/*_.extend(Template.play_results, {
+		 		_.extend(Template.play_results, {
 		 			results: function() {
 		 				return game.results();
 		 			}
-		 		});*/
+		 		});
 		 	})();
 
 			view.render('game');
