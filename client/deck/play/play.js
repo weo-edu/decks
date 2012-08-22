@@ -6,6 +6,38 @@
   	function(ctx){
       var game = new Game(ctx.params.id);
   		
+  		;(function localState() {
+  			var ctx = new Meteor.deps.Context(),
+	  			state = game.mystate();
+	  		switch(state) {
+	  			case 'await_select':
+	  			{
+	  				if(game.state() !== 'play') {
+		  				Meteor.defer(function(){
+		  					var dialog = ui.get('.dialog');
+		  					dialog.set('message', 'await_select');
+		  					dialog.overlay().center().show();
+		  				});
+		  			}
+	  			}
+	  			break;
+	  			case 'await_results':
+	  			{
+	  				if(game.state() !== 'results') {
+	  					Meteor.defer(function() {
+	  						var dialog = ui.get('.dialog');
+	  						dialog.set('message', 'await_results');
+	  						dialog.overlay().center().show();
+	  					});
+	  				}
+	  			}
+	  			break;
+	  		}
+
+	  		ctx.run(function(){ game.mystate() } );
+	  		ctx.on_invalidate(localState);
+  		})();
+  		
   		/*
   			Game template helpers and events
   		*/
@@ -15,7 +47,7 @@
   				'card_select': 'cards_select',
   				'await_select': 'select_wait',
   				'play': 'deck_play',
-  				'finished': 'game_finish'
+  				'results': 'game_finish'
   			};
 
   			_.extend(Template.game, {
@@ -28,7 +60,7 @@
   		/*
   			Cards select template helpers and events
   		*/
-  		;(function(){
+  		;(function() {
   			var cards = [],
   				deck = game.deck(),
   				deck_cards = Cards.find(deck.cards).fetch(),
@@ -39,7 +71,7 @@
 						return opponent;
 					},
 					deck: function(){
-						Meteor.defer(function(){
+						Meteor.defer(function() {
 							$('#card-grid').layout({
 								rows: 2,
 								cols: 4
@@ -50,9 +82,14 @@
 					cards: function(){
 						return deck_cards;
 					},
+					message: function(name) {
+						var dialog = ui.get('.dialog');
+						var message = dialog.get('message');
+						return Template[message] && Template[message]();
+					},
 					events: {
-						'click .play-button': function(e){
-							Meteor.defer(function(){ game.cards(cards) });
+						'click .play-button': function(e) {
+							Meteor.defer(function(){ game.problems(cards); });
 						},
 						'click .card': function(e) {
 							var self = this;
@@ -72,44 +109,59 @@
 						}
 					}
 				});
-
-				_.extend(Template.select_wait, {
-					cards: function(){
-						game.cards() && game.state('play');
-					}
-				})
 			})();
 
 			/*
 				Deck play template helpers and events
 			*/
-			;(function(){
-				function nextCard(){
-					Session.set('cur_problem', game.problem());
+			;(function() {
+				var deck = game.deck();
+				var opponent = game.opponent();
+
+				function nextCard() {
+					var p = game.problem();
+					p && Session.set('cur_problem', p);
 				}
 
 				_.extend(Template.deck_play, {
-		 			opponent: _.bind(game.opponent, game),
-		 			deck: _.bind(game.deck, game),
-		 			card: function(){
-		 				Meteor.defer(function(){
+		 			opponent: function(){ return opponent; },
+		 			deck: function() { return deck; },
+		 			card: function() {
+		 				Meteor.defer(function() {
 		 					$('#problem-container').addClass('show', 0);
 		 				});
 
-		 				return Session.get('cur_problem') || nextCard();
+		 				return Session.get('cur_problem') || Meteor.defer(nextCard);
+		 			},
+		 			message: function() {
+		 				var dialog = ui.get('.dialog');
+		 				var message = dialog.get('message');
+		 				return Template[message] && Template[message]();
 		 			},
 		 			events: {
-		 				'click': function(){
+		 				'click': function() {
 		 					$('#answer').focus();
 		 				},
-		 				'keypress': function(e){
+		 				'keypress': function(e) {
 		 					if(e.which === 13){
 		 						game.answer($('#answer').val());
 		 						nextCard();
+		 						Meteor.defer(function(){ $('#answer').focus(); });
 		 					}
 		 				}
 		 			}
 		 		});
+		 	})();
+
+		 	/*
+		 		Results
+		 	*/
+		 	;(function() {
+		 		/*_.extend(Template.play_results, {
+		 			results: function() {
+		 				return game.results();
+		 			}
+		 		});*/
 		 	})();
 
 			view.render('game');

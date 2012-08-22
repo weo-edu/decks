@@ -39,7 +39,7 @@ route('/deck/browse',function() {
 	  		var deck = Decks.findOne({ title: self.title });
 	  		var game = Game.create(deck._id, user);
 	  		$('#browse-screen').animate({left: 0}, 400, 'easeInOutExpo', function(){
-	  			route('/game/' + game.id);
+	  			route(game.url());
 	  		});
 	  	}
 	}

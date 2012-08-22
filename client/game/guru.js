@@ -9,7 +9,7 @@
 	}
 
 	Guru.cards = function(){
-		game.cards('random');
+		game.problems('random');
 	}
 
 	Guru.on('invite', function(e){
@@ -17,7 +17,7 @@
 		game.opponent = function(){
 			return Meteor.user();
 		};
-
+		
 		Guru.cards();
 	});
 })();

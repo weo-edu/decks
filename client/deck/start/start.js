@@ -12,8 +12,6 @@ Meteor.startup(function() {
 });
 
 route('/deck/start',function() {
-	console.log('deck start');
-
 	Template.deck_start.render = function() {
 		document.body.addEventListener('touchmove', function(e){ e.preventDefault(); });
 			hammerTest();

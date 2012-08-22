@@ -20,9 +20,13 @@
 			<p id='chosen' >CHOSEN <span class='chosen'>0</span> OF 3</p>
 		</div>r
 		{{#ui "dialog"}}
-			{{> max_cards}}
+			{{{ message }}}
 		{{/ui}}
 	</div>
+</template>
+
+<template name="await_select">
+	Waiting for the other player to select your cards
 </template>
 
 <template name='card_selection'>
@@ -36,10 +40,6 @@
 		</div>
 	</div>
 	<div class='next'></div>
-</template>
-
-<template name='select_wait'>
-Waiting for other player to select cards {{cards}}
 </template>
 
 <template name='user'>
