@@ -153,6 +153,7 @@
 		 						Meteor.defer(function(){ $('#answer').focus(); });
 		 					}
 		 				}
+
 		 			}
 		 		});
 		 	})();
