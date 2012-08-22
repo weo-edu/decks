@@ -3,7 +3,8 @@
 		<div id='problem-container'>
 			{{#with card}}
 				{{> problem_container this}}
-				{{{input "answer" }}}
+
+				<input type="text" id="answer"/>
 			{{/with}}
 		</div>
 		<div id='players-area'>
@@ -19,11 +20,34 @@
 				</div>
 			</div>
 	</div>
+	{{#ui "dialog"}}
+		{{{ message }}}
+	{{/ui}}
+</template>
+
+<template name="await_results">
+	Waiting for your opponent to finish
 </template>
 
 <template name='problem_container'>
-	<!-- <img src="/{{graphic}}" /> -->
-	<div id='problem'>{{problemized.html}}</div>
+	<img src="/{{graphic}}" />
+	<div id='problem'>{{html}}</div>
+</template>
+
+<template name="play_results">
+	{{#with results}}
+		<h2>You</h2>
+		{{> individual_results me}}
+
+		<h2>Opponent</h2>
+		{{> individual_results opponent}}
+	{{/with}}
+</template>
+
+<template name="individual_results">
+	Correct: {{correct}}<br />
+	Incorrect: {{incorrect}}<br />
+	Total: {{total}}<br />
 </template>
 
 <!-- <template name="deck_play">

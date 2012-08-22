@@ -22,15 +22,13 @@
 			},
 			update: function(uid, docs, fields, modifier){
 				var self = this;
-				console.log('test');
 				if(! ~fields.indexOf('created') && ! ~fields.indexOf('modified')){
 					var res = true;
-					console.log(uid, docs, fields, modifier);
 					_.each(docs, function(doc){
 						res = res && !!~doc.users.indexOf(uid);
 						doc.modified = (new Date()).getTime();
 					});
-
+					res || console.log('update access denied');
 					return res;
 				}
 			}
