@@ -17,7 +17,7 @@
 			<h1>SELECT YOUR OPPONENTS CARDS</h1>
 			{{> card_selection cards}}
 			<div class='play-button' rel='{{title}}'></div>
-			<p id='chosen' >CHOSEN <span class='chosen'>0</span> OF 3</p>
+			<p id='chosen' >CHOSEN <span class='chosen'>0</span> OF {{nCards}}</p>
 		</div>r
 		{{#ui "dialog"}}
 			{{{ message }}}

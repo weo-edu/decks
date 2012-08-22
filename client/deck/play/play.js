@@ -71,6 +71,9 @@
 					opponent: function(){
 						return opponent;
 					},
+					nCards: function() {
+						return nCards;
+					},
 					deck: function(){
 						Meteor.defer(function() {
 							$('#card-grid').layout({

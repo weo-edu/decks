@@ -40,7 +40,6 @@
 		
 		;(function gameLoop() {
 			var done = false;
-
 			switch(game.state()) {
 				case 'card_select':
 				{
