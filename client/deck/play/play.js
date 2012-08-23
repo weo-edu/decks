@@ -1,7 +1,10 @@
 ;(function(){
   route('/game/:id', 
-  	function(ctx, next){
-  		Game.gamesHandle = Games.gamesHandle || Meteor.subscribe('games',next);
+  	function(ctx, next) {
+  		if(Game.gamesHandle)
+  			next();
+  		else
+  			Game.gamesHandle = Meteor.subscribe('games', next);
   	},
   	function(ctx){
       var game = new Game(ctx.params.id);
@@ -70,6 +73,9 @@
 				_.extend(Template.cards_select, {
 					opponent: function(){
 						return opponent;
+					},
+					nCards: function() {
+						return nCards;
 					},
 					deck: function(){
 						Meteor.defer(function() {

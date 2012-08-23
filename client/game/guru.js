@@ -13,8 +13,6 @@
 		while(problem = game.problem()) {
 			game.answer(Guru.answer(problem));
 		}
-
-		console.log('Guru answers', game.problems());
 	}
 
 	Guru.answer = function(problem, difficulty) {
@@ -40,7 +38,6 @@
 		
 		;(function gameLoop() {
 			var done = false;
-
 			switch(game.state()) {
 				case 'card_select':
 				{
