@@ -13,8 +13,6 @@
 		while(problem = game.problem()) {
 			game.answer(Guru.answer(problem));
 		}
-
-		console.log('Guru answers', game.problems());
 	}
 
 	Guru.answer = function(problem, difficulty) {

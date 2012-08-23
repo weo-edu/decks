@@ -31,6 +31,7 @@
 	function Game(id) {
 		var self = this;
 		self.id = id;
+
 		if(!self.game())
 			throw new Error('Sorry the specified game does not exist');
 

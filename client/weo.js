@@ -3,11 +3,10 @@ route('/', function(ctx, next) {
   route.redirect('/deck/start');
 });
 
-Meteor.startup(function() {
-	Meteor.subscribe('Decks');
-	Meteor.subscribe('Cards');
-	route.start();
-});
+Meteor.subscribe('Decks');
+Meteor.subscribe('Cards');
+route.start();
+
 
 function renderView(template) {
 	/*if(!Template[template])
