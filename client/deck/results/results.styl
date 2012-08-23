@@ -1,0 +1,113 @@
+@import "nib";
+@import "../common/common.styl"
+
+#play-results {
+	ipad();
+	background: url('/img/woodBg.jpg') center center no-repeat;
+}
+
+#result-box {
+	width = 740px;
+	height = 430px;
+	width: width;
+	background: #EEE;
+	height: height;
+	position: absolute;
+	left: 50%;
+	margin-left: width * -.5;
+	top: 50%;
+	margin-top: height * -.5;
+	box-shadow: 0 0 10px #333;
+	h2 {
+		background: #333;
+		color: #FFF;
+		padding: 0 10px;
+		font-size: 30px;
+		line-height: 1.5em;
+		text-align: center;
+	}
+	.inner-results {
+		padding: 20px;
+		position: relative;
+		overflow: hidden;
+	}
+	.winner-circle {
+		size = 250px;
+		height: size;
+		width: size;
+		position: absolute;
+		left: 50%;
+		margin-left: size * -.5;
+		top: size * -.55;
+		border-radius: 50%;
+		background: #E31A21;
+		line-height: 330px;
+		font-size: 45px;
+		font-family: Nuku;
+		text-align: center;
+		color: white;
+	}
+
+	.results {
+		float: left;
+		margin-top: 155px;
+		font: 30px/1.3em "MayonaiseCondRegular";
+		text-transform: uppercase;
+		text-align: center;
+		width: 260px;
+		.score {
+			display: block;
+			float: left;
+			width: 40px;
+			&.left {
+				text-align: left;
+			}
+			&.right {
+				text-align: right;
+			}
+		}
+		.label {
+			display: block;
+			float: left;
+			width: 180px;
+		}
+		.rule {
+			border-bottom: 2px dashed #777;
+			clear: both;
+			padding-top: 15px;
+			margin-bottom: 10px;
+		}
+	}
+
+	#you, #opponent {
+		width: 220px;
+		height: height - 85;
+		position: relative;
+		.user {
+			height: 165px;
+			width: 220px !important;
+			position: absolute;
+			bottom: 0;
+			width: auto;
+			color: #333;
+			p {
+				width: 100%;
+			}
+		}
+	}
+
+	#you {
+		float: left;
+	}
+
+	#opponent {
+		float: right;
+		.user {
+			float: right;
+			text-align: right;
+			.avatar-tmb {
+				right: 0;
+			}
+		}
+	}
+}

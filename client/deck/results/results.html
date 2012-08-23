@@ -1,0 +1,43 @@
+<template name="play_results">
+	<div id='play-results'>
+		<div id='result-box'>
+			<h2>RESULTS</h2>
+			<div class='inner-results'>
+				{{#with results}}
+					<div class='winner-circle'>
+						<span class='winner'>WINNER</span>
+					</div>
+					<div id='you' class='user-1'>
+						{{> user currentUser}}
+					</div>
+					{{> individual_results}}
+
+					<div id='opponent' class='user-1'>
+						{{> user opponent}}
+					</div>
+				{{/with}}
+			</div>
+		</div>
+	</div>
+</template>
+
+<template name="individual_results">
+	<div class='results'>
+		<div>
+			<span class='score left'>{{me.correct}}</span>
+			<span class='label'>Correct</span>
+		 	<span class='score right'>{{opponent.correct}}</span>
+		</div>
+		<div>
+			<span class='score left'>{{me.incorrect}}</span>
+			<span class='label'>Incorrect</span>
+		 	<span class='score right'>{{opponent.incorrect}}</span>
+		</div>
+		<div class='rule'></div>
+		<div>
+			<span class='score left'>{{me.total}}</span>
+			<span class='label'>Total</span>
+		 	<span class='score right'>{{opponent.total}}</span>
+		</div>
+	</div>
+</template>
