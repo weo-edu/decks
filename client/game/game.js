@@ -187,9 +187,7 @@
       return false;
     });
 
-    var corre
     update['$set'][self.me()._id + '_problems'] = problems;
-    update['$set'][self.me()._id + '_results'] = 
     Games.update(self.id, update);
     return self.isCorrect(problem._id);
   }
