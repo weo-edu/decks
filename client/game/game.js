@@ -37,19 +37,23 @@
 	function Game(id) {
 		var self = this;
 		self.id = id;
+    Session.set('game_state', self.game().state);
 
 		if(!self.game())
 			throw new Error('Sorry the specified game does not exist');
 
-    Games.find(self.id).observe({
-      added: function(doc, before_index) {
-        Session.set('game_state', doc.state);
-      },
+    /*Games.find(self.id).observe({
       changed: function(new_doc, at_idx, old_doc) {
         new_doc.state === old_doc.state || Session.set('game_state', new_doc.state);
-        self.mine() && self.stateManager();
+        self.mine() && self.stateManager(new_doc, old_doc);
       }
-    });
+    });*/
+
+    if(self.mine()) {
+      self.stateManager();
+    } else {
+      self.stateWatcher();
+    }
 
     self.mystate() || self.mystate('await_join');
     //  If this is a game that we're joining, move ahead to the
@@ -193,9 +197,7 @@
       return false;
     });
 
-    var corre
     update['$set'][self.me()._id + '_problems'] = problems;
-    update['$set'][self.me()._id + '_results'] = 
     Games.update(self.id, update);
     return self.isCorrect(problem._id);
   }
@@ -287,18 +289,32 @@
 	Game.prototype.state = function(state) {
     var self = this;
     if(state) {
+      console.log('set state', state);
       var update = {$set: {state: state}};
       update['$set'][self.me()._id + '_state'] = state;
       update['$set'][self.opponent()._id + '_state'] = state;
       Games.update(self.id, update);
+      Session.set('game_state', state);
     }
 
     return Session.get('game_state');
 	}
 
+  Game.prototype.stateWatcher = function() {
+    var self = this;
+    self.ctx = new Meteor.deps.Context;
+
+    self.ctx.run(function() {
+      if(!Session.equals('game_state', self.game().state)) {
+        Session.set('game_state', self.game().state);
+      }
+    });
+    self.ctx.on_invalidate(_.bind(self.stateWatcher, self));
+  }
+
   Game.prototype.stateManager = function() {
     var self = this,
-        cur = self.game().state,
+        cur = self.state(),
         local = [self.game()[self.me()._id + '_state'], 
           self.game()[self.opponent()._id + '_state']];
 
@@ -323,6 +339,10 @@
         }
       }
     }
+
+    self.ctx = new Meteor.deps.Context;
+    self.ctx.run(function() { self.game().state; });
+    self.ctx.on_invalidate(_.bind(self.stateManager, self));
   }
 
 	window.Game = Game;
