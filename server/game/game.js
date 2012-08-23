@@ -22,6 +22,7 @@
 			},
 			update: function(uid, docs, fields, modifier){
 				var self = this;
+				console.log('attempting to update');
 				if(! ~fields.indexOf('created') && ! ~fields.indexOf('modified')){
 					var res = true;
 					_.each(docs, function(doc){
@@ -30,7 +31,8 @@
 					});
 					res || console.log('update access denied');
 					return res;
-				}
+				} else
+					console.log('update rejected');
 			}
 		});
 	});

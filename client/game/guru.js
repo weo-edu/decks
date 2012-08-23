@@ -5,7 +5,7 @@
 	process.register('guru', Guru);
 
 	Guru.goat = function() {
-		return {_id: 1, username: 'Goat Guru', synthetic: true};
+		return {_id: 1, username: 'Goat Guru', synthetic: true, avatar: '/app!common/avatars/guru.png'};
 	}
 
 	Guru.play = function() {
@@ -31,12 +31,14 @@
 	}
 
 	Guru.on('invite', function(e) {
+		var ctx = null;
 		game = new Game(e.object.body);
 		game.opponent = function() {
 			return Meteor.user();
 		};
 		
 		;(function gameLoop() {
+			console.log('gameloop', game.state(), game.id);
 			var done = false;
 			switch(game.state()) {
 				case 'card_select':
@@ -50,10 +52,15 @@
 					done = false;
 				}
 				break;
+				default:
+				{
+					done = true;
+				}
+				break;
 			};
 
 			if(! done) {
-				var ctx = new Meteor.deps.Context();
+				ctx = new Meteor.deps.Context();
 				ctx.run(function() { game.state(); });
 				ctx.on_invalidate(gameLoop);
 			}

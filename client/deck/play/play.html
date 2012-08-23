@@ -4,7 +4,6 @@
 			{{#with card}}
 				{{> problem_container this}}
 
-				<input type="text" id="answer"/>
 			{{/with}}
 		</div>
 		<div id='players-area'>
@@ -30,25 +29,12 @@
 </template>
 
 <template name='problem_container'>
-	<img src="/{{graphic}}" />
-	<div id='problem'>{{html}}</div>
+	<div id='problem'>
+		{{html}}<br/>
+		<input type="text" id="answer"/>
+	</div>
 </template>
 
-<template name="play_results">
-	{{#with results}}
-		<h2>You</h2>
-		{{> individual_results me}}
-
-		<h2>Opponent</h2>
-		{{> individual_results opponent}}
-	{{/with}}
-</template>
-
-<template name="individual_results">
-	Correct: {{correct}}<br />
-	Incorrect: {{incorrect}}<br />
-	Total: {{total}}<br />
-</template>
 
 <!-- <template name="deck_play">
 	<div id='playground'>

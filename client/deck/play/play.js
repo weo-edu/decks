@@ -168,6 +168,9 @@
 		 		_.extend(Template.play_results, {
 		 			results: function() {
 		 				return game.results();
+		 			},
+		 			opponent: function() {
+		 				return game.opponent();
 		 			}
 		 		});
 		 	})();
