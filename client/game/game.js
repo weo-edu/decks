@@ -8,8 +8,14 @@
     user = User.lookup(user || Meteor.user());
 
     Game.gamesHandle = Game.gamesHandle || Meteor.subscribe('games');
-		var game = new Game(Game._insert(deck, user._id));
-    return game.invite(user._id);
+    
+    try {
+      var game = new Game(Game._insert(deck, user._id));
+      return game.invite(user._id);
+    } catch(err) {
+      console.log("User does not exist: " + err.message);
+      return false;
+    }
 	}
 
   /*

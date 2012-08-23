@@ -35,12 +35,30 @@ route('/deck/browse',function() {
 	  		var dialog = ui.get('.dialog');
 	  		dialog.hide();
 
-	  		var user = prompt('Who would you like to play with?');
 	  		var deck = Decks.findOne({ title: self.title });
-	  		var game = Game.create(deck._id, user);
+	  		var game = Game.create(deck._id);
 	  		$('#browse-screen').animate({left: 0}, 400, 'easeInOutExpo', function(){
 	  			route(game.url());
 	  		});
+	  	},
+	  	'click .challenge-button' : function(e) {
+	  		var self = this;
+	  		var dialog = ui.get('.dialog');
+	  		var user = prompt('Who would you like to play with?');
+	  		
+	  		if(user) {
+	  			var deck = Decks.findOne({ title: self.title });
+  				var game = Game.create(deck._id, user);
+  				if(game) {
+  					dialog.hide();
+  					$('#browse-screen').animate({left: 0}, 400, 'easeInOutExpo', function(){
+  						route(game.url());
+  					});	
+  				} else {
+  					alert('User does not exist');
+  				}
+  				
+  			}
 	  	}
 	}
   	view.render('deck_browse');

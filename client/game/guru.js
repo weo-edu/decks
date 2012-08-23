@@ -5,7 +5,7 @@
 	process.register('guru', Guru);
 
 	Guru.goat = function() {
-		return {_id: 1, username: 'Goat Guru', synthetic: true};
+		return {_id: 1, username: 'Goat Guru', synthetic: true, avatar: '/app!common/avatars/guru.png'};
 	}
 
 	Guru.play = function() {
