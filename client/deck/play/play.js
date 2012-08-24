@@ -151,7 +151,14 @@
 		 				},
 		 				'keypress': function(e) {
 		 					if(e.which === 13){
-		 						game.answer(parseInt($('#answer').val(), 10));
+								game.answer(parseInt($('#answer').val(), 10));
+								// var results = game.results();
+								
+								// var myProgress = (results.me.correct / results.me.total) * 100;
+
+								// $('.user-1 .fill').animate({'height': myProgress + '%'});
+
+								// console.log(myProgress);
 		 						nextCard();
 		 						Meteor.defer(function(){ $('#answer').focus(); });
 		 					}
@@ -165,15 +172,36 @@
 		 		Results
 		 	*/
 		 	;(function() {
+		 		var results;
 		 		_.extend(Template.play_results, {
 		 			results: function() {
-		 				return game.results();
+		 				results = game.results();
+		 				return results;
 		 			},
 		 			opponent: function() {
 		 				return game.opponent();
+		 			},
+		 			winner: function() {
+		 				if(results.me.correct == results.opponent.correct)
+		 					return 'TIE';
+		 				else
+							return results.me.correct > results.opponent.correct ? game.me().username : game.opponent().username;
+		 			},
+		 			render: function() {
+			 				var myProgress = (results.me.correct / results.me.total) * 100;
+			 				var opponentProgress = (results.opponent.correct / results.opponent.total) * 100;
+			 				$('#you .fill').animate({'height': myProgress + '%'});
+			 				$('#opponent .fill').animate({'height': opponentProgress + '%'});
+		 			},
+		 			events: {
+		 				'click #results-nav .rematch': function() {
+		 					var id = game.opponent().synthetic ? game.me()._id : game.opponent()._id;
+		  				route(Game.create(game.deck()._id, id).url());		  				
+		 				}
 		 			}
 		 		});
 		 	})();
+
 
 			view.render('game');
 		}

@@ -44,6 +44,8 @@
 		}
 	}
 
+	.bar {display: none;}
+
 }
 
 
@@ -92,7 +94,7 @@
 	color: #FFF;
 	font-family: Fresca;
 	text-transform: uppercase;
-	font-size: 40px;
+	font-size: 28px;
 	p {
 		position: absolute;
 	}
@@ -114,10 +116,16 @@
 
 .user-2 {
 	p {
-		top: 50px;
+		top: 55px;
 	}
 	.avatar-tmb {
 		bottom: 20px;
+	}
+
+
+	.fill {
+		position: absolute;
+		bottom: 0;
 	}
 }
 
@@ -128,5 +136,20 @@
 		padding: 20px;
 		font: 20px/1.2em 'Fresca';
 		text-align: center;
+	}
+}
+
+
+.bar {
+	height: 220px;
+	margin-right: 10px;
+	width: 50px;
+	background: white;
+	float: right;
+	box-shadow: inset 0 0 8px #333;
+	position: relative;
+	.fill {
+		background: #3FA9F5;
+		width: 100%;
 	}
 }

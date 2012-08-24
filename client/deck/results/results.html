@@ -1,11 +1,13 @@
 <template name="play_results">
+	{{#constant}}
 	<div id='play-results'>
 		<div id='result-box'>
 			<h2>RESULTS</h2>
 			<div class='inner-results'>
 				{{#with results}}
 					<div class='winner-circle'>
-						<span class='winner'>WINNER</span>
+						<div class='winner'>WINNER</div>
+						<div class='winner-name'>{{winner}}</div>
 					</div>
 					<div id='you' class='user-1'>
 						{{> user currentUser}}
@@ -18,7 +20,13 @@
 				{{/with}}
 			</div>
 		</div>
+		<ul id='results-nav'>
+			<li class='view-cards'>View Cards</li>
+			<li class='rematch'>Rematch</li>
+			<li class='back'>Menu</li>
+		</ul>
 	</div>
+	{{/constant}}
 </template>
 
 <template name="individual_results">
