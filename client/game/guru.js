@@ -31,16 +31,22 @@
 	}
 
 	Guru.on('invite', function(e) {
-		var ctx = null;
 		game = new Game(e.object.body);
 		game.opponent = function() {
 			return Meteor.user();
 		};
-		
-		;(function gameLoop() {
-			console.log('gameloop', game.state(), game.id);
-			var done = false;
+
+		var handle = ui.autorun(
+		function() {
+			return game.state() === 'results';
+		},
+		function() {
 			switch(game.state()) {
+				case 'await_join':
+				{
+
+				}
+				break;
 				case 'card_select':
 				{
 					Guru.choose();
@@ -49,21 +55,15 @@
 				case 'play':
 				{
 					Guru.play();
-					done = false;
 				}
 				break;
 				default:
 				{
-					done = true;
+					console.log('stopping guru handle', game.state());
+					handle && handle.stop();
 				}
 				break;
-			};
-
-			if(! done) {
-				ctx = new Meteor.deps.Context();
-				ctx.run(function() { game.state(); });
-				ctx.on_invalidate(gameLoop);
 			}
-		})();
+		});
 	});
 })();

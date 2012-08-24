@@ -9,38 +9,28 @@
   	function(ctx){
       var game = new Game(ctx.params.id);
   		
-  		;(function localState() {
-  			var ctx = new Meteor.deps.Context(),
-	  			state = game.mystate();
-	  		switch(state) {
-	  			case 'await_select':
-	  			{
-	  				if(game.state() !== 'play') {
-		  				Meteor.defer(function(){
-		  					var dialog = ui.get('.dialog');
-		  					dialog.set('message', 'await_select');
-		  					dialog.overlay().center().show();
-		  				});
-		  			}
-	  			}
-	  			break;
-	  			case 'await_results':
-	  			{
-	  				if(game.state() !== 'results') {
-	  					Meteor.defer(function() {
-	  						var dialog = ui.get('.dialog');
-	  						dialog.set('message', 'await_results');
-	  						dialog.overlay().center().show();
-	  					});
-	  				}
-	  			}
-	  			break;
-	  		}
-
-	  		ctx.run(function(){ game.mystate() } );
-	  		ctx.on_invalidate(localState);
-  		})();
-  		
+  		ui.autorun(function() {
+  			switch(game.mystate()) {
+  				case 'await_select':
+  				{
+  					if(game.state() !== 'play') {
+  						var dialog = ui.get('.dialog');
+  						dialog.set('message', 'await_select');
+  						dialog.overlay().center().show();
+  					}
+  				}
+  				break;
+  				case 'await_results':
+  				{
+  					if(game.state() !== 'results') {
+  						var dialog = ui.get('.dialog');
+  						dialog.set('message', 'await_results');
+  						dialog.overlay().center().show();
+  					}
+  				}
+  			}
+  		});
+ 
   		/*
   			Game template helpers and events
   		*/
