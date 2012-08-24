@@ -323,43 +323,30 @@
     });
   }
 
-  /*
-    State transition table is a matrix of state transitions.
-    The rows represent transition points, and the columns are
-    as follows:
-      Game state, Local state, New game/local state
-
-    If first two conditions are satisfied, the transition occurs
-    to the new state. 
-  */
-  Game.stateTransitionTable = [
-    ['await_join', 'await_join', 'card_select'],
-    ['card_select', 'await_select', 'play'],
-    ['play', 'await_results', 'results']
-  ];
 
   Template.game.create = function() {
     //this.nextRender
   }
 
+
   Game.prototype.stateManager = function() {
     var self = this;
-    function allEqual(val) {
-      return val === this[0];
-    }
 
+    var transitionTable = [
+      // game state   local state      local state      new state
+      ['await_join',  'await_join',    'await_join',    'card_select'],
+      ['card_select', 'await_select',  'await_select',  'play'],
+      ['play',        'await_results', 'await_results', 'results'],
+      ['results', null, null, 
+      function() { self.stateHandle && self.stateHandle.stop(); }]
+    ];
+
+    var machine = new StateMachine(transitionTable, _.bind(self.state, self));
+    
     //Template.game.onRender(function() {
       //if(!this.firstRender) return;
       self.stateHandle = ui.autorun(function() {
-        var state = self.game().state.game,
-          local = [self.mystate(), self.localState(self.opponent()._id)];
-
-        _.find(Game.stateTransitionTable, function(transition) {
-          if(state === transition[0] && _.all(local, allEqual, [transition[1]])) {
-            self.state(transition[2]);
-            return true;
-          }
-        });
+        machine.state([self.state(), self.mystate(), self.localState(self.opponent()._id)]);
       });
 
       //Template.game.onDestroy(function() {

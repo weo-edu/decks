@@ -31,39 +31,30 @@
 	}
 
 	Guru.on('invite', function(e) {
+		var handle = null,
+			transitionTable = null,
+			evaluators = null,
+			machine = null;
+
 		game = new Game(e.object.body);
 		game.opponent = function() {
 			return Meteor.user();
 		};
 
-		var handle = ui.autorun(
+		transitionTable = [
+			['await_join', function() {}],
+			['card_select', function() { Guru.choose(); }],
+			['play', function(){ Guru.play(); }],
+			[null, function(){ handle && handle.stop(); }]
+		];
+
+		machine = new StateMachine(transitionTable);
+		handle = ui.autorun(
 		function() {
 			return game.state() === 'results';
 		},
 		function() {
-			switch(game.state()) {
-				case 'await_join':
-				{
-
-				}
-				break;
-				case 'card_select':
-				{
-					Guru.choose();
-				}
-				break;
-				case 'play':
-				{
-					Guru.play();
-				}
-				break;
-				default:
-				{
-					console.log('stopping guru handle', game.state());
-					handle && handle.stop();
-				}
-				break;
-			}
+			machine.state([game.state()]);
 		});
 	});
 })();
