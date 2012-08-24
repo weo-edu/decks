@@ -1,3 +1,15 @@
+<template name="end_game">
+	{{#if show_cards}}
+		{{> view_cards}}
+	{{/if}}
+	{{> play_results}}
+	<ul id='results-nav'>
+		<li class='view-cards'>View Cards</li>
+		<li class='rematch'>Rematch</li>
+		<li class='back'>Menu</li>
+	</ul>
+</template>
+
 <template name="play_results">
 	{{#constant}}
 	<div id='play-results'>
@@ -20,11 +32,6 @@
 				{{/with}}
 			</div>
 		</div>
-		<ul id='results-nav'>
-			<li class='view-cards'>View Cards</li>
-			<li class='rematch'>Rematch</li>
-			<li class='back'>Menu</li>
-		</ul>
 	</div>
 	{{/constant}}
 </template>
@@ -48,4 +55,10 @@
 		 	<span class='score right'>{{opponent.total}}</span>
 		</div>
 	</div>
+</template>
+
+<template name='view_cards'>
+	{{#each myCards}}
+		{{answer}}
+	{{/each}}
 </template>

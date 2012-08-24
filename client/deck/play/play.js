@@ -8,6 +8,7 @@
   	},
   	function(ctx){
       var game = new Game(ctx.params.id);
+      console.log('game', game);
   		
   		ui.autorun(function() {
   			switch(game.mystate()) {
@@ -40,7 +41,7 @@
   				'card_select': 'cards_select',
   				'await_select': 'select_wait',
   				'play': 'deck_play',
-  				'results': 'play_results'
+  				'results': 'end_game'
   			};
 
   			_.extend(Template.game, {
@@ -49,6 +50,10 @@
   				}
   			});
   		})();
+
+  		Template.user.select = function() {
+  			return Session.equals('game_state', 'card_select') || Session.equals('game_state', 'await_join');
+  		}
 
   		/*
   			Cards select template helpers and events
@@ -135,6 +140,11 @@
 		 				var message = dialog.get('message');
 		 				return Template[message] && Template[message]();
 		 			},
+		 			render: function() {
+						var results = game.results();
+						var myProgress = (results.me.correct / results.me.total) * 100;
+						// $('.user-1 .fill').animate({'height': myProgress + '%'});
+		 			},
 		 			events: {
 		 				'click': function() {
 		 					$('#answer').focus();
@@ -142,21 +152,22 @@
 		 				'keypress': function(e) {
 		 					if(e.which === 13){
 								game.answer(parseInt($('#answer').val(), 10));
-								// var results = game.results();
-								
-								// var myProgress = (results.me.correct / results.me.total) * 100;
-
-								// $('.user-1 .fill').animate({'height': myProgress + '%'});
-
-								// console.log(myProgress);
 		 						nextCard();
-		 						Meteor.defer(function(){ $('#answer').focus(); });
+		 						Meteor.defer(function(){ 
+		 							$('#answer').focus(); 
+		 						});
 		 					}
 		 				}
 
 		 			}
 		 		});
 		 	})();
+
+		 	Template.progress_bar.progress = function(ctx) {
+		 		var results = game.results(ctx._id);
+				var myProgress = (results.correct / results.total) * 100;
+		 		return myProgress + '%';
+		 	}
 
 		 	/*
 		 		Results
@@ -182,17 +193,30 @@
 			 				var opponentProgress = (results.opponent.correct / results.opponent.total) * 100;
 			 				$('#you .fill').animate({'height': myProgress + '%'});
 			 				$('#opponent .fill').animate({'height': opponentProgress + '%'});
-		 			},
-		 			events: {
+		 			}
+		 		});
+
+				_.extend(Template.end_game, {
+					show_cards: function() {
+						return this.get('show_cards');
+					},
+					myCards: function(){
+						return game.problems()
+					},
+					events: {
 		 				'click #results-nav .rematch': function() {
 		 					var id = game.opponent().synthetic ? game.me()._id : game.opponent()._id;
 		  				route(Game.create(game.deck()._id, id).url());		  				
 		 				},
 		 				'click #results-nav .back': function() {
 		 					route('/');
+		 				},
+		 				'click #results-nav .view-cards': function(evt, template) {
+		 					template.set('show_cards', true);
 		 				}
-		 			}
-		 		});
+					}
+				});
+
 		 	})();
 
 

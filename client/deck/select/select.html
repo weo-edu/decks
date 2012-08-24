@@ -46,13 +46,15 @@
 	<div class='user'>
 		<div class='avatar-tmb' style='background-image: url({{avatar}})'></div>
 		<p>{{username}}</p>
-		{{> progress}}
+		{{#unless select}}
+			{{> progress_bar}}
+		{{/unless}}
 	</div>
 </template>
 
-<template name='progress'>
+<template name='progress_bar'>
 	<div class='bar'>
-		<div class='fill'></div>
+		<div class='fill' style="height:{{progress this}}"></div>
 	</div>
 </template>
 
