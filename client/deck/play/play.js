@@ -187,6 +187,9 @@
 		 				'click #results-nav .rematch': function() {
 		 					var id = game.opponent().synthetic ? game.me()._id : game.opponent()._id;
 		  				route(Game.create(game.deck()._id, id).url());		  				
+		 				},
+		 				'click #results-nav .back': function() {
+		 					route('/');
 		 				}
 		 			}
 		 		});
