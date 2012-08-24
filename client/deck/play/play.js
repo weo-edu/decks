@@ -4,13 +4,25 @@
   		if(Game.gamesHandle)
   			next();
   		else
-  			Game.gamesHandle = Meteor.subscribe('games', next);
+  			Game.gamesHandle = Meteor.subscribe('game', ctx.params.id, next);
   	},
   	function(ctx){
       var game = new Game(ctx.params.id);
   		
+  		function showDialog(message) {
+  			console.log('test');
+  			var dialog = ui.get('.dialog');
+  			dialog.set('message', message);
+  			dialog.overlay().center().show();
+  		}
+
+  		var machine = new StateMachine(
+  			[['await_select', 'await_select'], ['await_results', 'await_results']],
+  			_.bind(showDialog, window)
+  			);
   		ui.autorun(function() {
-  			switch(game.mystate()) {
+  			machine.state([game.mystate()]);
+  		/*	switch(game.mystate()) {
   				case 'await_select':
   				{
   					if(game.state() !== 'play') {
@@ -28,7 +40,7 @@
   						dialog.overlay().center().show();
   					}
   				}
-  			}
+  			}*/
   		});
  
   		/*

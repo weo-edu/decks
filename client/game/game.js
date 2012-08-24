@@ -325,7 +325,7 @@
 
 
   Template.game.create = function() {
-    //this.nextRender
+   //Game.emit('create', ) 
   }
 
 

@@ -14,6 +14,10 @@
 		});
 	});
 
+	Meteor.publish('game', function(id) {
+		return Games.find({_id: id});
+	})
+
 	Meteor.startup(function(){
 		Games.allow({
 			insert: function(uid, doc){
@@ -22,7 +26,6 @@
 			},
 			update: function(uid, docs, fields, modifier){
 				var self = this;
-				console.log('attempting to update');
 				if(! ~fields.indexOf('created') && ! ~fields.indexOf('modified')){
 					var res = true;
 					_.each(docs, function(doc){
