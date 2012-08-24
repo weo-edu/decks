@@ -46,6 +46,13 @@
 	<div class='user'>
 		<div class='avatar-tmb' style='background-image: url({{avatar}})'></div>
 		<p>{{username}}</p>
+		{{> progress}}
+	</div>
+</template>
+
+<template name='progress'>
+	<div class='bar'>
+		<div class='fill'></div>
 	</div>
 </template>
 

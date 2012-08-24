@@ -6,9 +6,10 @@
 	background: url('/img/woodBg.jpg') center center no-repeat;
 }
 
+width = 740px;
+
 #result-box {
-	width = 740px;
-	height = 430px;
+	height = 420px;
 	width: width;
 	background: #EEE;
 	height: height;
@@ -41,16 +42,21 @@
 		top: size * -.55;
 		border-radius: 50%;
 		background: #E31A21;
-		line-height: 330px;
 		font-size: 45px;
-		font-family: Nuku;
+		font-family: "Nuku";
 		text-align: center;
 		color: white;
+		.winner {
+			margin-top: 140px;
+		}
+		.winner-name {
+			font: 28px "Fresca";
+		}
 	}
 
 	.results {
 		float: left;
-		margin-top: 155px;
+		margin-top: height - 270px;
 		font: 30px/1.3em "MayonaiseCondRegular";
 		text-transform: uppercase;
 		text-align: center;
@@ -94,10 +100,21 @@
 				width: 100%;
 			}
 		}
+		.bar {
+			position: absolute;
+			top: -100px;
+			.fill {
+				position: absolute;
+				bottom: 0;
+			}
+		}
 	}
 
 	#you {
 		float: left;
+		.bar {
+			left: 130px;
+		}
 	}
 
 	#opponent {
@@ -108,6 +125,34 @@
 			.avatar-tmb {
 				right: 0;
 			}
+		}
+		.bar {
+			right: 130px;
+			margin-right: 0;
+		}
+	}
+}
+
+#results-nav {
+	position: absolute;
+	bottom: 50px;
+	clear: both;
+	font: 56px Nuku;
+	margin-left: 175px;
+	color: #B3895D;
+	li {
+		transition: text-shadow .2s;
+		display: block;
+		float: left;
+		margin-right: 40px;
+		text-shadow: -1px -1px 0 rgba(black, .5);
+		cursor: pointer;
+		user-select: none;
+		&:hover {
+			text-shadow: 1px 1px 0 rgba(black, .5);
+		}
+		&:active {
+			text-shadow: -1px -1px 0 rgba(black, .5);
 		}
 	}
 }
