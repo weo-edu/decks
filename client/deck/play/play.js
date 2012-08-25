@@ -8,10 +8,8 @@
   	},
   	function(ctx){
       var game = new Game(ctx.params.id);
-      console.log('game', game);
   		
   		function showDialog(message) {
-  			console.log('test');
   			var dialog = ui.get('.dialog');
   			dialog.set('message', message);
   			dialog.overlay().center().show();
@@ -153,9 +151,9 @@
 		 				return Template[message] && Template[message]();
 		 			},
 		 			render: function() {
-						var results = game.results();
-						var myProgress = (results.me.correct / results.me.total) * 100;
-						// $('.user-1 .fill').animate({'height': myProgress + '%'});
+						// $('.user').each(function() {
+						// 	$(this).find('.fill').animate({'height': $(this).find('.fill').attr('rel') + '%'});
+						// });
 		 			},
 		 			events: {
 		 				'click': function() {
@@ -201,20 +199,21 @@
 							return results.me.correct > results.opponent.correct ? game.me().username : game.opponent().username;
 		 			},
 		 			render: function() {
-			 				var myProgress = (results.me.correct / results.me.total) * 100;
-			 				var opponentProgress = (results.opponent.correct / results.opponent.total) * 100;
-			 				$('#you .fill').animate({'height': myProgress + '%'});
-			 				$('#opponent .fill').animate({'height': opponentProgress + '%'});
+			 				// var myProgress = (results.me.correct / results.me.total) * 100;
+			 				// var opponentProgress = (results.opponent.correct / results.opponent.total) * 100;
+			 				// $('#you .fill').animate({'height': myProgress + '%'});
+			 				// $('#opponent .fill').animate({'height': opponentProgress + '%'});
 		 			}
 		 		});
 
 				_.extend(Template.end_game, {
 					show_cards: function() {
-						return this.get('show_cards');
+						return Session.get('show_cards');
 					},
-					myCards: function(){
-						return game.problems()
-					},
+					'destroyed': function(evt, template) {
+	 					console.log('end_game destroyed');
+	 					Session.set('show_cards', '');
+	 				},
 					events: {
 		 				'click #results-nav .rematch': function() {
 		 					var id = game.opponent().synthetic ? game.me()._id : game.opponent()._id;
@@ -224,10 +223,50 @@
 		 					route('/');
 		 				},
 		 				'click #results-nav .view-cards': function(evt, template) {
-		 					template.set('show_cards', true);
-		 				}
+		 					$('#slider').addClass('show-cards', 400, 'easeInOutExpo', function(){
+		 							Session.set('show_cards', 'show-cards');
+		 					});
+		 				},
+		 				'click #view-cards-nav .results': function(evt, template) {
+		 					$('#slider').removeClass('show-cards', 400, 'easeInOutExpo', function(){
+		 							Session.set('show_cards', '');
+		 					});
+		 				} 
 					}
 				});
+
+				_.extend(Template.view_cards, {
+					cards: function() {
+						return game.problems();
+					},
+					correct: function() {
+						return game.isCorrect(this._id) ? 'correct' : 'incorrect';
+					},
+					review: function() {
+						return Session.get('review');
+					},
+					review_card: function() {
+						console.log(this.get('review_card'), 'review-card');
+						return Session.get('review_card');
+					},
+					'render': function() {
+							$('#card-grid').layout({
+									rows: 2,
+									cols: 4
+							});
+	 				},
+	 				events: {
+	 					'click .card': function(evt, template) {
+	 						var self = this
+	 						$('#slider').addClass('review', 400, 'easeInOutExpo', function(){
+	 								console.log('Setting review_card to: ', self);
+	 								Session.set('review_card', self);
+	 								Session.set('show_cards', 'review');
+	 						});
+	 					}
+	 				}		
+				});
+
 
 		 	})();
 

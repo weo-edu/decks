@@ -1,18 +1,19 @@
 <template name="end_game">
-	{{#if show_cards}}
-		{{> view_cards}}
-	{{/if}}
-	{{> play_results}}
-	<ul id='results-nav'>
-		<li class='view-cards'>View Cards</li>
-		<li class='rematch'>Rematch</li>
-		<li class='back'>Menu</li>
-	</ul>
+	<div id='play-results'>
+		<div id='slider' class='{{show_cards}}'>
+			{{> view_cards}}
+			{{> play_results}}
+			<ul id='results-nav'>
+				<li class='view-cards'>View Cards</li>
+				<li class='rematch'>Rematch</li>
+				<li class='back'>Menu</li>
+			</ul>
+		</div>
+	</div>
 </template>
 
 <template name="play_results">
 	{{#constant}}
-	<div id='play-results'>
 		<div id='result-box'>
 			<h2>RESULTS</h2>
 			<div class='inner-results'>
@@ -32,7 +33,6 @@
 				{{/with}}
 			</div>
 		</div>
-	</div>
 	{{/constant}}
 </template>
 
@@ -58,7 +58,32 @@
 </template>
 
 <template name='view_cards'>
-	{{#each myCards}}
-		{{answer}}
-	{{/each}}
+	{{> review_problem review_card}}
+	<div id='card-grid'>
+		<div class='shelf-wrapper'>
+		{{#each cards}}
+			<div class='card {{correct this}}' style='background-image: url(/{{graphic}}); background-color: {{deck.colorScheme.secondary}}'>
+				{{name}}
+				<div class='x'>X</div>
+			</div>
+		{{/each}}
+		</div>
+	</div>
+	<div class='next'></div>
+
+	<ul id='view-cards-nav'>
+		<li class='results'>Back to Results</li>
+	</ul>
 </template>
+
+<template name='review_problem'>
+	<div id='problem-container'>
+		<div id='problem'>
+			{{html}}<br/>
+			<input type="text" id="answer"/>
+		</div>
+	</div>
+</template>
+
+
+
