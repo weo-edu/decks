@@ -12,7 +12,7 @@ route('/deck/browse',function() {
 	}
 
 	Template.deck_browse.mydecks = function(){
-		return Decks.find({_id: {$in: Meteor.user().decks}});
+		return Decks.find(Meteor.user().decks);
 	};
 
 	Template.deck_browse.decks = function() {
