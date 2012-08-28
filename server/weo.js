@@ -103,7 +103,7 @@ var cards = [
     var decks = [
         {
             title: 'Simple Sums',
-            image: '/decks/simple-sums/simple-sums.png',
+            image: 'decks/simple-sums/simple-sums.png',
             colorScheme: {
                 primary: 'skyblue',
                 secondary: 'green'
@@ -112,17 +112,17 @@ var cards = [
     ];
 
 Meteor.startup(function() {
-	// Decks.remove({});
- //    Cards.remove({});
+	Decks.remove({});
+    Cards.remove({});
 
- //    _.each(cards, function(card){
- //        Cards.insert(card);
- //    });
+    _.each(cards, function(card){
+        Cards.insert(card);
+    });
 
- //    _.each(decks, function(deck){
- //        deck.cards = _.pluck(Cards.find({}, {fields: ['_id']}).fetch(), '_id');
- //        Decks.insert(deck);
- //    });
+    _.each(decks, function(deck){
+        deck.cards = _.pluck(Cards.find({}, {fields: ['_id']}).fetch(), '_id');
+        Decks.insert(deck);
+    });
 
 
 	Meteor.publish('Decks', function(){
