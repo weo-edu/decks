@@ -1,4 +1,6 @@
 ;(function() {
+  Game.gamesHandle = Meteor.subscribe('games');
+
   var defaults = {
     nCards: 5
   };
@@ -7,8 +9,6 @@
 	Game.create = function(deck, user) {
     user = User.lookup(user || Meteor.user());
 
-    Game.gamesHandle = Game.gamesHandle || Meteor.subscribe('games');
-    
     try {
       var game = new Game(Game._insert(deck, user));
       return game.invite(user._id);
@@ -44,32 +44,51 @@
 		var self = this;
 		self.id = id;
 
+    DependsEmitter.apply(self);
+    self.depends('ready', function() {
+      if(typeof Games !== 'undefined' && Games) {
+        return self.game() && self.deck()
+          && self.me() && self.opponent()
+          && Cards.find(self.deck().cards).count() === self.deck().cards.length;
+      } else {
+        var cur = Meteor.deps.Context.current;
+        Meteor.defer(function() {
+          cur.invalidate();
+        });
+      }
+    });
 
-		if(!self.game())
-			throw new Error('Sorry the specified game does not exist');
+    self.on('ready', function() {
+      if(!self.game())
+        throw new Error('Sorry the specified game does not exist');
 
-    //  Setup the reactive game_state session variable
-    //  We use a session variable so that we can be reactive
-    //  specific to this value instead of the entire game object.
-    //
-    //  XXX Put this variable on routerSession once its finished
-    //  There is no need to maintain this once the current route
-    //  has been destroyed.
-    Session.set('game_state', self.game().state.game);
+      //  Setup the reactive game_state session variable
+      //  We use a session variable so that we can be reactive
+      //  specific to this value instead of the entire game object.
+      //
+      //  XXX Put this variable on routerSession once its finished
+      //  There is no need to maintain this once the current route
+      //  has been destroyed.
+      Session.set('game_state', self.game().state.game);
 
-
-    Meteor.defer(function() {
       //  The game creator manages the official state, anyone joining
       //  the game simply watches it.  This is arbitrary, it could be
       //  either of them, but we just have to choose one.
-      (self.mine() && self.stateManager()) || self.stateWatcher();
+      self.mine() ? self.stateManager() : self.stateWatcher();
 
       //  If we don't already have a local state, then we joined a new game
       //  so we set our state to 'await join'
       self.mystate() || self.mystate('await_join') 
     });
+
+    Meteor.defer(function() { 
+      self.emit('ready');
+    });
 	}
-	utils.inherits(Game, Emitter);
+
+  utils.inherits(Game, DependsEmitter);
+  _.extend(Game, DependsEmitter.prototype);
+  DependsEmitter.call(Game);
 
 
   /*
@@ -308,7 +327,8 @@
       update['$set']['state.' + self.me()._id] = state;
       update['$set']['state.' + self.opponent()._id] = state;
       Games.update(self.id, update);
-      Session.set('game_state', state);
+      if(!Session.equals('game_state', state))
+        Session.set('game_state', state);
     }
 
     return Session.get('game_state');
@@ -316,43 +336,34 @@
 
   Game.prototype.stateWatcher = function() {
     var self = this;
-    ui.autorun(function() { 
-      if(!Session.equals('game_state', self.game().state)) {
-        Session.set('game_state', self.game().state.game);
+    self.stateHandle = ui.autorun(function() {
+      var state = self.game().state.game;
+      if(!Session.equals('game_state', state)) {
+        Session.set('game_state', state);
       }
     });
   }
 
 
-  Template.game.create = function() {
-   //Game.emit('create', ) 
+  Game.prototype.destroy = function() {
+    var self = this;
+    self.stateHandle.stop();
   }
-
 
   Game.prototype.stateManager = function() {
     var self = this;
-
     var transitionTable = [
       // game state   local state      local state      new state
       ['await_join',  'await_join',    'await_join',    'card_select'],
       ['card_select', 'await_select',  'await_select',  'play'],
-      ['play',        'await_results', 'await_results', 'results'],
-      ['results', null, null, 
-      function() { self.stateHandle && self.stateHandle.stop(); }]
+      ['play',        'await_results', 'await_results', 'results']//,
+      //['results', null, null, _.bind(self.destroy, self)]
     ];
 
     var machine = new StateMachine(transitionTable, _.bind(self.state, self));
-    
-    //Template.game.onRender(function() {
-      //if(!this.firstRender) return;
-      self.stateHandle = ui.autorun(function() {
-        machine.state([self.state(), self.mystate(), self.localState(self.opponent()._id)]);
-      });
-
-      //Template.game.onDestroy(function() {
-      //  self.stateHandle.stop();
-      //});
-    //});
+    self.stateHandle = ui.autorun(function() {
+      machine.state([self.state(), self.mystate(), self.localState(self.opponent()._id)]);
+    });
   }
 
 	window.Game = Game;
