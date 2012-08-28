@@ -46,7 +46,7 @@
  				'card_select': 'cards_select',
  				'await_select': 'select_wait',
  				'play': 'deck_play',
- 				'results': 'play_results'
+ 				'results': 'end_game'
  			};
 
   		Template.game.helpers({
@@ -231,27 +231,29 @@
  				'click #results-nav .back': function() {
  					route('/');
  				},
- 				'click #results-nav .view-cards': function(evt, template) {
- 					$('#slider').addClass('show-cards', 400, 'easeInOutExpo', function(){
- 							Session.set('show_cards', 'show-cards');
- 					});
- 				},
  				'click #view-cards-nav .results': function(evt, template) {
  					$('#slider').removeClass('show-cards', 400, 'easeInOutExpo', function(){
  							Session.set('show_cards', '');
+ 					});
+ 				},
+ 				'click #results-nav .view-cards': function(evt, template) {
+ 					$('#slider').addClass('show-cards', 400, 'easeInOutExpo', function(){
+ 							Session.set('show_cards', 'show-cards');
  					});
  				} 
 			});
 
 			Template.view_cards.rendered = function() {
+				console.log('layout review');
 				$('#card-grid').layout({
 					rows: 2,
 					cols: 4
 				});
 			}
 
-			Template.view_cards({
+			Template.view_cards.helpers({
 				cards: function() {
+					console.log('cards helper');
 					return game.problems();
 				},
 				correct: function() {
@@ -261,7 +263,6 @@
 					return Session.get('review');
 				},
 				review_card: function() {
-					console.log(this.get('review_card'), 'review-card');
 					return Session.get('review_card');
 				}
 			});
@@ -278,17 +279,30 @@
 			});
 
 	 		Template.play_results.events({
-	 				'click #results-nav .rematch': function(e, template) {
-	 					var id = game.opponent().synthetic ? game.me()._id : game.opponent()._id;
-	 					var newGame = Game.create(game.deck()._id, id);
-	 					var url = newGame.url();
-	 					newGame.destroy();
-	  				route(url);		  				
-	 				},
-	 				'click #results-nav .back': function(e, template) {
-	 					route('/');
-	 				}
-	 			});
+ 				'click #results-nav .rematch': function(e, template) {
+ 					var id = game.opponent().synthetic ? game.me()._id : game.opponent()._id;
+ 					var newGame = Game.create(game.deck()._id, id);
+ 					var url = newGame.url();
+ 					newGame.destroy();
+  				route(url);		  				
+ 				},
+ 				'click #results-nav .back': function(e, template) {
+ 					route('/');
+ 				}
+ 			});
+
+			Template.review_problem.events({
+				'click .review-back': function() {
+					$('#slider').switchClass('review', 'show-cards', 400, 'easeInOutExpo', function(){
+ 							Session.set('show_cards', 'show-cards');
+ 					});
+				},
+				'click .solution': function() {
+					alert(Session.get('review_card').solution);
+				}
+			});
+
+		 	// })();
 
 			view.render('game');
 		});

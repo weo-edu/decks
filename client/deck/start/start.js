@@ -12,7 +12,7 @@ Meteor.startup(function() {
 });
 
 route('/deck/start',function() {
-	Template.deck_start.render = function() {
+	Template.deck_start.rendered = function() {
 		document.body.addEventListener('touchmove', function(e){ e.preventDefault(); });
 			hammerTest();
 			snapToDeck($('#deckFlow .deck').eq(1));
