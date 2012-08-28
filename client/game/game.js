@@ -40,8 +40,10 @@
   /*
     Instantiate a new game object
   */
-	function Game(id) {
+	function Game(id, options) {
 		var self = this;
+
+    self.options = options || {};
 		self.id = id;
 
     DependsEmitter.apply(self);
@@ -81,9 +83,7 @@
       self.mystate() || self.mystate('await_join') 
     });
 
-    Meteor.defer(function() { 
-      self.emit('ready');
-    });
+    self.emit('ready');
 	}
 
   utils.inherits(Game, DependsEmitter);
@@ -262,19 +262,25 @@
     Return your opponent's user object
   */
   Game.prototype.opponent = function() {
-    var uid = _.without(this.game().users, Meteor.user()._id);
-    return (uid[0] && User.lookup(uid[0])) || Guru.goat();
+    var self = this;
+
+    if(self.options.opponent) {
+      self.opponent = self.options.opponent;
+      return self.opponent();
+    } else
+      return User.lookup(_.without(self.game().users, self.me()._id)[0]) || Guru.goat();
   }
 
   /*
-    Returns the user id of the current user.  This is necessary
-    in order to support single-player modes.  In multiplayer this
-    will always be Meteor.user()._id, but in single-player it can
-    also be the computer player.
   */
   Game.prototype.me = function() {
-    var uid = _.without(this.game().users, this.opponent()._id)[0];
-    return (uid && User.lookup(uid)) || Guru.goat();
+    var self = this;
+
+    if(self.options.me) {
+      self.me = self.options.me;
+      return self.me();
+    } else
+      return Meteor.user();
   }
 
   /* 

@@ -1,6 +1,7 @@
 ;(function(){
 	var game = null;
 
+
   route('/game/:id', 
   	function(ctx, next) {
  			Meteor.subscribe('game', ctx.params.id, next);
@@ -8,35 +9,35 @@
   	function(ctx){
   		game = new Game(ctx.params.id);
 
-  		Template.game.created = function() {
-  			Game.emit('create', this, game);
+			Template.game.created = function() {
+				Game.emit('create', this, game);
 
-	  		function showDialog(message) {
-	  			var dialog = ui.get('.dialog');
-	  			dialog.set('message', message);
-	  			dialog.overlay().center().show();
-	  		}
+				function showDialog(message) {
+					var dialog = ui.get('.dialog');
+					dialog.set('message', message);
+					dialog.overlay().center().show();
+				}
 
-		  	var machine = new StateMachine(
-	  			[
-	  				['await_select', 'await_select'],
-	  				['await_results', 'await_results']
-	  			],
-	  			_.bind(showDialog, window)
-	  			);
+				var machine = new StateMachine(
+					[
+						['await_select', 'await_select'],
+						['await_results', 'await_results']
+					],
+					_.bind(showDialog, window)
+					);
 
-	  		var handle = ui.autorun(function() {
-	  			machine.state([game.mystate()]);
-	  		});
+				var handle = ui.autorun(function() {
+					machine.state([game.mystate()]);
+				});
 
-	  		this.onDestroy(function() {
-	  			handle && handle.stop();
-	  			handle = null;
+				this.onDestroy(function() {
+					handle && handle.stop();
+					handle = null;
 
-	  			game && game.destroy();
-	  			game = null;
-	  		});
-	    }
+					game && game.destroy();
+					game = null;
+				});
+			}
 
   		/*
   			Game template helpers and events

@@ -50,10 +50,14 @@
 		game.problems('random');
 	});
 
+	Guru.on('invite', function(e) {
+		Guru.start(e.object.body);
+	});
+
 	Game.on('create', function(tmpl, g) {
+		console.log('game create received', g.opponent());
 		if(g.opponent().synthetic && ! game) {
-			game = new Game(g.id);
-			Guru.start();
+			Guru.start(g.id);
 		}
 
 		tmpl.onDestroy(function() {
@@ -62,15 +66,20 @@
 	});
 
 
-
-	Guru.start = function() {
+	Guru.start = function(id) {
 		var transitionTable = null,
 			evaluators = null,
 			machine = null;
+			options = {
+				me: function() {
+					return Guru.goat();
+				},
+				opponent: function() {
+					return Meteor.user();
+				}
+			};
 
-		game.opponent = function() {
-			return Meteor.user();
-		};
+		game = new Game(id, options);
 
 		transitionTable = [
 			['await_join', function() { }],
@@ -86,7 +95,7 @@
 		},
 		function() {
 			machine.state([game.state()]);
-		});		
+		});
 	}
 
 	function stopAutorun() {
@@ -100,26 +109,5 @@
 		stopAutorun();
 	})
 
-	Guru.on('invite', function(e) {
-		game = new Game(e.object.body);
-		Guru.start();
-	});
 
-
-	if(Meteor._reload) {
-		Meteor._reload.on_migrate('guru', function() {
-			if(game) {
-				var ret = [true, game.id];
-				Guru.emit('stop');
-				return ret;
-			}
-			return [false];
-		});
-
-		var migration_data = Meteor._reload.migration_data('guru');
-		if(migration_data) {
-			game = new Game(migration_data);
-			Guru.start();
-		}
-	}
 })();
