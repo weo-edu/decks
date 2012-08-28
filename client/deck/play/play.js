@@ -128,6 +128,10 @@
 				this.opponent = game.opponent();
 		 	};
 
+		 	Template.deck_play.destroyed = function() {
+		 		Session.set('cur_problem', null);
+		 	}
+
 		 	function nextCard() {
 		 		var p = game.problem();
 		 		p && Session.set('cur_problem', p);
