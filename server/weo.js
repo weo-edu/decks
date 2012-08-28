@@ -27,118 +27,102 @@ app.get('/upload/*',express.static(process.cwd()+"/.meteor/"));
 
 var cards = [
                 {
-                        name: 'word addition',
+                        name: '1\'s',
                         graphic: 'addition.gif',
                         problem: {
-                                template: 'What is {{a}} plus {{b}}?',
-                                solution: 'a + b'
+                                template: '1 + {{a}}  = ?',
+                                solution: '1 + a'
                         }
                 },
                 {
-                        name: 'word subtraction',
-                        graphic: 'subtraction.jpeg',
-                        problem: {
-                                template: 'What is {{a}} minus {{b}}?',
-                                solution: 'a - b'
-                        }
-                },
-                {
-                        name: 'word multiplication',
-                        graphic: 'multiplication.jpg',
-                        problem: {
-                                template: 'What is {{a}} times {{b}}?',
-                                solution: 'a * b'
-                        }
-                },
-                {
-                        name: 'word addition',
+                        name: '2\'s',
                         graphic: 'addition.gif',
                         problem: {
-                                template: 'What is {{a}} plus {{b}}?',
-                                solution: 'a + b'
+                                template: '2 + {{a}}  = ?',
+                                solution: '2 + a'
                         }
                 },
                 {
-                        name: 'word subtraction',
-                        graphic: 'subtraction.jpeg',
-                        problem: {
-                                template: 'What is {{a}} minus {{b}}?',
-                                solution: 'a - b'
-                        }
-                },
-                {
-                        name: 'word multiplication',
-                        graphic: 'multiplication.jpg',
-                        problem: {
-                                template: 'What is {{a}} times {{b}}?',
-                                solution: 'a * b'
-                        }
-                },
-                {
-                        name: 'word addition',
+                        name: '3\'s',
                         graphic: 'addition.gif',
                         problem: {
-                                template: 'What is {{a}} plus {{b}}?',
-                                solution: 'a + b'
+                                template: '3 + {{a}}  = ?',
+                                solution: '3 + a'
                         }
                 },
                 {
-                        name: 'word subtraction',
-                        graphic: 'subtraction.jpeg',
+                        name: '4\'s',
+                        graphic: 'addition.gif',
                         problem: {
-                                template: 'What is {{a}} minus {{b}}?',
-                                solution: 'a - b'
+                                template: '4 + {{a}}  = ?',
+                                solution: '4 + a'
+                        }
+                },
+                {
+                        name: '5\'s',
+                        graphic: 'addition.gif',
+                        problem: {
+                                template: '5 + {{a}}  = ?',
+                                solution: '5 + a'
+                        }
+                },
+                {
+                        name: '6\'s',
+                        graphic: 'addition.gif',
+                        problem: {
+                                template: '6 + {{a}}  = ?',
+                                solution: '6 + a'
+                        }
+                },
+                {
+                        name: '7\'s',
+                        graphic: 'addition.gif',
+                        problem: {
+                                template: '7 + {{a}}  = ?',
+                                solution: '7 + a'
+                        }
+                },
+                {
+                        name: '8\'s',
+                        graphic: 'addition.gif',
+                        problem: {
+                                template: '8 + {{a}}  = ?',
+                                solution: '8 + a'
+                        }
+                },
+                {
+                        name: '9\'s',
+                        graphic: 'addition.gif',
+                        problem: {
+                                template: '9 + {{a}}  = ?',
+                                solution: '9 + a'
                         }
                 }
             ];
 
     var decks = [
         {
-            title: 'word arithmetic',
-            image: 'arithmetic-4.png',
+            title: 'Simple Sums',
+            image: '/decks/simple-sums.png',
             colorScheme: {
-                primary: 'goldenRod',
-                secondary: 'tomato'
-            }
-        },
-        {
-            title: 'word arithmetic',
-            image: 'arithmetic-4.png',
-            colorScheme: {
-                primary: 'goldenRod',
-                secondary: 'tomato'
-            }
-        },
-        {
-            title: 'word arithmetic',
-            image: 'arithmetic-4.png',
-            colorScheme: {
-                primary: 'goldenRod',
-                secondary: 'tomato'
-            }
-        },
-        {
-            title: 'word arithmetic',
-            image: 'arithmetic-4.png',
-            colorScheme: {
-               primary: 'goldenRod',
-               secondary: 'tomato'
+                primary: 'skyblue',
+                secondary: 'green'
             }
         }
     ];
 
 Meteor.startup(function() {
-	/*Decks.remove({});
-    Cards.remove({});
+	// Decks.remove({});
+ //    Cards.remove({});
 
-    _.each(cards, function(card){
-        Cards.insert(card);
-    });
+ //    _.each(cards, function(card){
+ //        Cards.insert(card);
+ //    });
 
-    _.each(decks, function(deck){
-        deck.cards = _.pluck(Cards.find({}, {fields: ['_id']}).fetch(), '_id');
-        Decks.insert(deck);
-    });*/
+ //    _.each(decks, function(deck){
+ //        deck.cards = _.pluck(Cards.find({}, {fields: ['_id']}).fetch(), '_id');
+ //        Decks.insert(deck);
+ //    });
 
 
 	Meteor.publish('Decks', function(){

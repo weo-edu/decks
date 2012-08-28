@@ -246,7 +246,6 @@
 						return Session.get('review');
 					},
 					review_card: function() {
-						console.log(this.get('review_card'), 'review-card');
 						return Session.get('review_card');
 					},
 					'render': function() {
@@ -257,9 +256,8 @@
 	 				},
 	 				events: {
 	 					'click .card': function(evt, template) {
-	 						var self = this
+	 						var self = this;
 	 						$('#slider').addClass('review', 400, 'easeInOutExpo', function(){
-	 								console.log('Setting review_card to: ', self);
 	 								Session.set('review_card', self);
 	 								Session.set('show_cards', 'review');
 	 						});
@@ -268,8 +266,20 @@
 				});
 
 
-		 	})();
+				_.extend(Template.review_problem, {
+					events: {
+						'click .review-back': function() {
+							$('#slider').switchClass('review', 'show-cards', 400, 'easeInOutExpo', function(){
+		 							Session.set('show_cards', 'show-cards');
+		 					});
+						},
+						'click .solution': function() {
+							alert(Session.get('review_card').solution);
+						}
+					}
+				});
 
+		 	})();
 
 			view.render('game');
 		}

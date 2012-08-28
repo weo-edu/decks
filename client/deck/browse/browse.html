@@ -1,24 +1,4 @@
 <template name="deck_browse">
-	<svg style='height: 0; position: absolute;'>
-		<defs>
-		    <filter id="innerbevel" x0="-50%" y0="-50%" width="200%" height="200%">
-				<feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
-				<feOffset in='blur' dy="-5" dx="-5"/>
-				<feComposite in2="SourceAlpha" operator="arithmetic"
-						k2="-1" k3="1" result="hlDiff"/>
-				<feFlood flood-color="black" flood-opacity=".6"/>
-				<feComposite in2="hlDiff" operator="in"/>
-				<feComposite in2="SourceGraphic" operator="over" result="withGlow"/>
-
-				<feOffset in="blur" dy="5" dx="5"/>
-				<feComposite in2="SourceAlpha" operator="arithmetic"
-						k2="-1" k3="1" result="shadowDiff"/>
-				<feFlood flood-color="black" flood-opacity=".6"/>
-				<feComposite in2="shadowDiff" operator="in"/>
-				<feComposite in2="withGlow" operator="over"/>
-			</filter>
-	  	</defs>
-	</svg>
 	<div id='browse-screen'>
 		<div class='select-placeholder'></div>
 		<div class='browse'>
@@ -45,7 +25,11 @@
 
 <template name="decks">
 		{{#iter decks}}
-			{{> deck_view}}
+			<div id="deck-{{idx}}" class='deck-container'>
+				{{> deck_view}}
+				<h4>{{title}}</h4>
+				<div class='shadow'></div>
+			</div>
 		{{/iter}}
 		{{#ui "dialog"}}
 			{{> deck_more}}
@@ -53,16 +37,7 @@
 </template>
 
 <template name="deck_view">
-	<div id="deck-{{idx}}" class='deck-container'>
-	<svg class="deck">
-		<polygon points='8,3 130,0 140,7 0,10' fill='{{colorScheme.primary}}' stroke='{{colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)' />
-		<polygon points='0,10 140,7 130,172, 12,180' fill='{{colorScheme.primary}}' stroke='{{colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)'/>
-		<image x="45" y="70" width="48px" height="48px"
-         xlink:href="/{{image}}"></image>
-         <text x="30" y="50" width="48px" height="48px">{{title}}</text>
-	</svg>
-	<div class='shadow'></div>
-	</div>
+	<div class='deck' style='background-image: url({{image}});'></div>
 </template>
 
 
@@ -71,13 +46,7 @@
 		<h2>{{title}}</h2>
 		<div class='more-info'>
 			<div class='deck-image'>
-				<svg class="deck">
-					<polygon points='8,3 130,0 140,7 0,10' fill='{{colorScheme.primary}}' stroke='{{colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)' />
-					<polygon points='0,10 140,7 130,172, 12,180' fill='{{colorScheme.primary}}' stroke='{{colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)'/>
-					<image x="45" y="70" width="48px" height="48px"
-			         xlink:href="/{{image}}"></image>
-			         <text x="30" y="50" width="48px" height="48px">{{title}}</text>
-				</svg>
+				{{> deck_view}}
 				<p> UNLOCKED 1 OF 10 </p>
 			</div>
 			<div class='deck-meta'>
@@ -103,3 +72,34 @@
 	{{/with}}
 
 </template>
+
+
+<!-- 
+	<svg style='height: 0; position: absolute;'>
+		<defs>
+		    <filter id="innerbevel" x0="-50%" y0="-50%" width="200%" height="200%">
+				<feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
+				<feOffset in='blur' dy="-5" dx="-5"/>
+				<feComposite in2="SourceAlpha" operator="arithmetic"
+						k2="-1" k3="1" result="hlDiff"/>
+				<feFlood flood-color="black" flood-opacity=".6"/>
+				<feComposite in2="hlDiff" operator="in"/>
+				<feComposite in2="SourceGraphic" operator="over" result="withGlow"/>
+
+				<feOffset in="blur" dy="5" dx="5"/>
+				<feComposite in2="SourceAlpha" operator="arithmetic"
+						k2="-1" k3="1" result="shadowDiff"/>
+				<feFlood flood-color="black" flood-opacity=".6"/>
+				<feComposite in2="shadowDiff" operator="in"/>
+				<feComposite in2="withGlow" operator="over"/>
+			</filter>
+	  	</defs>
+	</svg>
+
+	<svg class="deck">
+	<polygon points='8,3 130,0 140,7 0,10' fill='{{colorScheme.primary}}' stroke='{{colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)' />
+	<polygon points='0,10 140,7 130,172, 12,180' fill='{{colorScheme.primary}}' stroke='{{colorScheme.secondary}}' stroke-width='1' filter='url(#innerbevel)'/>
+	<image x="0" y="0" width="150px" height="200px"
+     xlink:href="/{{image}}"></image>
+     <text x="30" y="50" width="48px" height="48px">{{title}}</text>
+	</svg> -->

@@ -29,26 +29,35 @@
 	.browse{
 		float: left;
 		height: 100%;
-		background: url('/img/browseBg.jpg') center center no-repeat;
+		background: url('/img/bigShelf.jpg') center 55px;
 		ipad();
 	}
 }
 
 #deck-grid {
-	height = 220px;
+	height = 299px;
 	width = 150px;
-	
-	// height: height;
-	width: 850px;
-	margin: 88px auto 0;
-	transform-style: flat;
+	background: url('/img/bigShelf.jpg') center center;
+	height: height;
+	width: 100%;
+	.shelf-wrapper {
+		padding: 25px 50px;
+	}
 	.deck-container {
 		cursor: pointer;
 		width: width;
-		height: height;
+		height: 275px;
 		float: left;
 		background-position: center center;
 		position: relative;
+		margin: 0 40px;
+		h4 {
+			margin: 5px 0;
+			text-align: center;
+			font: 20px/20px 'Fresca';
+			color: #FFF;
+			text-shadow: 1px 1px 0 rgba(black, .5);
+		}
 		.shadow {
 			position: absolute;
 			bottom: 5px;
@@ -59,6 +68,13 @@
 			left: 25px;
 		}
 	}
+}
+
+.deck {
+	height: 200px;
+	width: 150px;
+	border-radius: 8px;
+	box-shadow: 0 0 15px #333, inset 1px 1px 1px rgba(white, .5), inset -1px -1px 1px rgba(black, .5);
 }
 
 .dialog {
@@ -102,9 +118,7 @@
 		background: #DDD url('/img/deckBurst.png') 14px -4px no-repeat;
 		.deck {
 			float: none;
-			margin: 20px auto 0;
-			height: 240px;
-			width: 142px;
+			margin: 10px auto 40px;
 			display: block;
 		}
 		p {

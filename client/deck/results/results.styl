@@ -9,17 +9,22 @@
 		position: absolute;
 		height: 100%;
 		width: 100%;
-		top: 0%;
+		bottom: 200%;
+		.slide {
+			position: relative;
+			height: 100%;
+			width: 100%;
+		}
 		&.show-cards {
-			top: 100%;
+			bottom: 100%;
 		}
 		&.review {
-			top: 200%;
+			bottom: 0%;
 		}
 	}
 	#card-grid {
 		position: absolute;
-		top: -92%;
+		top: 8%;
 		left: 50%;
 		margin-left: -350px;
 
@@ -56,15 +61,41 @@
 					opacity: 0;
 				}
 			}
-			
 		}
 	}
 
 	#problem-container {
-		top: -200%;
+		margin: 0 auto;
 		transform: scale(1);
 		opacity: 1;
+		float: none;
+
+	}
+
+	.review-back, .solution {
 		position: absolute;
+		font: 47px/40px Nuku;
+		color: #B3895D;
+		text-shadow: -1px -1px 0 rgba(black, .5);
+		transition: text-shadow .2s;
+		cursor: pointer;
+		user-select: none;
+		&:hover {
+			text-shadow: 1px 1px 0 rgba(black, .5);
+		}
+		&:active {
+			text-shadow: -1px -1px 0 rgba(black, .5);
+		}
+	}
+
+	.review-back {
+		left: 50px;
+		top: 260px;
+	}
+
+	.solution {
+		right: 40px;
+		top: 75px;
 	}
 }
 
@@ -164,7 +195,7 @@ width = 740px;
 		}
 		.bar {
 			position: absolute;
-			top: -100px;
+			top: -90px;
 			.fill {
 				position: absolute;
 				bottom: 0;
@@ -220,8 +251,6 @@ width = 740px;
 }
 
 #view-cards-nav {
-	top: -110px;
-	bottom: auto;	
 	li {
 		width: 700px;
 		text-align: center;

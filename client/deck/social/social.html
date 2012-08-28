@@ -17,7 +17,7 @@
 <template name='buddies'>
 	{{#each friends}}
 		<div class='buddy'>
-			<div class='avatar-tmb-small'></div>
+			<div class='avatar-tmb-small' style='background-image: url({{avatar}});'></div>
 			<p>{{username}}</p>
 		</div>
 	{{/each}}
