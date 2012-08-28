@@ -13,7 +13,7 @@ console.log(express.version);
 var cards = [
                 {
                         name: '1\'s',
-                        graphic: 'addition.gif',
+                        graphic: 'decks/simple-sums/1.png',
                         problem: {
                                 template: '1 + {{a}}  = ?',
                                 solution: '1 + a'
@@ -21,7 +21,7 @@ var cards = [
                 },
                 {
                         name: '2\'s',
-                        graphic: 'addition.gif',
+                        graphic: 'decks/simple-sums/2.png',
                         problem: {
                                 template: '2 + {{a}}  = ?',
                                 solution: '2 + a'
@@ -29,7 +29,7 @@ var cards = [
                 },
                 {
                         name: '3\'s',
-                        graphic: 'addition.gif',
+                        graphic: 'decks/simple-sums/3.png',
                         problem: {
                                 template: '3 + {{a}}  = ?',
                                 solution: '3 + a'
@@ -37,7 +37,7 @@ var cards = [
                 },
                 {
                         name: '4\'s',
-                        graphic: 'addition.gif',
+                        graphic: 'decks/simple-sums/4.png',
                         problem: {
                                 template: '4 + {{a}}  = ?',
                                 solution: '4 + a'
@@ -88,7 +88,7 @@ var cards = [
     var decks = [
         {
             title: 'Simple Sums',
-            image: '/decks/simple-sums.png',
+            image: 'decks/simple-sums/simple-sums.png',
             colorScheme: {
                 primary: 'skyblue',
                 secondary: 'green'

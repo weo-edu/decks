@@ -61,6 +61,7 @@
   			return Session.equals('game_state', 'card_select') || Session.equals('game_state', 'await_join');
   		}
 
+
   		/*
   			Cards select template helpers and events
   		*/
@@ -72,6 +73,13 @@
   				this.deck_cards = Cards.find(this.deck.cards).fetch();
 			};
 
+			Template.cards_select.rendered = function() {
+				$('#card-grid').layout({
+					rows: 2,
+					cols: 4
+				});
+			}
+
 			Template.cards_select.helpers( {
 				opponent: function(){
 					return this.template.opponent;
@@ -80,12 +88,6 @@
 					return this.template.nCards;
 				},
 				deck: function(){
-					Meteor.defer(function() {
-						$('#card-grid').layout({
-							rows: 2,
-							cols: 4
-						});
-					});
 					return this.template.deck;
 				},
 				cards: function() {
@@ -109,8 +111,8 @@
 						numSelected = container.children('.select').length;
 
 					if(numSelected === template.nCards && ! el.hasClass('select')) {
-						var dialog = ui.get('max_cards');
-						dialog.context(self);
+						var dialog = ui.get('.dialog');
+						dialog.set('message', 'max_cards');
 						dialog.closable().overlay().show().center();
 					} else {
 						template.cards.push(self._id);
