@@ -8,6 +8,7 @@
 
 				{{#with deck}}
 					{{> deck_view}}
+					<!-- <h4 class='deck-title'>{{title}}</h4> -->
 				{{/with}}
 
 				<div class='user-2'>
@@ -34,7 +35,6 @@
 		<div class='shelf-wrapper'>
 		{{#each this}}
 			<div class='card' style='background-image: url(/{{graphic}}); background-color: {{deck.colorScheme.secondary}}'>
-				{{name}}
 			</div>
 		{{/each}}
 		</div>
