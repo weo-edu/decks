@@ -4,6 +4,68 @@
 #play-results {
 	ipad();
 	background: url('/img/woodBg.jpg') center center no-repeat;
+
+	#slider {
+		position: absolute;
+		height: 100%;
+		width: 100%;
+		top: 0%;
+		&.show-cards {
+			top: 100%;
+		}
+		&.review {
+			top: 200%;
+		}
+	}
+	#card-grid {
+		position: absolute;
+		top: -92%;
+		left: 50%;
+		margin-left: -350px;
+
+		.correct {
+			.x {
+				display: none;
+			}
+		}
+
+		.incorrect {
+			position: relative;
+			.x {
+				transition: all .3s;
+				transform: scale(1);
+				opacity: 1;
+				size = 90px;
+				font: 90px/1em Nuku;
+				text-align: center;
+				color: #FFF;
+				background: #E60000;
+				display: block;
+				width: size;
+				height: size;
+				border-radius: 50%;
+				position: absolute;
+				top: 50%;
+				margin-top: size*-.5;
+				left: 50%;
+				margin-left: size*-.5;
+				box-shadow: 1px 1px 10px #333;
+				text-shadow: -1px -1px 0 rgba(black, .5);
+				&:hover {
+					transform: scale(2);
+					opacity: 0;
+				}
+			}
+			
+		}
+	}
+
+	#problem-container {
+		top: -200%;
+		transform: scale(1);
+		opacity: 1;
+		position: absolute;
+	}
 }
 
 width = 740px;
@@ -133,7 +195,7 @@ width = 740px;
 	}
 }
 
-#results-nav {
+#results-nav, #view-cards-nav {
 	position: absolute;
 	bottom: 50px;
 	clear: both;
@@ -154,5 +216,14 @@ width = 740px;
 		&:active {
 			text-shadow: -1px -1px 0 rgba(black, .5);
 		}
+	}
+}
+
+#view-cards-nav {
+	top: -110px;
+	bottom: auto;	
+	li {
+		width: 700px;
+		text-align: center;
 	}
 }
