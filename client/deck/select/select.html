@@ -2,7 +2,7 @@
 	<div id='select-screen'>
 		<div class='scene'>
 			<div id='players-area'>
-				<div class='user-1'>
+				<div id='me' class='user-1'>
 					{{> user currentUser}}
 				</div>
 
@@ -11,7 +11,7 @@
 					<!-- <h4 class='deck-title'>{{title}}</h4> -->
 				{{/with}}
 
-				<div class='user-2'>
+				<div id='opponent' class='user-2'>
 					{{> user opponent}}
 				</div>
 			</div>
@@ -34,7 +34,7 @@
 	<div id='card-grid'>
 		<div class='shelf-wrapper'>
 		{{#each this}}
-			<div class='card' style='background-image: url({{graphic}}); background-color: {{deck.colorScheme.secondary}}'>
+			<div class='card' style='background-image: url({{graphic}}); background-color: {{deck.colorScheme.secondary}};'>
 			</div>
 		{{/each}}
 		</div>
@@ -54,7 +54,9 @@
 
 <template name='progress_bar'>
 	<div class='bar'>
-		<div class='fill' style="height:{{progress this}}"></div>
+		{{#isolate}}
+			<div class='fill' style="height:{{progress this}}"></div>
+		{{/isolate}}
 	</div>
 </template>
 
