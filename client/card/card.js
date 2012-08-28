@@ -1,7 +1,45 @@
 //////////////////////////////////
 ////////////////XXX add iteration option to uikit
+route('/card/create', route.requireUser,function() {
+	Cards.insert({username: Meteor.user().username}, function(err,_id) {
+		if (err) throw err;
+		route('/card/edit/' + _id + '/info');
+	});
+});
 
+console.log('card.js');
 
+route('/card/edit/:id/info', route.requireSubscription('cards'),
+function(ctx) {
+
+var card = Cards.findOne(ctx.params.id);
+
+Template.card_preview.helpers({
+	card: function() {
+		return card;
+	}
+});
+
+Template.card_info_form.helpers({
+	form_init: function() {
+		return {id: 'form_init', component: 'form'}
+	}
+});
+
+Template.card_info_form.events = ({
+	'click #render-link': function() {
+		var form = ui.byID('info_form');
+		console.log('save');
+		Decks.set(deck,form.getFields());
+		route('/card/edit/' + card._id + '/look');
+	}
+});
+
+console.log('render');
+view.render('card_edit_info');
+});
+
+/*
 route('/card/create', function() {
 	var transformPrefix = domToCss(Modernizr.prefixed('transform'));
 
@@ -199,4 +237,4 @@ route('/card/create', function() {
 		return 'done';
 	}
 	view.render('card_create');
-});
+});*/

@@ -22,3 +22,5 @@ less
 stylus
 edis-cli
 edis-livedata
+models
+gsUpload

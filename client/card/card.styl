@@ -3,33 +3,11 @@
 cardheight = 400px;
 cardwidth = 250px
 
-.card-create-screen{
-	#template-input{
-		left:-800px;
-	}
+#card-create-screen{
 	#card{
-		background-color: rgba(darken(#3276c1,2), 0.5);
-		outline:2px solid lighten(#599adf, 10);
-		transition:all .5s ease-in-out;
+		background-color: white;
 		height:cardheight;
 		width:cardwidth;
-		transform-style: preserve-3d;
-		&.flip{
-			transform:rotateY(180deg);
-		}
-		#front, #back{
-			backface-visibility: hidden;
-			height:cardheight;
-			width:cardwidth;
-			position:absolute;
-			transform: rotateY(0deg);
-			img{
-				height:60%;
-				width:100%;
-			}
-		}
-		#back{
-			transform: rotateY(180deg);
-		}
+		margin-top: 80px;	
 	}
 }

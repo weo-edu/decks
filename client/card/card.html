@@ -1,23 +1,68 @@
-<template name="card_create">
-	<div class="card-create-screen create-screen" defer='{{defer}}'>
+<template name="card_edit_info">
+	<div id="card-create-screen" class="create-screen">
 		<h1 class="title">CARD CREATOR</h1>
-			{{>step_container_1}}
-	</div>
-</template>
-
-<template name="card_info_input">
-	<div id="template-input" class="input-area {{isActive}}">
-		<div class="field-wrapper">
-			{{{form "card_input_info" template="card_form"}}}
+		<div class="left">
+			<div class="input-area">
+				{{> card_info_form }}
+			</div>
+		</div>
+		<div class="right">
+			{{> card_preview }}
 		</div>
 	</div>
 </template>
 
-<template name="card_form">
-	{{{textarea "card_template" field="template" placeholder="{{a}} to make a variable" cls="field" label="Problem:"}}}
-	{{{input "card_solution" field="solution" placeholder="a to use variable a" cls="field" label="Solution:"}}}
-	{{>rules_form}}
+
+<template name="card_info_form">
+	{{#ui form_init}}
+		<textarea name="template" placeholder="template"></textarea>
+		<input name="solution" placeholder="solution"/>
+	{{/ui}}
 </template>
+
+<template name="card_preview">
+	{{#with card}}
+	<div id="card-back">
+		<div id="card-question">
+{{#markdown}}
+{{question}}
+{{/markdown}}
+		</div>
+		<div id="card-solution">
+			Solution: {{answer}}
+		</div>
+	</div>
+	{{/with}}
+</template>
+
+
+<template name="card_front">
+	<div id="front"  style="background-color:{{primary_color}}">
+		<div class="display-inner color-update">
+			{{#if name}}
+				<h2 class="secondary-color elem">{{name}}</h2>
+				{{#if image}}
+					<img src='/{{image}}'/>
+				{{else}}
+					<div class="fill elem"></div>
+				{{/if}}
+			{{else}}
+				{{#if image}}
+					<img src='/{{image}}' class="full elem"/>
+				{{else}}
+					<div class="full elem"></div>
+				{{/if}}
+			{{/if}}
+			<div class="tags text elem">
+				{{#each tags}}
+					<li class="tags" style="display:inline;">{{this}}</li>   
+				{{/each}}
+			</div>
+		</div>
+	</div>
+</template>
+
+
 
 <template name="card_look_input">
 	<div class="input-area {{isActive}}">
@@ -84,21 +129,9 @@
 	</div>
 </template>	
 
-<template name="card_preview">
-	<div class="deck-position">
-		<div class="deck-shadow">
-			{{>card_play}}
-		</div>
-	</div>
-</template>
 
 
 
-<template name="step_container_1">
-		{{>card_info_input}}
-		{{>card_look_input}}
-		{{>card_preview}}
-</template>
 
 <template name="card_deck_list">
 	<div class="display-inner">
@@ -136,57 +169,5 @@
 	</li>
 </template>
 
-<template name="front">
-	{{#with card}}
 
-	<div id="front"  style="background-color:{{primary_color}}">
-		<div class="display-inner color-update">
-			{{#if name}}
-				<h2 class="secondary-color elem">{{name}}</h2>
-				{{#if image}}
-					<img src='/{{image}}'/>
-				{{else}}
-					<div class="fill elem"></div>
-				{{/if}}
-			{{else}}
-				{{#if image}}
-					<img src='/{{image}}' class="full elem"/>
-				{{else}}
-					<div class="full elem"></div>
-				{{/if}}
-			{{/if}}
-			<div class="tags text elem">
-				{{#each tags}}
-					<li class="tags" style="display:inline;">{{this}}</li>   
-				{{/each}}
-			</div>
-		</div>
-	</div>
-	{{/with}}
-</template>
 
-<template name="back">
-	{{#with card}}
-	<div id="back" style="background-color:{{primary_color}}">
-		<div class="display-inner color-update">
-			<div id="template-show" class='question text elem'>
-				<div id="template-overflow" class='overflow'>
-{{#markdown}}
-{{question}}
-{{/markdown}}
-				</div>
-			</div>
-			<div class='solution text elem'>
-				<div for='answer'>Solution: {{answer}}</div>
-			</div>
-		</div>
-	</div>
-	{{/with}}
-</template>
-
-<template name="card_play">
-<div id="card" class="creator_card">
-	{{>front}}
-	{{>back}}
-</div>
-</template>

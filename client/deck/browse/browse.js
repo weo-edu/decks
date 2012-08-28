@@ -25,7 +25,7 @@ route('/deck/browse',function() {
 	}
 
 	Template.deck_browse.events = {
-	 	'click .deck-container': function(e) {
+	 	'click .deck-container': function(e,template) {
 	 		var dialog = ui.get('.dialog');
 	 		dialog.set('currentCard',this);
 	 		dialog.closable().overlay().center().show();
