@@ -17,7 +17,7 @@
 			<h1>SELECT YOUR OPPONENTS CARDS</h1>
 			{{> card_selection cards}}
 			<div class='play-button' rel='{{title}}'></div>
-			<p id='chosen' >CHOSEN <span class='chosen'>0</span> OF 3</p>
+			<p id='chosen' >CHOSEN <span class='chosen'>0</span> OF {{nCards}}</p>
 		</div>r
 		{{#ui "dialog"}}
 			{{{ message }}}
@@ -43,11 +43,18 @@
 </template>
 
 <template name='user'>
-	<div class='usr'>
-		<div class='avatar-tmb'></div>
-		<p>User</p>
-		<br />
-		{{username}}
+	<div class='user'>
+		<div class='avatar-tmb' style='background-image: url({{avatar}})'></div>
+		<p>{{username}}</p>
+		{{#unless select}}
+			{{> progress_bar}}
+		{{/unless}}
+	</div>
+</template>
+
+<template name='progress_bar'>
+	<div class='bar'>
+		<div class='fill' style="height:{{progress this}}"></div>
 	</div>
 </template>
 

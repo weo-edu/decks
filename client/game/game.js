@@ -1,4 +1,6 @@
 ;(function() {
+  Game.gamesHandle = Meteor.subscribe('games');
+
   var defaults = {
     nCards: 5
   };
@@ -7,21 +9,31 @@
 	Game.create = function(deck, user) {
     user = User.lookup(user || Meteor.user());
 
-    Game.gamesHandle = Game.gamesHandle || Meteor.subscribe('games');
-		var game = new Game(Game._insert(deck, user._id));
-    return game.invite(user._id);
+    try {
+      var game = new Game(Game._insert(deck, user));
+      return game.invite(user._id);
+    } catch(err) {
+      console.log("User does not exist: " + err.message);
+      return false;
+    }
 	}
 
   /*
     Inserts a new game record into the database
     and returns its id
   */
-  Game._insert = function(deck, cb) {
+  Game._insert = function(deck, user, cb) {
+    if(user._id === Meteor.user()._id) {
+      user = Guru.goat();
+    }
+
     return Games.insert({
       creator: Meteor.user()._id,
       deck: deck,
-      users: [Meteor.user()._id],
-      state: 'await_join'
+      users: [Meteor.user()._id, user._id],
+      state: {
+        game: 'await_join'
+      }
     }, cb);
   }
 
@@ -31,25 +43,52 @@
 	function Game(id) {
 		var self = this;
 		self.id = id;
-		if(!self.game())
-			throw new Error('Sorry the specified game does not exist');
 
-    Games.find(self.id).observe({
-      added: function(doc, before_index) {
-        Session.set('game_state', doc.state);
-      },
-      changed: function(new_doc, at_idx, old_doc) {
-        new_doc.state === old_doc.state || Session.set('game_state', new_doc.state);
-        self.mine() && self.stateManager();
+    DependsEmitter.apply(self);
+    self.depends('ready', function() {
+      if(typeof Games !== 'undefined' && Games) {
+        return self.game() && self.deck()
+          && self.me() && self.opponent()
+          && Cards.find(self.deck().cards).count() === self.deck().cards.length;
+      } else {
+        var cur = Meteor.deps.Context.current;
+        Meteor.defer(function() {
+          cur.invalidate();
+        });
       }
     });
 
-    self.mystate() || self.mystate('await_join');
-    //  If this is a game that we're joining, move ahead to the
-    //  card select phase
-    //(!self.mine() && self.state() === 'await_join') && self.state('card_select');
+    self.on('ready', function() {
+      if(!self.game())
+        throw new Error('Sorry the specified game does not exist');
+
+      //  Setup the reactive game_state session variable
+      //  We use a session variable so that we can be reactive
+      //  specific to this value instead of the entire game object.
+      //
+      //  XXX Put this variable on routerSession once its finished
+      //  There is no need to maintain this once the current route
+      //  has been destroyed.
+      Session.set('game_state', self.game().state.game);
+
+      //  The game creator manages the official state, anyone joining
+      //  the game simply watches it.  This is arbitrary, it could be
+      //  either of them, but we just have to choose one.
+      self.mine() ? self.stateManager() : self.stateWatcher();
+
+      //  If we don't already have a local state, then we joined a new game
+      //  so we set our state to 'await join'
+      self.mystate() || self.mystate('await_join') 
+    });
+
+    Meteor.defer(function() { 
+      self.emit('ready');
+    });
 	}
-	utils.inherits(Game, Emitter);
+
+  utils.inherits(Game, DependsEmitter);
+  _.extend(Game, DependsEmitter.prototype);
+  DependsEmitter.call(Game);
 
 
   /*
@@ -186,9 +225,7 @@
       return false;
     });
 
-    var corre
     update['$set'][self.me()._id + '_problems'] = problems;
-    update['$set'][self.me()._id + '_results'] = 
     Games.update(self.id, update);
     return self.isCorrect(problem._id);
   }
@@ -218,7 +255,7 @@
       self.mystate('await_select');
     }
 
-    return self.game(true)[self.me()._id + '_problems'];
+    return self.game()[self.me()._id + '_problems'];
   }
 
   /*
@@ -258,19 +295,25 @@
   /*
   */
   Game.prototype.mystate = function(state) {
+    return this.localState(this.me()._id, state);
+  }
+
+  /*
+  */
+  Game.prototype.localState = function(uid, state) {
     var self = this,
-      update = { $set: { } },
-      field = self.me()._id + '_state';
+      update = {$set: { } },
+      field  = 'state.' + uid,
+      fields = {fields: {}};
 
     if(state) {
       update['$set'][field] = state;
       Games.update(self.id, update);
     }
 
-    var fields = {fields: {}};
-    fields['fields'][field] = 1;
-    return Games.findOne(self.id, fields)[field];
+    return Games.findOne(self.id, {fields: {state: 1}})['state'][uid];
   }
+
   /*
     Reactive function that returns and/or sets
     the current state of the game.  Only the creator
@@ -280,42 +323,47 @@
 	Game.prototype.state = function(state) {
     var self = this;
     if(state) {
-      var update = {$set: {state: state}};
-      update['$set'][self.me()._id + '_state'] = state;
-      update['$set'][self.opponent()._id + '_state'] = state;
+      var update = {$set: {'state.game': state}};
+      update['$set']['state.' + self.me()._id] = state;
+      update['$set']['state.' + self.opponent()._id] = state;
       Games.update(self.id, update);
+      if(!Session.equals('game_state', state))
+        Session.set('game_state', state);
     }
 
     return Session.get('game_state');
 	}
 
-  Game.prototype.stateManager = function() {
-    var self = this,
-        cur = self.game().state,
-        local = [self.game()[self.me()._id + '_state'], 
-          self.game()[self.opponent()._id + '_state']];
+  Game.prototype.stateWatcher = function() {
+    var self = this;
+    self.stateHandle = ui.autorun(function() {
+      var state = self.game().state.game;
+      if(!Session.equals('game_state', state)) {
+        Session.set('game_state', state);
+      }
+    });
+  }
 
-    switch(cur) {
-      case 'await_join':
-      {
-        if(local[0] === 'await_join' && local[0] === 'await_join') {
-          self.state('card_select');
-        }
-      }
-      case 'card_select':
-      {
-        if(local[0] === 'await_select' && local[1] === 'await_select') {
-          self.state('play');
-        }
-      }
-      break;
-      case 'play':
-      {
-        if(local[0] === 'await_results' && local[1] === 'await_results') {
-          self.state('results');
-        }
-      }
-    }
+
+  Game.prototype.destroy = function() {
+    var self = this;
+    self.stateHandle.stop();
+  }
+
+  Game.prototype.stateManager = function() {
+    var self = this;
+    var transitionTable = [
+      // game state   local state      local state      new state
+      ['await_join',  'await_join',    'await_join',    'card_select'],
+      ['card_select', 'await_select',  'await_select',  'play'],
+      ['play',        'await_results', 'await_results', 'results']//,
+      //['results', null, null, _.bind(self.destroy, self)]
+    ];
+
+    var machine = new StateMachine(transitionTable, _.bind(self.state, self));
+    self.stateHandle = ui.autorun(function() {
+      machine.state([self.state(), self.mystate(), self.localState(self.opponent()._id)]);
+    });
   }
 
 	window.Game = Game;

@@ -3,7 +3,7 @@
 		$.fn.extend({
 			layout: function(options) {
 				this.css({
-					display: 'none',
+					// display: 'none',
 					overflow: 'hidden'
 				});
 
@@ -28,9 +28,10 @@
 
 				slider.width((containerWidth*numSlides)/options.rows);
 
+
 				// setTimeout ensures elements positioned before displayed.
-				var that = this;
-				setTimeout(function(){that.fadeIn(400)}, 0);
+				// var self = this;
+				// setTimeout(function(){self.show()}, 0);
 
 			}
 		});

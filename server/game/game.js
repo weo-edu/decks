@@ -14,6 +14,10 @@
 		});
 	});
 
+	Meteor.publish('game', function(id) {
+		return Games.find({_id: id});
+	})
+
 	Meteor.startup(function(){
 		Games.allow({
 			insert: function(uid, doc){
@@ -30,7 +34,8 @@
 					});
 					res || console.log('update access denied');
 					return res;
-				}
+				} else
+					console.log('update rejected');
 			}
 		});
 	});*/

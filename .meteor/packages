@@ -20,7 +20,9 @@ uikit
 streamio
 less
 stylus
-edis-cli
 edis-livedata
 models
 gsUpload
+edis-cli
+stateMachine
+
