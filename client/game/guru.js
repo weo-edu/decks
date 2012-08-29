@@ -50,12 +50,7 @@
 		game.problems('random');
 	});
 
-	Guru.on('invite', function(e) {
-		Guru.start(e.object.body);
-	});
-
 	Game.on('create', function(tmpl, g) {
-		console.log('game create received', g.opponent());
 		if(g.opponent().synthetic && ! game) {
 			Guru.start(g.id);
 		}
@@ -79,19 +74,21 @@
 				}
 			};
 
+		game && Guru.emit('stop');
+		game = null;
 		game = new Game(id, options);
 
 		transitionTable = [
 			['await_join', function() { }],
 			['card_select', function() { Guru.emit('choose'); }],
 			['play', function(){ Guru.emit('play'); }],
-			['results', function() { Guru.emit('stop'); }]
+			['results', function() { Meteor.defer(function() { Guru.emit('stop'); }) }]
 		];
 
 		machine = new StateMachine(transitionTable);
 		autorunHandle = ui.autorun(
 		function() {
-			game && game.state() === 'results';
+			game.state();
 		},
 		function() {
 			machine.state([game.state()]);
