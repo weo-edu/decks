@@ -135,6 +135,10 @@
 				this.opponent = game.opponent();
 		 	};
 
+		 	Template.deck_play.rendered = function() {
+		 		$('#answer').focus();
+		 	};
+
 		 	function nextCard() {
 		 		var p = game.problem();
 		 		p && routeSession.set('cur_problem', p);
@@ -164,23 +168,31 @@
  				'keypress': function(e, template) {
  					if(e.which === 13){
 						game.answer(parseInt($('#answer').val(), 10));
-						// var results = game.results();
-						
-						// var myProgress = (results.me.correct / results.me.total) * 100;
-
-						// $('.user-1 .fill').animate({'height': myProgress + '%'});
-
-						// console.log(myProgress);
  						nextCard();
  						Meteor.defer(function(){ $('#answer').focus(); });
  					}
  				}
 	 		});
 
+	 		Template.progress_bar.rendered = function() {
+	 			var myResults = game.results(game.me()._id);
+	 			var opResults = game.results(game.opponent()._id);
+	 			
+	 			var myProgress = (myResults.correct / myResults.total) * 100;
+	 			var opProgress = (opResults.correct / opResults.total) * 100;
+
+	 			$('#me .fill').animate({'height': myProgress + '%'}, function() {
+	 				Session.set('myProgress', myProgress + '%');
+	 			});
+	 			$('#opponent .fill').animate({'height': opProgress + '%'}, function() {
+	 				Session.set('opProgress', opProgress + '%');
+	 			});
+		 		
+	 		}
+
 		 	Template.progress_bar.progress = function(ctx) {
-		 		var results = game.results(ctx._id);
-				var myProgress = (results.correct / results.total) * 100;
-		 		return myProgress + '%';
+				var progress = Meteor.user()._id == ctx._id ? Session.get('myProgress') : Session.get('opProgress');
+				return progress;
 		 	}
 
 		 	/*
@@ -205,12 +217,6 @@
 	 				else
 						return this.template.results.me.correct > this.template.results.opponent.correct 
 							? this.template.me.username : this.template.opponent.username;
-	 			},
-	 			render: function() {
-		 				//var myProgress = (this.template.results.me.correct / this.template.results.me.total) * 100;
-		 				//var opponentProgress = (this.template.results.opponent.correct / this.template.results.opponent.total) * 100;
-		 				//$('#you .fill').animate({'height': myProgress + '%'});
-		 				//$('#opponent .fill').animate({'height': opponentProgress + '%'});
 	 			}
 	 		});
 

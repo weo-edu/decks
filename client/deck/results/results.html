@@ -24,7 +24,7 @@
 						<div class='winner'>WINNER</div>
 						<div class='winner-name'>{{winner}}</div>
 					</div>
-					<div id='you' class='user-1'>
+					<div id='me' class='user-1'>
 						{{> user currentUser}}
 					</div>
 					{{> individual_results}}
@@ -65,8 +65,7 @@
 		<div id='card-grid'>
 			<div class='shelf-wrapper'>
 			{{#each cards}}
-				<div class='card {{correct this}}' style='background-image: url(/{{graphic}}); background-color: {{deck.colorScheme.secondary}}'>
-					{{name}}
+				<div class='card {{correct this}}' style='background-image: url({{graphic}});'>
 					<div class='x'>X</div>
 				</div>
 			{{/each}}
