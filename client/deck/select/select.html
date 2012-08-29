@@ -43,20 +43,22 @@
 </template>
 
 <template name='user'>
+	{{#isolate}}
 	<div class='user'>
 		<div class='avatar-tmb' style='background-image: url({{avatar}})'></div>
 		<p>{{username}}</p>
 		{{#unless select}}
+			{{#isolate}}
 			{{> progress_bar}}
+			{{/isolate}}
 		{{/unless}}
 	</div>
+	{{/isolate}}
 </template>
 
 <template name='progress_bar'>
 	<div class='bar'>
-		{{#isolate}}
-			<div class='fill' style="height:{{progress this}}"></div>
-		{{/isolate}}
+			<div class='fill' style="height:{{progress}}"></div>
 	</div>
 </template>
 
