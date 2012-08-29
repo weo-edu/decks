@@ -1,5 +1,6 @@
 ;(function(){
-	var game = null;
+	var game = null,
+		stateMachineHandle = null;
 
 
   route('/game/:id', 
@@ -7,10 +8,20 @@
  			Meteor.subscribe('game', ctx.params.id, next);
   	},
   	function(ctx){
+  		game && stopPlaying();
   		game = new Game(ctx.params.id);
 
+  		function stopPlaying() {
+  			stateMachineHandle && stateMachineHandle.stop();
+  			stateMachineHandle = null;
+
+  			game && game.destroy();
+  			game = null;
+  		}
+
 			Template.game.created = function() {
-				Game.emit('create', this, game);
+				var self = this;
+				Game.emit('create', self, game);
 
 				function showDialog(message) {
 					var dialog = ui.get('.dialog');
@@ -19,24 +30,18 @@
 				}
 
 				var machine = new StateMachine(
-					[
-						['await_select', 'await_select'],
-						['await_results', 'await_results']
-					],
-					_.bind(showDialog, window)
+						[
+							['await_select', 'await_select'],
+							['await_results', 'await_results']
+						],
+						_.bind(showDialog, window)
 					);
 
-				var handle = ui.autorun(function() {
+				stateMachineHandle = ui.autorun(function() {
 					machine.state([game.mystate()]);
 				});
 
-				this.onDestroy(function() {
-					handle && handle.stop();
-					handle = null;
-
-					game && game.destroy();
-					game = null;
-				});
+				self.onDestroy(stopPlaying);
 			}
 
   		/*
@@ -52,13 +57,12 @@
 
   		Template.game.helpers({
   			state: function() {
-  				console.log('state rendering', game.state());
-  				return stateTemplateMap[game.state()];
+  				return game && stateTemplateMap[game.state()];
   			}
   		});
 
   		Template.user.select = function() {
-  			return Session.equals('game_state', 'card_select') || Session.equals('game_state', 'await_join');
+  			return routeSession.equals('game_state', 'card_select') || routeSession.equals('game_state', 'await_join');
   		}
 
 
@@ -131,13 +135,9 @@
 				this.opponent = game.opponent();
 		 	};
 
-		 	Template.deck_play.destroyed = function() {
-		 		Session.set('cur_problem', null);
-		 	}
-
 		 	function nextCard() {
 		 		var p = game.problem();
-		 		p && Session.set('cur_problem', p);
+		 		p && routeSession.set('cur_problem', p);
 		 	}
 
 	 		Template.deck_play.helpers({
@@ -148,7 +148,7 @@
 	 					$('#problem-container').addClass('show', 0);
 	 				});
 
-	 				return Session.get('cur_problem') || Meteor.defer(nextCard);
+	 				return routeSession.get('cur_problem') || Meteor.defer(nextCard);
 	 			},
 	 			message: function() {
 	 				var dialog = ui.get('.dialog');
@@ -215,39 +215,44 @@
 	 		});
 
 
-	 		Template.end_game.destroyed = function() {
-	 			console.log('end_game destroyed');
-	 			Session.set('show_cards', '');
-	 		}
 
 	 		Template.end_game.helpers({
 				show_cards: function() {
-					return Session.get('show_cards');
+					return routeSession.get('show_cards');
 				}
 			});
 
 			Template.end_game.events({
  				'click #results-nav .rematch': function() {
- 					var id = game.opponent().synthetic ? game.me()._id : game.opponent()._id;
-  				route(Game.create(game.deck()._id, id).url());		  				
+ 					var deckId = game.deck()._id;
+ 					var uid = game.opponent().synthetic ? game.me()._id : game.opponent()._id;
+
+ 					Meteor.defer(function() {
+	 					var g = Game.create(deckId, uid);
+	 					var url = g.url();
+	 					g.destroy();
+	 					stopPlaying();
+	 					Guru.emit('stop');
+	 					//view.render('game');
+  					route(url);
+  				});
  				},
  				'click #results-nav .back': function() {
  					route('/');
  				},
  				'click #view-cards-nav .results': function(evt, template) {
  					$('#slider').removeClass('show-cards', 400, 'easeInOutExpo', function(){
- 							Session.set('show_cards', '');
+ 							routeSession.set('show_cards', '');
  					});
  				},
  				'click #results-nav .view-cards': function(evt, template) {
  					$('#slider').addClass('show-cards', 400, 'easeInOutExpo', function(){
- 							Session.set('show_cards', 'show-cards');
+ 							routeSession.set('show_cards', 'show-cards');
  					});
  				} 
 			});
 
 			Template.view_cards.rendered = function() {
-				console.log('layout review');
 				$('#card-grid').layout({
 					rows: 2,
 					cols: 4
@@ -256,17 +261,16 @@
 
 			Template.view_cards.helpers({
 				cards: function() {
-					console.log('cards helper');
 					return game.problems();
 				},
 				correct: function() {
 					return game.isCorrect(this._id) ? 'correct' : 'incorrect';
 				},
 				review: function() {
-					return Session.get('review');
+					return routeSession.get('review');
 				},
 				review_card: function() {
-					return Session.get('review_card');
+					return routeSession.get('review_card');
 				}
 			});
 
@@ -274,39 +278,24 @@
 				'click .card': function(evt, template) {
 					var self = this
 					$('#slider').addClass('review', 400, 'easeInOutExpo', function(){
-							console.log('Setting review_card to: ', self);
-							Session.set('review_card', self);
-							Session.set('show_cards', 'review');
+							routeSession.set('review_card', self);
+							routeSession.set('show_cards', 'review');
 					});
 				}
 			});
 
-	 		Template.play_results.events({
- 				'click #results-nav .rematch': function(e, template) {
- 					var id = game.opponent().synthetic ? game.me()._id : game.opponent()._id;
- 					var newGame = Game.create(game.deck()._id, id);
- 					var url = newGame.url();
- 					newGame.destroy();
-  				route(url);		  				
- 				},
- 				'click #results-nav .back': function(e, template) {
- 					route('/');
- 				}
- 			});
 
 			Template.review_problem.events({
 				'click .review-back': function() {
 					$('#slider').switchClass('review', 'show-cards', 400, 'easeInOutExpo', function(){
- 							Session.set('show_cards', 'show-cards');
+ 							routeSession.set('show_cards', 'show-cards');
  					});
 				},
 				'click .solution': function() {
-					alert(Session.get('review_card').solution);
+					alert(routeSession.get('review_card').solution);
 				}
 			});
 
-		 	// })();
-
-			view.render('game');
+		 	view.render('game');
 		});
 })();
