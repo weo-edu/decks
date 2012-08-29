@@ -147,17 +147,20 @@
 	 		Template.deck_play.helpers({
 	 			opponent: function(){ return this.template.opponent; },
 	 			deck: function() { return this.template.deck; },
+	 			message: function() {
+	 				var dialog = ui.get('.dialog');
+	 				var message = dialog.get('message');
+	 				return Template[message] && Template[message]();
+	 			}
+	 		});
+
+	 		Template.problem_container.helpers({
 	 			card: function() {
 	 				Meteor.defer(function() {
 	 					$('#problem-container').addClass('show', 0);
 	 				});
 
 	 				return routeSession.get('cur_problem') || Meteor.defer(nextCard);
-	 			},
-	 			message: function() {
-	 				var dialog = ui.get('.dialog');
-	 				var message = dialog.get('message');
-	 				return Template[message] && Template[message]();
 	 			}
 	 		});
 
@@ -174,27 +177,34 @@
  				}
 	 		});
 
+	 		//Meteor.deps.Context.logInvalidateStack = true;
 
 	 		function percent(val, total) {
 	 			return (val / total) * 100;
 	 		}
 
-	 		Template.progress_bar.rendered = function() {
-	 			var self = this,
-					user = self.data._id === game.me()._id ? 'me' : 'opponent';
-		 			results = game.results(self.data._id);
-		 		
-		 		animateProgress('#' + user, results);
-		 		function animateProgress(container, results) {
-		 			var p = percent(results.correct, results.total);
-		 			$(container + ' .fill').animate({'height': p + '%'}, function() {
-		 				Session.set('results_' + self.data._id, results);
-		 			})
-		 		}
+	 		Template.progress_bar.created = function() {
+	 			var self = this;
+	 			var handle = ui.autorun(function(){
+					var user = self.data._id === Meteor.user()._id ? 'me' : 'opponent',
+						results = game.results(self.data._id);
+ 		
+ 					animateProgress('#' + user, results);
+ 					function animateProgress(container, results) {
+ 						var p = percent(results.correct, results.total);
+ 						$(container + ' .fill').animate({'height': p + '%'}, function() {
+ 							routeSession.set('results_' + self.data._id, results);
+ 						});
+ 					}
+	 			});
+
+	 			self.onDestroy(function() {
+	 				handle.stop();
+	 			});
 	 		}
 
 		 	Template.progress_bar.progress = function(ctx) {
-		 		var results = Session.get('results_' + this._id);
+		 		var results = routeSession.get('results_' + this._id);
 		 		return results && percent(results.correct, results.total) + '%';
 		 	}
 
