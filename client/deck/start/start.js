@@ -120,9 +120,6 @@ route('/deck/start',function() {
 
 	function floatDecks() {
 		var dur = 1000;
-		/*setInterval(function() {
-			$('#deckFlow .deck').find('img, .shadow').toggleClass('float', dur, 'easeInOutSine');
-		}, dur); */
 
 		$('#deckFlow .deck').each(function(idx, deck) {
 			setInterval(function() {
