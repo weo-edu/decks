@@ -174,25 +174,29 @@
  				}
 	 		});
 
-	 		Template.progress_bar.rendered = function() {
-	 			var myResults = game.results(game.me()._id);
-	 			var opResults = game.results(game.opponent()._id);
-	 			
-	 			var myProgress = (myResults.correct / myResults.total) * 100;
-	 			var opProgress = (opResults.correct / opResults.total) * 100;
 
-	 			$('#me .fill').animate({'height': myProgress + '%'}, function() {
-	 				Session.set('myProgress', myProgress + '%');
-	 			});
-	 			$('#opponent .fill').animate({'height': opProgress + '%'}, function() {
-	 				Session.set('opProgress', opProgress + '%');
-	 			});
-		 		
+	 		function percent(val, total) {
+	 			return (val / total) * 100;
+	 		}
+
+	 		Template.progress_bar.rendered = function() {
+	 			var self = this;
+
+		 		_.each(game.results(), function(val, key) {
+		 			animateProgress('#' + key, val);
+		 		});
+
+		 		function animateProgress(container, results) {
+		 			var p = percent(results.correct, results.total);
+		 			$(container + ' .fill').animate({'height': p + '%'}, function() {
+		 				Session.set('results_' + self.data._id, results);
+		 			})
+		 		}
 	 		}
 
 		 	Template.progress_bar.progress = function(ctx) {
-				var progress = Meteor.user()._id == ctx._id ? Session.get('myProgress') : Session.get('opProgress');
-				return progress;
+		 		var results = Session.get('results_' + this.template._id);
+		 		return results && percent(results.correct, results.total) + '%';
 		 	}
 
 		 	/*
@@ -212,7 +216,7 @@
 	 				return this.template.opponent;
 	 			},
 	 			winner: function() {
-	 				if(this.template.results.me.correct == this.template.results.opponent.correct)
+	 				if(this.template.results.me.correct === this.template.results.opponent.correct)
 	 					return 'TIE';
 	 				else
 						return this.template.results.me.correct > this.template.results.opponent.correct 
