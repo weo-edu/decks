@@ -180,12 +180,11 @@
 	 		}
 
 	 		Template.progress_bar.rendered = function() {
-	 			var self = this;
-
-		 		_.each(game.results(), function(val, key) {
-		 			animateProgress('#' + key, val);
-		 		});
-
+	 			var self = this,
+					user = self.data._id === game.me()._id ? 'me' : 'opponent';
+		 			results = game.results(self.data._id);
+		 		
+		 		animateProgress('#' + user, results);
 		 		function animateProgress(container, results) {
 		 			var p = percent(results.correct, results.total);
 		 			$(container + ' .fill').animate({'height': p + '%'}, function() {
@@ -195,7 +194,7 @@
 	 		}
 
 		 	Template.progress_bar.progress = function(ctx) {
-		 		var results = Session.get('results_' + this.template._id);
+		 		var results = Session.get('results_' + this._id);
 		 		return results && percent(results.correct, results.total) + '%';
 		 	}
 
