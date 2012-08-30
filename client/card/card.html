@@ -17,19 +17,45 @@
 	{{#ui form_init}}
 		<textarea name="template" placeholder="template"></textarea>
 		<input name="solution" placeholder="solution"/>
+		{{> rules_form}}
 	{{/ui}}
 </template>
 
+<template name="add_rule_dialog">
+	{{#ui "dialog"}}
+		{{#ui "form"}}
+			<input name="rule" placeholder="rule"/>
+			<div>{{error}}</div>
+			<div class="buttons">
+				<div class="save">save</div>
+				<div class="cancel">cancel</div>
+			</div>
+		{{/ui}}
+	{{/ui}}
+</template>
+
+<template name="rules_form">
+	<div id="rules_form">
+		{{> add_rule_dialog}}
+		<div id="add-rule">Add Rule</div>
+		<div class="rules">
+			{{#each rules}}
+				<div class="rule">{{this}}</div>
+			{{/each}}
+		</div>
+	</div>
+</template>
+
 <template name="card_preview">
-	{{#with card}}
+	{{#with problemized}}
 	<div id="card-back">
 		<div id="card-question">
 {{#markdown}}
-{{question}}
+{{html}}
 {{/markdown}}
 		</div>
 		<div id="card-solution">
-			Solution: {{answer}}
+			Solution: {{solution}}
 		</div>
 	</div>
 	{{/with}}
@@ -145,15 +171,6 @@
 				</div>
 			</div>
 		{{/each}}	
-	</div>
-</template>
-
-
-<template name="rules_form">
-	{{{form "rules_input_info" template="rule_input"}}}
-	<div id="add-rule" class="upload">Add Rule</div>
-	<div id="rule-container">
-	<ul id='rules'></ul>
 	</div>
 </template>
 

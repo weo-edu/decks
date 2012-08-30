@@ -1,5 +1,5 @@
 ;(function(){
-	/*Meteor.publish('games', function(){
+	Meteor.publish('games', function(){
 		var d = new Date();
 		d.setDate(d.getDate() - 1);
 
@@ -38,5 +38,5 @@
 					console.log('update rejected');
 			}
 		});
-	});*/
+	});
 })();
