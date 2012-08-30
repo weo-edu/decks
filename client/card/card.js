@@ -7,8 +7,6 @@ route('/card/create', route.requireUser,function() {
 	});
 });
 
-console.log('card.js');
-
 route('/card/edit/:id/back', route.requireSubscription('cards'),
 function(ctx) {
 
@@ -28,17 +26,12 @@ card.errorCheck = function() {
 	var self = this;
 	var edited = self.edited();
 	edited.problem.rules = self.edited_rules;
-
 	var p = problemize(edited);
 
 	var error = null;
-	console.log('errors',p.errors);
-	console.log('edited', edited);
-	console.log('editing rule idx', this.editing_rule_idx);
 	_.each(p.errors,function(err) {
-		console.log(err);
-		if (err.part === 'rule' && err.idx === self.editing_rule_idx) {
-			console.log('error');
+		if (err.part === 'rule' && 
+				(err.idx === self.editing_rule_idx || err.idx === 'all')) {
 			error = err.message;
 		}
 	});
@@ -46,9 +39,24 @@ card.errorCheck = function() {
 	return error;
 }
 
+card.newRule = function() {
+	this.edited_rules = _.clone(this.rules_form.get('rules'));
+	this.edited_rules.push('');
+	this.editing_rule_idx = this.edited_rules.length-1;
+}
+
+card.editRule = function(idx) {
+	card.edited_rules = _.clone(this.rules_form.get('rules'));
+	card.editing_rule_idx = idx;
+}
+
 card.setEditRules = function() {
 	this.rules_form.set('rules', this.edited_rules);
 	this.edited_rules = null;
+}
+
+card.save = function() {
+	Cards.save(this.db(), this.edited());
 }
 
 
@@ -68,7 +76,6 @@ Template.card_info_form.helpers({
 Template.card_info_form.events({
 	'click #render-link': function() {
 		var form = ui.byID('info_form');
-		console.log('save');
 		Decks.set(deck,form.getFields());
 		route('/card/edit/' + card._id + '/look');
 	}
@@ -81,7 +88,6 @@ Template.rules_form.created = function() {
 
 Template.rules_form.helpers({
 	rules: function(opts) {
-	//		console.log('rules', card.get('rules'));
 		var template = opts.template;
 		return template.get('rules');
 	}
@@ -94,28 +100,22 @@ Template.rules_form.events({
 			.relative('#add-rule', {top: 0, left: 0})
 			.show();
 		var form_html = dialog.find('.form');
-		console.log('form_html', form_html);
 		if (form_html) {
 			var form = ui.get(dialog.find('.form'));
-			console.log('setField', form.getField('rule'));
-			form.setField('rule','');
+			form.setField('rule', '');
 			form.set('error', '');
+
 		}
-		card.edited_rules = _.clone(template.get('rules'));
-		card.edited_rules.push('');
-		card.editing_rule_idx = card.edited_rules.length-1;
+		card.newRule();
 
 	},
 
 	'click .rule': function(evt, template) {
 		var dialog = ui.get('.dialog');
-		console.log(evt.target);
 		dialog
 			.relative($(evt.target), {top: 0, left: 0})
 			.show();
-		card.edited_rules = _.clone(template.get('rules'));
-		card.editing_rule_idx = $(evt.target).index();
-		console.log('editing rule', card.editing_rule_idx );
+		
 
 		var form_html = dialog.find('.form');
 		if (form_html) {
@@ -123,6 +123,8 @@ Template.rules_form.events({
 			form.setField('rule',card.edited_rules[card.editing_rule_idx]);
 			form.set('error', '');
 		}
+
+		card.editRule((evt.target).index());
 	}
 });
 
@@ -139,7 +141,6 @@ Template.add_rule_dialog.events({
 	'click .cancel': function(evt,template) {
 		var dialog = ui.get(template.find('.dialog'));
 		dialog.hide();
-		console.log('cancel');
 	}, 
 
 	'click .save': function(evt, template) {
@@ -162,7 +163,6 @@ Template.add_rule_dialog.events({
 
 });
 
-console.log('render');
 view.render('card_edit_info');
 });
 
