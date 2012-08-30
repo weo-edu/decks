@@ -21,5 +21,8 @@ streamio
 less
 stylus
 edis-livedata
+models
+gsUpload
 edis-cli
 stateMachine
+

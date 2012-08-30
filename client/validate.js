@@ -36,17 +36,7 @@ function validate(){
 	else return true;
 }
 
-// lets make this more meteory
-function switchPages(tar){
-	var move = $(tar).width();
-	var move_in = $('.input-area').not(tar);
-	$(tar).animate({left:-move}, 900, 'easeOutExpo', function(){
-		$(move_in).toggleClass('active').animate({left:'0px'}, 900, 'easeOutExpo', function(){
-			$('#card').toggleClass('flip');
-		});
-		$(this).toggleClass('active').css('left', '-800px');
-	})
-}
+
 
 function reset(obj){
 	

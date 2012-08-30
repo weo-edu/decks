@@ -3,10 +3,11 @@
 ipadheight = 672px;
 ipadwidth = 1024px;
 imgheight = 592px;
-imgwidth = 637px;
-height = 36px;
+imgwidth = 540px;
+leftwidth = ipadwidth/2px + 150px;
+rightwidth = ipadwidth/2px - 150px;
 
-.create-screen{
+.create-screen {
 	height:100%;
 	position:relative;
 	overflow:hidden;
@@ -14,47 +15,42 @@ height = 36px;
 	background-position:bottom;
 	background-color:transparent;
 	background-image:url('/create-bg.jpg');
-	.deck-position{
-	float:left;
-	width:ipadwidth - imgwidth;
-	height: 100%;
-	right: 0px;
-	position: absolute;
-	.deck-shadow{
-		font-family:'arial';
-		top: 95px;
-		width: width;
-		margin: 0 auto;
-		position: relative;
-		@include perspective(700px);
-		}
-		.drop-shadow{
-			margin: 5px auto;
-			height: depth/1.5;
-			width: width/1.8;
-			border-radius: 30% 45% 25% 30%;
-			background-color: transparentize(#000, 0.7); 
-			box-shadow: 0 0px 20px 12px transparentize(#000, 0.70);
-			transform: rotateX(90deg) translate3d(0px,0px,0px);
-			position: relative;
-			bottom: -360px;
-		}
+
+	.title{
+		background-color:#3FA9F5;
+		height:75px;
+		color:white;
+		font-size:50px;
+		line-height:75px;
+		padding:0px 20px;
+		font-family:'MayonaiseCondRegular';
 	}
-	.input-area{
-		position: absolute;
+	
+	.left {
+		float: left;
+		width: leftwidth;
 		height: imgheight;
-		width: imgwidth;
 		background-color: transparent;
 		background-image: url("/create-form.png");
+	}
+	.right {
 		float: left;
-		.field-wrapper{
-		margin: 18% 0px;
+		width: rightwidth;
+		height: imgheight;
+	}
+	.input-area{
+		margin-left: 72px;
+		margin-top: 74px;
+		padding: 30px;
+		width: 430px;
+		height: 385px;
+		position: relative;
 		div, input{
 			font-size:18px;
 			//line-height:36px;
 		}
 
-		input, textarea, option, select{
+		input, textarea, option, select {
 			text-indent:10px;
 			font-size:18px;
 			background-color: rgba(#000, 0.25);
@@ -63,18 +59,17 @@ height = 36px;
 			font-family:'arial';
 			resize: none;
 			display: block;
-			width: 200px
 			padding:2px 0px;
+			width: 200px;
+			margin-left: 215px
+			margin-top: 30px;
+			margin-bottom: 15px;
 		}
 		.upload_val{
 				display: none;
 			}
 		.field{
-			width:370px;
-			height: height;
-			margin-left: 300px
-			margin-top: 15px;
-			margin-bottom: 15px;
+			
 			#add-rule{
 				width:275px;
 				margin: 0 auto;
@@ -108,25 +103,15 @@ height = 36px;
 				padding-top:5px;
 				height:90px;
 			}
-		}
 	}
 		.button{
 			cursor:pointer;
 			height: 30px;
-			margin: 0 auto;
 			width: 30px;
 			background-size: 100%;
-			position: absolute;
-			bottom: 93px;
+			position: relative;
+
 		}
-		#more-inputs{
-			right:95px;
-			background-image:url('/right_arrow.gif');
-		}
-		#prev-inputs{
-			right:none;
-			left:95px;
-			background-image:url('/left_arrow.gif');
-		}
+
 	}
 }

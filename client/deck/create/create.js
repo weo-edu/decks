@@ -1,118 +1,77 @@
-route('/deck/create', function() {
-
-var transEndEventNames = {
-  'WebkitTransition' : 'webkitTransitionEnd',
-  'MozTransition'    : 'transitionend',
-  'OTransition'      : 'oTransitionEnd',
-  'msTransition'     : 'MSTransitionEnd',
-  'transition'       : 'transitionend'
-};
-
-var transEndEventName = transEndEventNames[Modernizr.prefixed('transition')];
-var domTransitionProperty = Modernizr.prefixed('transition');
-var transformPrefix = domToCss(Modernizr.prefixed('transform'));
-var transitionPrefix = domToCss(domTransitionProperty);
-
-	var current_page = new Reactive.Store('current_page', {
-		active: 'data-input'
-	})
-	
-function floatingObj(dist, time, ease){
-	//textColor();
-	var shadow_height = $('.drop-shadow').height();
-	var shadow_width = $('.drop-shadow').width();
-	var box = $('#box');
-	var shadow = $('.drop-shadow');
-	box.animate({top:'-'+dist}, time, ease, function(){
-		$(this).animate({top:dist}, time, ease);
+route('/deck/create', route.requireUser, function() {
+	console.log('user',Meteor.user().username);
+	Decks.insert({username: Meteor.user().username}, function(err,_id) {
+		if (err) throw err;
+		route('/deck/edit/' + _id + '/info');
 	});
-	shadow.animate({height:'-='+dist, width:'-='+dist}, time, ease, function(){
-		$(this).animate({height:'+='+dist, width:'+='+dist}, time, ease, function(){
-		$(this).css({height:shadow_height, width:shadow_width});
-		floatingObj(dist,time,ease);
-		});
-	});
-}
+});
 
+route('/deck/edit/:id/info', route.requireSubscription('decks'),
+function(ctx) {
 
-
-function selectOptions(max){
-	for(var i=2; i<=max; i++)
-	{
-		$('#gradePrior').append('<option val='+i+'>'+i+'</option');
-	}
-}
-
-Template.deck_spin.create_spin = function() {
-	Meteor.defer(function(){
-		var box = $('#box');
-		selectOptions(12);
-		var view = $('#viewport');
-		$('#deck_load').fileupload({
-	    	url: "/upload",
-	    	type: "POST",
-	    	dataType: 'json',
-	    	multipart: true,
-	    	done: function(e,data) {
-	    		$('#file').attr('img', data.result.path);
-	    		console.log('done');
-	    		ui.get('deck_image').value("upload/"+data.result.path)
-	    		//render.set('image',"upload/"+data.result.path);
-	    		//deck.set('render', render.all());		    
-	    	}
-	    });
-		mytrackball = new Traqball({
-			stage: 'deck-shadow',
-			axis: [1, 0, 0],
-			angle: 0,
-			perspective: '700'
-		});
-		floatingObj('10px', 1500, 'easeInOutSine');
-		//view.css(transformPrefix,'rotate3d(1, -.8, 0, -25deg)');
-	});
-	return '';
-}
-
-
-Template.deck_create.events = {
-	'click .button' : function(event){
-		var tar = $(event.target).closest('.input-area')
-		if(validate())
-			switchPages(tar);
-	}
-}
-
-Template.look_creator.events = {
-	'click #prev-inputs' : function(event){
-		var tar = $(event.target).closest('.input-area');
-		switchPages(tar);
-	},
-	'click #upload' : function(event){
-		event.preventDefault();
-		$('#file').click();
-	},
-	'click #insert' : function(){
-		if(validate())
-		{
-			Decks.insert(deck.all(), function(err, id){
-				if(!err){
-					to_reset = [deck, render, colorscheme];
-					reset(to_reset);
-				}
-			});
-		}
-	}
-}
+console.log('next');
+var deck = Decks.findOne(ctx.params.id);
+console.log('deck',deck);
 
 Template.deck_render.render = function() {
-	return ui.get('render_input_info').getFields()
+	var form = ui.byID('info_form');
+	return _.extend(deck,form.getFields());
 }
 
-Template.creator2.isActive = function(){
-	
+Template.deck_info_form.init_form = function() {
+	return {component: 'form', id: 'info_form'}
 }
 
-view.render('deck_create');
+Template.deck_info_form.rendered= function() {
+	console.log('rendered');
+	var form = ui.byID('info_form');
+	if(form) form.setFields(deck);
 
+}
+
+Template.deck_info_form.events = ({
+	'click #render-link': function() {
+		var form = ui.byID('info_form');
+		console.log('save');
+		Decks.set(deck,form.getFields());
+		route('/deck/edit/' + deck._id + '/look');
+	}
+});
+
+view.render('deck_edit_info');
+});
+
+route('/deck/edit/:id/look', route.requireSubscription('decks'),
+function(ctx) {
+
+var deck = Decks.findOne(ctx.params.id);
+
+Template.deck_render.render = function() {
+	var form = ui.byID('look_form');
+	return _.extend(deck,form.getFields());
+}
+
+Template.deck_look_form.init_form = function() {
+	return {component: 'form', id: 'look_form'}
+}
+
+Template.deck_look_form.rendered= function() {
+	var form = ui.byID('look_form');
+	if(form) form.setFields(deck);
+	gs.upload($(this.find('#image-upload')),function(err,data) {
+		$('#file').attr('img', data.result.path);
+  	form.setField('image', "upload/"+data.result.path);
+	});
+}
+
+Template.deck_look_form.events = ({
+	'click #info-link': function() {
+		var form = ui.byID('look_form');
+		Decks.set(deck,form.getFields());
+		route('/deck/edit/' + deck._id + '/info');
+	}
+});
+
+view.render('deck_edit_look');
 });
 

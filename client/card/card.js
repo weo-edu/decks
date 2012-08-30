@@ -1,7 +1,172 @@
 //////////////////////////////////
 ////////////////XXX add iteration option to uikit
+route('/card/create', route.requireUser,function() {
+	Cards.insert({username: Meteor.user().username, problem: {}}, function(err,_id) {
+		if (err) throw err;
+		route('/card/edit/' + _id + '/back');
+	});
+});
+
+console.log('card.js');
+
+route('/card/edit/:id/back', route.requireSubscription('cards'),
+function(ctx) {
+
+var card = {};
+card.rules_form = null;
+card.db = function() {
+	return Cards.findOne(ctx.params.id);
+}
+card.edited = function() {
+	var form = ui.byID('back_form');
+	var e = { problem: this.db().problem }
+	_.extend(e.problem, form.getFields());
+	if (this.rules_form) e.problem.rules = this.rules_form.get('rules');
+	return e;
+}
+card.errorCheck = function() {
+	var self = this;
+	var edited = self.edited();
+	edited.problem.rules = self.edited_rules;
+
+	var p = problemize(edited);
+
+	var error = null;
+	console.log('errors',p.errors);
+	console.log('edited', edited);
+	console.log('editing rule idx', this.editing_rule_idx);
+	_.each(p.errors,function(err) {
+		console.log(err);
+		if (err.part === 'rule' && err.idx === self.editing_rule_idx) {
+			console.log('error');
+			error = err.message;
+		}
+	});
+
+	return error;
+}
+
+card.setEditRules = function() {
+	this.rules_form.set('rules', this.edited_rules);
+	this.edited_rules = null;
+}
 
 
+
+Template.card_preview.helpers({
+	problemized: function() {
+		return problemize(card.edited());
+	}
+});
+
+Template.card_info_form.helpers({
+	form_init: function() {
+		return {id: 'back_form', component: 'form'}
+	}
+});
+
+Template.card_info_form.events({
+	'click #render-link': function() {
+		var form = ui.byID('info_form');
+		console.log('save');
+		Decks.set(deck,form.getFields());
+		route('/card/edit/' + card._id + '/look');
+	}
+});
+
+Template.rules_form.created = function() {
+	card.rules_form = this;
+	this.set('rules', card.db().problem.rules || []);
+}
+
+Template.rules_form.helpers({
+	rules: function(opts) {
+	//		console.log('rules', card.get('rules'));
+		var template = opts.template;
+		return template.get('rules');
+	}
+});
+
+Template.rules_form.events({
+	'click #add-rule': function(evt, template) {
+		var dialog = ui.get('.dialog');
+		dialog
+			.relative('#add-rule', {top: 0, left: 0})
+			.show();
+		var form_html = dialog.find('.form');
+		console.log('form_html', form_html);
+		if (form_html) {
+			var form = ui.get(dialog.find('.form'));
+			console.log('setField', form.getField('rule'));
+			form.setField('rule','');
+			form.set('error', '');
+		}
+		card.edited_rules = _.clone(template.get('rules'));
+		card.edited_rules.push('');
+		card.editing_rule_idx = card.edited_rules.length-1;
+
+	},
+
+	'click .rule': function(evt, template) {
+		var dialog = ui.get('.dialog');
+		console.log(evt.target);
+		dialog
+			.relative($(evt.target), {top: 0, left: 0})
+			.show();
+		card.edited_rules = _.clone(template.get('rules'));
+		card.editing_rule_idx = $(evt.target).index();
+		console.log('editing rule', card.editing_rule_idx );
+
+		var form_html = dialog.find('.form');
+		if (form_html) {
+			var form = ui.get(dialog.find('.form'));
+			form.setField('rule',card.edited_rules[card.editing_rule_idx]);
+			form.set('error', '');
+		}
+	}
+});
+
+Template.add_rule_dialog.created = function() {
+	this.rule_idx = null;
+}
+
+Template.add_rule_dialog.error = function(opts) {
+	var form = opts.template;
+	return form.get('error') || '';
+}
+
+Template.add_rule_dialog.events({
+	'click .cancel': function(evt,template) {
+		var dialog = ui.get(template.find('.dialog'));
+		dialog.hide();
+		console.log('cancel');
+	}, 
+
+	'click .save': function(evt, template) {
+		var form = ui.get(template.find('.form'));
+
+		card.edited_rules[card.editing_rule_idx] = form.getField('rule');
+
+		var error = card.errorCheck();
+		if (error) {
+			form.set('error',error);
+			return;
+		} else {
+			var dialog = ui.get(template.find('.dialog'));
+			dialog.hide();
+			card.setEditRules();
+		}
+
+		
+	}
+
+});
+
+console.log('render');
+view.render('card_edit_info');
+});
+
+/*
 route('/card/create', function() {
 	var transformPrefix = domToCss(Modernizr.prefixed('transform'));
 
@@ -199,4 +364,4 @@ route('/card/create', function() {
 		return 'done';
 	}
 	view.render('card_create');
-});
+});*/
