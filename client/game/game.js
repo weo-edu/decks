@@ -219,12 +219,7 @@
 
     _.find(problems, function(val, key) {
       if(val._id === problem._id) {
-        problems[key]['answer'] = answer;
-
-        problem.title = 'problem';
-        problem.type = 'problem';
-        event('complete', problem, self.isCorrect(problem._id));
-        
+        problems[key]['answer'] = answer;        
         return true;
       }
       return false;

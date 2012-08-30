@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-.DS_Store
-=======
 .DS_Store
 *~
 /dev_bundle
 /dev_bundle*.tar.gz
 /dist
->>>>>>> c5dc2663596226a5a6c2de5b1d0951897e51a48b
