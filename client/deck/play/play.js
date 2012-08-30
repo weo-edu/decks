@@ -85,17 +85,17 @@
 			}
 
 			Template.cards_select.helpers( {
-				opponent: function(){
-					return this.template.opponent;
+				opponent: function(ctx){
+					return ctx.template.opponent;
 				},
-				nCards: function() {
-					return this.template.nCards;
+				nCards: function(ctx) {
+					return ctx.template.nCards;
 				},
-				deck: function(){
-					return this.template.deck;
+				deck: function(ctx){
+					return ctx.template.deck;
 				},
-				cards: function() {
-					return this.template.deck_cards;
+				cards: function(ctx) {
+					return ctx.template.deck_cards;
 				},
 				message: function(name) {
 					var dialog = ui.get('.dialog');
@@ -145,8 +145,8 @@
 		 	}
 
 	 		Template.deck_play.helpers({
-	 			opponent: function(){ return this.template.opponent; },
-	 			deck: function() { return this.template.deck; },
+	 			opponent: function(ctx){ return ctx.template.opponent; },
+	 			deck: function(ctx) { return ctx.template.deck; },
 	 			message: function() {
 	 				var dialog = ui.get('.dialog');
 	 				var message = dialog.get('message');
@@ -154,12 +154,14 @@
 	 			}
 	 		});
 
+	 		var problemRendered = null;
 	 		Template.problem_container.helpers({
 	 			card: function() {
 	 				Meteor.defer(function() {
 	 					$('#problem-container').addClass('show', 0);
 	 				});
 
+	 				problemRendered = (new Date()).getTime();
 	 				return routeSession.get('cur_problem') || Meteor.defer(nextCard);
 	 			}
 	 		});
@@ -169,8 +171,19 @@
  					$('#answer').focus();
  				},
  				'keypress': function(e, template) {
- 					if(e.which === 13){
-						game.answer(parseInt($('#answer').val(), 10));
+ 					if(e.which === 13) {
+						var res = game.answer(parseInt($('#answer').val(), 10)),
+							dTime = (new Date()).getTime() - problemRendered,
+							problem = routeSession.get('cur_problem');
+
+						var card = _.clone(Cards.findOne(problem.card_id));
+						card.type = 'card';
+						card.title = card.name;
+						
+						event({name: 'complete', time: dTime},
+							card,
+							res ? 'correctly' : 'incorrectly'
+							);
  						nextCard();
  						Meteor.defer(function(){ $('#answer').focus(); });
  					}
@@ -218,18 +231,18 @@
 		 	}
 
 	 		Template.play_results.helpers({
-	 			results: function() {
-	 				return this.template.results;
+	 			results: function(ctx) {
+	 				return ctx.template.results;
 	 			},
-	 			opponent: function() {
-	 				return this.template.opponent;
+	 			opponent: function(ctx) {
+	 				return ctx.template.opponent;
 	 			},
-	 			winner: function() {
-	 				if(this.template.results.me.correct === this.template.results.opponent.correct)
+	 			winner: function(ctx) {
+	 				if(ctx.template.results.me.correct === ctx.template.results.opponent.correct)
 	 					return 'TIE';
 	 				else
-						return this.template.results.me.correct > this.template.results.opponent.correct 
-							? this.template.me.username : this.template.opponent.username;
+						return ctx.template.results.me.correct > ctx.template.results.opponent.correct 
+							? ctx.template.me.username : ctx.template.opponent.username;
 	 			}
 	 		});
 
