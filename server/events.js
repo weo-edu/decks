@@ -4,7 +4,7 @@ Observer.on('complete:deck', function(e){
         console.log('test');
         Decks.update(
             {title: e.object.name}, 
-            {$inc: 
+            {$inc:
                 {
                     total_attempts: 1, 
                     total_time: e.action.time || 0,
@@ -19,16 +19,14 @@ Observer.on('complete:deck', function(e){
     }).run();
 });
 
-
-Observer.on('complete:card', function(e){
-    console.log('completed:card', e);
+Observer.on('complete:problem', function(e){
+    console.log('completed:problem', e);
 
     Fiber(function(){
         var match = {name: 'word arithmetic'};
         match['cards._id'] = e.object._id;
 
         var update = {};
-
         update['cards.$'] = {$inc:
             {
                 total_attempts: 1,
@@ -41,7 +39,7 @@ Observer.on('complete:card', function(e){
             update,
             {multi: false},
             function(err){
-                console.log('update error', err);
+                err && console.log('update error', err);
             }
         );
     }).run();

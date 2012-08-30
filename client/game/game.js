@@ -64,14 +64,14 @@
       if(!self.game())
         throw new Error('Sorry the specified game does not exist');
 
-      //  Setup the reactive game_state session variable
-      //  We use a session variable so that we can be reactive
+      //  Setup the reactive game_state routeSession variable
+      //  We use a routeSession variable so that we can be reactive
       //  specific to this value instead of the entire game object.
       //
-      //  XXX Put this variable on routerSession once its finished
+      //  XXX Put this variable on routeSession once its finished
       //  There is no need to maintain this once the current route
       //  has been destroyed.
-      Session.set('game_state', self.game().state.game);
+      routeSession.set('game_state', self.game().state.game);
 
       //  The game creator manages the official state, anyone joining
       //  the game simply watches it.  This is arbitrary, it could be
@@ -220,6 +220,11 @@
     _.find(problems, function(val, key) {
       if(val._id === problem._id) {
         problems[key]['answer'] = answer;
+
+        problem.title = 'problem';
+        problem.type = 'problem';
+        event('complete', problem, self.isCorrect(problem._id));
+        
         return true;
       }
       return false;
@@ -333,19 +338,19 @@
       update['$set']['state.' + self.me()._id] = state;
       update['$set']['state.' + self.opponent()._id] = state;
       Games.update(self.id, update);
-      if(!Session.equals('game_state', state))
-        Session.set('game_state', state);
+      if(!routeSession.equals('game_state', state))
+        routeSession.set('game_state', state);
     }
 
-    return Session.get('game_state');
+    return routeSession.get('game_state');
 	}
 
   Game.prototype.stateWatcher = function() {
     var self = this;
     self.stateHandle = ui.autorun(function() {
       var state = self.game().state.game;
-      if(!Session.equals('game_state', state)) {
-        Session.set('game_state', state);
+      if(!routeSession.equals('game_state', state)) {
+        routeSession.set('game_state', state);
       }
     });
   }

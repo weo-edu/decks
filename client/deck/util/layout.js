@@ -12,12 +12,11 @@
 					cols: 4
 				}
 				var options =  $.extend(defaults, options);
-
 				var containerWidth = this.innerWidth();
 				var slider = this.children();
 				var items = slider.children();
 				var numItems = items.length;
-				var numSlides = Math.ceil(numItems / options.cols);
+				var numSlides = Math.ceil(numItems / options.cols / options.rows);
 				var itemWidth = items.outerWidth();
 
 				var gutter = (containerWidth - (itemWidth * options.cols)) / (options.cols * 2);
@@ -26,7 +25,7 @@
 					margin: gutter
 				});
 
-				slider.width((containerWidth*numSlides)/options.rows);
+				slider.width((containerWidth*numSlides));
 
 
 				// setTimeout ensures elements positioned before displayed.

@@ -37,10 +37,9 @@ route('/deck/browse',function() {
 
 	  		var deck = Decks.findOne({ title: self.title });
 	  		var game = Game.create(deck._id);
+	  		var url = game.url();
+	 		game.destroy();
 	  		$('#browse-screen').animate({left: 0}, 400, 'easeInOutExpo', function(){
-	  			var url = game.url();
-	  			game.destroy();
-	  			console.log('game destroy');
 	  			route(url);
 	  		});
 	  	},
@@ -53,12 +52,11 @@ route('/deck/browse',function() {
 	  			var deck = Decks.findOne({ title: self.title });
   				var game = Game.create(deck._id, user);
   				if(game) {
+  					var url = game.url();
+  					game.destroy();
   					dialog.hide();
   					$('#browse-screen').animate({left: 0}, 400, 'easeInOutExpo', function(){
-  						var url = game.url();
-  						game.destroy();
-  						console.log('game destroy');
-  						route(url);
+   						route(url);
   					});	
   				} else {
   					alert('User does not exist');
