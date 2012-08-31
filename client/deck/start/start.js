@@ -71,7 +71,7 @@ route('/deck/start',function() {
 		$("#deckFlow .deck").each(function(i) {
 			var matrix = matrixToArray($(this).css(transformPrefix));
 			if(parseInt(matrix[14], 10) > dif) {
-				dif = matrix[14];
+				dif = parseInt(matrix[14], 10);
 				cur = i;
 			}
 		});

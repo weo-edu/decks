@@ -1,13 +1,43 @@
-@import 'nib'
+@import 'nib';
+@import '../common/common.styl';
+@import '../decks/mixins.styl';
 
-cardheight = 400px;
-cardwidth = 250px
+#card-create-screen {
+	ipad();
+	background: url('/img/woodBg.jpg');
 
-#card-create-screen{
-	#card-back{
-		background-color: white;
-		height:cardheight;
-		width:cardwidth;
-		margin-top: 80px;	
+
+	#problem-container {
+		transform: scale(1);
+		opacity: 1;
+		float: left;
 	}
+
+	.input-area {
+		float: right;
+		width: 216px;
+		padding: 20px;
+		.conatiner {
+			width: 216px;
+		}
+		input, textarea {
+			width: 196px;
+			resize: none;
+		 	background: linear-gradient(top, rgba(black, .2), rgba(white, .08));
+		 	box-shadow: inset 1px 1px 0px rgba(black, .5), inset -1px -1px 0px rgba(white, .25), inset 3px 3px 10px rgba(black, .3);
+		 	outline: 0;
+		 	border: 1px solid #5A4F46;
+		 	border-radius: 8px;
+		 	padding: 10px;
+		 	font: 18px/22px "Fresca";
+		 	color: #FFF;
+		 	text-shadow: 1px 1px 0 rgba(black, .9);
+		}
+
+		textarea { height: 300px }
+	}
+}
+
+#add-rule{
+	
 }

@@ -1,23 +1,32 @@
 <template name="card_edit_info">
 	<div id="card-create-screen" class="create-screen">
-		<h1 class="title">CARD CREATOR</h1>
-		<div class="left">
-			<div class="input-area">
+		<h1 class="awning title">CARD CREATOR</h1>
+		<div class="input-area">
+			<div class='container'>
 				{{> card_info_form }}
 				{{> rules_form }}
+				<div id="card-solution">
+					{{> solution}}
+
+				</div>
 			</div>
 		</div>
-		<div class="right">
-			{{> card_preview }}
+		<div id='problem-container'>
+				{{> card_preview }}
 		</div>
+		
 	</div>
+</template>
+
+<template name='solution'>
+	Solution: {{solution}}
 </template>
 
 
 <template name="card_info_form">
 	{{#ui form_init}}
-		<textarea name="template" placeholder="template"></textarea>
-		<input name="solution" placeholder="solution"/>
+		<textarea name="template" placeholder="Template"></textarea>
+		<input name="solution" placeholder="Solution"/>
 	{{/ui}}
 </template>
 
@@ -47,18 +56,14 @@
 </template>
 
 <template name="card_preview">
-	{{#with problemized}}
-	<div id="card-back">
-		<div id="card-question">
-{{#markdown}}
-{{{html}}}
-{{/markdown}}
-		</div>
-		<div id="card-solution">
-			Solution: {{solution}}
-		</div>
+	<div id="problem" style='margin-top: {{margin}}'>
+		{{#with problemized}}
+			<div id="card-question">
+				{{#markdown}}{{{html}}}{{/markdown}}
+			</div>
+		{{/with}}	
 	</div>
-	{{/with}}
+	
 </template>
 
 

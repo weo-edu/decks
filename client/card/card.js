@@ -59,13 +59,29 @@ card.save = function() {
 	Cards.save(this.db(), this.edited());
 }
 
-
+Template.solution.helpers({
+	'solution': function() {
+		var problemized = Session.get('cur_problem');
+		if(problemized) 
+			return problemized.solution ? problemized.solution : ''; 
+	}
+});
 
 Template.card_preview.helpers({
 	problemized: function() {
-		return problemize(card.edited());
+		var problemized = problemize(card.edited());
+		Session.set('cur_problem', problemized);
+		return problemized;
+	},
+	margin: function() {
+		return parseInt(Session.get('margin'), 10) + 'px';
 	}
 });
+
+Template.card_preview.rendered = function() {
+	Session.set('margin', $('#problem').height() / -
+		2);
+}
 
 Template.card_info_form.helpers({
 	form_init: function() {
@@ -97,7 +113,7 @@ Template.rules_form.events({
 	'click #add-rule': function(evt, template) {
 		var dialog = ui.get('.dialog');
 		dialog
-			.relative('#add-rule', {top: 0, left: 0})
+			.relative('#add-rule', {top: 0, left: -300})
 			.show();
 		var form_html = dialog.find('.form');
 		if (form_html) {

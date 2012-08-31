@@ -1,15 +1,3 @@
-var app = __meteor_bootstrap__.app;
-var require = __meteor_bootstrap__.require;
-var express = require('express');
-var fs = require('fs');
-var path = require('path');
-var mongo = require('mongodb');
-var Step = require('step');
-
-console.log(express.version);
-
-
-
 var cards = [
                 {
                         name: '1\'s',
