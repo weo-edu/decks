@@ -1,0 +1,21 @@
+red-button() {
+	background-image: url('/img/red-button.png');
+	right: 5px;
+	bottom: 10px;
+	width: 160px;
+	height: 80px;
+	text-align: center;
+	font: 40px/85px "Fresca"
+	color: #FFF;
+	text-shadow: -1px -1px 0 rgba(black, .5);
+	cursor: pointer;
+	user-select: none;
+	&:hover {
+		background-position: 0px 81px;
+		text-shadow: 1px 1px 0 rgba(black, .5);
+	}
+	&:active{
+		bottom: 9px;
+		text-shadow: -1px -1px 0 rgba(black, .5);
+	}
+}
