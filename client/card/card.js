@@ -19,7 +19,7 @@ card.edited = function() {
 	var form = ui.byID('back_form');
 	var e = { problem: this.db().problem }
 	_.extend(e.problem, form.getFields());
-	if (this.rules_form) e.problem.rules = this.rules_form.get('rules');
+	e.problem.rules = routeSession.get('rules');
 	return e;
 }
 card.errorCheck = function() {
@@ -40,18 +40,18 @@ card.errorCheck = function() {
 }
 
 card.newRule = function() {
-	this.edited_rules = _.clone(this.rules_form.get('rules'));
+	this.edited_rules = _.clone(routeSession.get('rules'));
 	this.edited_rules.push('');
 	this.editing_rule_idx = this.edited_rules.length-1;
 }
 
 card.editRule = function(idx) {
-	card.edited_rules = _.clone(this.rules_form.get('rules'));
+	card.edited_rules = _.clone(routeSession.get('rules'));
 	card.editing_rule_idx = idx;
 }
 
 card.setEditRules = function() {
-	this.rules_form.set('rules', this.edited_rules);
+	routeSession.set('rules', this.edited_rules);
 	this.edited_rules = null;
 }
 
@@ -59,27 +59,27 @@ card.save = function() {
 	Cards.save(this.db(), this.edited());
 }
 
-Template.solution.helpers({
-	'solution': function() {
-		var problemized = Session.get('cur_problem');
-		if(problemized) 
-			return problemized.solution ? problemized.solution : ''; 
-	}
-});
+// Template.solution.helpers({
+// 	'solution': function() {
+// 		var problemized = routeSession.get('cur_problem');
+// 		if(problemized) 
+// 			return problemized.solution ? problemized.solution : ''; 
+// 	}
+// });
 
 Template.card_preview.helpers({
 	problemized: function() {
 		var problemized = problemize(card.edited());
-		Session.set('cur_problem', problemized);
+		routeSession.set('cur_problem', problemized);
 		return problemized;
 	},
 	margin: function() {
-		return parseInt(Session.get('margin'), 10) + 'px';
+		return parseInt(routeSession.get('margin'), 10) + 'px';
 	}
 });
 
 Template.card_preview.rendered = function() {
-	Session.set('margin', $('#problem').height() / -
+	routeSession.set('margin', $('#problem').height() / -
 		2);
 }
 
@@ -97,86 +97,109 @@ Template.card_info_form.events({
 	}
 });
 
+// Template.rules_form.events({
+// 	'click #add-rule': function(evt, template) {
+// 		// var dialog = ui.get('.dialog');
+// 		// dialog
+// 		// 	.relative('#add-rule', {top: -1, left: 0})
+// 		// 	.show();
+// 		// var form_html = dialog.find('.form');
+// 		// if (form_html) {
+// 		// 	var form = ui.get(dialog.find('.form'));
+// 		// 	form.setField('rule', '');
+// 		// 	form.set('error', '');
+
+// 		// }
+// 		// card.newRule();
+
+// 	},
+
+// 	'click .rule': function(evt, template) {
+// 		var dialog = ui.get('.dialog');
+// 		dialog
+// 			.relative($(evt.target), {top: 0, left: 0})
+// 			.show();
+		
+
+// 		var form_html = dialog.find('.form');
+// 		if (form_html) {
+// 			var form = ui.get(dialog.find('.form'));
+// 			form.setField('rule',card.edited_rules[card.editing_rule_idx]);
+// 			form.set('error', '');
+// 		}
+
+// 		card.editRule((evt.target).index());
+// 	}
+// });
+
+// Template.add_rule_dialog.created = function() {
+// 	this.rule_idx = null;
+// }
+
+// Template.add_rule_dialog.error = function(opts) {
+// 	var form = opts.template;
+// 	return form.get('error') || '';
+// }
+
 Template.rules_form.created = function() {
 	card.rules_form = this;
-	this.set('rules', card.db().problem.rules || []);
+	routeSession.set('rules', routeSession.get('rules') || card.db().problem.rules || []);
 }
 
 Template.rules_form.helpers({
-	rules: function(opts) {
-		var template = opts.template;
-		return template.get('rules');
+	'rules': function(opts) {
+		return routeSession.get('rules');
+		// var template = opts.template;
+		// return template.get('rules');
+	},
+	'error': function(opts) {
+		// var form = opts.template;
+		return routeSession.get('error') || '';
 	}
 });
+
+// Template.rules_form.created = function() {
+// 	// this.rule_idx = null;
+// }
+
+// Template.rules_form.error = function(opts) {
+// 	var form = opts.template;
+// 	return form.get('error') || '';
+// }
+
 
 Template.rules_form.events({
-	'click #add-rule': function(evt, template) {
-		var dialog = ui.get('.dialog');
-		dialog
-			.relative('#add-rule', {top: 0, left: -300})
-			.show();
-		var form_html = dialog.find('.form');
-		if (form_html) {
-			var form = ui.get(dialog.find('.form'));
-			form.setField('rule', '');
-			form.set('error', '');
-
-		}
-		card.newRule();
-
+	'change .set-rule': function(evt, template) {
+		updateRules();
 	},
-
-	'click .rule': function(evt, template) {
-		var dialog = ui.get('.dialog');
-		dialog
-			.relative($(evt.target), {top: 0, left: 0})
-			.show();
-		
-
-		var form_html = dialog.find('.form');
-		if (form_html) {
-			var form = ui.get(dialog.find('.form'));
-			form.setField('rule',card.edited_rules[card.editing_rule_idx]);
-			form.set('error', '');
-		}
-
-		card.editRule((evt.target).index());
+	'click .cancel': function(evt) {
+		var el = $(evt.currentTarget).prev();
+		el.val('');
+		updateRules();
 	}
 });
 
-Template.add_rule_dialog.created = function() {
-	this.rule_idx = null;
-}
+function updateRules() {
+	routeSession.set('rules', []);
+	$('.set-rule').each(function(idx) {
+		if($(this).val() !== '') {
+			card.newRule();
+			routeSession.set('error', '');
+			card.edited_rules[card.editing_rule_idx] = $(this).val();
+			var error = card.errorCheck();
 
-Template.add_rule_dialog.error = function(opts) {
-	var form = opts.template;
-	return form.get('error') || '';
-}
-
-Template.add_rule_dialog.events({
-	'click .cancel': function(evt,template) {
-		var dialog = ui.get(template.find('.dialog'));
-		dialog.hide();
-	}, 
-
-	'click .save': function(evt, template) {
-		var form = ui.get(template.find('.form'));
-
-		card.edited_rules[card.editing_rule_idx] = form.getField('rule');
-
-		var error = card.errorCheck();
-		if (error) {
-			form.set('error',error);
-			return;
-		} else {
-			var dialog = ui.get(template.find('.dialog'));
-			dialog.hide();
-			card.setEditRules();
+			if (error) {
+				routeSession.set('error',error);
+				return;
+			} else {
+				card.setEditRules();
+			}
 		}
+	});
+}
 
-		
-	}
-
+Template.rules_form.preserve({
+	'.set-rule[id]': function(node) { console.log(node.id); return node.id; }
 });
 
 view.render('card_edit_info');

@@ -1,14 +1,10 @@
 <template name="card_edit_info">
 	<div id="card-create-screen" class="create-screen">
-		<h1 class="awning title">CARD CREATOR</h1>
+		<!-- <h1 class="awning title">CARD CREATOR</h1> -->
 		<div class="input-area">
 			<div class='container'>
 				{{> card_info_form }}
 				{{> rules_form }}
-				<div id="card-solution">
-					{{> solution}}
-
-				</div>
 			</div>
 		</div>
 		<div id='problem-container'>
@@ -18,19 +14,19 @@
 	</div>
 </template>
 
-<template name='solution'>
+<!-- <template name='solution'>
 	Solution: {{solution}}
-</template>
+</template> -->
 
 
 <template name="card_info_form">
 	{{#ui form_init}}
 		<textarea name="template" placeholder="Template"></textarea>
-		<input name="solution" placeholder="Solution"/>
+		<input id='solution' name="solution" placeholder="Solution"/>
 	{{/ui}}
 </template>
 
-<template name="add_rule_dialog">
+<!-- <template name="add_rule_dialog">
 	{{#ui "dialog"}}
 		{{#ui "form"}}
 			<input name="rule" placeholder="rule"/>
@@ -41,9 +37,23 @@
 			</div>
 		{{/ui}}
 	{{/ui}}
-</template>
+</template> -->
 
 <template name="rules_form">
+	<div id="rules_form">
+		{{#iter rules}}
+		<!-- XXX iter not returning idx? XXX -->
+			<div class='input-container' style='position: relative;'>
+				<input id='rule-{{idx}}' class="set-rule" value='{{this}}' />
+				<div class='cancel'>x</div>
+			</div>
+		{{/iter}}
+		<input id="add-rule" class='set-rule' name='rule' placeholder='Add Rule' />
+		<div>{{error}}</div>
+	</div>
+</template>
+
+<!-- <template name="rules_form">
 	<div id="rules_form">
 		{{> add_rule_dialog}}
 		<div id="add-rule">Add Rule</div>
@@ -53,13 +63,16 @@
 			{{/each}}
 		</div>
 	</div>
-</template>
+</template> -->
 
 <template name="card_preview">
 	<div id="problem" style='margin-top: {{margin}}'>
 		{{#with problemized}}
 			<div id="card-question">
 				{{#markdown}}{{{html}}}{{/markdown}}
+				<div id="card-solution">
+					{{#if solution}}{{solution}}{{/if}}
+				</div>
 			</div>
 		{{/with}}	
 	</div>
