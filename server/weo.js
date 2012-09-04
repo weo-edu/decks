@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 var app = __meteor_bootstrap__.app;
 var require = __meteor_bootstrap__.require;
 var express = require('express');
@@ -7,6 +8,8 @@ var mongo = require('mongodb');
 var Step = require('step');
 
 
+=======
+>>>>>>> 352b49c869531d75d4b2c1ec93563ab7e64068b7
 var cards = [
                 {
                         name: '1\'s',

@@ -1,40 +1,42 @@
 <template name="card_edit_info">
 	<div id="card-create-screen" class="create-screen">
-		<h1 class="title">CARD CREATOR</h1>
-		<div class="left">
-			<div class="input-area">
+		<!-- <h1 class="awning title">CARD CREATOR</h1> -->
+		<div class="input-area">
+			<div class='container'>
 				{{> card_info_form }}
 				{{> rules_form }}
 			</div>
 		</div>
-		<div class="right">
-			{{> card_preview }}
+		<div id='problem-container'>
+				{{> card_preview }}
 		</div>
+		
 	</div>
 </template>
 
-
 <template name="card_info_form">
 	{{#ui form_init}}
-		<textarea name="template" placeholder="template"></textarea>
-		<input name="solution" placeholder="solution"/>
+		<textarea name="template" placeholder="Template"></textarea>
+		<input id='solution' name="solution" placeholder="Solution"/>
 	{{/ui}}
 </template>
 
-<template name="add_rule_dialog">
-	{{#ui "dialog"}}
-		{{#ui "form"}}
-			<input name="rule" placeholder="rule"/>
-			<div>{{error}}</div>
-			<div class="buttons">
-				<div class="save">save</div>
-				<div class="cancel">cancel</div>
-			</div>
-		{{/ui}}
-	{{/ui}}
-</template>
 
 <template name="rules_form">
+	<div id="rules_form">
+		{{#iter rules}}
+			<div class='input-container' style='position: relative;'>
+				<input id='rule-{{idx}}' class="set-rule" value='{{val}}' />
+				<div class='cancel'>x</div>
+			</div>
+		{{/iter}}
+		<input id="add-rule" class='set-rule' name='rule' placeholder='Add Rule' />
+		<div>{{error}}</div>
+		<div class='red-button'>SAVE</div>
+	</div>
+</template>
+
+<!-- <template name="rules_form">
 	<div id="rules_form">
 		{{> add_rule_dialog}}
 		<div id="add-rule">Add Rule</div>
@@ -44,21 +46,20 @@
 			{{/each}}
 		</div>
 	</div>
-</template>
+</template> -->
 
 <template name="card_preview">
-	{{#with problemized}}
-	<div id="card-back">
-		<div id="card-question">
-{{#markdown}}
-{{{html}}}
-{{/markdown}}
-		</div>
-		<div id="card-solution">
-			Solution: {{solution}}
-		</div>
+	<div id="problem" style='margin-top: {{margin}}'>
+		{{#with problemized}}
+			<div id="card-question">
+				{{#markdown}}{{{html}}}{{/markdown}}
+				<div id="card-solution">
+					{{#if solution}}{{solution}}{{/if}}
+				</div>
+			</div>
+		{{/with}}	
 	</div>
-	{{/with}}
+	
 </template>
 
 

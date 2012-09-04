@@ -41,6 +41,8 @@ Handlebars.registerHelper('iter', function(ctx, options){
   var ret = '';
   if(ctx && ctx.length > 0){
     _.each(ctx, function(val, idx){
+      if(typeof val !== 'object')
+        val = {val: val};
       val.idx = idx + 1;
       ret = ret + fn(val);
     });

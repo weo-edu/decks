@@ -1,78 +1,56 @@
+<template name='my_collection'>
+	<div id='create-screen'>
+		{{> create_menu}}
+	</div>
+</template>
+
+<template name='create_menu'>	
+		<header class="awning title">
+			<ul id='create-menu'>
+				<li id='deck-create'>CREATE DECKS</li>
+				<li id='card-create'>CREATE CARDS</li>
+				<li id='my-collection'>MY COLLECTION</li>
+			</ul>
+		</header>
+	</div>
+</template>
+
 <template name="deck_edit_info">
 	<div id="deck-edit-info-page" class="create-screen">
-		<h1 class="title">DECK EDITOR</h1>
-		<div class="left">
-			<div class="input-area">
+		<h1 class="awning title">DECK EDITOR</h1>
+		<div class="parchment">
 			{{> deck_info_form}}
-			</div>
 		</div>
-		<div class="right">
-			{{> deck_spin}}
+		<div class='deck-preview'>
+			{{> deck_edit}}
 		</div>
 	</div>
 </template>
 
 <template name="deck_info_form">
-	{{#ui init_form}}
-		<input placeholder="title" name="title"/>
-		<input placeholder="categories" name="tags"/>
-		<textarea name="description" placeholder="description"></textarea>
-		<div id="render-link" class="button"></div>
-	{{/ui}}
-</template>
-
-<template name="deck_edit_look">
-	<div id="deck-edit-look-page" class="create-screen">
-		<h1 class="title">DECK EDITOR</h1>
-		<div class="left">
-			<div class="input-area">
-			{{> deck_look_form}}
+		{{#ui init_form}}
+			<label for='title'>Title</label> 
+			<input name="title"/>
+			<label for='tags'>Categories</label>
+			<input name="tags"/>
+			<label for='description'>Description</label>
+			<textarea name="description"></textarea>
+			<label for='image-upload'>Image<small>300 x 400</small></label>
+			<!-- XXX is multiple right? -->
+			<div id='file-upload-box'>
+				<input tabindex='-1' id="image-filename" name="image"/>
+				<input onfocus='$(this).click()' id="image-upload" type="file" multiple/>
 			</div>
-		</div>
-		<div class="right">
-			{{> deck_spin}}
-		</div>
-	</div>
+
+		{{/ui}}
 </template>
 
-<template name="deck_look_form">
-	{{#ui init_form}}
-		<input id="image-upload" type="file" placeholder="file" multiple/>
-		<input id="image-filename" name="image"/>
-		<input name="primary_color" placeholder="Primary color"/>
-		<input name="secondary_color" placeholder="Secondary color"/>
-		<div id="info-link" class="button"></div>
-	{{/ui}}
-</template>
-
-<template name="deck_spin">
-	<div class="deck-position">
-		<div class="deck-shadow" id="deck-shadow">
-			<section id="viewport" tag="{{create_spin}}">
-			 <article id="box" >
-			 	{{> deck_render}}
-			 </article>
-			 <div class="drop-shadow"></div>
-			</section>
-		</div>
-	</div>
-</template>
-
-
-<template name="deck_render">
-	{{#with render}}
-		<section id="front" style="background-color:{{primary_color}}; outline-color:{{secondary_color}};">
-			<h2 class="deck-title" style="background-color:{{seconday_color}}; color:{{primary_color}}">{{title}}</h2>
-			{{#if image}}
-				<img class="full-image" src='/{{image}}' />
-			{{/if}}
-		</section>
-		<section id="top" style="background-color:{{primary_color}}; outline-color:{{secondary_color}};"/>
-		<section id="bottom" style="background-color:{{primary_color}}; outline-color:{{secondary_color}};"/>
-		<section id="back" style="background-color:{{primary_color}}; outline-color:{{secondary_color}};"/>
-		<section id="left" style="background-color:{{primary_color}}; outline-color:{{secondary_color}};"/>
-		<section id="right" style="background-color:{{primary_color}}; outline-color:{{secondary_color}};"/>
+<template name='deck_edit'>
+	{{#with deck}}
+		<div id='deck-edit' {{#if image}} style='background-image: url({{image}}); background-size: cover; background-position: center center; background-repeat: no-repeat;' {{/if}}></div>
+		<h4 class='deck-title'>{{#if title}} {{title}} {{/if}}</h4>
 	{{/with}}
+	<div id='save-deck'>NEXT</div>
 </template>
 
 

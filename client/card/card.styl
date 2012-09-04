@@ -1,13 +1,133 @@
-@import 'nib'
+@import 'nib';
+@import '../common/common.styl';
+@import '../decks/mixins.styl';
 
-cardheight = 400px;
-cardwidth = 250px
+#card-create-screen {
+	ipad();
+	background: url('/img/woodBg.jpg');
 
-#card-create-screen{
-	#card-back{
-		background-color: white;
-		height:cardheight;
-		width:cardwidth;
-		margin-top: 80px;	
+	indent() {
+		background: linear-gradient(top, rgba(black, .2), rgba(white, .08));
+	 	box-shadow: inset 1px 1px 0px rgba(black, .5), inset -1px -1px 0px rgba(white, .25), inset 3px 3px 10px rgba(black, .3);
 	}
+
+	outdent() {
+		background: linear-gradient(bottom, rgba(black, .2), rgba(white, .08));
+	 	box-shadow: inset -1px -1px 0px rgba(black, .5), inset 1px 1px 0px rgba(white, .25);
+	}
+
+
+	#problem-container {
+		transform: scale(1);
+		opacity: 1;
+		float: left;
+		#card-solution {
+			color: #2AABE2;
+		}
+	}
+
+	.input-area {
+		float: right;
+		width: 216px;
+		padding: 20px;
+		.container {
+			width: 216px;
+			font: 18px/22px "Fresca";
+		 	color: #FFF;
+		 	text-shadow: 1px 1px 0 rgba(black, .9);
+		}
+		input, textarea {
+			width: 194px;
+			resize: none;
+		 	indent();
+	 		outline: 0;
+		 	border: 1px solid rgba(#5A4F46, .5);
+		 	border-radius: 8px;
+		 	padding: 10px;
+		 	font: 18px/22px "Fresca";
+		 	color: #FFF;
+		 	text-shadow: 1px 1px 0 rgba(black, .9);
+		}
+
+		textarea { height: 250px }
+	}
+
+	#solution {
+		margin-bottom: 20px;
+	}
+
+	#add-rule, #rules_form .set-rule{
+		margin: 2px 0;
+		outdent();
+		cursor: pointer;
+		.cancel {
+			opacity: 0;
+		}
+	 	&:focus {
+	 		cursor: auto;
+	 		indent();
+	 	}
+	}
+	.input-container {
+		.cancel {
+			transition: all .2s;
+			opacity: 0;
+			position: absolute;
+			size = 13px;
+			height: size;
+			width: size;
+			font-size 14px
+			line-height: 10px;
+			top: 50%;
+			margin-top: (size/-2);
+			user-select: none;
+			right: 10px;
+			text-align: center;
+			text-shadow: 0 0 0;
+			cursor: pointer;
+			color: #CCC;
+			&:hover {
+				color: #FFF;
+			}
+		}	
+		&:hover .cancel { opacity: 1; }
+	}
+	
+
+	.dialog {
+		background: transparent;
+		width: 236px;
+		background: url('/img/woodBg.jpg');
+	}
+
+
+	input, textarea {
+		transition: box-shadow .1s ease-in;
+		color = #FFF;
+		&::-webkit-input-placeholder {
+			color: color;
+		}
+		&:-moz-placeholder {
+			color: color;
+		}
+		&:focus {
+			color = #BBB;
+			&::-webkit-input-placeholder {
+			color: color;
+			}
+			&:-moz-placeholder {
+				color: color;
+			}
+		}
+	}
+	// input:-moz-placeholder, textarea:-moz-placeholder {
+	// 	color: #FFF;
+	// } 
+	// input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+	// 	color: black;
+	// }
+	// input:-moz-placeholder, textarea:-moz-placeholder {
+	// 	color: #FFF;
+	// } 
 }
+

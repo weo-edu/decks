@@ -17,19 +17,19 @@ height = 617px;
 }
 
 #buddy-list {
-	width: 358px;
+	width: 226px;
 	float: left;
 	height: height;
+	background-image: url('/app!common/textures/roughcloth.png');
+	box-shadow: 0 0 40px #000;
 	.buddy{
-		height: 70px;
-		width: 100%;
-		background-image: url('/img/shelf.png');
-		background-position:  center 102px;
+		width: 186px;
+		// background-image: url('/img/shelf.jpg');
+		background-position:  center center;
 		background-repeat: repeat-x;
-		padding: 18px 30px 40px;
 		cursor: pointer;
 		transition: background-color .3s;
-		box-shadow: 0 10px 10px rgba(#000, .5);
+		padding: 10px 20px;
 	}
 	.buddy-list-bg {
 		position: absolute;
@@ -39,12 +39,12 @@ height = 617px;
 
 	.avatar-tmb-small {
 		box-shadow: 0 0 0px #333, inset 0 0 20px #111;
-		size = 70px;		
+		size = 40px;		
 		height: size;
 		width: size;
 		float: left;
 		display: block;
-		margin-right: 20px;
+		margin-right: 15px;
 		transition: all .3s;
 		background-repeat: no-repeat;
 		background-size: size;
@@ -52,13 +52,17 @@ height = 617px;
 	}
 
 	p {
-		font: 30px/70px 'nuku';
-		color: #B3895D;
-		text-shadow: -1px -1px 0 rgba(black, .7);	
+		font: 18px/43px 'Fresca';
+		color: #333;
+		text-shadow: -1px -1px 0 rgba(white, .5);	
 	}
 
-	.active { 
-		background-color: rgba(#412312, .5);
+	.buddy:hover { 
+		background-color: rgba(black, .08);
+	}
+
+	.buddy.active { 
+		background-color: rgba(black, .12);
 		.avatar-tmb-small {
 			box-shadow: 0 0 10px #111, inset 0 0 0 #000;
 		}
@@ -66,46 +70,77 @@ height = 617px;
 }
 
 #active-friend {
-	width: 410px;
-	height: height;
+	width: 798px;
+	height: 82px;
 	float: left;
-	background: url('/app!common/textures/roughcloth.png');
-	box-shadow: 10px 0 20px #CCC;
 	position: relative;
 	z-index: 0;
 	.avatar {
 		margin: 0 auto 10px;
-		height: 340px;
-		width: 320px;
+		height: 120px;
+		width: 120px;
 		background-position: center center;
 		background-repeat: no-repeat;
+		display: none;
 	}
 	.collection-button {
-		width: 303px;
-		height: 103px;
-		margin: 40px auto 0px;
-		background: url('/img/collection-button.png') center center no-repeat;
+		float: right;
+		width: 204px;
+		height: 74px;
+		// margin: 40px auto 0px;
+		background-image: url('/img/collection-button.png');
+		background-position: center top;
 		cursor: pointer;
+		margin-top: 7px;
+		opacity(.2);
+		&:hover {
+			background-position: center 70px;
+		}
 		&:active {
-			margin: 41px auto -1px;
+			margin-top: 8px;
 		}
 	}
-	.play-button {
-		position: static;
-		float: none;
-		margin: 10px auto 20px;
-		&:active {
-			margin: 11px auto 19px;
+	// .play-button {
+	// 	float: right;
+	// 	position: static;
+	// 	clear: none;
+	// 	&:active {
+	// 		margin-top: 1px;
+	// 	}
+	// }
+}
+
+#opponent-decks {
+	width: 692px;
+	height: 535px;
+	float: left;
+	padding: 0px 53px;
+	.deck {
+		margin: 30px 0 0;
+		cursor: pointer;
+	}
+
+	.dialog {
+		.deck {
+			margin: 10px auto 40px;
+			cursor: default;
+		}
+		.challenge-button {
+		 	right: 0;
+		 	bottom: 0;
+		 	&:active {
+		 		bottom: -1px;
+		 	}
 		}
 	}
 }
 
-#message-box {
-	position: absolute;
-	bottom: 20px;
-	width: 196px;
-	height: 110px;
-	padding: 5px 10px;
-	font: 18px/1.2em 'Fresca';
-	resize: none;
-}
+// #message-box {
+// 	position: absolute;
+// 	bottom: 20px;
+// 	width: 196px;
+// 	height: 110px;
+// 	padding: 5px 10px;
+// 	font: 18px/1.2em 'Fresca';
+// 	resize: none;
+// }
