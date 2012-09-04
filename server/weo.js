@@ -6,9 +6,6 @@ var path = require('path');
 var mongo = require('mongodb');
 var Step = require('step');
 
-console.log(express.version);
-
-
 
 var cards = [
                 {
@@ -119,13 +116,21 @@ Meteor.startup(function() {
  //        Decks.insert(deck);
  //    });
 
-Meteor.publish('decks', function() {
-  return Decks.find({});
-});
+  Meteor.publish('decks', function() {
+    return Decks.find({});
+  });
 
-Meteor.publish('cards',function() {
-  return Cards.find({});
-})
+  Meteor.publish('UserCardStats', function(uid) {
+      return UserCardStats.find({uid: uid});
+  });
+
+  Meteor.publish('cards',function() {
+    return Cards.find({});
+  })
+
+  Meteor.publish('user', function(identifier) {
+    return Meteor.users.find({$or: [{_id: identifier}, {username: identifier}]});
+  });
 
 	Meteor.publish('Decks', function(){
     return Decks.find({});
