@@ -18,9 +18,6 @@ route('/deck/create', route.requireUser, function() {
 
 });
 
-
-
-
 // route('/deck/edit', route.requireUser, function() {
 // 	console.log('user',Meteor.user().username);
 // 	Decks.insert({username: Meteor.user().username}, function(err,_id) {
@@ -53,6 +50,10 @@ Template.deck_info_form.rendered= function() {
 		// $('#file').attr('img', data.result.path);
   		form.setField('image', "/upload/"+data.result.path);
   	});
+
+	ui.autorun(function() {
+		Decks.update(ctx.params.id, {$set: form.getFields()});
+	});
 }
 
 
@@ -68,8 +69,9 @@ Template.deck_info_form.rendered= function() {
 
 Template.deck_edit.events({
 	'click #save-deck': function(e) {
-		var form = ui.byID('info_form');
-		Decks.set(deck, form.getFields());
+		// var form = ui.byID('info_form');
+		// Decks.set(deck, form.getFields());
+		route('/deck/edit/' + ctx.params.id + '/select-cards');
 	}
 });
 
@@ -81,6 +83,29 @@ Template.deck_edit.helpers({
 });
 
 	view.render('deck_edit_info');
+
+});
+
+route('/deck/edit/:id/select-cards', route.requireSubscription('decks'),
+function(ctx) {
+
+	Template.deck_cards_select.rendered = function() {
+		console.log(ctx.params.id);
+	}
+
+	Template.deck_cards_grid.helpers({
+		'cards': function() {
+			return Cards.find();
+		}
+	});
+
+	Template.deck_cards_grid.events({
+		'click .card': function(ctx) {
+			console.log(this);
+		}
+	});
+
+	view.render('deck_cards_select');
 
 });
 

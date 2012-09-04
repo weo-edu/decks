@@ -1,7 +1,7 @@
 var cards = [
                 {
                         name: '1\'s',
-                        graphic: '/decks/simple-sums/1.png',
+                        image: '/decks/simple-sums/1.png',
                         problem: {
                                 template: '1 + {{a}}  = ?',
                                 solution: '1 + a'
@@ -9,7 +9,7 @@ var cards = [
                 },
                 {
                         name: '2\'s',
-                        graphic: '/decks/simple-sums/2.png',
+                        image: '/decks/simple-sums/2.png',
                         problem: {
                                 template: '2 + {{a}}  = ?',
                                 solution: '2 + a'
@@ -17,7 +17,7 @@ var cards = [
                 },
                 {
                         name: '3\'s',
-                        graphic: '/decks/simple-sums/3.png',
+                        image: '/decks/simple-sums/3.png',
                         problem: {
                                 template: '3 + {{a}}  = ?',
                                 solution: '3 + a'
@@ -25,7 +25,7 @@ var cards = [
                 },
                 {
                         name: '4\'s',
-                        graphic: '/decks/simple-sums/4.png',
+                        image: '/decks/simple-sums/4.png',
                         problem: {
                                 template: '4 + {{a}}  = ?',
                                 solution: '4 + a'
@@ -33,7 +33,7 @@ var cards = [
                 },
                 {
                         name: '5\'s',
-                        graphic: '/decks/simple-sums/5.png',
+                        image: '/decks/simple-sums/5.png',
                         problem: {
                                 template: '5 + {{a}}  = ?',
                                 solution: '5 + a'
@@ -41,7 +41,7 @@ var cards = [
                 },
                 {
                         name: '6\'s',
-                        graphic: '/decks/simple-sums/6.png',
+                        image: '/decks/simple-sums/6.png',
                         problem: {
                                 template: '6 + {{a}}  = ?',
                                 solution: '6 + a'
@@ -49,7 +49,7 @@ var cards = [
                 },
                 {
                         name: '7\'s',
-                        graphic: '/decks/simple-sums/7.png',
+                        image: '/decks/simple-sums/7.png',
                         problem: {
                                 template: '7 + {{a}}  = ?',
                                 solution: '7 + a'
@@ -57,7 +57,7 @@ var cards = [
                 },
                 {
                         name: '8\'s',
-                        graphic: '/decks/simple-sums/8.png',
+                        image: '/decks/simple-sums/8.png',
                         problem: {
                                 template: '8 + {{a}}  = ?',
                                 solution: '8 + a'
@@ -65,7 +65,7 @@ var cards = [
                 },
                 {
                         name: '9\'s',
-                        graphic: '/decks/simple-sums/9.png',
+                        image: '/decks/simple-sums/9.png',
                         problem: {
                                 template: '9 + {{a}}  = ?',
                                 solution: '9 + a'
@@ -77,18 +77,14 @@ var cards = [
         {
             title: 'Simple Sums',
             image: '/decks/simple-sums/simple-sums.png',
-            colorScheme: {
-                primary: 'skyblue',
-                secondary: 'green'
-            }
+            description: 'This is an easy addition deck',
+            tags: 'addition'
         },
         {
             title: 'Mini Minus',
             image: '/decks/mini-minus/mini-minus.png',
-            colorScheme: {
-                primary: 'skyblue',
-                secondary: 'green'
-            }
+            description: 'This is an easy subtraction deck',
+            tags: 'subtraction'
         }
     ];
 

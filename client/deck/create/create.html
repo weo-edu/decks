@@ -53,6 +53,19 @@
 	<div id='save-deck'>NEXT</div>
 </template>
 
+<template name='deck_cards_select'>
+	<div id='deck-cards-select-screen'>
+		{{> deck_cards_grid}}
+	</div>
+</template>
+
+<template name='deck_cards_grid'>
+	{{#iter cards}}
+		<div title="{{stats}}" class='card' style='background-image: url({{image}});'>
+			</div>
+	{{/iter}}
+</template>
+
 
 
 

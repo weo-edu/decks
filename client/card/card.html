@@ -64,33 +64,66 @@
 
 
 <template name="card_front">
-	<div id="front"  style="background-color:{{primary_color}}">
-		<div class="display-inner color-update">
-			{{#if name}}
-				<h2 class="secondary-color elem">{{name}}</h2>
-				{{#if image}}
-					<img src='/{{image}}'/>
-				{{else}}
-					<div class="fill elem"></div>
-				{{/if}}
-			{{else}}
-				{{#if image}}
-					<img src='/{{image}}' class="full elem"/>
-				{{else}}
-					<div class="full elem"></div>
-				{{/if}}
-			{{/if}}
-			<div class="tags text elem">
-				{{#each tags}}
-					<li class="tags" style="display:inline;">{{this}}</li>   
-				{{/each}}
-			</div>
+	<div id='card-front-screen'>
+		<h1 class='awning'>DESIGN YOUR CARD</h1>
+		<div class="parchment">
+			{{> card_front_form}}
 		</div>
+		<div class='card-preview'>
+			{{> card_front_preview}}
+		</div>
+	
 	</div>
 </template>
 
+<template name='card_front_form'>
+		{{#ui init_form}}
+			<label for='title'>Title</label> 
+			<input name='title'/>
+			<label for='tags'>Categories</label>
+			<input name='tags'/>
+			<label for='description'>Description</label>
+			<textarea name="description"></textarea>
+			<label for='image-upload'>Image<small>300 x 400</small></label>
+			<!-- XXX is multiple right? -->
+			<div id='file-upload-box'>
+				<input tabindex='-1' id='image-filename' name="image"/>
+				<input onfocus='$(this).click()' id="image-upload" type="file" multiple/>
+			</div>
+		{{/ui}}
+</template>
 
-
+<template name='card_front_preview'>
+	{{#with card}}
+		<div id='card-edit' {{#if image}} style='background-image: url({{image}}); background-size: cover; background-position: center center; background-repeat: no-repeat;' {{/if}}></div>
+		<h4 class='card-title'>{{#if title}} {{title}} {{/if}}</h4>
+	{{/with}}
+	<div id='save-card'>PUBLISH</div>
+</template>
+	<!-- <div id="front"  style="background-color:{{primary_color}}">
+			<div class="display-inner color-update">
+				{{#if name}}
+					<h2 class="secondary-color elem">{{name}}</h2>
+					{{#if image}}
+						<img src='/{{image}}'/>
+					{{else}}
+						<div class="fill elem"></div>
+					{{/if}}
+				{{else}}
+					{{#if image}}
+						<img src='/{{image}}' class="full elem"/>
+					{{else}}
+						<div class="full elem"></div>
+					{{/if}}
+				{{/if}}
+				<div class="tags text elem">
+					{{#each tags}}
+						<li class="tags" style="display:inline;">{{this}}</li>   
+					{{/each}}
+				</div>
+			</div>
+		</div> -->
+<!-- 
 <template name="card_look_input">
 	<div class="input-area {{isActive}}">
 		<div class="field-wrapper">
@@ -180,12 +213,12 @@
 <template name="rule_input">
 	<li id="rule-{{idx}}" class="rule-cont">
 		{{{input "rules-{{idx}}" field="rules-{{idx}}" cls="field"}}}
-		<!-- <div class="field">
+		<div class="field">
 			<div class="text">rule-{{idx_adj}}:</div>
 			<input id="rules-{{idx}}" class="instant_update rule-input"/>
-		</div> -->
+		</div>
 	</li>
-</template>
+</template> -->
 
 
 

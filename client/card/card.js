@@ -215,9 +215,42 @@ Template.rules_form.preserve({
 view.render('card_edit_info');
 });
 
-route('card/edit/:id/front', route.requireSubscription('cards'), function(ctx) {
-
+route('/card/edit/:id/front', route.requireSubscription('cards'), function(ctx) {
+	var card = Cards.findOne(ctx.params.id);
+	console.log(card);
 	view.render('card_front');
+
+
+	Template.card_front_form.init_form = function() {
+		return {component: 'form', id: 'info_form'}
+	}
+
+	Template.card_front_form.rendered= function() {
+		console.log('rendered');
+		var form = ui.byID('info_form');
+		if(form) form.setFields(card);
+		gs.upload($(this.find('#image-upload')),function(err,data) {
+	  		form.setField('image', "/upload/"+data.result.path);
+	  	});
+
+		ui.autorun(function() {
+			Cards.update(ctx.params.id, {$set: form.getFields()});
+		});
+	}
+
+	Template.card_front_preview.helpers({
+		'card': function() {
+			var form = ui.byID('info_form');
+			return form.getFields();
+		}
+	});
+
+	Template.card_front_preview.events({
+		'click #save-card': function() {
+
+		}
+	});
+
 });
 
 /*

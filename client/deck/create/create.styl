@@ -34,58 +34,58 @@
 #deck-edit-info-page {
 	ipad();
 	background: url('/img/woodBg.jpg');
+}
 
-	.parchment {
-		height: 446px;
-		width: 490px;
-		background: url('/img/parchment.jpg');
-		box-shadow: 0 0 40px #333;
+.parchment {
+	height: 446px;
+	width: 490px;
+	background: url('/img/parchment.jpg');
+	box-shadow: 0 0 40px #333;
+	float: left;
+	margin: 70px;
+}
+
+#info_form {
+	width: 440px;
+	float: right;
+	margin-top: 85px;
+	input, textarea {
+		margin: 0 0 10px;
+		resize: none;
+		border: 0;
+		box-shadow: inset -1px -1px 15px rgba(#333, .7);
+		padding: 8px 10px;
+		background: rgba(black, .2);
+		border-radius: 4px;
+		width: 200px;
+		outline: 0;
+		font: 18px/22px "fresca";
+	}
+
+	textarea { height: 100px }
+
+	label {
+		font: 25px/30px nuku;
+		color: #645037;
+		text-shadow: 1px 1px 0 rgba(black, .5);
+		display: block;
 		float: left;
-		margin: 70px;
-	}
-
-	#info_form {
-		width: 440px;
-		float: right;
-		margin-top: 85px;
-		input, textarea {
-			margin: 0 0 10px;
-			resize: none;
-			border: 0;
-			box-shadow: inset -1px -1px 15px rgba(#333, .7);
-			padding: 8px 10px;
-			background: rgba(black, .2);
-			border-radius: 4px;
-			width: 200px;
-			outline: 0;
-			font: 18px/22px "fresca";
-		}
-
-		textarea { height: 100px }
-
-		label {
-			font: 25px/30px nuku;
-			color: #645037;
-			text-shadow: 1px 1px 0 rgba(black, .5);
+		width: 160px;
+		text-align: right;
+		margin-right: 20px;
+		small {
 			display: block;
-			float: left;
-			width: 160px;
-			text-align: right;
-			margin-right: 20px;
-			small {
-				display: block;
-				font-size: 18px;
-				line-height: 18px;
-			}
+			font-size: 18px;
+			line-height: 18px;
 		}
 	}
+}
 
-	#file-upload-box {
-		position: relative;
-		input {
-			position: absolute;
-			&#image-upload { opacity: 0 }
-		}
+#file-upload-box {
+	position: relative;
+	input {
+		position: absolute;
+		&#image-upload { opacity: 0 }
 	}
 }
 
@@ -113,4 +113,11 @@
 #save-deck {
 	red-button();
 	position: absolute;
+	bottom: -5px;
+	&:active{ bottom: -6px }
+}
+
+#deck-cards-select-screen {
+	ipad();
+	background: url('/img/woodBg.jpg') center;
 }

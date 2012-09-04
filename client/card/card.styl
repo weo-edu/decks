@@ -120,14 +120,48 @@
 			}
 		}
 	}
-	// input:-moz-placeholder, textarea:-moz-placeholder {
-	// 	color: #FFF;
-	// } 
-	// input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
-	// 	color: black;
-	// }
-	// input:-moz-placeholder, textarea:-moz-placeholder {
-	// 	color: #FFF;
-	// } 
+	
+	#design-card {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+	}
+
 }
 
+#card-front-screen {
+	ipad();
+	background: url('/img/woodBg.jpg');
+}
+
+.card-preview {
+	float: left;
+	#card-edit {
+		float: left;
+		height: 360px;
+		width: 260px;
+		border: 20px solid #FFF;
+		// box-shadow: 0 0 30px #333, inset 2px 2px 1px rgba(white, .5), inset -1px -1px 1px rgba(black, .5);
+		background-image: url('/app!common/textures/45degree_fabric.png');
+		margin: 90px 0 20px 20px;
+		position: relative;
+		border-radius: 16px;
+		display: block;
+	}
+	.card-title {
+		margin: 5px 0 5px 20px;
+		text-align: center;
+		font: 36px/30px 'Fresca';
+		color: white;
+		text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+		width: 300px;
+		clear: both;
+	}
+}
+
+#save-card {
+	red-button();
+	position: absolute;
+	bottom: 0px;
+	&:active{ bottom: -1px }
+}
