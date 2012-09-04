@@ -1,30 +1,26 @@
 //////////////////////////////////
 ////////////////XXX add iteration option to uikit
-route('/card/create', route.requireUser,function() {
-	Cards.insert({username: Meteor.user().username, problem: {}}, function(err,_id) {
-		if (err) throw err;
-		route('/card/edit/' + _id + '/back');
-	});
-});
+// route('/card/create', route.requireUser,function() {
+// 	Cards.insert({username: Meteor.user().username, problem: {}}, function(err,_id) {
+// 		if (err) throw err;
+// 		route('/card/edit/' + _id + '/back');
+// 	});
+// });
 
 route('/card/edit/:id/back', route.requireSubscription('cards'),
 function(ctx) {
 
 var card = {};
 card.rules_form = null;
+
+
 card.db = function() {
 	return Cards.findOne(ctx.params.id);
 }
-card.edited = function() {
-	var form = ui.byID('back_form');
-	var e = { problem: this.db().problem }
-	_.extend(e.problem, form.getFields());
-	e.problem.rules = routeSession.get('rules');
-	return e;
-}
+
 card.errorCheck = function() {
 	var self = this;
-	var edited = self.edited();
+	var edited = self.db();
 	edited.problem.rules = self.edited_rules;
 	var p = problemize(edited);
 
@@ -55,9 +51,6 @@ card.setEditRules = function() {
 	this.edited_rules = null;
 }
 
-card.save = function() {
-	Cards.save(this.db(), this.edited());
-}
 
 // Template.solution.helpers({
 // 	'solution': function() {
@@ -69,7 +62,7 @@ card.save = function() {
 
 Template.card_preview.helpers({
 	problemized: function() {
-		var problemized = problemize(card.edited());
+		var problemized = problemize(card.db());
 		routeSession.set('cur_problem', problemized);
 		return problemized;
 	},
@@ -81,6 +74,20 @@ Template.card_preview.helpers({
 Template.card_preview.rendered = function() {
 	routeSession.set('margin', $('#problem').height() / -
 		2);
+}
+
+Template.card_info_form.rendered = function() {
+	var form = ui.byID('back_form');
+	form.setFields(card.db().problem);
+	ui.autorun(function() {
+		Cards.update(ctx.params.id, {$set: {problem: form.getFields()}});
+	});
+
+	ui.autorun(function() {
+		Cards.update(ctx.params.id, {$set: {'problem.rules': routeSession.get('rules')}});
+	});
+
+
 }
 
 Template.card_info_form.helpers({
@@ -176,6 +183,9 @@ Template.rules_form.events({
 		var el = $(evt.currentTarget).prev();
 		el.val('');
 		updateRules();
+	},
+	'click #design-card': function() {
+		route('/card/edit/' + card.db()._id + '/front');
 	}
 });
 
@@ -199,10 +209,15 @@ function updateRules() {
 }
 
 Template.rules_form.preserve({
-	'.set-rule[id]': function(node) { console.log(node.id); return node.id; }
+	'.new-rule[id]': function(node) { console.log(node.id); return node.id; }
 });
 
 view.render('card_edit_info');
+});
+
+route('card/edit/:id/front', route.requireSubscription('cards'), function(ctx) {
+
+	view.render('card_front');
 });
 
 /*

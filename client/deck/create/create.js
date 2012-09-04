@@ -7,6 +7,12 @@ route('/deck/create', route.requireUser, function() {
 				if (err) throw err;
 				route('/deck/edit/' + _id);
 			});
+		},
+		'click #card-create': function() {
+			Cards.insert({username: Meteor.user().username, problem: {}}, function(err,_id) {
+				if (err) throw err;
+				route('/card/edit/' + _id + '/back');
+			});
 		}
 	});
 
