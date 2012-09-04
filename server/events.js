@@ -34,5 +34,11 @@ Observer.on('complete:card', function(e) {
           {uid: e.user._id, pid: e.object._id},
           stats
           );
+
+        if(stats.correct) {
+          var card = Cards.findOne(e.object._id);
+          var pts = points(card);
+          augmentPoints(e.user._id, pts);
+        }
     }).run();
 });
