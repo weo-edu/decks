@@ -1,10 +1,27 @@
 route('/deck/create', route.requireUser, function() {
-	console.log('user',Meteor.user().username);
-	Decks.insert({username: Meteor.user().username}, function(err,_id) {
-		if (err) throw err;
-		route('/deck/edit/' + _id);
+	view.render('my_collection');
+
+	Template.create_menu.events({
+		'click #deck-create': function() {
+			Decks.insert({username: Meteor.user().username}, function(err,_id) {
+				if (err) throw err;
+				route('/deck/edit/' + _id);
+			});
+		}
 	});
+
 });
+
+
+
+
+// route('/deck/edit', route.requireUser, function() {
+// 	console.log('user',Meteor.user().username);
+// 	Decks.insert({username: Meteor.user().username}, function(err,_id) {
+// 		if (err) throw err;
+// 		route('/deck/edit/' + _id);
+// 	});
+// });
 
 route('/deck/edit/:id', route.requireSubscription('decks'),
 function(ctx) {
@@ -48,7 +65,7 @@ Template.deck_edit.events({
 		var form = ui.byID('info_form');
 		Decks.set(deck, form.getFields());
 	}
-})
+});
 
 Template.deck_edit.helpers({
 	'deck': function() {

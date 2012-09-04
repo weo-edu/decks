@@ -2,6 +2,35 @@
 @import '../common/common.styl';
 @import '../decks/mixins.styl';
 
+
+/**
+ * 	CREATE OPTIONS SCREEN
+ */
+
+#create-screen {
+	ipad();
+	background-image: url('/img/woodBg.jpg');
+}
+
+#create-menu {
+	width: 770px;
+	margin: 0 auto;
+	li {
+		float: left;
+		display: block;
+		margin: 0 20px;
+		cursor: pointer;
+		text-shadow: 1px 1px 0 rgba(black, .5);
+		&:hover {
+			text-shadow: -1px -1px 0 rgba(black, .5);
+		}
+	}
+}
+
+/**
+ *	DECK CREATE
+ */
+
 #deck-edit-info-page {
 	ipad();
 	background: url('/img/woodBg.jpg');
@@ -26,7 +55,7 @@
 			box-shadow: inset -1px -1px 15px rgba(#333, .7);
 			padding: 8px 10px;
 			background: rgba(black, .2);
-			border-radius: 8px;
+			border-radius: 4px;
 			width: 200px;
 			outline: 0;
 			font: 18px/22px "fresca";
@@ -85,190 +114,3 @@
 	red-button();
 	position: absolute;
 }
-
-
-//	DECKS CREATOR
-////////////////////////////
-
-// ipadheight = 672px;
-// ipadwidth = 1024px;
-// imgheight = 592px;
-// imgwidth = 637px;
-// height = 36px;
-
-
-
-// #card-inner{
-// 	#rule-container{
-// 	margin: 0 auto;
-// 	overflow-x:hidden;
-// 	overflow-y: auto;
-// 	height:118px;
-// 	margin-top:5px;
-// 	}
-// 	#rules{
-// 		width:100%;
-// 	}
-// 	#bottom-button{
-// 		position:relative;
-// 		margin:25px auto;
-// 	}
-// }
-
-
-// .instant_update{
-// 	height:height;
-// 	width:60%;
-// 	float:right;
-// 	padding:0px;
-// 	border:none;
-// 	&:active{
-// 		border:none;
-// 	}
-// }
-
-// size = 320px;
-// width = size/1.45;
-// depth = width/3;
-// offset =depth/2;
-// color = lighten(#599adf, 35);
-// margin = 15px;
-
-// .create-screen {
-
-// 	.deck-position {
-// 		float:left;
-// 		width:ipadwidth - imgwidth;
-// 		height: 100%;
-// 		right: 0px;
-// 		position: absolute;
-
-// 		.deck-shadow {
-// 			font-family:'arial';
-// 			top: 95px;
-// 			width: width;
-// 			margin: 0 auto;
-// 			position: relative;
-// 			perspective: 700px;
-// 		}
-		
-// 		.drop-shadow{
-// 			margin: 5px auto;
-// 			height: depth/1.5;
-// 			width: width/1.8;
-// 			border-radius: 30% 45% 25% 30%;
-// 			background-color: transparentize(#000, 0.7); 
-// 			box-shadow: 0 0px 20px 12px transparentize(#000, 0.70);
-// 			transform: rotateX(90deg) translate3d(0px,0px,0px);
-// 			position: relative;
-// 			bottom: -360px;
-// 		}
-// 	}
-
-// }
-
-
-
-// #deck-edit-info-page, #deck-edit-look-page {
-// 	section#viewport{
-// 		//-webkit-animation:infinite-spinning $time linear;
-// 		position:relative;
-// 		top:25%;
-// 		margin:0 auto;
-// 		width:width;
-// 		height:size;
-// 		perspective: none;
-// 		transform-style: preserve-3d;
-// 	}
-// 	article#box{
-// 		width:width;
-// 		height:size;
-// 	 	transform-style: preserve-3d;
-// 	 	position:absolute;
-// 	}
-// 	.transition{
-// 		transition: all .8s ease-in-out;
-// 	}
-// 	#box section{
-// 		cursor:move;
-// 		text-align:center;
-// 		transform-style: flat;
-// 		backface-visibility: hidden;
-// 		position:absolute;
-// 		background-color: rgba(darken(#3276c1,2), 0.5);
-// 		outline:2px solid lighten(#599adf, 10);
-// 		// @include box-shadow(inset 0px 0px 30px #3FA9F5);
-// 		h1, h2, h3{
-// 			font-family:'MayonaiseCondRegular';
-// 			font-size:35px;
-// 			padding:offset/2;
-// 			z-index:1;
-// 			//color:lighten($color,20);
-// 		}
-// 		p{
-// 			color: darken(color, 82);
-// 			font-size:20px;
-// 			line-height:25px;
-// 		}
-// 	}
-
-// 	#front, #back{
-// 	 width:width;
-// 	 height: size;
-// 	 transform: translate3d(0px, 0px, offset);
-// 	 .full-image{
-// 	 	left:0px;
-// 	 	top: 0px;
-// 		z-index: 0;
-// 		position: absolute;
-// 		height: size;
-// 		width: width;
-// 	 }
-// 	 h1,h2,h3,p{
-// 		position:relative;
-// 	}
-// 	.deck-title{
-// 		padding:10px;
-// 		margin:10px auto;
-// 	}
-// }
-// #back{
-// 	transform: rotateY(180deg) translate3d(0px, 0px, offset);
-// }
-// #top, #bottom{
-//  width:width;
-//  height: depth;
-//  transform: rotateX(90deg) translate3d(0px, 0px, offset);
-// }
-// #bottom{
-// 	transform: rotateX(-90deg) translate3d(0px, 0px, size - offset);
-// }
-// #left, #right{
-//  width: depth;
-//  height: size;
-//  transform: rotateY(-90deg) translate3d(0px, 0px, offset);
-// }
-// #right{
-// 	transform: rotateY(90deg) translate3d(0px, 0px, width - offset);
-// }
-
-// #look-input, #template-input{
-// 	left:-800px;
-// 	}	
-// }
-
-// #render-link{
-// 	background-image:url('/right_arrow.gif');
-// 	top: 385px;
-// 	left: 425px;
-// 	position: absolute;
-
-// }
-// #info-link{
-// 	top: 385px;
-// 	background-image:url('/left_arrow.gif');
-// 	position: absolute;
-// }
-// #image-filename {
-// 	display: none;
-// }

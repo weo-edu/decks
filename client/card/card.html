@@ -14,11 +14,6 @@
 	</div>
 </template>
 
-<!-- <template name='solution'>
-	Solution: {{solution}}
-</template> -->
-
-
 <template name="card_info_form">
 	{{#ui form_init}}
 		<textarea name="template" placeholder="Template"></textarea>
@@ -26,30 +21,18 @@
 	{{/ui}}
 </template>
 
-<!-- <template name="add_rule_dialog">
-	{{#ui "dialog"}}
-		{{#ui "form"}}
-			<input name="rule" placeholder="rule"/>
-			<div>{{error}}</div>
-			<div class="buttons">
-				<div class="save">save</div>
-				<div class="cancel">cancel</div>
-			</div>
-		{{/ui}}
-	{{/ui}}
-</template> -->
 
 <template name="rules_form">
 	<div id="rules_form">
 		{{#iter rules}}
-		<!-- XXX iter not returning idx? XXX -->
 			<div class='input-container' style='position: relative;'>
-				<input id='rule-{{idx}}' class="set-rule" value='{{this}}' />
+				<input id='rule-{{idx}}' class="set-rule" value='{{val}}' />
 				<div class='cancel'>x</div>
 			</div>
 		{{/iter}}
 		<input id="add-rule" class='set-rule' name='rule' placeholder='Add Rule' />
 		<div>{{error}}</div>
+		<div class='red-button'>SAVE</div>
 	</div>
 </template>
 
