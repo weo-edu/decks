@@ -24,12 +24,12 @@
 
 <template name="rules_form">
 	<div id="rules_form">
-		{{#iter rules}}
+		{{#each rules}}
 			<div class='input-container' style='position: relative;'>
 				<input id='rule-{{idx}}' class="set-rule new-rule" value='{{val}}' />
 				<div class='cancel'>x</div>
 			</div>
-		{{/iter}}
+		{{/each}}
 		<input id="add-rule" class='set-rule' name='rule' placeholder='Add Rule' />
 		<div>{{error}}</div>
 		<div id='design-card' class='red-button'>NEXT</div>

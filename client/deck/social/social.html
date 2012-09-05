@@ -15,20 +15,20 @@
 </template>
 
 <template name='buddies'>
-	{{#iter friends}}
-		<div id='buddy-{{idx}}' class='buddy {{active}}'>
+	{{#each friends}}
+		<div id='buddy-{{_id}}' class='buddy {{active}}'>
 			<div id='avatar-{{idx}}' class='avatar-tmb-small' style='background-image: url({{avatar}});'></div>
 			<p>{{username}}</p>
 		</div>
-	{{/iter}}
+	{{/each}}
 </template>
 
 <template name='opponent_decks'>
 	<div id='opponent-decks'>
-		{{#iter decks}}
-			<div id='deck-{{idx}}' class='deck {{selected}}' style='background-image: url({{image}});'></div>
+		{{#each decks}}
+			<div id='deck-{{_id}}' class='deck {{selected}}' style='background-image: url({{image}});'></div>
 			<h4 class='deck-title'>{{title}}</h4>
-		{{/iter}}
+		{{/each}}
 		{{#ui "dialog"}}
 			{{> opponent_deck_more}}
 		{{/ui}}

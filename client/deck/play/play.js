@@ -84,13 +84,6 @@
 				});
 			}
 
-			Template.card_selection.helpers({
-				stats: function(ctx) {
-					var grade = computeGrade(_.clone(this));
-					return "Grade: " + Math.floor(grade*100)/100;
-				}
-			});
-
 			Template.cards_select.helpers( {
 				opponent: function(ctx){
 					return ctx.template.opponent;
@@ -273,7 +266,9 @@
 	 					stopPlaying();
 	 					Guru.emit('stop');
 	 					//view.render('game');
-  					route(url);
+  					Meteor.defer(function() { 
+  						route(url);
+  					});
   				});
  				},
  				'click #results-nav .back': function() {
