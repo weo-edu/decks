@@ -61,7 +61,9 @@ route('/deck/start',function() {
 
     	hammer.ontap = function(ev) {
     		var el = $(ev.originalEvent.target).closest('.deck');
-    		endAnimation(function() {route('/deck/' + el.attr('rel'))});	
+    		endAnimation(function() {
+    			route('/deck/' + el.attr('rel'))
+    		});	
 		}
 	}
 
@@ -132,8 +134,9 @@ route('/deck/start',function() {
 		callback = callback || function(){};
 		$('#deckFlow').addClass('offstage');
 		$('.sign, .mountain-front, .mountain-mid, .mountain-back, .temple').addClass('offstage', 600, 'easeInBack');
-		$('#scene .ground, #scene .guru').addClass('offstage', 700, 'easeInExpo', function() {callback()});
-		
+		$('#scene .ground').addClass('offstage', 700, 'easeInExpo');
+		$('#scene .guru').addClass('offstage', 700, 'easeInExpo', function() {callback()});
+
 		
 	}
 	
