@@ -22,6 +22,7 @@ card.errorCheck = function() {
 	var self = this;
 	var edited = self.db();
 	edited.problem.rules = self.edited_rules;
+	console.log(self.edited_rules);
 	var p = problemize(edited);
 
 	var error = null;
@@ -155,7 +156,7 @@ Template.rules_form.created = function() {
 
 Template.rules_form.helpers({
 	'rules': function(opts) {
-		return utils.index(routeSession.get('rules'));
+		return utils.index(_.clone(routeSession.get('rules')));
 		// var template = opts.template;
 		// return template.get('rules');
 	},
