@@ -3,32 +3,72 @@
 		<div class='awning'>Friends</div>
 		<div id='buddy-list'>
 			{{> buddies}}
-			<img class='buddy-list-bg' src='/img/buddyList.png' />
+		</div>
+		
+		<div class='decks'>
+			{{> opponent_decks}}
 		</div>
 		<div id='active-friend'>
-			{{> active-friend}}
-		</div>
-		<div class='chat'>
-			{{> chat}}
+			{{> active_friend}}
 		</div>
 	</div>
 </template>
 
 <template name='buddies'>
-	{{#each friends}}
-		<div class='buddy'>
-			<div class='avatar-tmb-small' style='background-image: url({{avatar}});'></div>
+	{{#iter friends}}
+		<div id='buddy-{{idx}}' class='buddy {{active}}'>
+			<div id='avatar-{{idx}}' class='avatar-tmb-small' style='background-image: url({{avatar}});'></div>
 			<p>{{username}}</p>
 		</div>
-	{{/each}}
+	{{/iter}}
 </template>
 
-<template name='chat'>
-	{{{textarea "message-box" placeholder=". . ."}}}
+<template name='opponent_decks'>
+	<div id='opponent-decks'>
+		{{#iter decks}}
+			<div id='deck-{{idx}}' class='deck {{selected}}' style='background-image: url({{image}});'></div>
+			<h4 class='deck-title'>{{title}}</h4>
+		{{/iter}}
+		{{#ui "dialog"}}
+			{{> opponent_deck_more}}
+		{{/ui}}
+	</div>
 </template>
 
-<template name='active-friend'>
+<template name='active_friend'>
+	<div class='avatar' style='background-image: url({{active}})';></div>
+	<!-- <div class='play-button'></div> -->
 	<div class='collection-button'></div>
-	<div class='avatar' style='background-image: url(/img/weo.png)';></div>
-	<div class='play-button'></div>
+</template>
+
+
+<template name="opponent_deck_more">
+	{{#with deck}}
+		<h2>{{title}}</h2>
+		<div class='more-info'>
+			<div class='deck-image'>
+				{{> deck_view}}
+				<p> UNLOCKED 1 OF 10 </p>
+			</div>
+			<div class='deck-meta'>
+				<div class='meta'>
+					<h3>DESCRIPTION:</h3>
+					<p>{{description}}</p>
+					<div class='clear'></div>
+				</div>
+				<div class='meta'>
+					<h3>Categories:</h3>
+					<p>{{tags}}</p>
+					<div class='clear'></div>
+				</div>
+				<div class='meta'>
+					<h3>Grade Level:</h3>
+					<p>{{gradePrior}}</p>
+					<div class='clear'></div>
+				</div>
+				<div class='challenge-button'></div>
+			</div>
+		</div>
+	{{/with}}
+
 </template>

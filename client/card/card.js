@@ -1,30 +1,26 @@
 //////////////////////////////////
 ////////////////XXX add iteration option to uikit
-route('/card/create', route.requireUser,function() {
-	Cards.insert({username: Meteor.user().username, problem: {}}, function(err,_id) {
-		if (err) throw err;
-		route('/card/edit/' + _id + '/back');
-	});
-});
+// route('/card/create', route.requireUser,function() {
+// 	Cards.insert({username: Meteor.user().username, problem: {}}, function(err,_id) {
+// 		if (err) throw err;
+// 		route('/card/edit/' + _id + '/back');
+// 	});
+// });
 
 route('/card/edit/:id/back', route.requireSubscription('cards'),
 function(ctx) {
 
 var card = {};
 card.rules_form = null;
+
+
 card.db = function() {
 	return Cards.findOne(ctx.params.id);
 }
-card.edited = function() {
-	var form = ui.byID('back_form');
-	var e = { problem: this.db().problem }
-	_.extend(e.problem, form.getFields());
-	if (this.rules_form) e.problem.rules = this.rules_form.get('rules');
-	return e;
-}
+
 card.errorCheck = function() {
 	var self = this;
-	var edited = self.edited();
+	var edited = self.db();
 	edited.problem.rules = self.edited_rules;
 	var p = problemize(edited);
 
@@ -40,32 +36,59 @@ card.errorCheck = function() {
 }
 
 card.newRule = function() {
-	this.edited_rules = _.clone(this.rules_form.get('rules'));
+	this.edited_rules = _.clone(routeSession.get('rules'));
 	this.edited_rules.push('');
 	this.editing_rule_idx = this.edited_rules.length-1;
 }
 
 card.editRule = function(idx) {
-	card.edited_rules = _.clone(this.rules_form.get('rules'));
+	card.edited_rules = _.clone(routeSession.get('rules'));
 	card.editing_rule_idx = idx;
 }
 
 card.setEditRules = function() {
-	this.rules_form.set('rules', this.edited_rules);
+	routeSession.set('rules', this.edited_rules);
 	this.edited_rules = null;
 }
 
-card.save = function() {
-	Cards.save(this.db(), this.edited());
-}
 
-
+// Template.solution.helpers({
+// 	'solution': function() {
+// 		var problemized = routeSession.get('cur_problem');
+// 		if(problemized) 
+// 			return problemized.solution ? problemized.solution : ''; 
+// 	}
+// });
 
 Template.card_preview.helpers({
 	problemized: function() {
-		return problemize(card.edited());
+		var problemized = problemize(card.db());
+		routeSession.set('cur_problem', problemized);
+		return problemized;
+	},
+	margin: function() {
+		return parseInt(routeSession.get('margin'), 10) + 'px';
 	}
 });
+
+Template.card_preview.rendered = function() {
+	routeSession.set('margin', $('#problem').height() / -
+		2);
+}
+
+Template.card_info_form.rendered = function() {
+	var form = ui.byID('back_form');
+	form.setFields(card.db().problem);
+	ui.autorun(function() {
+		Cards.update(ctx.params.id, {$set: {problem: form.getFields()}});
+	});
+
+	ui.autorun(function() {
+		Cards.update(ctx.params.id, {$set: {'problem.rules': routeSession.get('rules')}});
+	});
+
+
+}
 
 Template.card_info_form.helpers({
 	form_init: function() {
@@ -81,89 +104,153 @@ Template.card_info_form.events({
 	}
 });
 
+// Template.rules_form.events({
+// 	'click #add-rule': function(evt, template) {
+// 		// var dialog = ui.get('.dialog');
+// 		// dialog
+// 		// 	.relative('#add-rule', {top: -1, left: 0})
+// 		// 	.show();
+// 		// var form_html = dialog.find('.form');
+// 		// if (form_html) {
+// 		// 	var form = ui.get(dialog.find('.form'));
+// 		// 	form.setField('rule', '');
+// 		// 	form.set('error', '');
+
+// 		// }
+// 		// card.newRule();
+
+// 	},
+
+// 	'click .rule': function(evt, template) {
+// 		var dialog = ui.get('.dialog');
+// 		dialog
+// 			.relative($(evt.target), {top: 0, left: 0})
+// 			.show();
+		
+
+// 		var form_html = dialog.find('.form');
+// 		if (form_html) {
+// 			var form = ui.get(dialog.find('.form'));
+// 			form.setField('rule',card.edited_rules[card.editing_rule_idx]);
+// 			form.set('error', '');
+// 		}
+
+// 		card.editRule((evt.target).index());
+// 	}
+// });
+
+// Template.add_rule_dialog.created = function() {
+// 	this.rule_idx = null;
+// }
+
+// Template.add_rule_dialog.error = function(opts) {
+// 	var form = opts.template;
+// 	return form.get('error') || '';
+// }
+
 Template.rules_form.created = function() {
 	card.rules_form = this;
-	this.set('rules', card.db().problem.rules || []);
+	routeSession.set('rules', routeSession.get('rules') || card.db().problem.rules || []);
 }
 
 Template.rules_form.helpers({
-	rules: function(opts) {
-		var template = opts.template;
-		return template.get('rules');
+	'rules': function(opts) {
+		return routeSession.get('rules');
+		// var template = opts.template;
+		// return template.get('rules');
+	},
+	'error': function(opts) {
+		// var form = opts.template;
+		return routeSession.get('error') || '';
 	}
 });
+
+// Template.rules_form.created = function() {
+// 	// this.rule_idx = null;
+// }
+
+// Template.rules_form.error = function(opts) {
+// 	var form = opts.template;
+// 	return form.get('error') || '';
+// }
+
 
 Template.rules_form.events({
-	'click #add-rule': function(evt, template) {
-		var dialog = ui.get('.dialog');
-		dialog
-			.relative('#add-rule', {top: 0, left: 0})
-			.show();
-		var form_html = dialog.find('.form');
-		if (form_html) {
-			var form = ui.get(dialog.find('.form'));
-			form.setField('rule', '');
-			form.set('error', '');
-
-		}
-		card.newRule();
-
+	'change .set-rule': function(evt, template) {
+		updateRules();
 	},
-
-	'click .rule': function(evt, template) {
-		var dialog = ui.get('.dialog');
-		dialog
-			.relative($(evt.target), {top: 0, left: 0})
-			.show();
-		
-
-		var form_html = dialog.find('.form');
-		if (form_html) {
-			var form = ui.get(dialog.find('.form'));
-			form.setField('rule',card.edited_rules[card.editing_rule_idx]);
-			form.set('error', '');
-		}
-
-		card.editRule((evt.target).index());
+	'click .cancel': function(evt) {
+		var el = $(evt.currentTarget).prev();
+		el.val('');
+		updateRules();
+	},
+	'click #design-card': function() {
+		route('/card/edit/' + card.db()._id + '/front');
 	}
 });
 
-Template.add_rule_dialog.created = function() {
-	this.rule_idx = null;
-}
+function updateRules() {
+	routeSession.set('rules', []);
+	$('.set-rule').each(function(idx) {
+		if($(this).val() !== '') {
+			card.newRule();
+			routeSession.set('error', '');
+			card.edited_rules[card.editing_rule_idx] = $(this).val();
+			var error = card.errorCheck();
 
-Template.add_rule_dialog.error = function(opts) {
-	var form = opts.template;
-	return form.get('error') || '';
-}
-
-Template.add_rule_dialog.events({
-	'click .cancel': function(evt,template) {
-		var dialog = ui.get(template.find('.dialog'));
-		dialog.hide();
-	}, 
-
-	'click .save': function(evt, template) {
-		var form = ui.get(template.find('.form'));
-
-		card.edited_rules[card.editing_rule_idx] = form.getField('rule');
-
-		var error = card.errorCheck();
-		if (error) {
-			form.set('error',error);
-			return;
-		} else {
-			var dialog = ui.get(template.find('.dialog'));
-			dialog.hide();
-			card.setEditRules();
+			if (error) {
+				routeSession.set('error',error);
+				return;
+			} else {
+				card.setEditRules();
+			}
 		}
+	});
+}
 
-		
-	}
-
+Template.rules_form.preserve({
+	'.new-rule[id]': function(node) { console.log(node.id); return node.id; }
 });
 
 view.render('card_edit_info');
+});
+
+route('/card/edit/:id/front', route.requireSubscription('cards'), function(ctx) {
+	var card = Cards.findOne(ctx.params.id);
+	console.log(card);
+	view.render('card_front');
+
+
+	Template.card_front_form.init_form = function() {
+		return {component: 'form', id: 'info_form'}
+	}
+
+	Template.card_front_form.rendered= function() {
+		console.log('rendered');
+		var form = ui.byID('info_form');
+		if(form) form.setFields(card);
+		gs.upload($(this.find('#image-upload')),function(err,data) {
+	  		form.setField('image', "/upload/"+data.result.path);
+	  	});
+
+		ui.autorun(function() {
+			Cards.update(ctx.params.id, {$set: form.getFields()});
+		});
+	}
+
+	Template.card_front_preview.helpers({
+		'card': function() {
+			var form = ui.byID('info_form');
+			return form.getFields();
+		}
+	});
+
+	Template.card_front_preview.events({
+		'click #save-card': function() {
+
+		}
+	});
+
 });
 
 /*
