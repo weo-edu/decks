@@ -85,17 +85,17 @@
 			}
 
 			Template.cards_select.helpers( {
-				opponent: function(){
-					return this.template.opponent;
+				opponent: function(opts){
+					return opts.template.opponent;
 				},
-				nCards: function() {
-					return this.template.nCards;
+				nCards: function(opts) {
+					return opts.template.nCards;
 				},
-				deck: function(){
-					return this.template.deck;
+				deck: function(opts){
+					return opts.template.deck;
 				},
-				cards: function() {
-					return this.template.deck_cards;
+				cards: function(opts) {
+					return opts.template.deck_cards;
 				},
 				message: function(name) {
 					var dialog = ui.get('.dialog');
