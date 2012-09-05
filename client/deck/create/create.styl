@@ -133,13 +133,39 @@
 #edit-collection-screen {
 	ipad();
 	background: url('/img/woodBg.jpg') center;
+	.dialog {
+		.deck-image {
+			background: #DDD url("/img/deckBurst.png") 14px 33px no-repeat
+			.deck {
+				margin-top: 40px;
+			}
+			.card {
+				margin: 40px 46px;
+			}
+		}
+
+		.edit-button {
+			right: 5px;
+			bottom: 10px;
+			red-button();
+			position: absolute;
+			&:hover {
+				background-position: 0px 81px;
+			}
+			&:active{
+				bottom: 9px;
+			}
+		}
+
+	}
 }
 
 #my-decks, #my-cards {
 	clearfix();
-	.deck, .card {
+	.deck-container {
 		float: left;
 		margin: 10px;
+		cursor: pointer;
 	}
 
 }

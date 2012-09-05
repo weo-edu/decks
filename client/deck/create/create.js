@@ -1,25 +1,25 @@
-route('/deck/create', route.requireUser, function() {
-	view.render('my_collection');
-
-	Template.create_menu.events({
-		'click #deck-create': function() {
-			Decks.insert({username: Meteor.user().username}, function(err,_id) {
-				if (err) throw err;
-				route('/deck/edit/' + _id);
-			});
-		},
-		'click #card-create': function() {
-			Cards.insert({username: Meteor.user().username, problem: {}}, function(err,_id) {
-				if (err) throw err;
-				route('/card/edit/' + _id + '/back');
-			});
-		},
-		'click #my-collection': function() {
-			route('/deck/edit-collection')
-		}
-	});
-
+// route('/deck/create', route.requireUser, function() {
+// 	view.render('my_collection');
+Template.create_menu.events({
+	'click #deck-create': function() {
+		Decks.insert({username: Meteor.user().username, type: 'deck'}, function(err,_id) {
+			if (err) throw err;
+			route('/deck/edit/' + _id);
+		});
+	},
+	'click #card-create': function() {
+		Cards.insert({username: Meteor.user().username, problem: {}, type: 'card'}, function(err,_id) {
+			if (err) throw err;
+			route('/card/edit/' + _id);
+		});
+	},
+	'click #my-collection': function() {
+		route('/deck/create');
+	}
 });
+	
+
+// });
 
 // route('/deck/edit', route.requireUser, function() {
 // 	console.log('user',Meteor.user().username);
@@ -89,44 +89,86 @@ Template.deck_edit.helpers({
 
 });
 
-route('/deck/edit/:id/select-cards', route.requireSubscription('decks'),
-function(ctx) {
+// route('/deck/edit/:id/select-cards', route.requireSubscription('decks'),
+// function(ctx) {
 
-	Template.deck_cards_select.rendered = function() {
-		console.log(ctx.params.id);
-	}
+// 	Template.deck_cards_select.rendered = function() {
+// 		console.log(ctx.params.id);
+// 	}
 
-	Template.deck_cards_grid.helpers({
-		'cards': function() {
-			return Cards.find();
-		}
-	});
+// 	Template.deck_cards_grid.helpers({
+// 		'cards': function() {
+// 			return Cards.find();
+// 		}
+// 	});
 
-	Template.deck_cards_grid.events({
-		'click .card': function(ctx) {
-			console.log(this);
-		}
-	});
+// 	Template.deck_cards_grid.events({
+// 		'click .card': function(ctx) {
+// 			console.log(this);
+// 		}
+// 	});
 
-	view.render('deck_cards_select');
+// 	view.render('deck_cards_select');
 
-});
+// });
 
-route('/deck/edit-collection', function(){
+route('/deck/create', function(){
 
 	Template.edit_collection.rendered = function() {
 		console.log(this);
 	}
 
+	Template.my_decks.events({
+		'click .deck-container': function(e) {
+			var dialog = ui.get('.dialog');
+	 		dialog.set('currentDeck', this);
+	 		dialog.closable().overlay().center().show();
+	 	}
+	});
+
+	Template.my_cards.events({
+		'click .deck-container': function(e) {
+			var dialog = ui.get('.dialog');
+	 		dialog.set('currentDeck', this);
+	 		dialog.closable().overlay().center().show();
+	 	}
+	});
+
 	Template.my_decks.helpers({
 		'decks': function() {
-			return Decks.find();
+			return Decks.find({});
 		}
 	});
 
 	Template.my_cards.helpers({
 		'cards': function() {
-			return Cards.find();
+			return Cards.find({});
+		}
+	});
+
+	Template.collection_more.helpers({
+		'card': function() {
+			var dialog = ui.get('.dialog');
+			return dialog.get('currentDeck');
+		},
+		'isDeck': function() {
+			return this.type === 'deck';
+		}
+	});
+
+	Template.collection_more.events({
+		'click .delete-button': function() {
+			if(this.type === 'card') {
+				console.log('delete card', this);
+				Cards.remove(this._id);
+			}
+			else if(this.type === 'deck')
+				Decks.remove(this._id);
+
+			ui.get('.dialog').hide();
+		},
+		'click .edit-button': function() {
+			route('/' + this.type + '/edit/' + this._id);
 		}
 	});
 

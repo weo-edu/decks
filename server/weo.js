@@ -1,6 +1,7 @@
 var cards = [
                 {
-                        name: '1\'s',
+                        type: 'card',
+                        title: '1\'s',
                         image: '/decks/simple-sums/1.png',
                         problem: {
                                 template: '1 + {{a}}  = ?',
@@ -8,7 +9,8 @@ var cards = [
                         }
                 },
                 {
-                        name: '2\'s',
+                        type: 'card',
+                        title: '2\'s',
                         image: '/decks/simple-sums/2.png',
                         problem: {
                                 template: '2 + {{a}}  = ?',
@@ -16,7 +18,8 @@ var cards = [
                         }
                 },
                 {
-                        name: '3\'s',
+                        type: 'card',
+                        title: '3\'s',
                         image: '/decks/simple-sums/3.png',
                         problem: {
                                 template: '3 + {{a}}  = ?',
@@ -24,7 +27,8 @@ var cards = [
                         }
                 },
                 {
-                        name: '4\'s',
+                        type: 'card',
+                        title: '4\'s',
                         image: '/decks/simple-sums/4.png',
                         problem: {
                                 template: '4 + {{a}}  = ?',
@@ -32,7 +36,8 @@ var cards = [
                         }
                 },
                 {
-                        name: '5\'s',
+                        type: 'card',
+                        title: '5\'s',
                         image: '/decks/simple-sums/5.png',
                         problem: {
                                 template: '5 + {{a}}  = ?',
@@ -40,7 +45,8 @@ var cards = [
                         }
                 },
                 {
-                        name: '6\'s',
+                        type: 'card',
+                        title: '6\'s',
                         image: '/decks/simple-sums/6.png',
                         problem: {
                                 template: '6 + {{a}}  = ?',
@@ -48,7 +54,8 @@ var cards = [
                         }
                 },
                 {
-                        name: '7\'s',
+                        type: 'card',
+                        title: '7\'s',
                         image: '/decks/simple-sums/7.png',
                         problem: {
                                 template: '7 + {{a}}  = ?',
@@ -56,7 +63,8 @@ var cards = [
                         }
                 },
                 {
-                        name: '8\'s',
+                        type: 'card',
+                        title: '8\'s',
                         image: '/decks/simple-sums/8.png',
                         problem: {
                                 template: '8 + {{a}}  = ?',
@@ -64,7 +72,8 @@ var cards = [
                         }
                 },
                 {
-                        name: '9\'s',
+                        type: 'card',
+                        title: '9\'s',
                         image: '/decks/simple-sums/9.png',
                         problem: {
                                 template: '9 + {{a}}  = ?',
@@ -75,12 +84,35 @@ var cards = [
 
     var decks = [
         {
+            type: 'deck',
             title: 'Simple Sums',
             image: '/decks/simple-sums/simple-sums.png',
             description: 'This is an easy addition deck',
             tags: 'addition'
         },
         {
+            type: 'deck',
+            title: 'Mini Minus',
+            image: '/decks/mini-minus/mini-minus.png',
+            description: 'This is an easy subtraction deck',
+            tags: 'subtraction'
+        },
+        {
+            type: 'deck',
+            title: 'Mini Minus',
+            image: '/decks/mini-minus/mini-minus.png',
+            description: 'This is an easy subtraction deck',
+            tags: 'subtraction'
+        },
+        {
+            type: 'deck',
+            title: 'Mini Minus',
+            image: '/decks/mini-minus/mini-minus.png',
+            description: 'This is an easy subtraction deck',
+            tags: 'subtraction'
+        },
+        {
+            type: 'deck',
             title: 'Mini Minus',
             image: '/decks/mini-minus/mini-minus.png',
             description: 'This is an easy subtraction deck',

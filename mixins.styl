@@ -23,3 +23,26 @@ red-button() {
 .red-button {
 	red-button();
 }
+
+wood-button() {
+	font: 35px/73px "Nuku";
+	width: 198px;
+	height: 70px;
+	background: url("/img/wood-button.png");
+	text-align: center;
+	color: #9E7850;
+	text-shadow: -1px -1px 0 rgba(black, .5);
+	cursor: pointer;
+	user-select: none;
+	&:hover {
+		background-position: 0px 70px;
+		text-shadow: 1px 1px 0 rgba(black, .5);
+	}
+	&:active{
+		text-shadow: -1px -1px 0 rgba(black, .5);
+	}
+}
+
+.wood-button { 
+	wood-button();
+}
