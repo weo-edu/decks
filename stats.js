@@ -55,40 +55,45 @@
 			return bin.percentage;
 		});
 
-		var cutoff = {percentage: 0};
+		var cutoff;
 		_.find(obj.stats.bins, function(bin, grade) {
 			bin.percentage = Math.floor(bin.correct / bin.attempts * 100);
 			bin.grade = Number(grade);
 			if(!cutoff || cutoff.percentage < bin.percentage) {
-				cutoff = bin;
+				cutoff = grade;
 			}
 
-			if(bin.percentage > cutoffPercentage) {
-				cutoff = bin;
+			if(bin.percentage > percentageCutoff) {
+				cutoff = grade;
 				return true;
 			}
 		});
-		var bin = _.find(sorted, function(bin) { 
-			return bin.percentage > percentageCutoff;
-		});
 
-		bin = bin || sorted[sorted.length-1];
+		if(typeof cutoff === 'undefined') {
+			return obj.grade;
+		}
+
+		var bin = obj.stats.bins[cutoff];
 		var bins = [
 			obj.stats.bins[bin.grade-1],
 			bin,
 			obj.stats.bins[bin.grade+1]
 		];
 
-		bins = _.compact(bins);
+		bins = _.compact(bins);			
+		var result = obj.grade;
+		try{
+			result = (bins.length > 1 && fn(bins));
+		} catch(e) {
 
-		return bins.length > 1 && fn(bins);
+		}
+		return result;
 	}
 
 
 	function regrade(obj) {
 		var grade = computeGrade(obj);
 		if(grade) {
-			console.log('updating grade of ', obj._id, 'to', grade);
 			Cards.update(obj._id, {$set: {'stats.grade': grade}});
 		}
 	}
