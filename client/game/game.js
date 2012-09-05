@@ -353,7 +353,7 @@
 
   Game.prototype.destroy = function() {
     var self = this;
-    self.stateHandle.stop();
+    self.stateHandle && self.stateHandle.stop();
   }
 
   Game.prototype.stateManager = function() {
