@@ -123,15 +123,27 @@
 
 <template name='deck_cards_select'>
 	<div id='deck-cards-select-screen'>
+		<h1 class='awning'>Select Cards</h1>
+		{{> deck_selected_cards}}
 		{{> deck_cards_grid}}
 	</div>
 </template>
 
 <template name='deck_cards_grid'>
-	{{#iter cards}}
-		<div title="{{stats}}" class='card' style='background-image: url({{image}});'>
-			</div>
-	{{/iter}}
+	<div class='card-grid'>
+		{{#each cards}}
+			<div title="{{stats}}" class='card' style='background-image: url({{image}});'></div>
+		{{/each}}
+	</div>
+</template>
+
+<template name='deck_selected_cards'>
+	<div class='selected-cards'>
+		{{> deck_view}}
+		{{#each deck-cards}}
+
+		{{/each}}
+	</div>
 </template>
 
 

@@ -4,6 +4,50 @@
 
 
 /**
+ * Edit my collection screen
+ */
+
+#edit-collection-screen {
+	ipad();
+	background: url('/img/woodBg.jpg') center;
+	.dialog {
+		.deck-image {
+			background: #DDD url("/img/deckBurst.png") 14px 33px no-repeat
+			.deck {
+				margin-top: 40px;
+			}
+			.card {
+				margin: 40px 46px;
+			}
+		}
+
+		.edit-button {
+			right: 5px;
+			bottom: 10px;
+			red-button();
+			position: absolute;
+			&:hover {
+				background-position: 0px 81px;
+			}
+			&:active{
+				bottom: 9px;
+			}
+		}
+
+	}
+}
+
+#my-decks, #my-cards {
+	clearfix();
+	.deck-container {
+		float: left;
+		margin: 10px;
+		cursor: pointer;
+	}
+
+}
+
+/**
  * 	CREATE OPTIONS SCREEN
  */
 
@@ -124,48 +168,23 @@
 #deck-cards-select-screen {
 	ipad();
 	background: url('/img/woodBg.jpg') center;
-}
 
-/**
- * Edit my collection screen
- */
-
-#edit-collection-screen {
-	ipad();
-	background: url('/img/woodBg.jpg') center;
-	.dialog {
-		.deck-image {
-			background: #DDD url("/img/deckBurst.png") 14px 33px no-repeat
-			.deck {
-				margin-top: 40px;
-			}
-			.card {
-				margin: 40px 46px;
-			}
-		}
-
-		.edit-button {
-			right: 5px;
-			bottom: 10px;
-			red-button();
-			position: absolute;
-			&:hover {
-				background-position: 0px 81px;
-			}
-			&:active{
-				bottom: 9px;
-			}
-		}
-
-	}
-}
-
-#my-decks, #my-cards {
-	clearfix();
-	.deck-container {
+	.selected-cards {
+		width: 226px;
+		height: 100%;
+		box-shadow: 0 0 30px #333;
+		background: url('/app!common/textures/roughcloth.png');
 		float: left;
-		margin: 10px;
-		cursor: pointer;
+		position: relative;
 	}
 
+	.card-grid {
+		float: left;
+		background: url('/img/smallShelf.jpg');
+		width: 798px;
+		height: 100%;
+		clearfix();
+	}
 }
+
+
