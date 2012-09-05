@@ -1,9 +1,13 @@
 <template name="game">
+	{{> level_progress}}
 	<div id='game-template'>
 		{{{render state}}}
 	</div>
 </template>
 
+<template name="level_progress">
+	Level {{level}} ({{points}} / {{pointsNeeded}})
+</template>
 <template name="game_wait">
 	Waiting for other player to accept
 </template>

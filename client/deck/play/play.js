@@ -335,6 +335,18 @@
 				}
 			});
 
+			Template.level_progress.helpers({
+				level: function() {
+					return Meteor.user().level;
+				},
+				points: function() {
+					return Math.round(pointsToNextLevel(Meteor.user().level) - Meteor.user().points);
+				},
+				pointsNeeded: function() {
+					return Math.round(pointsToNextLevel(Meteor.user().level));
+				}
+			})
+
 		 	view.render('game');
 		});
 })();
