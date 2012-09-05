@@ -16,7 +16,7 @@
 	}
 
 	function weightedRegression(bins) {
-		var X = $M(_.map(bins, function(bin) { return [bin.percentage, 1]; })),
+		var X = $M(_.map(bins, function(bin) { return [bin.percentage || .00001, 1]; })),
 			y = $V(_.pluck(bins, 'grade')),
 			W = $V(_.pluck(bins, 'attempts')).toDiagonalMatrix();
 
@@ -55,6 +55,19 @@
 			return bin.percentage;
 		});
 
+		var cutoff = {percentage: 0};
+		_.find(obj.stats.bins, function(bin, grade) {
+			bin.percentage = Math.floor(bin.correct / bin.attempts * 100);
+			bin.grade = Number(grade);
+			if(!cutoff || cutoff.percentage < bin.percentage) {
+				cutoff = bin;
+			}
+
+			if(bin.percentage > cutoffPercentage) {
+				cutoff = bin;
+				return true;
+			}
+		});
 		var bin = _.find(sorted, function(bin) { 
 			return bin.percentage > percentageCutoff;
 		});
