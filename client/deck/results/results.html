@@ -15,27 +15,25 @@
 </template>
 
 <template name="play_results">
-	{{#constant}}
-		<div id='result-box'>
-			<h2>RESULTS</h2>
-			<div class='inner-results'>
-				{{#with results}}
-					<div class='winner-circle'>
-						<div class='winner'>WINNER</div>
-						<div class='winner-name'>{{winner}}</div>
-					</div>
-					<div id='me' class='user-1'>
-						{{> user currentUser}}
-					</div>
-					{{> individual_results}}
+	<div id='result-box'>
+		<h2>RESULTS</h2>
+		<div class='inner-results'>
+			{{#with results}}
+				<div class='winner-circle'>
+					<div class='winner'>WINNER</div>
+					<div class='winner-name'>{{winner}}</div>
+				</div>
+				<div id='me' class='user-1'>
+					{{> user currentUser}}
+				</div>
+				{{> individual_results}}
 
-					<div id='opponent' class='user-1'>
-						{{> user opponent}}
-					</div>
-				{{/with}}
-			</div>
+				<div id='opponent' class='user-1'>
+					{{> user opponent}}
+				</div>
+			{{/with}}
 		</div>
-	{{/constant}}
+	</div>
 </template>
 
 <template name="individual_results">
