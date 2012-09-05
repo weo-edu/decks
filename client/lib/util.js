@@ -44,7 +44,8 @@ Handlebars.registerHelper('iter', function(ctx, options){
       if(typeof val !== 'object')
         val = {val: val};
       val.idx = idx + 1;
-      ret = ret + fn(val);
+      var branch = (val._id || (typeof val === 'string' ? val : null) || Spark.UNIQUE_LABEL);
+      ret = ret + Spark.labelBranch(branch, function() { return fn(val); });
     });
   }
   else{

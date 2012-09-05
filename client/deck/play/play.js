@@ -266,7 +266,9 @@
 	 					stopPlaying();
 	 					Guru.emit('stop');
 	 					//view.render('game');
-  					route(url);
+  					Meteor.defer(function() { 
+  						route(url);
+  					});
   				});
  				},
  				'click #results-nav .back': function() {
