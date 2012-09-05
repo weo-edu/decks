@@ -60,10 +60,10 @@
 </template>
 
 <template name='deck_cards_grid'>
-	{{#iter cards}}
+	{{#each cards}}
 		<div title="{{stats}}" class='card' style='background-image: url({{image}});'>
 			</div>
-	{{/iter}}
+	{{/each}}
 </template>
 
 

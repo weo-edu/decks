@@ -155,7 +155,7 @@ Template.rules_form.created = function() {
 
 Template.rules_form.helpers({
 	'rules': function(opts) {
-		return routeSession.get('rules');
+		return utils.index(routeSession.get('rules'));
 		// var template = opts.template;
 		// return template.get('rules');
 	},
@@ -209,7 +209,7 @@ function updateRules() {
 }
 
 Template.rules_form.preserve({
-	'.new-rule[id]': function(node) { console.log(node.id); return node.id; }
+	'.new-rule[id]': function(node) { return node.id; }
 });
 
 view.render('card_edit_info');

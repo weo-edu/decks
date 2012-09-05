@@ -5,15 +5,6 @@
 			<div class='awning'>
 				BROWSE
 			</div>
-			{{#if currentUser}}
-			{{#if currentUser.decks}}
-			<div id='my-decks' class='shelf'>
-				{{#iter mydecks}}
-					{{> deck_view}}
-				{{/iter}}
-			</div>
-			{{/if}}
-			{{/if}}
 			<div id='deck-grid' class='shelf'>
 				<div class='shelf-wrapper'>
 					{{> decks}}
@@ -24,20 +15,20 @@
 </template>
 
 <template name="decks">
-		{{#iter decks}}
-			<div id="deck-{{idx}}" class='deck-container'>
+		{{#each decks}}
+			<div id="deck-{{_id}}" class='deck-container'>
 				{{> deck_view}}
 				<h4 class='deck-title'>{{title}}</h4>
 				<!-- <div class='shadow'></div> -->
 			</div>
-		{{/iter}}
+		{{/each}}
 		{{#ui "dialog"}}
 			{{> deck_more}}
 		{{/ui}}
 </template>
 
 <template name="deck_view">
-	<div><div class='deck' style='background-image: url({{image}});'></div></div>
+	<div class='deck' style='background-image: url({{image}});'></div>
 </template>
 
 
