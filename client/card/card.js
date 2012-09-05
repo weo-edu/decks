@@ -7,7 +7,7 @@
 // 	});
 // });
 
-route('/card/edit/:id/back', route.requireSubscription('cards'),
+route('/card/edit/:id', route.requireSubscription('cards'),
 function(ctx) {
 
 var card = {};
@@ -217,7 +217,6 @@ view.render('card_edit_info');
 
 route('/card/edit/:id/front', route.requireSubscription('cards'), function(ctx) {
 	var card = Cards.findOne(ctx.params.id);
-	console.log(card);
 	view.render('card_front');
 
 
@@ -247,7 +246,7 @@ route('/card/edit/:id/front', route.requireSubscription('cards'), function(ctx) 
 
 	Template.card_front_preview.events({
 		'click #save-card': function() {
-
+			route('/deck/create');
 		}
 	});
 

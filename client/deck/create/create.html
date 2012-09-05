@@ -1,7 +1,75 @@
-<template name='my_collection'>
-	<div id='create-screen'>
+<template name='edit_collection'>
+	<div id='edit-collection-screen'>
 		{{> create_menu}}
+		<!-- <header class='awning'>
+			<ul id='create-menu'>
+				<li id='my-decks'>DECKS</li>
+				<li id='my-cards'>CARDS</li>
+			</ul>
+		</header> -->
+
+		<div id='my-decks'>
+			{{> my_decks}}
+		</div>
+		<div id='my-cards'>
+			{{> my_cards}}
+		</div>
 	</div>
+</template>
+
+<template name='my_decks'>
+	{{#each decks}}
+		<div class='deck-container'>
+			{{> deck_view}}
+			<h4 class='deck-title'>{{title}}</div>
+		</div>
+	{{/each}}
+	{{#ui "dialog"}}
+		{{> collection_more}}
+	{{/ui}}
+</template>
+
+<template name='my_cards'>
+	{{#each cards}}
+		<div class='deck-container'>
+			{{> card_view}}
+			<h4 class='deck-title'>{{title}}</div>
+		</div>
+	{{/each}}
+</template>
+
+<template name="collection_more">
+	{{#with card}}
+		<h2>{{title}}</h2>
+		<div class='more-info'>
+			<div class='deck-image'>
+				{{#if isDeck}}
+					{{> deck_view}}
+				{{else}}
+					{{> card_view}}
+				{{/if}}
+			</div>
+			<div class='deck-meta'>
+				<div class='meta'>
+					<h3>Description:</h3>
+					<p>{{description}}</p>
+					<div class='clear'></div>
+				</div>
+				<div class='meta'>
+					<h3>Categories:</h3>
+					<p>{{tags}}</p>
+					<div class='clear'></div>
+				</div>
+				<div class='meta'>
+					<h3>Grade Level:</h3>
+					<p>{{gradePrior}}</p>
+					<div class='clear'></div>
+				</div>
+				<div class='delete-button challenge-button'>Delete</div>
+				<div class='edit-button'>EDIT</div>
+			</div>
+		</div>
+	{{/with}}
 </template>
 
 <template name='create_menu'>	
@@ -55,16 +123,30 @@
 
 <template name='deck_cards_select'>
 	<div id='deck-cards-select-screen'>
+		<h1 class='awning'>Select Cards</h1>
+		{{> deck_selected_cards}}
 		{{> deck_cards_grid}}
 	</div>
 </template>
 
 <template name='deck_cards_grid'>
-	{{#each cards}}
-		<div title="{{stats}}" class='card' style='background-image: url({{image}});'>
-			</div>
-	{{/each}}
+	<div class='card-grid'>
+		{{#each cards}}
+			<div title="{{stats}}" class='card' style='background-image: url({{image}});'></div>
+		{{/each}}
+	</div>
 </template>
+
+<template name='deck_selected_cards'>
+	<div class='selected-cards'>
+		{{> deck_view}}
+		{{#each deck-cards}}
+
+		{{/each}}
+	</div>
+</template>
+
+
 
 
 
