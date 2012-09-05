@@ -117,7 +117,29 @@
 	&:active{ bottom: -6px }
 }
 
+/**
+ * Select Cards
+ */
+
 #deck-cards-select-screen {
 	ipad();
 	background: url('/img/woodBg.jpg') center;
+}
+
+/**
+ * Edit my collection screen
+ */
+
+#edit-collection-screen {
+	ipad();
+	background: url('/img/woodBg.jpg') center;
+}
+
+#my-decks, #my-cards {
+	clearfix();
+	.deck, .card {
+		float: left;
+		margin: 10px;
+	}
+
 }

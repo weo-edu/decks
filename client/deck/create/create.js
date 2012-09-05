@@ -13,6 +13,9 @@ route('/deck/create', route.requireUser, function() {
 				if (err) throw err;
 				route('/card/edit/' + _id + '/back');
 			});
+		},
+		'click #my-collection': function() {
+			route('/deck/edit-collection')
 		}
 	});
 
@@ -106,6 +109,28 @@ function(ctx) {
 	});
 
 	view.render('deck_cards_select');
+
+});
+
+route('/deck/edit-collection', function(){
+
+	Template.edit_collection.rendered = function() {
+		console.log(this);
+	}
+
+	Template.my_decks.helpers({
+		'decks': function() {
+			return Decks.find();
+		}
+	});
+
+	Template.my_cards.helpers({
+		'cards': function() {
+			return Cards.find();
+		}
+	});
+
+	view.render('edit_collection');
 
 });
 

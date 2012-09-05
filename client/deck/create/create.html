@@ -66,6 +66,36 @@
 	{{/iter}}
 </template>
 
+<template name='edit_collection'>
+	<div id='edit-collection-screen'>
+		<header class='awning'>
+			<ul id='create-menu'>
+				<li id='my-decks'>DECKS</li>
+				<li id='my-cards'>CARDS</li>
+			</ul>
+		</header>
+
+		<div id='my-decks'>
+			{{> my_decks}}
+		</div>
+		<div id='my-cards'>
+			{{> my_cards}}
+		</div>
+	</div>
+</template>
+
+<template name='my_decks'>
+	{{#iter decks}}
+		{{> deck_view}}
+	{{/iter}}
+</template>
+
+<template name='my_cards'>
+	{{#iter cards}}
+		{{> card_view}}
+	{{/iter}}
+</template>
+
 
 
 
