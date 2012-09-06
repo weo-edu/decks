@@ -265,7 +265,6 @@
 	 					g.destroy();
 	 					stopPlaying();
 	 					Guru.emit('stop');
-	 					//view.render('game');
   					Meteor.defer(function() { 
   						route(url);
   					});
@@ -297,6 +296,9 @@
 				cards: function() {
 					return game.problems();
 				},
+				image: function() {
+					return Cards.findOne(this.card_id).image;
+				},
 				correct: function() {
 					return game.isCorrect(this._id) ? 'correct' : 'incorrect';
 				},
@@ -310,7 +312,7 @@
 
  			Template.view_cards.events({
 				'click .card': function(evt, template) {
-					var self = this
+					var self = this;
 					$('#slider').addClass('review', 400, 'easeInOutExpo', function(){
 							routeSession.set('review_card', self);
 							routeSession.set('show_cards', 'review');

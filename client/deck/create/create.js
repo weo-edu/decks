@@ -65,11 +65,12 @@ route('/deck/create', function(){
 
 	Template.collection_more.events({
 		'click .delete-button': function() {
-			if(this.type === 'card') {
-				console.log('delete card', this);
-				Cards.remove(this._id);
-			}
-			else if(this.type === 'deck')
+			// if(this.type === 'card') {
+			// 	console.log('delete card', this);
+			// 	Cards.remove(this._id);
+			// }
+			// else 
+			if(this.type === 'deck')
 				Decks.remove(this._id);
 
 			ui.get('.dialog').hide();
@@ -135,18 +136,37 @@ function(ctx) {
 	
 	var deck = Decks.findOne(ctx.params.id);
 
-	Template.deck_cards_grid.helpers({
-		'cards': function() {
-			return Cards.find({});
+	Template.deck_selected_cards.helpers({
+		'deck': function() {
+			return deck;
+		},
+		'deck-cards': function() {
+			deck = Decks.findOne(ctx.params.id);
+			if(deck.cards)
+				return Cards.find(deck.cards);
 		}
 	});
 
-	Template.deck_selected_cards.helpers({
-		'deck-cards': function() {
-			if(deck.cards)
-				return deck.cards;
+	Template.deck_selected_cards.events({
+		'click .selected-card': function() {
+			Decks.update(ctx.params.id, {$pull: {cards: this._id}});
 		}
 	});
+
+	Template.deck_cards_grid.helpers({
+		'cards': function() {
+			deck = Decks.findOne(ctx.params.id);
+			return Cards.find({_id: {$nin: deck.cards}});
+		}
+	});
+
+	Template.deck_cards_grid.events({
+		'click .card': function() {
+			Decks.update(ctx.params.id, {$push: {cards: this._id}});
+		}
+	});
+
+	
 
 	view.render('deck_cards_select');
 
