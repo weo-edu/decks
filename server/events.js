@@ -1,5 +1,5 @@
 Observer.on('complete:deck', function(e) {
-    console.log('complete:deck', e);
+    //console.log('complete:deck', e);
     Fiber(function() {
         console.log('test');
         Decks.update(
@@ -37,7 +37,13 @@ Observer.on('complete:card', function(e) {
         
         if(stats.correct) {
           var card = Cards.findOne(e.object._id);
-          var pts = points(card);
+          if(!card.stats.hasOwnProperty('grade')) {
+            regrade(card);
+            card = Cards.findOne(e.object._id);
+          }
+
+          console.log('grade', card.stats.grade);
+          var pts = points(card.stats.grade || card.grade);
           augmentPoints(e.user._id, pts);
         }
     }).run();

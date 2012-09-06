@@ -44,6 +44,7 @@
 		}
 
 		if(obj.grade) {
+			obj.stats.bins.grade = obj.stats.bins.grade || {attempts: 0, correct: 0, time: 0};
 			obj.stats.bins.grade.attempts += initialBoost;
 			obj.stats.bins.grade.correct += Math.floor(initialBoost * percentageCutoff);
 		}
@@ -142,15 +143,20 @@
 		);
 	}
 
+	function displayPoints(g) {
+		var cl = Meteor.user().level;
+		return (points(g) / points(1+cl/60)) * (2*cl+45);
+	}
 	function pointsToNextLevel(l) {
 		return .5*l*(Math.pow(3, 14/(1+Math.exp(-.25*(1+l/60-8)))))+300;
 	}
 
-	function points(card) {
-		var g = (card.stats && card.stats.grade) || card.grade || 4;
+	function points(g) {
 		return Math.pow(3, 14 / (1 + Math.exp((-.25) * (g - 8))));
 	}
 
+	global.regrade = regrade;
+	global.displayPoints = displayPoints;
 	global.augmentPoints = augmentPoints;
 	global.pointsToNextLevel = pointsToNextLevel;
 	global.points = points;

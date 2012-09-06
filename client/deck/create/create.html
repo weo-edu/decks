@@ -65,7 +65,9 @@
 					<p>{{gradePrior}}</p>
 					<div class='clear'></div>
 				</div>
-				<div class='delete-button challenge-button'>Delete</div>
+				{{#if isDeck}}
+					<div class='delete-button challenge-button'>DELETE</div>
+				{{/if}}
 				<div class='edit-button'>EDIT</div>
 			</div>
 		</div>
@@ -100,7 +102,7 @@
 			<label for='title'>Title</label> 
 			<input name="title"/>
 			<label for='tags'>Categories</label>
-			<input name="tags"/>
+			<input name='tags'/>
 			<label for='description'>Description</label>
 			<textarea name="description"></textarea>
 			<label for='image-upload'>Image<small>300 x 400</small></label>
@@ -129,6 +131,17 @@
 	</div>
 </template>
 
+<template name='deck_selected_cards'>
+	<div class='selected-cards'>
+		{{#with deck}}
+			{{> deck_view}}
+		{{/with}}
+		{{#each deck-cards}}
+			<div class='selected-card'>{{title}}</div>
+		{{/each}}
+	</div>
+</template>
+
 <template name='deck_cards_grid'>
 	<div class='card-grid'>
 		{{#each cards}}
@@ -136,18 +149,3 @@
 		{{/each}}
 	</div>
 </template>
-
-<template name='deck_selected_cards'>
-	<div class='selected-cards'>
-		{{> deck_view}}
-		{{#each deck-cards}}
-
-		{{/each}}
-	</div>
-</template>
-
-
-
-
-
-

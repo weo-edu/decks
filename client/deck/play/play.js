@@ -180,10 +180,15 @@
 						card.type = 'card';
 						card.title = card.name;
 						
+						if(res) {
+							regrade(card);
+							console.log(displayPoints(card.stats.grade || card.grade), 'points');
+						}
 						event({name: 'complete', time: dTime},
 							card,
 							res ? 'correctly' : 'incorrectly'
 							);
+
  						nextCard();
  						Meteor.defer(function(){ $('#answer').focus(); });
  					}
@@ -199,14 +204,15 @@
 	 		Template.progress_bar.created = function() {
 	 			var self = this;
 	 			var handle = ui.autorun(function(){
-					var user = self.data._id === Meteor.user()._id ? 'me' : 'opponent',
-						results = game.results(self.data._id);
- 		
- 					animateProgress('#' + user, results);
- 					function animateProgress(container, results) {
- 						var p = percent(results.correct, results.total);
+					var user = self.data._id === Meteor.user()._id ? 'me' : 'opponent';
+
+ 					animateProgress('#' + user);
+ 					function animateProgress(container) {
+ 						var answered = game.answered(self.data._id),
+ 							p = percent(answered, game.nCards());
+
  						$(container + ' .fill').animate({'height': p + '%'}, function() {
- 							routeSession.set('results_' + self.data._id, results);
+ 							routeSession.set('answered_' + self.data._id, answered);
  						});
  					}
 	 			});
@@ -217,8 +223,8 @@
 	 		}
 
 		 	Template.progress_bar.progress = function(ctx) {
-		 		var results = routeSession.get('results_' + this._id);
-		 		return results && percent(results.correct, results.total) + '%';
+		 		var answered = routeSession.get('answered_' + this._id);
+		 		return percent(answered, game.nCards()) + '%';
 		 	}
 
 		 	/*
@@ -265,7 +271,6 @@
 	 					g.destroy();
 	 					stopPlaying();
 	 					Guru.emit('stop');
-	 					//view.render('game');
   					Meteor.defer(function() { 
   						route(url);
   					});
@@ -297,6 +302,9 @@
 				cards: function() {
 					return game.problems();
 				},
+				image: function() {
+					return Cards.findOne(this.card_id).image;
+				},
 				correct: function() {
 					return game.isCorrect(this._id) ? 'correct' : 'incorrect';
 				},
@@ -310,7 +318,7 @@
 
  			Template.view_cards.events({
 				'click .card': function(evt, template) {
-					var self = this
+					var self = this;
 					$('#slider').addClass('review', 400, 'easeInOutExpo', function(){
 							routeSession.set('review_card', self);
 							routeSession.set('show_cards', 'review');
