@@ -126,6 +126,76 @@ var cards = [
             image: '/decks/mini-minus/mini-minus.png',
             description: 'This is an easy subtraction deck',
             tags: 'subtraction'
+        },
+        {
+            type: 'deck',
+            title: 'Simple Sums',
+            image: '/decks/simple-sums/simple-sums.png',
+            description: 'This is an easy addition deck',
+            tags: 'addition'
+        },
+        {
+            type: 'deck',
+            title: 'Mini Minus',
+            image: '/decks/mini-minus/mini-minus.png',
+            description: 'This is an easy subtraction deck',
+            tags: 'subtraction'
+        },
+        {
+            type: 'deck',
+            title: 'Mini Minus',
+            image: '/decks/mini-minus/mini-minus.png',
+            description: 'This is an easy subtraction deck',
+            tags: 'subtraction'
+        },
+        {
+            type: 'deck',
+            title: 'Mini Minus',
+            image: '/decks/mini-minus/mini-minus.png',
+            description: 'This is an easy subtraction deck',
+            tags: 'subtraction'
+        },
+        {
+            type: 'deck',
+            title: 'Mini Minus',
+            image: '/decks/mini-minus/mini-minus.png',
+            description: 'This is an easy subtraction deck',
+            tags: 'subtraction'
+        },
+        {
+            type: 'deck',
+            title: 'Simple Sums',
+            image: '/decks/simple-sums/simple-sums.png',
+            description: 'This is an easy addition deck',
+            tags: 'addition'
+        },
+        {
+            type: 'deck',
+            title: 'Mini Minus',
+            image: '/decks/mini-minus/mini-minus.png',
+            description: 'This is an easy subtraction deck',
+            tags: 'subtraction'
+        },
+        {
+            type: 'deck',
+            title: 'Mini Minus',
+            image: '/decks/mini-minus/mini-minus.png',
+            description: 'This is an easy subtraction deck',
+            tags: 'subtraction'
+        },
+        {
+            type: 'deck',
+            title: 'Mini Minus',
+            image: '/decks/mini-minus/mini-minus.png',
+            description: 'This is an easy subtraction deck',
+            tags: 'subtraction'
+        },
+        {
+            type: 'deck',
+            title: 'Mini Minus',
+            image: '/decks/mini-minus/mini-minus.png',
+            description: 'This is an easy subtraction deck',
+            tags: 'subtraction'
         }
     ];
 
