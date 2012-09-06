@@ -182,7 +182,7 @@
 						
 						if(res) {
 							Stats.regrade(card);
-							console.log(Stats.points(card.stats.grade || card.grade), 'points');
+							console.log(Stats.points(card.stats.grade || card.grade), card._id, card.stats.grade, 'points');
 						}
 						event({name: 'complete', time: dTime},
 							card,

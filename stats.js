@@ -204,7 +204,7 @@
 			);
 		},
 		augmentStats: function(collection, item, data, bin) {
-			var update = {$inc: {}};
+			var update = {$inc: {}};cluster =
 			_.each(data, function(val, key) {
 				update['$inc']['stats.' + key] = val;
 				if(bin) update['$inc']['stats.bins.' + bin + '.' + key] = val;
@@ -219,7 +219,7 @@
 						if(err) throw err;
 					
 						if(res.stats.updates % regradeInterval  === 0) {
-							regrade(res);
+							Stats.regrade(res);
 						}
 					});
 			} else {
@@ -241,10 +241,10 @@
 			var cutoff = null;
 			_.find(bins, function(bin, grade) {
 				if(!cutoff || cutoff.percentage < bin.percentage)
-					cutoff = grade;
+					cutoff = parseInt(grade, 10);
 
 				if(bin.percentage > percentageCutoff) {
-					cutoff = grade;
+					cutoff = parseInt(grade, 10);
 					return true;
 				}
 			});
@@ -257,14 +257,14 @@
 			fn = fn || weightedRegression;
 
 			if(obj.grade) {
-				bins.grade = bins.grade || {attempts: 0, correct: 0, time: 0};
-				bins.grade.attempts += initialBoost;
-				bins.grade.correct += Math.floor(initialBoost * percentageCutoff);
+				bins[obj.grade] = bins[obj.grade] || {attempts: 0, correct: 0, time: 0};
+				bins[obj.grade].attempts += initialBoost;
+				bins[obj.grade].correct += Math.floor(initialBoost * percentageCutoff);
 			}
 
 			_.each(bins, function(bin, grade) {
 				bin.percentage = Math.floor(bin.correct / bin.attempts * 100);
-				bin.grade = Number(grade);
+				bin.grade = parseInt(grade, 10);
 			});
 
 			var cluster = Stats.getBinCluster(bins),
