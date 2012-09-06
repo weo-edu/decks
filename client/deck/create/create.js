@@ -89,24 +89,36 @@ route('/deck/edit/:id', route.requireSubscription('decks'),
 function(ctx) {
 
 var deck = Decks.findOne(ctx.params.id);
-console.log('deck',deck);
-
 
 Template.deck_info_form.init_form = function() {
 	return {component: 'form', id: 'info_form'}
 }
 
-Template.deck_info_form.rendered= function() {
-	console.log('rendered');
-	var form = ui.byID('info_form');
-	if(form) form.setFields(deck);
-	gs.upload($(this.find('#image-upload')),function(err,data) {
-  		form.setField('image', "/upload/"+data.result.path);
-  	});
+Template.deck_info_form.created = function() {
 
-	ui.autorun(function() {
-		Decks.update(ctx.params.id, {$set: form.getFields()});
+	ui.onID('info_form', function(form) {
+		form.onSet('tags', function(tags) {
+			return tags.join(', ');
+		});
+		form.onGet('tags', function(tags) {
+			return _.map(tags.split(','), function(tag) {
+				return tag.trim();
+			});
+		});
+		form.setFields(deck);
+		ui.autorun(function() {
+			Decks.update(ctx.params.id, {$set: form.getFields()});
+		});
 	});
+	
+}
+
+Template.deck_info_form.rendered= function() {
+	var form = ui.byID('info_form');
+	gs.upload($(this.find('#image-upload')),function(err,data) {
+		form && form.setField('image', "/upload/"+data.result.path);
+	});
+
 }
 
 

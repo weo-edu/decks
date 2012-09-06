@@ -76,16 +76,25 @@ Template.card_preview.rendered = function() {
 		2);
 }
 
+Template.card_info_form.created = function() {
+	this.autoSaveSetup = false;
+}
+
 Template.card_info_form.rendered = function() {
 	var form = ui.byID('back_form');
 	form.setFields(card.db().problem);
-	ui.autorun(function() {
-		Cards.update(ctx.params.id, {$set: {problem: form.getFields()}});
-	});
 
-	ui.autorun(function() {
-		Cards.update(ctx.params.id, {$set: {'problem.rules': routeSession.get('rules')}});
-	});
+	if (!this.autoSaveSetup) {
+		this.autoSaveSetup = true;
+		ui.autorun(function() {
+			Cards.update(ctx.params.id, {$set: {problem: form.getFields()}});
+		});
+
+		ui.autorun(function() {
+			Cards.update(ctx.params.id, {$set: {'problem.rules': routeSession.get('rules')}});
+		});
+	}
+	
 
 
 }
