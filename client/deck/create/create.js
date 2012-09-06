@@ -102,12 +102,14 @@ Template.deck_info_form.created = function() {
 			return tags.join(', ');
 		});
 		form.onGet('tags', function(tags) {
+			if (!tags) return;
 			return _.map(tags.split(','), function(tag) {
 				return tag.trim();
 			});
 		});
 		form.setFields(deck);
 		ui.autorun(function() {
+			console.log('save', form.getFields());
 			Decks.update(ctx.params.id, {$set: form.getFields()});
 		});
 	});
