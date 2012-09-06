@@ -179,6 +179,18 @@
     return problem.answer === problem.solution;
   }
 
+  /*  
+    Return the number of problems yet to be
+    answered
+  */
+  Game.prototype.answered = function(id) {
+    id = id || this.me()._id;
+    var problems = this.game()[id + '_problems'];
+    var rest = _.filter(problems, function(p) {
+      return p.hasOwnProperty('answer');
+    });
+    return rest && rest.length;
+  }
   /*
     Generate a small object representing the results
     of the game
