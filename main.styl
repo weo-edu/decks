@@ -1,3 +1,12 @@
+@import 'nib';
+global-reset();
+@import '../common/common.styl';
+
+/**
+ * Mixins
+ */
+
+
 red-button() {
 	background-image: url('/img/red-button.png');
 	right: 5px;
@@ -45,4 +54,18 @@ wood-button() {
 
 .wood-button { 
 	wood-button();
+}
+
+
+/**
+ * Main
+ */
+
+#level-progress {
+	position: absolute;
+	z-index: 9999;
+	font: 18px/25px Fresca;
+	padding: 0 5px;
+	color: #fff;
+	text-shadow: 1px 1px 0 rgba(black, .5);
 }

@@ -1,5 +1,4 @@
-@import "nib";
-@import "../common/common.styl"
+@import '../decks/main.styl';
 
 #select-screen {
 	ipad();
@@ -43,6 +42,11 @@
 			background-position: 25px 0px;
 		}
 	}
+
+	.selection-count {
+		margin-top: 5px;
+		margin-left: 5px;
+	}
 }
 
 
@@ -76,6 +80,7 @@
 	&.select {
 		box-shadow: 0 0 20px #FCEE21;
 	}
+	user-select: none;
 }
 
 .scene {

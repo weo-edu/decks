@@ -1,6 +1,4 @@
-@import 'nib';
-@import '../common/common.styl';
-@import '../decks/mixins.styl';
+@import '../decks/main.styl';
 
 .awning {
 	height = 55px;
@@ -38,16 +36,23 @@
 #deck-grid {
 	height = 299px;
 	width = 150px;
-	background: url('/img/bigShelf.jpg') center center;
-	height: height;
+	height: 617px;
 	width: 100%;
+	overflow-y: auto;
+	overflow-x: hidden;
 	.shelf-wrapper {
-		padding: 35px 50px;
+		padding-left: 40px;
+		width: 980px;
+		background-image: url('/img/bigShelf.jpg');
+		background-repeat: repeat;
+		background-attachment: scroll;
+		clearfix();
 	}
 	.deck-container {
 		cursor: pointer;
 		width: width;
-		height: 265px;
+		height: 263px;
+		padding-top: 35px;
 		float: left;
 		background-position: center center;
 		position: relative;
