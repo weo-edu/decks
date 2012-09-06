@@ -181,8 +181,8 @@
 						card.title = card.name;
 						
 						if(res) {
-							regrade(card);
-							console.log(displayPoints(card.stats.grade || card.grade), 'points');
+							Stats.regrade(card);
+							console.log(Stats.points(card.stats.grade || card.grade), 'points');
 						}
 						event({name: 'complete', time: dTime},
 							card,
@@ -341,10 +341,10 @@
 					return Meteor.user().level;
 				},
 				points: function() {
-					return Math.round(pointsToNextLevel(Meteor.user().level) - Meteor.user().points);
+					return Math.round(Stats.levelPoints(Meteor.user().level) - Meteor.user().points);
 				},
 				pointsNeeded: function() {
-					return Math.round(pointsToNextLevel(Meteor.user().level));
+					return Math.round(Stats.levelPoints(Meteor.user().level));
 				}
 			})
 
