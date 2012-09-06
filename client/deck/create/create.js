@@ -99,7 +99,10 @@ Template.deck_info_form.created = function() {
 
 	ui.onID('info_form', function(form) {
 		form.onSet('tags', function(tags) {
-			return tags.join(', ');
+			if (_.isArray(tags))
+				return tags.join(', ');
+			else
+				return tags;
 		});
 		form.onGet('tags', function(tags) {
 			if (!tags) return;
@@ -107,11 +110,8 @@ Template.deck_info_form.created = function() {
 				return tag.trim();
 			});
 		});
-		form.setFields(deck);
-		ui.autorun(function() {
-			console.log('save', form.getFields());
-			Decks.update(ctx.params.id, {$set: form.getFields()});
-		});
+		console.log('set deck', deck);
+		
 	});
 	
 }
@@ -121,6 +121,16 @@ Template.deck_info_form.rendered= function() {
 	gs.upload($(this.find('#image-upload')),function(err,data) {
 		form && form.setField('image', "/upload/"+data.result.path);
 	});
+
+	if (this.firstRender)  {
+		form.setFields(deck);
+		ui.autorun(function() {
+			console.log('save', form.getFields());
+			Decks.update(ctx.params.id, {$set: form.getFields()});
+		});
+	}
+		
+
 
 }
 
