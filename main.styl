@@ -29,10 +29,6 @@ red-button() {
 	}
 }
 
-.red-button {
-	red-button();
-}
-
 wood-button() {
 	font: 35px/73px "Nuku";
 	width: 198px;
@@ -52,6 +48,10 @@ wood-button() {
 	}
 }
 
+.red-button {
+	red-button();
+}
+
 .wood-button { 
 	wood-button();
 }
@@ -69,6 +69,27 @@ wood-button() {
 	color: #fff;
 	text-shadow: 1px 1px 0 rgba(black, .5);
 }
+
+.back-button {
+	background-image: url('/img/back-button.png');
+	position: absolute;
+	size = 65px;
+	height: size;
+	width: size;
+	left: 10px;
+	bottom: 10px;
+	box-shadow: 0 0 20px #333, inset 1px 1px 0 rgba(white, .3);
+	border-radius: 50%;
+	cursor: pointer; 
+	&:hover{
+		background-position: 0 -75px;
+	}
+	&:active {
+		bottom: 9px;
+		background-position: top left;
+	}
+}
+
 
 .small-grid {
 		float: left;
