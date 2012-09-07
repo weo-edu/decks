@@ -37,11 +37,11 @@
 
 #my-decks, #my-cards {
 	clearfix();
-	.deck-container {
-		float: left;
-		margin: 10px;
-		cursor: pointer;
-	}
+	// .deck-container {
+	// 	float: left;
+	// 	// margin: 10px;
+	// 	// cursor: pointer;
+	// }
 
 }
 
@@ -174,15 +174,58 @@
 		background: url('/app!common/textures/roughcloth.png');
 		float: left;
 		position: relative;
+		.deck {
+			margin: 50px auto;
+		}
+		.selected-card {
+			cursor: pointer;
+			user-select: none;
+			margin: 0 auto;
+			padding: 10px 20px;
+			border-bottom: 2px dashed #333;
+			&:hover {
+				background: rgba(red, .05);
+			}
+			// &:last-child {
+			// 	border: 0;
+			// }
+		}
 	}
 
-	.card-grid {
-		float: left;
-		background: url('/img/smallShelf.jpg');
-		width: 798px;
-		height: 100%;
-		clearfix();
-	}
+	// .card-grid {
+	// 	float: left;
+	// 	width: 798px;
+	// 	height: 100%;
+	// 	clearfix();
+	// }
+	// .card-grid {
+	// 	height = 299px;
+	// 	width = 150px;
+	// 	height: 617px;
+	// 	width: 798px;
+	// 	overflow-y: auto;
+	// 	overflow-x: hidden;
+	// 	&::-webkit-scrollbar { width: 0 }
+	// 	background-image: url('/img/smallShelf.jpg');
+	// 	.shelf-wrapper {
+	// 		padding: 0 0 30px 54px;
+	// 		width: 745px;
+	// 		background-image: url('/img/smallShelf.jpg');
+	// 		background-repeat: repeat;
+	// 		background-attachment: scroll;
+	// 		clearfix();
+	// 	}
+	// 	.deck-container {
+	// 		cursor: pointer;
+	// 		width: width;
+	// 		height: 263px;
+	// 		padding-top: 35px;
+	// 		float: left;
+	// 		background-position: center center;
+	// 		position: relative;
+	// 		margin: 0 40px;
+	// 	}
+	// }
 }
 
 

@@ -6,7 +6,7 @@ Template.create_menu.events({
 		});
 	},
 	'click #card-create': function() {
-		Cards.insert({username: Meteor.user().username, problem: {}, type: 'card'}, function(err,_id) {
+		Cards.insert({username: Meteor.user().username, type: 'card'}, function(err,_id) {
 			if (err) throw err;
 			route('/card/edit/' + _id);
 		});
@@ -15,17 +15,15 @@ Template.create_menu.events({
 		route('/deck/create');
 	}
 });
-	
-
 
 
 route('/deck/create', function(){
 
 	Template.edit_collection.rendered = function() {
-		console.log(this);
+		// console.log(this);
 	}
 
-	Template.my_decks.events({
+	Template.my_collection.events({
 		'click .deck-container': function(e) {
 			var dialog = ui.get('.dialog');
 	 		dialog.set('currentDeck', this);
@@ -33,25 +31,26 @@ route('/deck/create', function(){
 	 	}
 	});
 
-	Template.my_cards.events({
-		'click .deck-container': function(e) {
-			var dialog = ui.get('.dialog');
-	 		dialog.set('currentDeck', this);
-	 		dialog.closable().overlay().center().show();
-	 	}
-	});
+	// Template.my_cards.events({
+	// 	'click .deck-container': function(e) {
+	// 		var dialog = ui.get('.dialog');
+	//  		dialog.set('currentDeck', this);
+	//  		dialog.closable().overlay().center().show();
+	//  	}
+	// });
 
-	Template.my_decks.helpers({
+	Template.my_collection.helpers({
 		'decks': function() {
 			return Decks.find({});
-		}
-	});
-
-	Template.my_cards.helpers({
+		},
 		'cards': function() {
 			return Cards.find({});
 		}
 	});
+
+	// Template.my_cards.helpers({
+		
+	// });
 
 	Template.collection_more.helpers({
 		'card': function() {
@@ -86,11 +85,11 @@ route('/deck/create', function(){
 
 
 
-route('/deck/edit/:id', route.requireSubscription('decks'),
+route('/deck/edit/:id', route.requireSubscription('decks'), isDeck,
 function(ctx) {
 
 var deck = Decks.findOne(ctx.params.id);
-console.log('deck',deck);
+view.render('deck_edit_info');
 
 
 Template.deck_info_form.init_form = function() {
@@ -110,10 +109,17 @@ Template.deck_info_form.rendered= function() {
 	});
 }
 
+Template.deck_edit_info.destroyed = function() {
+	if(isEmptyDeck(ctx))
+		Decks.remove(ctx.params.id);
+}
 
 Template.deck_edit.events({
 	'click #save-deck': function(e) {
-		route('/deck/edit/' + ctx.params.id + '/select-cards');
+		if(isEmptyDeck(ctx))
+			alert('Please fill out the form before you continue');
+		else 
+			route('/deck/edit/' + ctx.params.id + '/select-cards');
 	}
 });
 
@@ -124,17 +130,28 @@ Template.deck_edit.helpers({
 	}
 });
 
-	view.render('deck_edit_info');
-
 });
 
 
 
 
-route('/deck/edit/:id/select-cards', route.requireSubscription('decks'),
+route('/deck/edit/:id/select-cards', route.requireSubscription('decks'), isDeck,
 function(ctx) {
 	
 	var deck = Decks.findOne(ctx.params.id);
+
+	if(isEmptyDeck(ctx))
+		route.redirect('/deck/edit/' + ctx.params.id);
+	else
+		view.render('deck_cards_select');
+
+	
+	
+
+	Template.deck_cards_select.destroyed = function() {
+		if(isEmptyDeck(ctx)) 
+			Decks.remove(ctx.params.id);
+	}
 
 	Template.deck_selected_cards.helpers({
 		'deck': function() {
@@ -148,6 +165,9 @@ function(ctx) {
 	});
 
 	Template.deck_selected_cards.events({
+		'click .deck': function() {
+			console.log(Decks.findOne(ctx.params.id));
+		},
 		'click .selected-card': function() {
 			Decks.update(ctx.params.id, {$pull: {cards: this._id}});
 		}
@@ -155,8 +175,15 @@ function(ctx) {
 
 	Template.deck_cards_grid.helpers({
 		'cards': function() {
-			deck = Decks.findOne(ctx.params.id);
-			return Cards.find({_id: {$nin: deck.cards}});
+			// var deck = Decks.findOne(ctx.params.id);
+			return Cards.find();
+		},
+		'notInDeck': function() {
+			var deck = Decks.findOne(ctx.params.id);
+			if (!deck.cards)
+				return true;
+			else
+				return deck.cards.indexOf(this._id) === -1;
 		}
 	});
 
@@ -166,9 +193,24 @@ function(ctx) {
 		}
 	});
 
-	
-
-	view.render('deck_cards_select');
-
 });
+
+
+function isDeck(ctx, next) {
+	if(Decks.findOne(ctx.params.id) !== undefined)
+		next();
+	else
+		route.redirect('/deck/create');
+}
+
+function isEmptyDeck(ctx) {
+	var deck = Decks.findOne(ctx.params.id);
+	var keys = _.keys(deck);
+	keys = _.without(keys,'_id','type', 'username');
+	if (_.all(keys, function(key) {return !deck[key];}))
+		return true;
+	else
+		return false;
+}
+
 

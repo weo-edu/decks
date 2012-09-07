@@ -1,42 +1,41 @@
 <template name='edit_collection'>
 	<div id='edit-collection-screen'>
 		{{> create_menu}}
-		<!-- <header class='awning'>
-			<ul id='create-menu'>
-				<li id='my-decks'>DECKS</li>
-				<li id='my-cards'>CARDS</li>
-			</ul>
-		</header> -->
-
 		<div id='my-decks'>
-			{{> my_decks}}
-		</div>
-		<div id='my-cards'>
-			{{> my_cards}}
+			{{> my_collection}}
 		</div>
 	</div>
 </template>
 
-<template name='my_decks'>
-	{{#each decks}}
-		<div class='deck-container'>
-			{{> deck_view}}
-			<h4 class='deck-title'>{{title}}</div>
+<template name='my_collection'>
+	<div id='deck-grid'>
+		<div class='shelf-wrapper'>
+			{{#each decks}}
+				<div class='deck-container'>
+					{{> deck_view}}
+					<h4 class='deck-title'>{{title}}</div>
+				</div>
+			{{/each}}
+			{{#each cards}}
+				<div class='deck-container'>
+					{{> card_view}}
+					<h4 class='deck-title'>{{title}}</div>
+				</div>
+			{{/each}}
 		</div>
-	{{/each}}
+	</div>
 	{{#ui "dialog"}}
 		{{> collection_more}}
 	{{/ui}}
 </template>
 
-<template name='my_cards'>
-	{{#each cards}}
-		<div class='deck-container'>
-			{{> card_view}}
-			<h4 class='deck-title'>{{title}}</div>
+<!-- <template name='my_cards'>
+	<div class='create-grid'>
+		<div class='shelf-wrapper'>
+			
 		</div>
-	{{/each}}
-</template>
+	</div>
+</template> -->
 
 <template name="collection_more">
 	{{#with card}}
@@ -137,15 +136,30 @@
 			{{> deck_view}}
 		{{/with}}
 		{{#each deck-cards}}
-			<div class='selected-card'>{{title}}</div>
+			{{> selected_card}}
 		{{/each}}
 	</div>
 </template>
 
+<template name='selected_card'>
+	<div class='selected-card'>{{title}}</div>
+</template>
+
 <template name='deck_cards_grid'>
-	<div class='card-grid'>
-		{{#each cards}}
-			<div title="{{stats}}" class='card' style='background-image: url({{image}});'></div>
-		{{/each}}
+	<div class='small-grid'>
+		<ul class='shelf-wrapper'>
+			{{#each cards}}
+				{{#if notInDeck}}
+					{{> selectable_card}}
+				{{/if}}
+			{{/each}}
+		</ul>
 	</div>
+</template>
+
+<template name='selectable_card'>
+	<li class='deck-container'>
+		<div title="{{stats}}" class='card' style='background-image: url({{image}});'></div>
+		<h4 class='deck-title'>{{title}}</h4>
+	</li>
 </template>

@@ -24,14 +24,18 @@
 </template>
 
 <template name='opponent_decks'>
-	<div id='opponent-decks'>
+	<div class='small-grid'>
+		<div class='shelf-wrapper'>
 		{{#each decks}}
-			<div id='deck-{{_id}}' class='deck {{selected}}' style='background-image: url({{image}});'></div>
-			<h4 class='deck-title'>{{title}}</h4>
+			<div class='deck-container'>
+				<div id='deck-{{_id}}' class='deck {{selected}}' style='background-image: url({{image}});'></div>
+				<h4 class='deck-title'>{{title}}</h4>
+			</div>
 		{{/each}}
 		{{#ui "dialog"}}
 			{{> opponent_deck_more}}
 		{{/ui}}
+		</div>
 	</div>
 </template>
 
@@ -66,7 +70,7 @@
 					<p>{{gradePrior}}</p>
 					<div class='clear'></div>
 				</div>
-				<div class='challenge-button'></div>
+				<div class='challenge-button'>CHALLENGE</div>
 			</div>
 		</div>
 	{{/with}}

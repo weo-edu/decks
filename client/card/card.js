@@ -7,12 +7,71 @@
 // 	});
 // });
 
-route('/card/edit/:id', route.requireSubscription('cards'),
+function isCard(ctx, next) {
+	if(Cards.findOne(ctx.params.id) !== undefined)
+		next();
+	else
+		route.redirect('/deck/create');
+}
+
+
+route('/card/edit/:id', route.requireSubscription('cards'), isCard, function(ctx) {
+	var card = Cards.findOne(ctx.params.id);
+	view.render('card_front');
+
+	Template.card_front.destroyed = function(){
+		if(isEmptyCard(ctx)) 
+			Cards.remove(ctx.params.id);
+	}
+
+	Template.card_front_form.init_form = function() {
+		return {component: 'form', id: 'info_form'}
+	}
+
+	Template.card_front_form.rendered= function() {
+		var form = ui.byID('info_form');
+		if(form) form.setFields(card);
+		gs.upload($(this.find('#image-upload')),function(err,data) {
+	  		form.setField('image', "/upload/"+data.result.path);
+	  	});
+
+		ui.autorun(function() {
+			Cards.update(ctx.params.id, {$set: form.getFields()});
+		});
+	}
+
+	Template.card_front_preview.helpers({
+		'card': function() {
+			var form = ui.byID('info_form');
+			return form.getFields();
+		}
+	});
+
+	Template.card_front_preview.events({
+		'click #save-card': function() {
+			if(isEmptyCard(ctx))
+				alert('Fill out this form fool');
+			else
+				route('/card/edit/' + ctx.params.id + '/problem');
+		}
+	});
+
+});
+
+route('/card/edit/:id/problem', route.requireSubscription('cards'), isCard,
 function(ctx) {
 
-var card = {};
-card.rules_form = null;
+var card = Cards.findOne(ctx.params.id);
 
+if(isEmptyCard(ctx))
+	route.redirect('/card/edit/' + ctx.params.id);
+else {
+	if(card.poblem === undefined);
+		Cards.update(ctx.params.id, {$set: {problem: {}}});
+	view.render('card_edit_info');
+}
+
+card.rules_form = null;
 
 card.db = function() {
 	return Cards.findOne(ctx.params.id);
@@ -52,15 +111,6 @@ card.setEditRules = function() {
 	this.edited_rules = null;
 }
 
-
-// Template.solution.helpers({
-// 	'solution': function() {
-// 		var problemized = routeSession.get('cur_problem');
-// 		if(problemized) 
-// 			return problemized.solution ? problemized.solution : ''; 
-// 	}
-// });
-
 Template.card_preview.helpers({
 	problemized: function() {
 		var problemized = problemize(card.db());
@@ -79,7 +129,8 @@ Template.card_preview.rendered = function() {
 
 Template.card_info_form.rendered = function() {
 	var form = ui.byID('back_form');
-	form.setFields(card.db().problem);
+	// console.log('cards.db()', Cards.findOne(ctx.params.id));
+	form.setFields(card.problem);
 	ui.autorun(function() {
 		Cards.update(ctx.params.id, {$set: {problem: form.getFields()}});
 	});
@@ -96,58 +147,6 @@ Template.card_info_form.helpers({
 		return {id: 'back_form', component: 'form'}
 	}
 });
-
-Template.card_info_form.events({
-	'click #render-link': function() {
-		var form = ui.byID('info_form');
-		Decks.set(deck,form.getFields());
-		route('/card/edit/' + card._id + '/look');
-	}
-});
-
-// Template.rules_form.events({
-// 	'click #add-rule': function(evt, template) {
-// 		// var dialog = ui.get('.dialog');
-// 		// dialog
-// 		// 	.relative('#add-rule', {top: -1, left: 0})
-// 		// 	.show();
-// 		// var form_html = dialog.find('.form');
-// 		// if (form_html) {
-// 		// 	var form = ui.get(dialog.find('.form'));
-// 		// 	form.setField('rule', '');
-// 		// 	form.set('error', '');
-
-// 		// }
-// 		// card.newRule();
-
-// 	},
-
-// 	'click .rule': function(evt, template) {
-// 		var dialog = ui.get('.dialog');
-// 		dialog
-// 			.relative($(evt.target), {top: 0, left: 0})
-// 			.show();
-		
-
-// 		var form_html = dialog.find('.form');
-// 		if (form_html) {
-// 			var form = ui.get(dialog.find('.form'));
-// 			form.setField('rule',card.edited_rules[card.editing_rule_idx]);
-// 			form.set('error', '');
-// 		}
-
-// 		card.editRule((evt.target).index());
-// 	}
-// });
-
-// Template.add_rule_dialog.created = function() {
-// 	this.rule_idx = null;
-// }
-
-// Template.add_rule_dialog.error = function(opts) {
-// 	var form = opts.template;
-// 	return form.get('error') || '';
-// }
 
 Template.rules_form.created = function() {
 	card.rules_form = this;
@@ -166,16 +165,6 @@ Template.rules_form.helpers({
 	}
 });
 
-// Template.rules_form.created = function() {
-// 	// this.rule_idx = null;
-// }
-
-// Template.rules_form.error = function(opts) {
-// 	var form = opts.template;
-// 	return form.get('error') || '';
-// }
-
-
 Template.rules_form.events({
 	'change .set-rule': function(evt, template) {
 		updateRules();
@@ -186,7 +175,7 @@ Template.rules_form.events({
 		updateRules();
 	},
 	'click #design-card': function() {
-		route('/card/edit/' + card.db()._id + '/front');
+		route('/deck/create');
 	}
 });
 
@@ -213,242 +202,15 @@ Template.rules_form.preserve({
 	'.new-rule[id]': function(node) { return node.id; }
 });
 
-view.render('card_edit_info');
 });
 
-route('/card/edit/:id/front', route.requireSubscription('cards'), function(ctx) {
+function isEmptyCard(ctx) {
 	var card = Cards.findOne(ctx.params.id);
-	view.render('card_front');
+	var keys = _.keys(card);
+	keys = _.without(keys,'_id','type', 'username');
+	if (_.all(keys, function(key) {return !card[key];}))
+		return true;
+	else
+		return false;
+}
 
-
-	Template.card_front_form.init_form = function() {
-		return {component: 'form', id: 'info_form'}
-	}
-
-	Template.card_front_form.rendered= function() {
-		console.log('rendered');
-		var form = ui.byID('info_form');
-		if(form) form.setFields(card);
-		gs.upload($(this.find('#image-upload')),function(err,data) {
-	  		form.setField('image', "/upload/"+data.result.path);
-	  	});
-
-		ui.autorun(function() {
-			Cards.update(ctx.params.id, {$set: form.getFields()});
-		});
-	}
-
-	Template.card_front_preview.helpers({
-		'card': function() {
-			var form = ui.byID('info_form');
-			return form.getFields();
-		}
-	});
-
-	Template.card_front_preview.events({
-		'click #save-card': function() {
-			route('/deck/create');
-		}
-	});
-
-});
-
-/*
-route('/card/create', function() {
-	var transformPrefix = domToCss(Modernizr.prefixed('transform'));
-
-	var error = new Reactive.Store('error',{
-		template:'',
-		solution:'',
-		rules:[]
-	});
-
-	var watchErrors = function(){
-		var update = function(){
-			Meteor.defer(function(){
-				var err = error.all();
-				_.each(err, function(msg, ele){
-					if(ele == 'rules')
-					{
-						$('#rules').children().children().children('.error').removeClass('error');
-						_.each(msg, function(mssg, elem){
-							var num = $('#rules').children().index() - elem;
-							var el = '#rules-' + num.toString();
-							$(el).addClass('error');
-						})
-					}
-					else
-					{
-						var el = '#' + ele;
-						$(el).addClass('error');
-					}
-				}); 
-			});
-		};
-		update();
-	}
-
-
-	function instantUpdate(event){
-		var el = $(event.target);
-			var id = $(event.target).attr('id');
-			var val = el.val();
-
-
-			if (!card.equals(id,val))
-			{
-				if(id == 'name')
-					card.set('name', val);
-				else if(id == 'tags')
-				{
-					val = val.split(',');
-					_.each(val, function(el, idx){
-						val[idx] = el.trim();
-					});
-					card.set(id, val);
-				}
-				else{
-					problem.set(id,val);
-					card.set('problem',problem.all());
-					watchErrors(el, id);
-				}
-			}
-	}
-
-
-	var events = {
-
-	'click .button' : function(event){
-			var tar = $(event.target).closest('.input-area')
-			if(validate())
-				switchPages(tar);
-		},
-		'click #upload' : function(){
-			$('#file').click();
-		}
-	};
-
-	Template.template_preview.events = {
-		'click #create' : function(event){
-			if(validate())
-				Cards.insert(card.all(), function(err, id){
-					if(!err)
-					{
-						alert('Succesful Creation');
-						var to_reset = [card, problem, error]
-						reset(to_reset);
-					}
-				})
-		}
-	}
-
-	Template.card_create.events = events;
-
-
-	Template.rules_form.events = {
-		// 'keyup .instant_update': function(event) {
-		// 	var el = $(event.target);
-		// 	var idx = el.closest('#rules').children().children().children('.rule-input').index(el);
-		// 	var rules = _.clone(problem.get('rules'));
-
-		// 	rules[idx] = el.val();
-		// 	problem.set('rules',rules);
-		// 	card.set('problem',problem.all())
-		// 	watchErrors();
-		// 	return false;
-		// },
-		'click #add-rule': function(event) {
-			$('#rules').prepend(Meteor.ui.render(function() {
-				return Template.rule_input();
-			}));
-			if($('#rules').height() <= $('#rule-container').height())
-				$('#bottom-button').css('top', $('#rules').height());
-		}
-	}
-
-
-
-	function getCard(){
-		var c = card.all();
-		var prob = problem.all();
-		var p = problemize(prob);
-		c.question = p.html;
-		c.answer = p.solution;
-
-	}
-
-	Template.front.card = function(){
-		return ui.get('card_look_info').getFields();
-	}
-
-	Template.back.card = function(){
-		var c = ui.get('card_input_info').getFields();
-		var p = problemize(c);
-		c.question = p.html;
-		c.answer = p.solution;
-		var e = {
-			template: '',
-			solution: '',
-			rules: _.map(c.rules,function(rule) {return '';})
-			};
-
-	_.each(p.errors,function(err) {
-		if (err.part == 'rule') {
-			console.log('rule error',err.idx);
-			e.rules[err.idx] = err.message;
-		}
-			
-		else
-			e[err.part] = err.message;
-		});
-
-		_.each(e,function(val,key) {
-			error.set(key,val);
-		})
-
-		watchErrors();
- 
-		return c;
-	}
-
-	// Template.front.card = function(){
-	// 	return getCard();
-	// }
-
-	Template.rule_input.idx = function(){
-		return $('#rules').children().length;
-	}
-
-	Template.rule_input.idx_adj = function(){
-		return $('#rules').children().length + 1;
-	}
-
-	Template.card_create.defer = function(){
-		Meteor.defer(function() {
-			//floatingObj('10px', 1500, 'easeInOutSine', $('.deck-shadow'));
-			// $('.color-change').change(function(){
-			// 	var name = $(this).attr('name');
-			// 	var val = $(this).val();
-			// 	card.set(name, val)
-			// });
-			// var picker = $.farbtastic('#colorpicker');
-			// picker.linkTo(onColorChange);
-			// function onColorChange(color){
-			// 	card.set('main-color',color);
-			// }
-			console.log('file', $('#file'));
-			$('#card_load').fileupload({
-		    	url: "/upload",
-		    	type: "POST",
-		    	dataType: 'json',
-		    	multipart: true,
-		    	done: function(e,data) {
-		    		console.log('done');
-		    		ui.get('card_image').value("upload/"+data.result.path)
-			    }
-		    });
-			});
-		return 'done';
-	}
-	view.render('card_create');
-});*/

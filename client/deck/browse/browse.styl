@@ -33,15 +33,16 @@
 	}
 }
 
-#deck-grid {
+#deck-grid, .create-grid {
 	height = 299px;
 	width = 150px;
 	height: 617px;
 	width: 100%;
 	overflow-y: auto;
 	overflow-x: hidden;
+	&::-webkit-scrollbar { width: 0 }
 	.shelf-wrapper {
-		padding-left: 40px;
+		padding: 0 0 30px 40px;
 		width: 980px;
 		background-image: url('/img/bigShelf.jpg');
 		background-repeat: repeat;
