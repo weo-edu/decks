@@ -20,7 +20,7 @@ Template.create_menu.events({
 route('/deck/create', function(){
 
 	Template.edit_collection.rendered = function() {
-		// console.log(this);
+
 	}
 
 	Template.my_collection.events({
@@ -88,6 +88,7 @@ route('/deck/create', function(){
 route('/deck/edit/:id', route.requireSubscription('decks'), isDeck,
 function(ctx) {
 
+var deck_id = ctx.params.id;
 var deck = Decks.findOne(ctx.params.id);
 view.render('deck_edit_info');
 
@@ -97,7 +98,6 @@ Template.deck_info_form.init_form = function() {
 }
 
 Template.deck_info_form.rendered= function() {
-	console.log('rendered');
 	var form = ui.byID('info_form');
 	if(form) form.setFields(deck);
 	gs.upload($(this.find('#image-upload')),function(err,data) {
@@ -109,14 +109,23 @@ Template.deck_info_form.rendered= function() {
 	});
 }
 
+Template.deck_info_form.destroyed = function() {
+
+}
+
+Template.deck_edit_info.created = function() {
+	// this.onDestroy(function() {
+	// 	console.log('instance destroyed');
+	// });
+}
 Template.deck_edit_info.destroyed = function() {
-	if(isEmptyDeck(ctx))
+	if(isEmptyDeck(deck_id))
 		Decks.remove(ctx.params.id);
 }
 
 Template.deck_edit.events({
 	'click #save-deck': function(e) {
-		if(isEmptyDeck(ctx))
+		if(isEmptyDeck(deck_id))
 			alert('Please fill out the form before you continue');
 		else 
 			route('/deck/edit/' + ctx.params.id + '/select-cards');
@@ -138,9 +147,10 @@ Template.deck_edit.helpers({
 route('/deck/edit/:id/select-cards', route.requireSubscription('decks'), isDeck,
 function(ctx) {
 	
-	var deck = Decks.findOne(ctx.params.id);
+	var deck_id = ctx.params.id;
+	var deck = Decks.findOne(deck_id);
 
-	if(isEmptyDeck(ctx))
+	if(isEmptyDeck(deck_id))
 		route.redirect('/deck/edit/' + ctx.params.id);
 	else
 		view.render('deck_cards_select');
@@ -149,7 +159,7 @@ function(ctx) {
 	
 
 	Template.deck_cards_select.destroyed = function() {
-		if(isEmptyDeck(ctx)) 
+		if(isEmptyDeck(deck_id)) 
 			Decks.remove(ctx.params.id);
 	}
 
@@ -166,7 +176,7 @@ function(ctx) {
 
 	Template.deck_selected_cards.events({
 		'click .deck': function() {
-			console.log(Decks.findOne(ctx.params.id));
+
 		},
 		'click .selected-card': function() {
 			Decks.update(ctx.params.id, {$pull: {cards: this._id}});
@@ -203,8 +213,10 @@ function isDeck(ctx, next) {
 		route.redirect('/deck/create');
 }
 
-function isEmptyDeck(ctx) {
-	var deck = Decks.findOne(ctx.params.id);
+function isEmptyDeck(id) {
+	var deck = Decks.findOne(id);
+	if(!deck) return true;
+
 	var keys = _.keys(deck);
 	keys = _.without(keys,'_id','type', 'username');
 	if (_.all(keys, function(key) {return !deck[key];}))

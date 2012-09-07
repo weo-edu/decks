@@ -16,11 +16,12 @@ function isCard(ctx, next) {
 
 
 route('/card/edit/:id', route.requireSubscription('cards'), isCard, function(ctx) {
-	var card = Cards.findOne(ctx.params.id);
+	var card_id = ctx.params.id;
+	var card = Cards.findOne(card_id);
 	view.render('card_front');
 
 	Template.card_front.destroyed = function(){
-		if(isEmptyCard(ctx)) 
+		if(isEmptyCard(card_id)) 
 			Cards.remove(ctx.params.id);
 	}
 
@@ -49,7 +50,7 @@ route('/card/edit/:id', route.requireSubscription('cards'), isCard, function(ctx
 
 	Template.card_front_preview.events({
 		'click #save-card': function() {
-			if(isEmptyCard(ctx))
+			if(isEmptyCard(card_id))
 				alert('Fill out this form fool');
 			else
 				route('/card/edit/' + ctx.params.id + '/problem');
@@ -61,9 +62,10 @@ route('/card/edit/:id', route.requireSubscription('cards'), isCard, function(ctx
 route('/card/edit/:id/problem', route.requireSubscription('cards'), isCard,
 function(ctx) {
 
-var card = Cards.findOne(ctx.params.id);
+var card_id = ctx.params.id;
+var card = Cards.findOne(card_id);
 
-if(isEmptyCard(ctx))
+if(isEmptyCard(card_id))
 	route.redirect('/card/edit/' + ctx.params.id);
 else {
 	if(card.poblem === undefined);
@@ -204,8 +206,10 @@ Template.rules_form.preserve({
 
 });
 
-function isEmptyCard(ctx) {
-	var card = Cards.findOne(ctx.params.id);
+function isEmptyCard(id) {
+	var card = Cards.findOne(id);
+	if(!card) return true;
+
 	var keys = _.keys(card);
 	keys = _.without(keys,'_id','type', 'username');
 	if (_.all(keys, function(key) {return !card[key];}))
