@@ -5,6 +5,12 @@ Template.card_view.helpers({
 	}
 });
 
+Template.back_button.events({
+	'click .back-button': function() {
+		route('/');
+	}
+});
+
 
 var muted = false;
 

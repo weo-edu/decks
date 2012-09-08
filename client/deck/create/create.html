@@ -1,42 +1,42 @@
 <template name='edit_collection'>
 	<div id='edit-collection-screen'>
 		{{> create_menu}}
-		<!-- <header class='awning'>
-			<ul id='create-menu'>
-				<li id='my-decks'>DECKS</li>
-				<li id='my-cards'>CARDS</li>
-			</ul>
-		</header> -->
-
 		<div id='my-decks'>
-			{{> my_decks}}
+			{{> my_collection}}
 		</div>
-		<div id='my-cards'>
-			{{> my_cards}}
-		</div>
+		{{> back_button}}
 	</div>
 </template>
 
-<template name='my_decks'>
-	{{#each decks}}
-		<div class='deck-container'>
-			{{> deck_view}}
-			<h4 class='deck-title'>{{title}}</div>
+<template name='my_collection'>
+	<div id='deck-grid'>
+		<div class='shelf-wrapper'>
+			{{#each decks}}
+				<div class='deck-container'>
+					{{> deck_view}}
+					<h4 class='deck-title'>{{title}}</div>
+				</div>
+			{{/each}}
+			{{#each cards}}
+				<div class='deck-container'>
+					{{> card_view}}
+					<h4 class='deck-title'>{{title}}</div>
+				</div>
+			{{/each}}
 		</div>
-	{{/each}}
+	</div>
 	{{#ui "dialog"}}
 		{{> collection_more}}
 	{{/ui}}
 </template>
 
-<template name='my_cards'>
-	{{#each cards}}
-		<div class='deck-container'>
-			{{> card_view}}
-			<h4 class='deck-title'>{{title}}</div>
+<!-- <template name='my_cards'>
+	<div class='create-grid'>
+		<div class='shelf-wrapper'>
+			
 		</div>
-	{{/each}}
-</template>
+	</div>
+</template> -->
 
 <template name="collection_more">
 	{{#with card}}
@@ -77,9 +77,9 @@
 <template name='create_menu'>	
 		<header class="awning title">
 			<ul id='create-menu'>
+				<li id='my-collection'>MY COLLECTION</li>
 				<li id='deck-create'>CREATE DECKS</li>
 				<li id='card-create'>CREATE CARDS</li>
-				<li id='my-collection'>MY COLLECTION</li>
 			</ul>
 		</header>
 	</div>
@@ -87,13 +87,14 @@
 
 <template name="deck_edit_info">
 	<div id="deck-edit-info-page" class="create-screen">
-		<h1 class="awning title">DECK EDITOR</h1>
+		{{> create_menu}}
 		<div class="parchment">
 			{{> deck_info_form}}
 		</div>
 		<div class='deck-preview'>
 			{{> deck_edit}}
 		</div>
+		{{> back_to_collection}}
 	</div>
 </template>
 
@@ -129,6 +130,7 @@
 		<h1 class='awning'>Select Cards</h1>
 		{{> deck_selected_cards}}
 		{{> deck_cards_grid}}
+		<a href='/deck/create' id='save-deck' style='position: absolute'>PUBLISH</a>
 	</div>
 </template>
 
@@ -138,15 +140,34 @@
 			{{> deck_view}}
 		{{/with}}
 		{{#each deck-cards}}
-			<div class='selected-card'>{{title}}</div>
+			{{> selected_card}}
 		{{/each}}
 	</div>
 </template>
 
+<template name='selected_card'>
+	<div class='selected-card'>{{title}}</div>
+</template>
+
 <template name='deck_cards_grid'>
-	<div class='card-grid'>
-		{{#each cards}}
-			<div title="{{stats}}" class='card' style='background-image: url({{image}});'></div>
-		{{/each}}
+	<div class='small-grid'>
+		<ul class='shelf-wrapper'>
+			{{#each cards}}
+				{{#if notInDeck}}
+					{{> selectable_card}}
+				{{/if}}
+			{{/each}}
+		</ul>
 	</div>
+</template>
+
+<template name='selectable_card'>
+	<li class='deck-container'>
+		<div title="{{stats}}" class='card' style='background-image: url({{image}});'></div>
+		<h4 class='deck-title'>{{title}}</h4>
+	</li>
+</template>
+
+<template name='back_to_collection'>
+	<div class='back-button' onclick='route("/deck/create")'></div>
 </template>
