@@ -30,6 +30,7 @@
 		return theta.dot([percentageCutoff, 1]);
 	}
 
+	/*
 	function computeGrade(obj, fn) {
 		fn = fn || weightedRegression;
 
@@ -93,6 +94,7 @@
 
 
 	function regrade(obj) {
+		console.log('regrading card');
 		var grade = computeGrade(obj);
 		if(grade) {
 			Cards.update(obj._id, {$set: {'stats.grade': grade}});
@@ -155,6 +157,10 @@
 		return Math.pow(3, 14 / (1 + Math.exp((-.25) * (g - 8))));
 	}
 
+	global.pointTest = function(g) {
+		return 14 / (1 + Math.exp((-.25) * (g-8)));
+	};
+
 	global.regrade = regrade;
 	global.displayPoints = displayPoints;
 	global.augmentPoints = augmentPoints;
@@ -162,4 +168,120 @@
 	global.points = points;
 	global.computeGrade = computeGrade;
 	global.augmentStats = augmentStats;
+	*/
+
+	Stats = {
+		regrade: function(obj) {
+			var grade = Stats.computeGrade(obj);
+			if(grade) {
+				Cards.update(obj._id, {$set: {'stats.grade': grade}});
+			}
+
+			return grade;
+		},
+		points: function(g) {
+			return Math.pow(3, 14 / (1 + Math.exp((-.25) * (g - 8))));
+		},
+		levelPoints: function(l) {
+			return .5*l*(Math.pow(3, 14/(1+Math.exp(-.25*(1+l/60-8)))))+300;
+		},
+		augmentPoints: function(uid, points) {
+			Meteor.users.findAndModify(uid,
+				[['_id', 'asc']],
+				{$inc: {points: -points}},
+				{'new': true},
+				function(err, res) {
+					if(err) throw err;
+
+					if(res.points < 0) {
+						console.log('level up', res.username, Stats.levelPoints(res.level+1));
+						Meteor.users.update(uid, {
+							$inc: {
+								level: 1, 
+								points: Stats.levelPoints(res.level+1)
+							}
+						});
+					}
+				}
+			);
+		},
+		augmentStats: function(collection, item, data, bin) {
+			var update = {$inc: {}};cluster =
+			_.each(data, function(val, key) {
+				update['$inc']['stats.' + key] = val;
+				if(bin) update['$inc']['stats.bins.' + bin + '.' + key] = val;
+			});
+
+			if(bin) {
+				update['$inc']['stats.updates'] = 1;
+				var obj = collection.findAndModify(item, 
+					[['_id', 'asc']], 
+					update, 
+					{'new': true}, function(err, res) {
+						if(err) throw err;
+					
+						if(res.stats.updates % regradeInterval  === 0) {
+							Stats.regrade(res);
+						}
+					});
+			} else {
+				collection.update(item, update, {multi: 0, upsert: 1}, function(err) {
+					err && console.log('augmentStats update error', err);
+				});
+			}
+		},
+		initialize: function(o) {
+			o.stats = {
+				bins: {
+
+				}
+			};
+			if(o.grade) o.stats.bins[o.grade] = {};
+			return o;
+		},
+		getBinCluster: function(bins) {
+			var cutoff = null;
+			_.find(bins, function(bin, grade) {
+				if(!cutoff || cutoff.percentage < bin.percentage)
+					cutoff = parseInt(grade, 10);
+
+				if(bin.percentage > percentageCutoff) {
+					cutoff = parseInt(grade, 10);
+					return true;
+				}
+			});
+
+			if(cutoff === null) return cutoff;
+			return _.compact([bins[cutoff-1], bins[cutoff], bins[cutoff+1]]);
+		},
+		computeGrade: function(obj, fn) {
+			var bins = (obj.stats && obj.stats.bins) || Stats.initialize(obj).stats.bins;
+			fn = fn || weightedRegression;
+
+			if(obj.grade) {
+				bins[obj.grade] = bins[obj.grade] || {attempts: 0, correct: 0, time: 0};
+				bins[obj.grade].attempts += initialBoost;
+				bins[obj.grade].correct += Math.floor(initialBoost * percentageCutoff);
+			}
+
+			_.each(bins, function(bin, grade) {
+				bin.percentage = Math.floor(bin.correct / bin.attempts * 100);
+				bin.grade = parseInt(grade, 10);
+			});
+
+			var cluster = Stats.getBinCluster(bins),
+				result = null;
+			try{
+				if(cluster && cluster.length > 1)
+					result = fn(cluster);
+				else
+					result = obj.grade;
+			} finally {
+				return result;
+			}
+		}
+	}
+
+
+	global.Stats = Stats;
 })(Meteor.is_client ? window : global);

@@ -27,14 +27,15 @@
       user = Guru.goat();
     }
 
-    return Games.insert({
+    var o = {
       creator: Meteor.user()._id,
       deck: deck,
       users: [Meteor.user()._id, user._id],
-      state: {
-        game: 'await_join'
-      }
-    }, cb);
+      state: 'await_join'
+    };
+    o[Meteor.user()._id] = {};
+    o[user._id] = {};
+    return Games.insert(o, cb);
   }
 
   /*
@@ -185,12 +186,25 @@
   */
   Game.prototype.answered = function(id) {
     id = id || this.me()._id;
-    var problems = this.game()[id + '_problems'];
+    var problems = this.game()[id].problems;
     var rest = _.filter(problems, function(p) {
       return p.hasOwnProperty('answer');
     });
     return rest && rest.length;
   }
+
+  Game.prototype.winner = function() {
+    var self = this;
+    var res = self.results();
+
+    if(Math.round(res.me.points) === Math.round(res.opponent.points))
+      return null;
+    else if(res.me.points > res.opponent.points)
+      return self.me();
+    else
+      return self.opponent();
+  }
+
   /*
     Generate a small object representing the results
     of the game
@@ -203,21 +217,35 @@
         opponent: self.results(self.opponent()._id)
       };
     } else {
-      var problems = self.game()[id + '_problems'],
-        correct = 0;
+      var problems = self.game()[id].problems,
+        correct = 0,
+        points = 0;
 
-      _.each(problems, function(val, key) {
-        if(self.isCorrect(val._id, problems)) {
+      _.each(problems, function(p, key) {
+        if(self.isCorrect(p._id, problems)) {
           correct++;
+          points += p.points;
         }
       });
 
       return {
         correct: correct,
         incorrect: problems.length - correct,
-        total: problems.length
+        total: problems.length,
+        points: points
       };
     }
+  }
+
+  Game.prototype.lastAnswerTime = function() {
+    return this.game()[this.me()._id].last_answer;
+  }
+
+  Game.prototype.lastAnsweredProblem = function() {
+    var self = this;
+    return _.find(self.problems().reverse(), function(p, i) {
+      return typeof p.answer !== 'undefined';
+    });
   }
 
   /*
@@ -231,13 +259,18 @@
 
     _.find(problems, function(val, key) {
       if(val._id === problem._id) {
-        problems[key]['answer'] = answer;        
+        problems[key]['answer'] = answer;
+        problems[key]['time'] = (+new Date()) - self.lastAnswerTime();
+        var card = Cards.findOne(problems[key].card_id);
+        var g = Stats.regrade(card);
+        problems[key]['points'] = Stats.points(g);    
         return true;
       }
       return false;
     });
 
-    update['$set'][self.me()._id + '_problems'] = problems;
+    update['$set'][self.me()._id + '.last_answer'] = new Date(); 
+    update['$set'][self.me()._id + '.problems'] = problems;
     Games.update(self.id, update);
     return self.isCorrect(problem._id);
   }
@@ -260,9 +293,7 @@
         cards = _.shuffle(cards);
       }
 
-      
-
-      update['$set'][self.opponent()._id + '_problems'] = 
+      update['$set'][self.opponent()._id + '.problems'] = 
         _.map(cards, function(card) {
           return problemize(Cards.findOne(card));
         });
@@ -271,7 +302,7 @@
       self.mystate('await_select');
     }
 
-    return self.game()[self.me()._id + '_problems'];
+    return self.game()[self.me()._id].problems;
   }
 
   /*
@@ -325,15 +356,14 @@
   Game.prototype.localState = function(uid, state) {
     var self = this,
       update = {$set: { } },
-      field  = 'state.' + uid,
-      fields = {fields: {}};
+      field  = uid + '.state';
 
     if(state) {
       update['$set'][field] = state;
       Games.update(self.id, update);
     }
 
-    return Games.findOne(self.id, {fields: {state: 1}})['state'][uid];
+    return self.game()[uid]['state'];
   }
 
   /*
@@ -345,9 +375,9 @@
 	Game.prototype.state = function(state) {
     var self = this;
     if(state) {
-      var update = {$set: {'state.game': state}};
-      update['$set']['state.' + self.me()._id] = state;
-      update['$set']['state.' + self.opponent()._id] = state;
+      var update = {$set: {'state': state}};
+      update['$set'][self.me()._id + '.state'] = state;
+      update['$set'][self.opponent()._id + '.state'] = state;
       Games.update(self.id, update);
       if(!routeSession.equals('game_state', state)) {
         routeSession.set('game_state', state);
@@ -368,7 +398,7 @@
   Game.prototype.stateWatcher = function() {
     var self = this;
     self.stateHandle = ui.autorun(function() {
-      var state = self.game().state.game;
+      var state = self.game().state;
       if(!routeSession.equals('game_state', state)) {
         routeSession.set('game_state', state);
         console.log('state change', state, self.me(), self.opponent());

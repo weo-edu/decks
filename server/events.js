@@ -28,8 +28,8 @@ Observer.on('complete:card', function(e) {
           time: e.action.time || 0,
           correct: ~e.action.adverbs.indexOf('correctly') ? 1 : 0
         };
-        augmentStats(Cards, match, stats, e.user.grade);
-        augmentStats(
+        Stats.augmentStats(Cards, match, stats, e.user.grade);
+        Stats.augmentStats(
           UserCardStats,
           {uid: e.user._id, pid: e.object._id},
           stats
@@ -38,13 +38,13 @@ Observer.on('complete:card', function(e) {
         if(stats.correct) {
           var card = Cards.findOne(e.object._id);
           if(!card.stats.hasOwnProperty('grade')) {
-            regrade(card);
+            Stats.regrade(card);
             card = Cards.findOne(e.object._id);
           }
 
           console.log('grade', card.stats.grade);
-          var pts = points(card.stats.grade || card.grade);
-          augmentPoints(e.user._id, pts);
+          var pts = Stats.points(card.stats.grade || card.grade);
+          Stats.augmentPoints(e.user._id, pts);
         }
     }).run();
 });

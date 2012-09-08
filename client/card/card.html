@@ -32,7 +32,7 @@
 		{{/each}}
 		<input id="add-rule" class='set-rule' name='rule' placeholder='Add Rule' />
 		<div>{{error}}</div>
-		<div id='design-card' class='red-button'>NEXT</div>
+		<div id='design-card' class='red-button'>PUBLISH</div>
 	</div>
 </template>
 
@@ -65,14 +65,14 @@
 
 <template name="card_front">
 	<div id='card-front-screen'>
-		<h1 class='awning'>DESIGN YOUR CARD</h1>
+		{{> create_menu}}
 		<div class="parchment">
 			{{> card_front_form}}
 		</div>
 		<div class='card-preview'>
 			{{> card_front_preview}}
 		</div>
-	
+		{{> back_to_collection}}
 	</div>
 </template>
 
@@ -100,127 +100,6 @@
 		<div id='card-edit' {{#if image}} style='background-image: url({{image}}); background-size: cover; background-position: center center; background-repeat: no-repeat;' {{/if}}></div>
 		<h4 class='card-title'>{{#if title}} {{title}} {{/if}}</h4>
 	{{/with}}
-	<div id='save-card'>PUBLISH</div>
+	<div id='save-card'>NEXT</div>
 </template>
-	<!-- <div id="front"  style="background-color:{{primary_color}}">
-			<div class="display-inner color-update">
-				{{#if name}}
-					<h2 class="secondary-color elem">{{name}}</h2>
-					{{#if image}}
-						<img src='/{{image}}'/>
-					{{else}}
-						<div class="fill elem"></div>
-					{{/if}}
-				{{else}}
-					{{#if image}}
-						<img src='/{{image}}' class="full elem"/>
-					{{else}}
-						<div class="full elem"></div>
-					{{/if}}
-				{{/if}}
-				<div class="tags text elem">
-					{{#each tags}}
-						<li class="tags" style="display:inline;">{{this}}</li>   
-					{{/each}}
-				</div>
-			</div>
-		</div> -->
-<!-- 
-<template name="card_look_input">
-	<div class="input-area {{isActive}}">
-		<div class="field-wrapper">
-			{{{form "card_look_info" template="card_look"}}}
-		</div>
-		<div class="button" id="more-inputs"></div>
-	</div>
-</template>
-
-<template name="card_look">
-	{{{input "card_name" field="name" placeholder="name" cls="field"}}}
-	{{{input "card_tags" field="tags" placeholder="tags" cls="field"}}}
-	{{{input "card_load" type="file" placeholder="file" cls="field" label="Image:" multiple="true"}}}
-	{{{input "card_image" field="image" cls="field upload_val"}}}
-	{{{input "card_primary" field="primary_color" cls="field" label="Background Color:"}}}
-</template>
-
-<template name="color_picker">
-	<div id="color-picker" class="input-area active">
-		<div class="field-wrapper">
-			<div class="field">
-				<div class="text">Name:</div>
-				<input id="name" class="instant_update" type="text" name="important" />
-			</div>
-			<div class="field">
-				<div class="text">Tags:</div>
-				<input type="text" class="instant_update" id="tags" name="tags"/>
-			</div>
-			<div class="field">
-				<div class="text">Graphic*:</div>
-				<div class="instant_update">
-					<div id="upload" class="upload">Browse</div>	
-					<input type="file" id="file" name="file" tabindex="-1" img='' style="display:none;" multiple />
-				</div>
-			</div>
-			<div class="card-section">
-				<div class="to-change">Background Color:</div>
-				<input type="hidden" id="color-update" class="color-update color-change" name="main-color" value="#134256" />
-				<input type="hidden" id="secondary-color"class="secondary-color color-change" name="sec-color" value="#132634"/>
-				<div id="colorpicker"></div>
-			</div>
-		</div>
-	</div>
-</template>
-
-<template name="template_preview">
-	<div id="template-input" class="input-area">
-		<div id="card-inner" class="display-inner field-wrapper">
-		<div class="textarea-field field">
-			<div class="text">Template*: </div>
-			<textarea id="template" type="text" class="instant_update back-part validate" name="template" rows="4"/> 
-		</div>
-		<div class="field">
-			<div class="text">Solution*: </div>
-			<input class="instant_update back-part validate" id="solution" type="text" name="solution"/>
-		</div>
-		{{>rules}}
-		<div id="bottom-button" class="field">
-			<div id="create" class="upload">Create</div>
-		</div>
-		</div>
-		<div class="button" id="prev-inputs"></div>
-	</div>
-</template>	
-
-
-
-
-
-<template name="card_deck_list">
-	<div class="display-inner">
-		<h2>Select Deck to Add To</h2>
-		Decks:
-		{{#each deck}}
-			<div class="deck-container">
-				<div class="deck">
-					<p>{{name}}</p>
-					<img src="/{{graphic}}"/>
-				</div>
-			</div>
-		{{/each}}	
-	</div>
-</template>
-
-
-
-<template name="rule_input">
-	<li id="rule-{{idx}}" class="rule-cont">
-		{{{input "rules-{{idx}}" field="rules-{{idx}}" cls="field"}}}
-		<div class="field">
-			<div class="text">rule-{{idx_adj}}:</div>
-			<input id="rules-{{idx}}" class="instant_update rule-input"/>
-		</div>
-	</li>
-</template> -->
-
-
-
+	
