@@ -70,7 +70,7 @@ wood-button() {
 	text-shadow: 1px 1px 0 rgba(black, .5);
 }
 
-.back-button {
+back-button() {
 	background-image: url('/img/back-button.png');
 	position: absolute;
 	size = 64px;
@@ -89,6 +89,10 @@ wood-button() {
 		bottom: 9px;
 		background-position: -1px -1px;
 	}
+}
+
+.back-button {
+	back-button();
 }
 
 
