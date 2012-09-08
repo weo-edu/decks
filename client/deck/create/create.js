@@ -90,23 +90,48 @@ function(ctx) {
 
 var deck_id = ctx.params.id;
 var deck = Decks.findOne(ctx.params.id);
-view.render('deck_edit_info');
 
+view.render('deck_edit_info');
 
 Template.deck_info_form.init_form = function() {
 	return {component: 'form', id: 'info_form'}
 }
 
+Template.deck_info_form.created = function() {
+
+	ui.onID('info_form', function(form) {
+		form.onSet('tags', function(tags) {
+			if (_.isArray(tags))
+				return tags.join(', ');
+			else
+				return tags;
+		});
+		form.onGet('tags', function(tags) {
+			if (!tags) return;
+			return _.map(tags.split(','), function(tag) {
+				return tag.trim();
+			});
+		});
+		
+	});
+	
+}
+
 Template.deck_info_form.rendered= function() {
 	var form = ui.byID('info_form');
-	if(form) form.setFields(deck);
 	gs.upload($(this.find('#image-upload')),function(err,data) {
-  		form.setField('image', "/upload/"+data.result.path);
-  	});
-
-	ui.autorun(function() {
-		Decks.update(ctx.params.id, {$set: form.getFields()});
+		form && form.setField('image', "/upload/"+data.result.path);
 	});
+
+	if (this.firstRender)  {
+		form.setFields(deck);
+		ui.autorun(function() {
+			Decks.update(ctx.params.id, {$set: form.getFields()});
+		});
+	}
+		
+
+
 }
 
 Template.deck_info_form.destroyed = function() {

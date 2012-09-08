@@ -18,12 +18,16 @@
 			<h1>SELECT YOUR OPPONENTS CARDS</h1>
 			{{> card_selection cards}}
 			<div class='play-button'>GO</div>
-			<p id='chosen' >CHOSEN <span class='chosen'>0</span> OF {{nCards}}</p>
+			{{> num_selected}}
 		</div>
 		{{#ui "dialog"}}
 			{{{ message }}}
 		{{/ui}}
 	</div>
+</template>
+
+<template name="num_selected">
+	<p id='chosen' >CHOSEN {{selected}} OF {{nCards}}</p>
 </template>
 
 <template name="await_select">
@@ -34,7 +38,7 @@
 	<div id='card-grid'>
 		<div class='shelf-wrapper'>
 		{{#each this}}
-			{{> card_view}}
+			{{> card_selection_view}}
 		{{/each}}
 		</div>
 	</div>
@@ -42,17 +46,13 @@
 </template>
 
 <template name='user'>
-	{{#isolate}}
 	<div class='user'>
 		<div class='avatar-tmb' style='background-image: url({{avatar}})'></div>
 		<p>{{username}}</p>
 		{{#unless select}}
-			{{#isolate}}
 			{{> progress_bar}}
-			{{/isolate}}
 		{{/unless}}
 	</div>
-	{{/isolate}}
 </template>
 
 <template name='progress_bar'>
@@ -66,7 +66,19 @@
 	<p>You've already selected the maximum number of cards allowed per game.</p>
 </template>
 
-<template name='card_view'>
+<template name='card_selection_view'>
 	<div title="{{stats}}" class='card' style='background-image: url({{image}});'>
+		<div class="selection-count">
+			{{selectionCount}}
+		</div>
+		{{#if selectionCount}}
+			<div class="deselect">
+				-
 			</div>
+		{{/if}}
+	</div>
+</template>
+
+<template name='card_view'>
+	<div title="{{stats}}" class='card' style='background-image: url({{image}});'></div>
 </template>

@@ -66,15 +66,25 @@
   		}
 
 
+  		//XXX if you could access a parent template vars this would be unnecessary
+  		var selected_cards = null;
   		/*
   			Cards select template helpers and events
   		*/
   		Template.cards_select.created = function() {
-  				this.cards = [];
-  				this.opponent = game.opponent();
-  				this.nCards = game.nCards();
-  				this.deck = game.deck();
-  				this.deck_cards = Cards.find(this.deck.cards).fetch();
+  			var self = this;
+				self.opponent = game.opponent();
+
+				self.deck = game.deck();
+				self.deck_cards = Cards.find(this.deck.cards).fetch();
+
+				selected_cards = new ReactiveDict();
+
+				_.each(this.deck_cards, function(card) {
+					selected_cards.set(card._id,0);
+				});
+
+				routeSession.set('selectionsLeft', game.nCards());
 			};
 
 			Template.cards_select.rendered = function() {
@@ -88,9 +98,6 @@
 				opponent: function(ctx){
 					return ctx.template.opponent;
 				},
-				nCards: function(ctx) {
-					return ctx.template.nCards;
-				},
 				deck: function(ctx){
 					return ctx.template.deck;
 				},
@@ -102,29 +109,68 @@
 					var message = dialog.get('message');
 					return Template[message] && Template[message]();
 				}
+
 			});
 
 			Template.cards_select.events({
 				'click .play-button': function(e, template) {
-					Meteor.defer(function(){ game.problems(template.cards); });
+					var cards = [];
+					_.each(selected_cards.all(), function(num, _id) {
+						_.times(num, function() {
+							cards.push(_id);
+						});
+					});
+					console.log('cards', cards);
+					Meteor.defer(function(){ game.problems(cards); });
 				},
-				'click .card': function(e, template) {
-					var self = this,
-						el = $(e.currentTarget),
-						container = el.parent(),
-						numSelected = container.children('.select').length;
+				'mousedown .card': function(evt, template) {
+					var data = this;
+					template.handler = ui.down(template,function() {
+						var numSelected = selected_cards.get(data._id);
+						var selectionsLeft = routeSession.get('selectionsLeft')
+						if (selectionsLeft) {
+							selected_cards.set(data._id, numSelected + 1 );
+							routeSession.set('selectionsLeft', selectionsLeft - 1);
+							return true;
+						}
+					});
+				},
+				'mousedown .deselect': function(evt, template) {
+					var data = this;
+					template.handler = ui.down(template,function() {
+						var numSelected = selected_cards.get(data._id);
+						var selectionsLeft = routeSession.get('selectionsLeft')
+						if (numSelected > 0) {
+							selected_cards.set(data._id, numSelected - 1 );
+							routeSession.set('selectionsLeft', selectionsLeft + 1);
+							return true;
+						}
+					});
+					evt.preventDefault();
+					evt.stopPropagation();
+				},
 
-					if(numSelected === template.nCards && ! el.hasClass('select')) {
-						var dialog = ui.get('.dialog');
-						dialog.set('message', 'max_cards');
-						dialog.closable().overlay().show().center();
-					} else {
-						template.cards.push(self._id);
-						el.toggleClass('select');
-						$('.chosen').html(container.children('.select').length);
-					}
+				'mouseup': function (evt, template) {
+					template.handler.up();
 				}
 			});
+		
+		Template.num_selected.created = function() {
+			this.ncards = game.nCards();
+		}
+
+		Template.num_selected.helpers({
+			nCards: function(ctx) {
+				return ctx.template.ncards;
+			},
+			selected: function(ctx) {
+				return ctx.template.ncards - routeSession.get('selectionsLeft');
+			}
+		});
+
+			Template.card_selection_view.selectionCount = function() {
+				return selected_cards.get(this._id);
+			}
 
 
 			/*
@@ -166,6 +212,12 @@
 	 			}
 	 		});
 
+	 		Template.current_card.helpers({
+	 			card: function() {
+	 				return routeSession.get('cur_problem');
+	 			}
+	 		});
+
 	 		Template.deck_play.events({
  				'click': function(e, template) {
  					$('#answer').focus();
@@ -181,8 +233,8 @@
 						card.title = card.name;
 						
 						if(res) {
-							regrade(card);
-							console.log(displayPoints(card.stats.grade || card.grade), 'points');
+							Stats.regrade(card);
+							console.log(Stats.points(card.stats.grade || card.grade), card._id, card.stats.grade, 'points');
 						}
 						event({name: 'complete', time: dTime},
 							card,
@@ -343,10 +395,10 @@
 					return Meteor.user().level;
 				},
 				points: function() {
-					return Math.round(pointsToNextLevel(Meteor.user().level) - Meteor.user().points);
+					return Math.round(Stats.levelPoints(Meteor.user().level) - Meteor.user().points);
 				},
 				pointsNeeded: function() {
-					return Math.round(pointsToNextLevel(Meteor.user().level));
+					return Math.round(Stats.levelPoints(Meteor.user().level));
 				}
 			})
 

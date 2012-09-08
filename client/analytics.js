@@ -22,7 +22,7 @@
 				return val && val.toFixed && val.toFixed(2);
 			},
 			points: function() {
-				return points(this).toFixed(2);
+				return Stats.points(this).toFixed(2);
 			}
 		});
 

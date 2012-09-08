@@ -1,6 +1,6 @@
 Template.card_view.helpers({
 	stats: function(ctx) {
-		var grade = computeGrade(_.clone(this));
+		var grade = Stats.computeGrade(_.clone(this));
 		return "Grade: " + Math.floor(grade*100)/100;
 	}
 });
