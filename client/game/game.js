@@ -167,7 +167,7 @@
     XXX: Add run-time config options
   */
   Game.prototype.nCards = function() {
-    return defaults.nCards;
+    return this.deck(true).cardsPerGame || defaults.nCards;
   }
 
   Game.prototype.isCorrect = function(id, problems){
@@ -289,6 +289,8 @@
         cards = _.map(_.range(self.nCards()), function() {
           return deck.cards[utils.rand_int(deck.cards.length)];
         });
+      } else {
+        cards = _.shuffle(cards);
       }
 
       update['$set'][self.opponent()._id + '.problems'] = 
