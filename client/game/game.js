@@ -349,8 +349,17 @@
       update['$set']['state.' + self.me()._id] = state;
       update['$set']['state.' + self.opponent()._id] = state;
       Games.update(self.id, update);
-      if(!routeSession.equals('game_state', state))
+      if(!routeSession.equals('game_state', state)) {
         routeSession.set('game_state', state);
+        if (state === 'results') {
+          /*var game = Games.findOne(self.id);
+          game.type = 'game';
+          game.tile = self.deck().title + ': ' + self.me().username + 'vs ' + self.opponent().username;
+          event('complete', game, self.win() ? 'correctly' : 'incorrectly');*/
+        }
+        console.log('set game state', state, self.me(), self.opponent());
+      }
+        
     }
 
     return routeSession.get('game_state');
@@ -362,6 +371,7 @@
       var state = self.game().state.game;
       if(!routeSession.equals('game_state', state)) {
         routeSession.set('game_state', state);
+        console.log('state change', state, self.me(), self.opponent());
       }
     });
   }

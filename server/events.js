@@ -48,3 +48,11 @@ Observer.on('complete:card', function(e) {
         }
     }).run();
 });
+
+
+Observer.on('complete:game', function(e) {
+  Fiber(function() {
+    var match = e.object;
+    UserDeckStats.update({user: e.user, deck: match.deck}, mod, {multi: 0, upsert: true})
+  }).run();
+});
