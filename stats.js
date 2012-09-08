@@ -176,6 +176,8 @@
 			if(grade) {
 				Cards.update(obj._id, {$set: {'stats.grade': grade}});
 			}
+
+			return grade;
 		},
 		points: function(g) {
 			return Math.pow(3, 14 / (1 + Math.exp((-.25) * (g - 8))));

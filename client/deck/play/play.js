@@ -1,17 +1,17 @@
 ;(function(){
-	var game = null,
-		stateMachineHandle = null;
-
-
   route('/game/:id', 
   	function(ctx, next) {
  			Meteor.subscribe('game', ctx.params.id, next);
   	},
   	function(ctx){
+  		var game = null,
+  			stateMachineHandle = null;
+
   		game && stopPlaying();
   		game = new Game(ctx.params.id);
 
   		function stopPlaying() {
+  			console.log('stopplaying');
   			stateMachineHandle && stateMachineHandle.stop();
   			stateMachineHandle = null;
 
@@ -173,18 +173,16 @@
  				'keypress': function(e, template) {
  					if(e.which === 13) {
 						var res = game.answer(parseInt($('#answer').val(), 10)),
-							dTime = (new Date()).getTime() - problemRendered,
-							problem = routeSession.get('cur_problem');
+							problem = game.lastAnsweredProblem();
 
 						var card = _.clone(Cards.findOne(problem.card_id));
 						card.type = 'card';
 						card.title = card.name;
 						
 						if(res) {
-							Stats.regrade(card);
-							console.log(Stats.points(card.stats.grade || card.grade), card._id, card.stats.grade, 'points');
+							console.log('<table>',problem.points, card.stats.grade, 'points','</table>');
 						}
-						event({name: 'complete', time: dTime},
+						event({name: 'complete', time: problem.time},
 							card,
 							res ? 'correctly' : 'incorrectly'
 							);
@@ -244,11 +242,14 @@
 	 				return ctx.template.opponent;
 	 			},
 	 			winner: function(ctx) {
-	 				if(ctx.template.results.me.correct === ctx.template.results.opponent.correct)
-	 					return 'TIE';
-	 				else
-						return ctx.template.results.me.correct > ctx.template.results.opponent.correct 
-							? ctx.template.me.username : ctx.template.opponent.username;
+	 				var winner = game.winner();
+	 				return winner && winner.username || 'TIE';
+	 			}
+	 		});
+
+	 		Template.individual_results.helpers({
+	 			round: function(points) {
+	 				return Math.round(points);
 	 			}
 	 		});
 
