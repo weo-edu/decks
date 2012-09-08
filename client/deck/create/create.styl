@@ -8,6 +8,17 @@
 #edit-collection-screen {
 	ipad();
 	background: url('/img/woodBg.jpg') center;
+
+	.deck-container.empty {
+		.deck:after {
+			content: '';
+			position: absolute;
+			background: url('/img/emptyBanner.png');
+			width: 150px;
+			height: 100px;
+		}
+	}
+
 	.dialog {
 		.deck-image {
 			background: #DDD url("/img/deckBurst.png") 14px 33px no-repeat

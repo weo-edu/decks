@@ -101,6 +101,7 @@
 	}
 
 	Guru.on('stop', function() {
+		console.log('guru stop');
 		game && game.destroy();
 		game = null;
 		stopAutorun();

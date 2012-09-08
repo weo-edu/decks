@@ -43,6 +43,15 @@ route('/deck/create', function(){
 		'decks': function() {
 			return Decks.find({});
 		},
+		'hasCards': function() {
+			if(!this.cards) 
+				return 'empty';
+			else if(this.cards.length === 0)
+				return 'empty';
+			else
+				return ''
+			// console.log(Decks.find(this._id).fetch());	
+		},
 		'cards': function() {
 			return Cards.find({});
 		}

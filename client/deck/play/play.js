@@ -1,17 +1,17 @@
 ;(function(){
-	var game = null,
-		stateMachineHandle = null;
-
-
   route('/game/:id', 
   	function(ctx, next) {
  			Meteor.subscribe('game', ctx.params.id, next);
   	},
   	function(ctx){
+  		var game = null,
+				stateMachineHandle = null;
+
   		game && stopPlaying();
   		game = new Game(ctx.params.id);
 
   		function stopPlaying() {
+  			console.log('stopplaying'); 
   			stateMachineHandle && stateMachineHandle.stop();
   			stateMachineHandle = null;
 
@@ -151,7 +151,7 @@
 				},
 
 				'mouseup': function (evt, template) {
-					template.handler.up();
+					template.handler && template.handler.up();
 				}
 			});
 		

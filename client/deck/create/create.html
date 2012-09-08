@@ -12,7 +12,7 @@
 	<div id='deck-grid'>
 		<div class='shelf-wrapper'>
 			{{#each decks}}
-				<div class='deck-container'>
+				<div class='deck-container {{hasCards}}'>
 					{{> deck_view}}
 					<h4 class='deck-title'>{{title}}</div>
 				</div>
