@@ -187,6 +187,13 @@ Template.rules_form.events({
 	},
 	'click #design-card': function() {
 		route('/deck/create');
+	},
+	'click #save-button': function() {
+		route.redirect('/card/edit/' + card_id);
+	},
+	'click #save-card.publish': function() {
+		Cards.update(card_id, {$set: {status: 'published'}});
+		route.redirect('/deck/create');
 	}
 });
 

@@ -152,7 +152,7 @@
 				},
 
 				'mouseup': function (evt, template) {
-					template.handler.up();
+					template.handler && template.handler.up();
 				}
 			});
 		

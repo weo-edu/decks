@@ -15,10 +15,10 @@
 					{{> user opponent}}
 				</div>
 			</div>
-			<h1>SELECT YOUR OPPONENTS CARDS</h1>
+			<div class='awning title'>SELECT YOUR OPPONENTS CARDS {{> num_selected}}</div>
 			{{> card_selection cards}}
 			<div class='play-button'>GO</div>
-			{{> num_selected}}
+			
 		</div>
 		{{#ui "dialog"}}
 			{{{ message }}}
@@ -27,7 +27,7 @@
 </template>
 
 <template name="num_selected">
-	<p id='chosen' >CHOSEN {{selected}} OF {{nCards}}</p>
+	({{selected}} OF {{nCards}})
 </template>
 
 <template name="await_select">
@@ -35,14 +35,15 @@
 </template>
 
 <template name='card_selection'>
-	<div id='card-grid'>
+	<div class='small-grid'>
 		<div class='shelf-wrapper'>
 		{{#each this}}
-			{{> card_selection_view}}
+			<div class='deck-container'>
+				{{> card_selection_view}}
+			</div>
 		{{/each}}
 		</div>
 	</div>
-	<div class='next'></div>
 </template>
 
 <template name='user'>
@@ -67,16 +68,16 @@
 </template>
 
 <template name='card_selection_view'>
-	<div title="{{stats}}" class='card' style='background-image: url({{image}});'>
-		<div class="selection-count">
-			{{selectionCount}}
-		</div>
-		{{#if selectionCount}}
-			<div class="deselect">
-				-
+		{{> card_view}}
+			<div class="selection-count">
+				{{selectionCount}}
 			</div>
-		{{/if}}
-	</div>
+			{{#if selectionCount}}
+				<div class="deselect">
+					-
+				</div>
+			{{/if}}
+		</div>
 </template>
 
 <template name='card_view'>
