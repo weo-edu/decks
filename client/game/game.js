@@ -9,13 +9,14 @@
 	Game.create = function(deck, user) {
     user = User.lookup(user || Meteor.user());
 
-    try {
+//    try {
       var game = new Game(Game._insert(deck, user));
       return game.invite(user._id);
-    } catch(err) {
+    /*} catch(err) {
       console.log("User does not exist: " + err.message);
+      console.log(err);
       return false;
-    }
+    }*/
 	}
 
   /*
@@ -68,10 +69,6 @@
       //  Setup the reactive game_state routeSession variable
       //  We use a routeSession variable so that we can be reactive
       //  specific to this value instead of the entire game object.
-      //
-      //  XXX Put this variable on routeSession once its finished
-      //  There is no need to maintain this once the current route
-      //  has been destroyed.
       routeSession.set('game_state', self.game().state.game);
 
       //  The game creator manages the official state, anyone joining
@@ -136,7 +133,7 @@
   */
   Game.prototype.invite = function(uid) {
     var self = this;
-    Games.update(this.id, { $addToSet: { users: uid } }, function(err) {
+    self.update({ $addToSet: { users: uid } }, function(err) {
       if(!err) {
         self.message('invite:game', self.id);
       } else {
@@ -170,14 +167,36 @@
     return this.deck(true).cardsPerGame || defaults.nCards;
   }
 
-  Game.prototype.isCorrect = function(id, problems){
+  Game.prototype.isCorrect = function(problem){
+    return problem.answer === problem.solution;
+  }
+
+  Game.prototype.player = function(id) {
     var self = this;
-    problems = problems || self.problems();
-    var problem = _.find(problems, function(val, key){
-      return val._id === id;
+    id = id || self.me()._id;
+    return self.game()[id];
+  }
+
+  Game.prototype.updatePlayer = function(o, id) {
+    var self = this,
+      update = {$set: {}};
+
+    id = id || self.me()._id;
+    _.each(o, function(val, key) {
+      update['$set'][id + '.' + key] = val;
     });
 
-    return problem.answer === problem.solution;
+    self.update(update);
+  }
+
+  Game.prototype.update = function(update, cb) {
+    Games.update(this.id, update, cb);
+  }
+
+  Game.prototype.points = function(pts) {
+    var self = this;
+    pts && self.updatePlayer({ points: self.player().points + pts });
+    return self.player().points;
   }
 
   /*  
@@ -186,10 +205,10 @@
   */
   Game.prototype.answered = function(id) {
     id = id || this.me()._id;
-    var problems = this.game()[id].problems;
-    var rest = _.filter(problems, function(p) {
-      return p.hasOwnProperty('answer');
-    });
+    var problems = this.player(id).problems,
+      rest = _.filter(problems, function(p) {
+        return p.hasOwnProperty('answer');
+      });
     return rest && rest.length;
   }
 
@@ -217,12 +236,12 @@
         opponent: self.results(self.opponent()._id)
       };
     } else {
-      var problems = self.game()[id].problems,
+      var problems = self.player(id).problems,
         correct = 0,
         points = 0;
 
       _.each(problems, function(p, key) {
-        if(self.isCorrect(p._id, problems)) {
+        if(self.isCorrect(p)) {
           correct++;
           points += p.points;
         }
@@ -238,7 +257,7 @@
   }
 
   Game.prototype.lastAnswerTime = function() {
-    return this.game()[this.me()._id].last_answer;
+    return this.player().last_answer;
   }
 
   Game.prototype.lastAnsweredProblem = function() {
@@ -254,30 +273,30 @@
   Game.prototype.answer = function(answer) {
     var self = this,
       problems = self.problems(),
-      update = { $set: {} },
-      problem = self.problem();
+      pid = self.problem()._id;
 
-    _.find(problems, function(val, key) {
-      if(val._id === problem._id) {
-        problems[key]['answer'] = answer;
-        problems[key]['time'] = (+new Date()) - self.lastAnswerTime();
-        var card = Cards.findOne(problems[key].card_id);
-        var g = Stats.regrade(card);
-        problems[key]['points'] = Stats.points(g);    
+    problem = _.find(problems, function(p, key) {
+      if(p._id === pid) {
+        p.answer = answer;
+        p.time = (+new Date()) - self.lastAnswerTime();
+        p.points = Stats.points(Stats.regrade(p.card_id));    
         return true;
       }
-      return false;
     });
 
-    update['$set'][self.me()._id + '.last_answer'] = new Date(); 
-    update['$set'][self.me()._id + '.problems'] = problems;
-    Games.update(self.id, update);
-    return self.isCorrect(problem._id);
+    self.updatePlayer({
+      last_answer: new Date(),
+      problems: problems
+    });
+
+    var correct = self.isCorrect(problem);
+    self.emit('answer', problem, correct);
+    return correct;
   }
 
   /*
     Returns the list of problemized cards
-    or a particular index into that list
+    or sets them for the opponent
   */
   Game.prototype.problems = function(cards) {
     var self = this,
@@ -293,16 +312,14 @@
         cards = _.shuffle(cards);
       }
 
-      update['$set'][self.opponent()._id + '.problems'] = 
-        _.map(cards, function(card) {
-          return problemize(Cards.findOne(card));
-        });
-
-      Games.update(self.id, update);
+      self.updatePlayer({
+        problems: _.map(cards, function(c) { return problemize(Cards.findOne(c)); })
+      }, 
+      self.opponent()._id);
       self.mystate('await_select');
     }
 
-    return self.game()[self.me()._id].problems;
+    return self.player().problems;
   }
 
   /*
@@ -354,16 +371,9 @@
   /*
   */
   Game.prototype.localState = function(uid, state) {
-    var self = this,
-      update = {$set: { } },
-      field  = uid + '.state';
-
-    if(state) {
-      update['$set'][field] = state;
-      Games.update(self.id, update);
-    }
-
-    return self.game()[uid]['state'];
+    var self = this;
+    state && self.updatePlayer({state: state}, uid);
+    return self.player(uid).state;
   }
 
   /*
@@ -378,7 +388,7 @@
       var update = {$set: {'state': state}};
       update['$set'][self.me()._id + '.state'] = state;
       update['$set'][self.opponent()._id + '.state'] = state;
-      Games.update(self.id, update);
+      self.update(update);
       if(!routeSession.equals('game_state', state))
         routeSession.set('game_state', state);
     }

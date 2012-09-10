@@ -28,10 +28,14 @@
 				var self = this;
 				if(! ~fields.indexOf('created') && ! ~fields.indexOf('modified')){
 					var res = true;
+					fields.push('modified');
+					modifier['$set'] = modifier['$set'] || {};
 					_.each(docs, function(doc){
 						res = res && !!~doc.users.indexOf(uid);
 						doc.modified = (new Date()).getTime();
+						modifier['$set']['modified'] = doc.modified;
 					});
+
 					res || console.log('update access denied');
 					return res;
 				} else

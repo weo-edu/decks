@@ -1,8 +1,9 @@
 ;(function(){
   route('/game/:id', 
-  	function(ctx, next) {
+  	/*function(ctx, next) {
  			Meteor.subscribe('game', ctx.params.id, next);
-  	},
+  	}*/
+  		route.requireSubscription2('game', route.params('id')),
   	function(ctx){
   		var game = null,
   			stateMachineHandle = null;
