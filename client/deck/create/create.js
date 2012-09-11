@@ -44,11 +44,10 @@ route('/deck/create', function(){
 			return Decks.find({});
 		},
 		'isPublished': function() {
-			if(this.status === 'published')
-				return '';
+			if(this.status !== 'published')
+				return 'draft'
 			else
-				return 'draft';
-
+				return '';
 		},
 		'cards': function() {
 			return Cards.find({});
@@ -151,8 +150,12 @@ Template.deck_edit_info.created = function() {
 	// });
 }
 Template.deck_edit_info.destroyed = function() {
+	var thisDeck = Decks.findOne(deck_id);
 	if(isEmptyDeck(deck_id))
 		Decks.remove(ctx.params.id);
+	else if(thisDeck.cards.length === 0)
+		Decks.update(deck_id, {$set: {status: 'draft'}});
+
 }
 
 Template.deck_edit.events({
@@ -191,8 +194,11 @@ function(ctx) {
 	
 
 	Template.deck_cards_select.destroyed = function() {
-		if(isEmptyDeck(deck_id)) 
+		var thisDeck = Decks.findOne(deck_id);
+		if(isEmptyDeck(deck_id))
 			Decks.remove(ctx.params.id);
+		else if(thisDeck.cards.length === 0)
+			Decks.update(deck_id, {$set: {status: 'draft'}});
 	}
 
 	Template.deck_selected_cards.helpers({
@@ -240,7 +246,12 @@ function(ctx) {
 			route.redirect('/deck/edit/' + deck_id);
 		},
 		'click #save-deck.publish': function() {
-			Decks.update(deck_id, {$set: {status: 'published'}});
+			if(Decks.findOne(deck_id).cards.length === 0) {
+				alert('you need to assign cards to a deck before you publish it');
+				Decks.update(deck_id, {$set: {status: 'draft'}});
+			}
+			else 
+				Decks.update(deck_id, {$set: {status: 'published'}});
 			route.redirect('/deck/create');
 		}
 	});

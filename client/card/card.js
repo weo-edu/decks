@@ -36,9 +36,11 @@ route('/card/edit/:id', route.requireSubscription('cards'), isCard, function(ctx
 	  		form.setField('image', "/upload/"+data.result.path);
 	  	});
 
+		// XXX clean up autoruns
 		ui.autorun(function() {
 			Cards.update(ctx.params.id, {$set: form.getFields()});
 		});
+
 	}
 
 	Template.card_front_preview.helpers({
@@ -109,7 +111,8 @@ card.editRule = function(idx) {
 }
 
 card.setEditRules = function() {
-	routeSession.set('rules', this.edited_rules);
+	console.log('seteditrules');
+	routeSession.set('rules', _.clone(this.edited_rules), false);
 	this.edited_rules = null;
 }
 
@@ -135,9 +138,10 @@ Template.card_info_form.created = function() {
 
 Template.card_info_form.rendered = function() {
 	var form = ui.byID('back_form');
-
 	form.setFields(card.problem);
+	routeSession.set('rules', _.clone(card.problem.rules));
 
+	// XXX clean up autoruns
 	if (!this.autoSaveSetup) {
 		this.autoSaveSetup = true;
 		ui.autorun(function() {
@@ -145,6 +149,7 @@ Template.card_info_form.rendered = function() {
 		});
 
 		ui.autorun(function() {
+			console.log('update rules')
 			Cards.update(ctx.params.id, {$set: {'problem.rules': routeSession.get('rules')}});
 		});
 	}
