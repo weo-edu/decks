@@ -153,6 +153,8 @@ Template.deck_edit_info.destroyed = function() {
 	var thisDeck = Decks.findOne(deck_id);
 	if(isEmptyDeck(deck_id))
 		Decks.remove(ctx.params.id);
+	else if(!thisDeck.cards)
+		Decks.update(deck_id, {$set: {status: 'draft'}});
 	else if(thisDeck.cards.length === 0)
 		Decks.update(deck_id, {$set: {status: 'draft'}});
 
@@ -197,6 +199,8 @@ function(ctx) {
 		var thisDeck = Decks.findOne(deck_id);
 		if(isEmptyDeck(deck_id))
 			Decks.remove(ctx.params.id);
+		if(!thisDeck.cards)
+			Decks.update(deck_id, {$set: {status: 'draft'}});
 		else if(thisDeck.cards.length === 0)
 			Decks.update(deck_id, {$set: {status: 'draft'}});
 	}
@@ -246,7 +250,10 @@ function(ctx) {
 			route.redirect('/deck/edit/' + deck_id);
 		},
 		'click #save-deck.publish': function() {
-			if(Decks.findOne(deck_id).cards.length === 0) {
+			var thisDeck = Decks.findOne(deck_id);
+			if(!thisDeck.cards)
+				Decks.update(deck_id, {$set: {status: 'draft'}});
+			else if(thisDeck.cards.length === 0) {
 				alert('you need to assign cards to a deck before you publish it');
 				Decks.update(deck_id, {$set: {status: 'draft'}});
 			}
