@@ -36,12 +36,10 @@ route('/deck/browse',function() {
 	  		var dialog = ui.get('.dialog');
 	  		dialog.hide();
 
+	  		//XXX is title unique ?
 	  		var deck = Decks.findOne({ title: self.title });
-	  		var game = Game.create(deck._id);
-	  		var url = game.url();
-	 			game.destroy();
-	  		$('#browse-screen').animate({left: 0}, 400, 'easeInOutExpo', function(){
-	  			route(url);
+		  	$('#browse-screen').animate({left: 0}, 400, 'easeInOutExpo', function(){
+	  			Game.route(deck._id);
 	  		});
 	  	},
 	  	'click .challenge-button' : function(e) {

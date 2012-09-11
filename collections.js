@@ -3,6 +3,7 @@
 Decks = new Meteor.Collection('decks');
 Cards = new Meteor.Collection('cards');
 Games = new Meteor.Collection('games');
+StatsCollection = new Meteor.Collection('stats');
 
 UserCardStats = new Meteor.Collection('UserCardStats');
-UserDeckStats = new Meteor.Collection('UserDeckStats');
+UserDeckInfo = new Meteor.Collection('UserDeckInfo');

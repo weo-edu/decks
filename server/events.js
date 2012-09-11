@@ -23,10 +23,19 @@ Observer.on('complete:card', function(e) {
     //console.log('completed:card', e);
     Fiber(function() {
         var match = {_id: e.object._id};
+        var card = Cards.findOne(e.object._id);
+        var time = e.action.time || 0;
+        var correct = ~e.action.adverbs.indexOf('correctly') ? 1 : 0;
+
+        //XXX time_squared is used for variance calc
+        // we may want to use an incremental variance calculation instead
         var stats = {
           attempts: 1,
-          time: e.action.time || 0,
-          correct: ~e.action.adverbs.indexOf('correctly') ? 1 : 0
+          time: time,
+          time_squared: Math.pow(time, 2),
+          correct: correct,
+          correct_time: correct ? time : 0,
+          correct_time_squared: correct ? Math.pow(time, 2) : 0
         };
         Stats.augmentStats(Cards, match, stats, e.user.grade);
         Stats.augmentStats(
@@ -35,8 +44,11 @@ Observer.on('complete:card', function(e) {
           stats
           );
         
+        Stats.augmentStats(StatsCollection, {
+          name: 'gradeStats'
+        }, stats, card.grade);
+        
         if(stats.correct) {
-          var card = Cards.findOne(e.object._id);
           if(!card.stats.hasOwnProperty('grade')) {
             Stats.regrade(card);
             card = Cards.findOne(e.object._id);
@@ -49,10 +61,23 @@ Observer.on('complete:card', function(e) {
     }).run();
 });
 
+/**
+ *  UserDeckInfo
+ *  wins 
+ *  attempts
+ *  mastery
+ *  
+ */
 
 Observer.on('complete:game', function(e) {
   Fiber(function() {
     var match = e.object;
-    UserDeckStats.update({user: e.user, deck: match.deck}, mod, {multi: 0, upsert: true})
+    var action = e.action;
+    console.log('complete game', match, action);
+    var mod = { attempts: 1 };
+    if (action.adverbs.indexOf('andWon') >= 0) {
+      mod.wins = 1;
+    }
+    UserDeckInfo.update({user: e.user, deck: match.deck}, {$inc: mod}, {multi: 0, upsert: true});
   }).run();
 });
