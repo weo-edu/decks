@@ -139,7 +139,8 @@ Template.card_info_form.created = function() {
 Template.card_info_form.rendered = function() {
 	var form = ui.byID('back_form');
 	form.setFields(card.problem);
-	routeSession.set('rules', _.clone(card.problem.rules));
+	if(card.problem.rules !== undefined)
+		routeSession.set('rules', _.clone(card.problem.rules));
 
 	// XXX clean up autoruns
 	if (!this.autoSaveSetup) {
