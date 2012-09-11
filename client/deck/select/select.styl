@@ -83,16 +83,17 @@
 }
 
 .card {
-	border-radius: 5px;
-	border: 10px solid #FFF;
-	width: 130px;
-	height: 180px;
+	border-radius: 10px;
+	border: 5px solid #EEE;
+	width: 140px;
+	height: 190px;
 	float: left;
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
 	transition: box-shadow .4s;
-	box-shadow: 0 0 7px #333;
+	box-shadow: inset 0 0 15px #333, 0 0 15px #333;
+	// box-shadow: 0 0 15px #333, inset 1px 1px 1px rgba(white, .5), inset -1px -1px 1px rgba(black, .5);
 	cursor: pointer;
 	&.select {
 		box-shadow: 0 0 20px #FCEE21;
