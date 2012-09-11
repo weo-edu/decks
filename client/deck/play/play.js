@@ -3,25 +3,23 @@
   	function(ctx, next) {
  			Meteor.subscribe('game', ctx.params.id, next);
   	},
+  	function(ctx, next) {
+  		var game = Games.findOne(ctx.params.id);
+  		Meteor.subscribe('userDeckInfo', game.users, game.deck, next);
+  	},
+  	function(ctx, next) {
+  		//XXX do in parallel
+  		Meteor.subscribe('gradeStats', next);
+  	},
   	function(ctx){
-  		var game = null,
-  			stateMachineHandle = null;
-
-  		game && stopPlaying();
-  		game = new Game(ctx.params.id);
-
-  		function stopPlaying() {
-  			console.log('stopplaying');
-  			stateMachineHandle && stateMachineHandle.stop();
-  			stateMachineHandle = null;
-
-  			game && game.destroy();
-  			game = null;
-  		}
+  		var game = null
+  			, stateMachineHandle = null
+  			, game_id = ctx.params.id;
 
 			Template.game.created = function() {
 				var self = this;
-				Game.emit('create', self, game);
+				game = new Game(game_id);
+				game.start();
 
 				function showDialog(message) {
 					var dialog = ui.get('.dialog');
@@ -41,7 +39,15 @@
 					machine.state([game.mystate()]);
 				});
 
-				self.onDestroy(stopPlaying);
+
+			}
+
+			Template.game.destroyed = function() {
+				stateMachineHandle && stateMachineHandle.stop();
+  			stateMachineHandle = null;
+
+  			game && game.stop();
+  			game = null;
 			}
 
   		/*
@@ -120,7 +126,6 @@
 							cards.push(_id);
 						});
 					});
-					console.log('cards', cards);
 					Meteor.defer(function(){ game.problems(cards); });
 				},
 				'mousedown .card': function(evt, template) {
@@ -318,16 +323,7 @@
  					var deckId = game.deck()._id;
  					var uid = game.opponent().synthetic ? game.me()._id : game.opponent()._id;
 
- 					Meteor.defer(function() {
-	 					var g = Game.create(deckId, uid);
-	 					var url = g.url();
-	 					g.destroy();
-	 					stopPlaying();
-	 					Guru.emit('stop');
-  					Meteor.defer(function() { 
-  						route(url);
-  					});
-  				});
+ 					Game.route(deckId, uid);
  				},
  				'click #results-nav .back': function() {
  					route('/');
