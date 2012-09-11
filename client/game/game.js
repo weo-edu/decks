@@ -44,7 +44,6 @@
   */
 	function Game(id, options) {
 		var self = this;
-
     self.options = options || {};
 		self.id = id;
 
@@ -267,27 +266,33 @@
     });
   }
 
+  Game.prototype.updateProblem = function(problem) {
+    var self = this,
+      problems = self.problems();
+
+    _.find(problems, function(p, i) { 
+      if(p._id === problem._id) {
+        problems[i] = problem;
+        return true;
+      } 
+    });
+
+    self.updatePlayer({problems: problems});
+  }
+
   /*
     Record an answer to a problem
   */
   Game.prototype.answer = function(answer) {
     var self = this,
-      problems = self.problems(),
-      pid = self.problem()._id;
+      problem = self.problem();
 
-    problem = _.find(problems, function(p, key) {
-      if(p._id === pid) {
-        p.answer = answer;
-        p.time = (+new Date()) - self.lastAnswerTime();
-        p.points = Stats.points(Stats.regrade(p.card_id));    
-        return true;
-      }
-    });
+    problem.answer = answer;
+    problem.time = (+new Date()) - self.lastAnswerTime();
+    problem.points = Stats.points(Stats.regrade(problem.card_id));
 
-    self.updatePlayer({
-      last_answer: new Date(),
-      problems: problems
-    });
+    self.updateProblem(problem);
+    self.updatePlayer({last_answer: new Date()});
 
     var correct = self.isCorrect(problem);
     self.emit('answer', problem, correct);
