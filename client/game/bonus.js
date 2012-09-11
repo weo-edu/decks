@@ -4,21 +4,46 @@
 			nCorrect = 0;
 
 		return function(problem, correct) {
+			var self = this;
 			nCorrect = correct ? nCorrect+1 : 0;
 			if (nCorrect >= n) {
 				self.award();
+				nCorrect = 0;
 			}  
 		}
 	}
 
-	var bonuses = [{
+	var bonuses = [
+	{
 		setup: function(game) {
 			var self = this;
-			game.on('answer', _.bind(self, nInARow(3)));
+			game.on('answer', _.bind(nInARow(3), self));
 		},
 		name: '3 in a row!!',
 		points: 100
-	}];
+	},
+	{
+		baseProbability: .05,
+		setup: function(game) {
+			var self = this;
+			game.on('answer', function(problem, correct) {
+				if(!correct) return;
+
+				var probability = self.baseProbability;
+				_.each(self.game.problems(), function(p, i) {
+					if(p._id === problem._id && p.answer !== undefined)
+						probability *= 2;
+				});
+
+				if(Math.random() < probability) {
+					self.award();
+				}
+			});
+		},
+		points: 100,
+		name: 'Critical Strike!!'
+	}
+	];
 
 	Bonus.setup = function(game) {
 		_.each(bonuses, function(b, i) {

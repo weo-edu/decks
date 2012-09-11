@@ -66,22 +66,8 @@ route('/deck/friends', function(ctx) {
 		},
 		'click .challenge-button': function() {
 			var self = this;
-			console.log(self);
-	  		// var dialog = ui.get('.dialog');
-	  		// dialog.hide();
-
-	  		var deck = Decks.findOne({ title: self.title });
-	  		var game = Game.create(deck._id, Session.get('active')._id);
-  			var url = game.url();
-  			game.destroy();
-  			route(url);
-
-	  		// $('#browse-screen').animate({left: 0}, 400, 'easeInOutExpo', function(){
-	  		// 	var url = game.url();
-	  		// 	game.destroy();
-	  		// 	console.log('game destroy');
-	  		// 	route(url);
-	  		// });
+  		var deck = Decks.findOne({ title: self.title });
+  		Game.route(deck._id, Session.get('active')._id);
 		}
 	});
 

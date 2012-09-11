@@ -173,7 +173,7 @@
 	Stats = {
 		regrade: function(obj) {
 			if(typeof obj === 'string')
-				obj = Cards.find(obj);
+				obj = Cards.findOne(obj);
 			
 			var grade = Stats.computeGrade(obj);
 			if(grade) {
@@ -209,18 +209,20 @@
 			);
 		},
 		augmentStats: function(collection, item, data, bin) {
-			var update = {$inc: {}};cluster =
+			var update = {$inc: {}};
 			_.each(data, function(val, key) {
 				update['$inc']['stats.' + key] = val;
 				if(bin) update['$inc']['stats.bins.' + bin + '.' + key] = val;
 			});
+
+			console.log('update', update);
 
 			if(bin) {
 				update['$inc']['stats.updates'] = 1;
 				var obj = collection.findAndModify(item, 
 					[['_id', 'asc']], 
 					update, 
-					{'new': true}, function(err, res) {
+					{'new': true, upsert: 1}, function(err, res) {
 						if(err) throw err;
 					
 						if(res.stats.updates % regradeInterval  === 0) {

@@ -1,42 +1,12 @@
 ;(function() {
-  Game.gamesHandle = Meteor.subscribe('games');
 
   var defaults = {
     nCards: 5
   };
 
-  Game.gamesHandle = null;
-	Game.create = function(deck, user) {
-    user = User.lookup(user || Meteor.user());
-
-//    try {
-      var game = new Game(Game._insert(deck, user));
-      return game.invite(user._id);
-    /*} catch(err) {
-      console.log("User does not exist: " + err.message);
-      console.log(err);
-      return false;
-    }*/
-	}
-
-  /*
-    Inserts a new game record into the database
-    and returns its id
-  */
-  Game._insert = function(deck, user, cb) {
-    if(user._id === Meteor.user()._id) {
-      user = Guru.goat();
-    }
-
-    var o = {
-      creator: Meteor.user()._id,
-      deck: deck,
-      users: [Meteor.user()._id, user._id],
-      state: 'await_join'
-    };
-    o[Meteor.user()._id] = {};
-    o[user._id] = {};
-    return Games.insert(o, cb);
+  Game.route = function(deck, user) {
+    var game = new Game({deck: deck, user: user});
+    route(game.url());
   }
 
   /*
@@ -44,11 +14,8 @@
   */
 	function Game(id, options) {
 		var self = this;
-    self.options = options || {};
-		self.id = id;
-
-    DependsEmitter.apply(self);
-    self.depends('ready', function() {
+    DependsEmitter.call(self);
+    self.depends('start', function() {
       if(typeof Games !== 'undefined' && Games) {
         return self.game() && self.deck()
           && self.me() && self.opponent()
@@ -61,14 +28,19 @@
       }
     });
 
-    self.on('ready', function() {
+    self.on('start', function() {
       if(!self.game())
         throw new Error('Sorry the specified game does not exist');
 
+      Bonus.setup(self);
       //  Setup the reactive game_state routeSession variable
       //  We use a routeSession variable so that we can be reactive
       //  specific to this value instead of the entire game object.
-      routeSession.set('game_state', self.game().state.game);
+      //  
+      //  XXX Put this variable on routeSession once its finished
+      //  There is no need to maintain this once the current route
+      //  has been destroyed.
+      routeSession.set('game_state', self.game().state);
 
       //  The game creator manages the official state, anyone joining
       //  the game simply watches it.  This is arbitrary, it could be
@@ -80,13 +52,48 @@
       self.mystate() || self.mystate('await_join') 
     });
 
-    self.emit('ready');
+    self.on('start', function() {
+      Game.emit('start', self);
+    });
+
+
+    self.options = options || {};
+
+    // insert game into db if first param is not id
+    if ('object' === typeof id) {
+      var user = id.user;
+      var deck = id.deck;
+
+      user = User.lookup(user || Meteor.user());
+
+      if(user._id === Meteor.user()._id) {
+        user = Guru.goat();
+      }
+
+      var game = {
+        creator: Meteor.user()._id,
+        deck: deck,
+        users: [Meteor.user()._id, user._id],
+        state: 'await_join'
+      };
+      game[Meteor.user()._id] = {};
+      game[user._id] = {};
+      self.id = Games.insert(game);
+    } else {
+      self.id = id;
+    }
 	}
 
   utils.inherits(Game, DependsEmitter);
-  _.extend(Game, DependsEmitter.prototype);
-  DependsEmitter.call(Game);
 
+  _.extend(Game, Emitter.prototype);
+  Emitter.call(Game);
+
+
+  Game.prototype.start = function() {
+    var self = this;
+    self.emit('start');
+  }
 
   /*
     Returns the url of the game
@@ -149,11 +156,23 @@
   */
   Game.prototype.problem = function(id) {
     var self = this;
-    var p = _.find(self.problems(), function(p) {
+    var p_idx = 0;
+    var p = _.find(self.problems(), function(p, idx) {
+      p_idx = idx;
       return (id && p._id === id) || typeof p.answer === 'undefined';
     });
 
-    p || self.mystate('await_results');
+
+    if (p) {
+      if (! p.startTime) {
+        console.log('update start Time');
+        var update = {};
+        update[self.me()._id+'.problems.'+p_idx + '.startTime'] = +new Date();
+        Games.update(self.game()._id, {$set: update});
+        console.log('game', self.game(), update);
+      }
+    } else
+      self.mystate('await_results');
     return p;
   }
 
@@ -255,10 +274,6 @@
     }
   }
 
-  Game.prototype.lastAnswerTime = function() {
-    return this.player().last_answer;
-  }
-
   Game.prototype.lastAnsweredProblem = function() {
     var self = this;
     return _.find(self.problems().reverse(), function(p, i) {
@@ -288,7 +303,7 @@
       problem = self.problem();
 
     problem.answer = answer;
-    problem.time = (+new Date()) - self.lastAnswerTime();
+    problem.time = (+new Date()) - problem.startTime;
     problem.points = Stats.points(Stats.regrade(problem.card_id));
 
     self.updateProblem(problem);
@@ -394,8 +409,12 @@
       update['$set'][self.me()._id + '.state'] = state;
       update['$set'][self.opponent()._id + '.state'] = state;
       self.update(update);
-      if(!routeSession.equals('game_state', state))
+      if(!routeSession.equals('game_state', state)) {
         routeSession.set('game_state', state);
+        if (state === 'results')
+          self.complete();
+      }
+        
     }
 
     return routeSession.get('game_state');
@@ -412,9 +431,28 @@
   }
 
 
-  Game.prototype.destroy = function() {
+  Game.prototype.complete = function() {
+    var self = this;
+
+    var game = Games.findOne(self.id);
+    game.type = 'game';
+    game.title = self.deck().title + ': ' + self.me().username + ' vs ' + self.opponent().username;
+    var adverb = null;
+    var winner = self.winner();
+    if (winner === null)
+      adverb = 'andTied';
+    else if (winner.username === Meteor.user().username)
+      adverb = 'andWon';
+    else
+      adverb = 'andLost';
+    event('complete', game, adverb);
+    self.emit('complete');
+  }
+
+  Game.prototype.stop = function() {
     var self = this;
     self.stateHandle && self.stateHandle.stop();
+    self.emit('stop');
   }
 
   Game.prototype.stateManager = function() {
@@ -427,7 +465,9 @@
       //['results', null, null, _.bind(self.destroy, self)]
     ];
 
-    var machine = new StateMachine(transitionTable, _.bind(self.state, self));
+    var machine = new StateMachine(transitionTable, function(new_state) {
+      self.state(new_state);
+    });
     self.stateHandle = ui.autorun(function() {
       machine.state([self.state(), self.mystate(), self.localState(self.opponent()._id)]);
     });
