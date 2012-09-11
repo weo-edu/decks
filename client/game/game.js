@@ -14,7 +14,6 @@
   */
 	function Game(id, options) {
 		var self = this;
-
     DependsEmitter.call(self);
     self.depends('start', function() {
       if(typeof Games !== 'undefined' && Games) {
@@ -33,6 +32,7 @@
       if(!self.game())
         throw new Error('Sorry the specified game does not exist');
 
+      Bonus.setup(self);
       //  Setup the reactive game_state routeSession variable
       //  We use a routeSession variable so that we can be reactive
       //  specific to this value instead of the entire game object.
@@ -281,27 +281,33 @@
     });
   }
 
+  Game.prototype.updateProblem = function(problem) {
+    var self = this,
+      problems = self.problems();
+
+    _.find(problems, function(p, i) { 
+      if(p._id === problem._id) {
+        problems[i] = problem;
+        return true;
+      } 
+    });
+
+    self.updatePlayer({problems: problems});
+  }
+
   /*
     Record an answer to a problem
   */
   Game.prototype.answer = function(answer) {
     var self = this,
-      problems = self.problems(),
-      pid = self.problem()._id;
+      problem = self.problem();
 
-    problem = _.find(problems, function(p, key) {
-      if(p._id === pid) {
-        p.answer = answer;
-        p.time = (+new Date()) - p.startTime;
-        p.points = Stats.points(Stats.regrade(p.card_id));    
-        return true;
-      }
-    });
+    problem.answer = answer;
+    problem.time = (+new Date()) - problem.startTime;
+    problem.points = Stats.points(Stats.regrade(problem.card_id));
 
-    self.updatePlayer({
-      last_answer: new Date(),
-      problems: problems
-    });
+    self.updateProblem(problem);
+    self.updatePlayer({last_answer: new Date()});
 
     var correct = self.isCorrect(problem);
     self.emit('answer', problem, correct);
