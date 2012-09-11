@@ -237,7 +237,7 @@
 						card.title = card.name;
 						
 						if(res) {
-							console.log('<table>',problem.points, card.stats.grade, 'points','</table>');
+							console.log('<table>',problem.points, card.stats && card.stats.grade, 'points','</table>');
 						}
 						event({name: 'complete', time: problem.time},
 							card,

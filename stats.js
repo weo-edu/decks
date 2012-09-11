@@ -208,6 +208,25 @@
 				}
 			);
 		},
+		updateCardStats: function(query, stats, grade) {
+			var update = {$inc: {}};
+			_.each(stats, function(val, key) {
+				update['$inc']['stats.' + key] = val;
+				update['$inc']['stats.bins.' + grade + '.' + key] = val;
+			});
+			update['$inc']['stats.updates'] = 1;
+			var obj = Cards.findAndModify(query, 
+				[['_id', 'asc']], 
+				update, 
+				{'new': true, upsert: 1}, 
+				function(err, res) {
+					if(err) throw err;
+				
+					if(res.stats.updates % regradeInterval  === 0) {
+						Stats.regrade(res);
+					}
+				});
+		},
 		augmentStats: function(collection, item, data, bin) {
 			var update = {$inc: {}};
 			_.each(data, function(val, key) {

@@ -117,8 +117,10 @@
 		var card = Cards.findOne(problem.card_id);
 		var grade_stats = StatsCollection.findOne({name: 'gradeStats'});
 		if (grade_stats) grade_stats = grade_stats.stats.bins[card.grade];
+		console.log('grad_stats', grade_stats);
+		console.log('card_stats', card.stats);
 		var stats = {};
-		if (card.stats.correct >= 10) {
+		if (card.stats && card.stats.correct >= 10) {
 			var average_time = card.stats.correct_time / card.stats.correct;
 			stats.u  = average_time;
 			var std = Math.sqrt((card.stats.correct_time_squared/card.stats.correct) - Math.pow(average_time,2));
@@ -157,6 +159,8 @@
 
 		if(answer < difficulty)
 			answer = problem.solution;
+
+		console.log('time_stats', time_stats(problem));
 
 		return answer;
 	}

@@ -37,19 +37,39 @@ Observer.on('complete:card', function(e) {
           correct_time: correct ? time : 0,
           correct_time_squared: correct ? Math.pow(time, 2) : 0
         };
-        Stats.augmentStats(Cards, match, stats, e.user.grade);
-        Stats.augmentStats(
-          UserCardStats,
+
+        // card stats update
+        Stats.updateCardStats(match, stats, e.user.grade);
+
+        // user-card stat update
+        var update = {$inc: {}};
+        _.each(stats,function(stat, name) {
+          update.$inc['stats.' + name] = stat;
+        });
+        console.log('update', update);
+        UserCardStats.update(
           {uid: e.user._id, pid: e.object._id},
-          stats
-          );
-        
-        Stats.augmentStats(StatsCollection, {
-          name: 'gradeStats'
-        }, stats, card.grade);
+          update,
+          {multi: 0, upsert: 1}
+        );
+
+        //grade stats update
+        var update = {$inc: {}};
+        _.each(stats,function(stat, name) {
+          update.$inc[card.grade + '.' + name] = stat;
+        });
+        console.log('update', update);
+        StatsCollection.update(
+          {name: 'gradeStats'},
+          update,
+          {multi: 0, upsert: 1}
+        );
         
         if(stats.correct) {
-          if(!card.stats.hasOwnProperty('grade')) {
+          if (!card.stats)
+            card = Cards.findOne(e.object._id);
+
+          if(!card.stats.grade) {
             Stats.regrade(card);
             card = Cards.findOne(e.object._id);
           }
