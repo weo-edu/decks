@@ -172,6 +172,9 @@
 
 	Stats = {
 		regrade: function(obj) {
+			if(typeof obj === 'string')
+				obj = Cards.find(obj);
+			
 			var grade = Stats.computeGrade(obj);
 			if(grade) {
 				Cards.update(obj._id, {$set: {'stats.grade': grade}});

@@ -43,6 +43,13 @@ route('/deck/create', function(){
 		'decks': function() {
 			return Decks.find({});
 		},
+		'isPublished': function() {
+			if(this.status === 'published')
+				return '';
+			else
+				return 'draft';
+
+		},
 		'cards': function() {
 			return Cards.find({});
 		}
@@ -218,13 +225,23 @@ function(ctx) {
 			if (!deck.cards)
 				return true;
 			else
-				return deck.cards.indexOf(this._id) === -1;
+				return deck.cards.indexOf(this._id) === -1 && this.status === 'published';
 		}
 	});
 
 	Template.deck_cards_grid.events({
 		'click .card': function() {
 			Decks.update(ctx.params.id, {$push: {cards: this._id}});
+		}
+	});
+
+	Template.deck_cards_select.events({
+		'click #save-button': function() {
+			route.redirect('/deck/edit/' + deck_id);
+		},
+		'click #save-deck.publish': function() {
+			Decks.update(deck_id, {$set: {status: 'published'}});
+			route.redirect('/deck/create');
 		}
 	});
 

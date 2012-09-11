@@ -9,18 +9,14 @@
   	},
   	function(ctx, next) {
   		//XXX do in parallel
-  		console.log('subscribe grade stats');
   		Meteor.subscribe('gradeStats', next);
   	},
   	function(ctx){
-  		console.log('route');
-
   		var game = null
   			, stateMachineHandle = null
   			, game_id = ctx.params.id;
 
 			Template.game.created = function() {
-				console.log('game template created');
 				var self = this;
 				game = new Game(game_id);
 				game.start();
@@ -130,7 +126,6 @@
 							cards.push(_id);
 						});
 					});
-					console.log('cards', cards);
 					Meteor.defer(function(){ game.problems(cards); });
 				},
 				'mousedown .card': function(evt, template) {
@@ -161,7 +156,7 @@
 				},
 
 				'mouseup': function (evt, template) {
-					template.handler.up();
+					template.handler && template.handler.up();
 				}
 			});
 		

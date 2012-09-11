@@ -20,7 +20,6 @@ route('/deck/friends', function(ctx) {
 	});
 
 	Template.social.destroyed = function() {
-		console.log('social destroyed');
 		Session.set('active', null);
 	}
 
@@ -55,7 +54,7 @@ route('/deck/friends', function(ctx) {
 
 	Template.opponent_decks.helpers({
 		'decks': function() {
-			return Decks.find({});
+			return Decks.find({status: 'published'});
 		}
 	});
 

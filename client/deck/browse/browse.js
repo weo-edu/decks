@@ -1,11 +1,7 @@
 route('/deck/browse',function() {
 
 	Template.decks.decks = function() {
-		Meteor.defer(function() {
-			// $('#deck-grid').layout();
-		});
-		
-		return Decks.find({});
+		return Decks.find({status: 'published'});
 	}
 
 	Template.decks.arrange = function(selector) {

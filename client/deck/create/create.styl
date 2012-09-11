@@ -8,6 +8,24 @@
 #edit-collection-screen {
 	ipad();
 	background: url('/img/woodBg.jpg') center;
+
+	.deck-container.draft {
+		.deck, .card {
+			position: relative;
+			&:after {
+				content: '';
+				position: absolute;
+				background: url('/img/draftBanner.png');
+				width: 150px;
+				height: 100px;
+			}
+		}
+		.card:after {
+			top: -10px;
+			left: -10px;
+		}
+	}
+
 	.dialog {
 		.deck-image {
 			background: #DDD url("/img/deckBurst.png") 14px 33px no-repeat
@@ -153,11 +171,21 @@
 	}
 }
 
+#save-button {
+	back-button();	
+	left: 240px;
+}
+
 #save-deck {
 	red-button();
 	position: absolute;
-	bottom: 0px;
-	&:active{ bottom: -1px }
+	bottom: 5px;
+	right: 1px;
+	&:active{ bottom: 4px }
+	&.publish {
+		bottom: 0px;
+		&:active{ bottom: -1px }
+	}
 }
 
 /**

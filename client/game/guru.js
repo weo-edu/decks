@@ -116,9 +116,7 @@
 	function time_stats(problem) {
 		var card = Cards.findOne(problem.card_id);
 		var grade_stats = StatsCollection.findOne({name: 'gradeStats'});
-		console.log('grade_stats', grade_stats);
 		if (grade_stats) grade_stats = grade_stats.stats.bins[card.grade];
-		console.log('card_stats', card.stats);
 		var stats = {};
 		if (card.stats.correct >= 10) {
 			var average_time = card.stats.correct_time / card.stats.correct;

@@ -70,24 +70,29 @@ wood-button() {
 	text-shadow: 1px 1px 0 rgba(black, .5);
 }
 
-.back-button {
+back-button() {
 	background-image: url('/img/back-button.png');
 	position: absolute;
-	size = 65px;
+	size = 64px;
 	height: size;
 	width: size;
 	left: 10px;
 	bottom: 10px;
-	box-shadow: 0 0 20px #333, inset 1px 1px 0 rgba(white, .3);
+	box-shadow: 0 0 20px #333, inset 1px 1px 0 rgba(white, .5);
 	border-radius: 50%;
 	cursor: pointer; 
+	background-position: -1px -1px;
 	&:hover{
-		background-position: 0 -75px;
+		background-position: -1px -76px;
 	}
 	&:active {
 		bottom: 9px;
-		background-position: top left;
+		background-position: -1px -1px;
 	}
+}
+
+.back-button {
+	back-button();
 }
 
 
