@@ -287,6 +287,7 @@
 		 	*/
 		 	Template.play_results.created = function() {
 		 		this.results = game.results();
+		 		console.log('results', game.game());
 		 		this.opponent = game.opponent();
 		 		this.me = game.me();
 		 	}
