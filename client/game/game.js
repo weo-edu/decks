@@ -303,7 +303,7 @@
       problem = self.problem();
 
     problem.answer = answer;
-    problem.time = (+new Date()) - problem.startTime;
+    if (!problem.time) problem.time = (+new Date()) - problem.startTime;
     problem.points = Stats.points(Stats.regrade(problem.card_id));
 
     self.updateProblem(problem);
@@ -355,6 +355,34 @@
       return User.lookup(_.without(self.game().users, self.me()._id)[0]) || Guru.goat();
   }
 
+  Game.prototype.opponentCardStats = function (cardId) {
+    var self = this;
+    if (self.options.opponentCardStats) {
+      self.opponentCardStats = self.options.opponentCardStats;
+      return self.opponentCardStats(cardId);
+    } else {
+      var userStats = UserCardStats.findOne({user: self.opponent()._id, card: cardId});
+      var user_average_speed = userStats.correct_time / ucstats.correct;
+
+      var cardStatistics = Stats.cardTime(cardId);
+
+      // speed is cumulative density at point user_average_speed on the normal
+      // distribution defined by the card statistics
+      var speed = jstat.pnorm(user_average_speed,cardStatistics.u,cardStatistics.s);
+
+      var t = new Date() - userStats.last_played;
+      t = t/(1000*60*60*24);
+      var retention = Math.exp(-t/userStats.correct);
+     
+      var stats = {
+        accuracy: userStats.correct / userStats.attempts,
+        speed:  speed,
+        points: Stats.points(Stats.regrade(cardId)),
+        retention: retention
+      };
+    }
+  } 
+
   /*
   */
   Game.prototype.me = function() {
@@ -387,6 +415,12 @@
   Game.prototype.mystate = function(state) {
     return this.localState(this.me()._id, state);
   }
+
+  Game.prototype.opponentState = function(state) {
+    return this.localState(this.opponent()._id, state);
+  }
+
+  
 
   /*
   */
@@ -424,6 +458,9 @@
     var self = this;
     self.stateHandle = ui.autorun(function() {
       var state = self.game().state;
+      if (self.opponentState() === 'await_results') {
+        self.emit('opponentDone');
+      }
       if(!routeSession.equals('game_state', state)) {
         routeSession.set('game_state', state);
       }
@@ -469,7 +506,7 @@
       self.state(new_state);
     });
     self.stateHandle = ui.autorun(function() {
-      machine.state([self.state(), self.mystate(), self.localState(self.opponent()._id)]);
+      machine.state([self.state(), self.mystate(), self.opponentState()]);
     });
   }
 

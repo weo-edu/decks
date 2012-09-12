@@ -227,33 +227,6 @@
 					}
 				});
 		},
-		augmentStats: function(collection, item, data, bin) {
-			var update = {$inc: {}};
-			_.each(data, function(val, key) {
-				update['$inc']['stats.' + key] = val;
-				if(bin) update['$inc']['stats.bins.' + bin + '.' + key] = val;
-			});
-
-			console.log('update', update);
-
-			if(bin) {
-				update['$inc']['stats.updates'] = 1;
-				var obj = collection.findAndModify(item, 
-					[['_id', 'asc']], 
-					update, 
-					{'new': true, upsert: 1}, function(err, res) {
-						if(err) throw err;
-					
-						if(res.stats.updates % regradeInterval  === 0) {
-							Stats.regrade(res);
-						}
-					});
-			} else {
-				collection.update(item, update, {multi: 0, upsert: 1}, function(err) {
-					err && console.log('augmentStats update error', err);
-				});
-			}
-		},
 		initialize: function(o) {
 			o.stats = {
 				bins: {
@@ -303,6 +276,31 @@
 			} finally {
 				return result;
 			}
+		},
+
+		cardTime: function(cardId) {
+			//XXX where does subscribe for cards happen
+			var card = Cards.findOne(cardId);
+			var grade_stats = StatsCollection.findOne({name: 'gradeStats'});
+			if (grade_stats) grade_stats = grade_stats[card.grade];
+			console.log('grad_stats', grade_stats);
+			console.log('card_stats', card.stats);
+			var stats = {};
+			if (card.stats && card.stats.correct >= 10) {
+				var average_time = card.stats.correct_time / card.stats.correct;
+				stats.u  = average_time;
+				var std = Math.sqrt((card.stats.correct_time_squared/card.stats.correct) - Math.pow(average_time,2));
+				stats.s = std;
+			} else if (grade_stats && grade_stats.correct > 0) {
+				var average_time = grade_stats.correct_time / grade_stats.correct;
+				stats.u = average_time;
+				var std = Math.sqrt((grade_stats.correct_time_squared/grade_stats.correct) - Math.pow(average_time,2));
+				stats.s = std;
+			} else {
+				stats.u = 5;
+				stats.s = 1;
+			}
+			return stats;
 		}
 	}
 

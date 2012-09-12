@@ -69,17 +69,31 @@
 
 <template name='card_selection_view'>
 		{{> card_view}}
-			<div class="selection-count">
-				{{selectionCount}}
-			</div>
-			{{#if selectionCount}}
-				<div class="deselect">
-					-
-				</div>
-			{{/if}}
-		</div>
+		{{> card_selection_count}}
+		{{> card_stats}}
 </template>
 
 <template name='card_view'>
 	<div title="{{stats}}" class='card' style='background-image: url({{image}});'></div>
+</template>
+
+<template name="card_selection_count">
+	<div class="selection-count">
+		{{selectionCount}}
+	</div>
+	{{#if selectionCount}}
+		<div class="deselect">
+			-
+		</div>
+	{{/if}}
+	</div>
+</template>
+
+<template name="card_stats">
+	{{#with stats}}
+		{{accuracy}}
+		{{time}}
+		{{recent}}
+		{{points}}
+	{{/with}}
 </template>

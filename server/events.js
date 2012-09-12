@@ -44,8 +44,9 @@ Observer.on('complete:card', function(e) {
         // user-card stat update
         var update = {$inc: {}};
         _.each(stats,function(stat, name) {
-          update.$inc['stats.' + name] = stat;
+          update.$inc[name] = stat;
         });
+        update.$set = {last_played: +new Date()}
         console.log('update', update);
         UserCardStats.update(
           {uid: e.user._id, pid: e.object._id},

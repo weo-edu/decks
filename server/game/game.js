@@ -29,7 +29,12 @@
 	Meteor.publish('gradeStats', function() {
 		console.log('publish gradeStats');
 		return StatsCollection.find({name: 'gradeStats'});
-	})
+	});
+
+	Meteor.publish('userCardStats', function (users, cards) {
+		users = _.without(users,1);
+		return UserCardStats.find({ user: {$in: users}, cards: {$in: cards} });
+	});
 
 	Meteor.startup(function(){
 		Games.allow({

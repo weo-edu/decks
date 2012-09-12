@@ -16,6 +16,8 @@
   			, stateMachineHandle = null
   			, game_id = ctx.params.id;
 
+  		Meteor.subscribe('userCardStats', game.users, game.deck.cards);
+
 			Template.game.created = function() {
 				var self = this;
 				game = new Game(game_id);
@@ -173,9 +175,13 @@
 			}
 		});
 
-			Template.card_selection_view.selectionCount = function() {
-				return selected_cards.get(this._id);
-			}
+		Template.card_selection_count.selectionCount = function() {
+			return selected_cards.get(this._id);
+		}
+
+		Template.card_stats.stats = function() {
+			return game.opponentCardStats(this._id);
+		}
 
 
 			/*
@@ -235,6 +241,7 @@
 						var card = _.clone(Cards.findOne(problem.card_id));
 						card.type = 'card';
 						card.title = card.name;
+
 						
 						if(res) {
 							console.log('<table>',problem.points, card.stats && card.stats.grade, 'points','</table>');
