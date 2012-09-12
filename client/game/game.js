@@ -419,7 +419,7 @@
       var stats = {
         accuracy: { name: 'accuracy', val:  accuracy},
         speed:  { name: 'speed', val: speed },
-        points: { name: 'points', val: Stats.points(Stats.regrade(cardId)) },
+        points: { name: 'points', val: Math.round(Stats.points(Stats.regrade(cardId))) },
         retention: { name: 'retention', val: retention }
       };
       console.log("stats", stats);

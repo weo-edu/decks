@@ -84,15 +84,18 @@
 <template name='card_view'>
 	<div title="{{stats}}" class='card' style='background-image: url({{image}});'>
 		{{#if showStats}}
+			{{#with stats}}
+				<div class='points-banner'>
+					<div class='points'>{{points.val}}</div>
+				</div>
 				<div class='stats-box'>
 					<ul>
-						{{#with stats}}
-							{{> stat_circle speed}}
-							{{> stat_circle accuracy}}
-							{{> stat_circle retention}}
-						{{/with}}
-					</ul>
+						{{> stat_circle speed}}
+						{{> stat_circle accuracy}}
+						{{> stat_circle retention}}
+					</ul>	
 				</div>
+				{{/with}}
 		{{/if}}
 	</div>
 </template>
