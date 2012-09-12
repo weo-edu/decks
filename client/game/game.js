@@ -211,12 +211,37 @@
     Games.update(this.id, update, cb);
   }
 
-  Game.prototype.points = function(pts) {
+  Game.prototype.bonus = function(pts, reason, problem) {
     var self = this;
-    pts && self.updatePlayer({ points: self.player().points + pts });
-    return self.player().points;
+    var bonuses = problem ? (problem.bonuses || {}) : (self.player().bonuses || {});
+    bonuses[reason] = bonuses[reason] || 0;
+    bonuses[reason] += pts;
+
+    if(problem) {
+      problem.bonuses = bonuses;
+      self.updateProblem(problem);
+    } else {
+      self.updatePlayer({bonuses: bonuses});
+    }
   }
 
+  Game.prototype.points = function(uid) {
+    var self = this;
+    uid = uid || self.me()._id;
+
+    var points = _.reduce(self.player(uid).problems, function(memo, problem) {
+      return memo + (problem.points || 0) + _.reduce(problem.bonuses, function(memo, bonus) {
+        return memo + bonus;
+      }, 0);
+    }, 0);
+
+    points += _.reduce(self.player(uid).bonuses, function(memo, bonus) {
+      return memo + bonus;
+    }, 0);
+
+    return points;
+  }
+ 
   /*  
     Return the number of problems yet to be
     answered
@@ -255,13 +280,11 @@
       };
     } else {
       var problems = self.player(id).problems,
-        correct = 0,
-        points = 0;
+        correct = 0;
 
       _.each(problems, function(p, key) {
         if(self.isCorrect(p)) {
           correct++;
-          points += p.points;
         }
       });
 
@@ -269,7 +292,7 @@
         correct: correct,
         incorrect: problems.length - correct,
         total: problems.length,
-        points: points
+        points: self.points(id)
       };
     }
   }
@@ -283,13 +306,14 @@
 
   Game.prototype.updateProblem = function(problem) {
     var self = this,
+      idx = null,
       problems = self.problems();
 
-    _.find(problems, function(p, i) { 
+    _.find(problems, function(p, i) {
       if(p._id === problem._id) {
         problems[i] = problem;
         return true;
-      } 
+      }
     });
 
     self.updatePlayer({problems: problems});
@@ -303,14 +327,20 @@
       problem = self.problem();
 
     problem.answer = answer;
-    if (!problem.time) problem.time = (+new Date()) - problem.startTime;
-    problem.points = Stats.points(Stats.regrade(problem.card_id));
 
-    self.updateProblem(problem);
-    self.updatePlayer({last_answer: new Date()});
+    if (!problem.time) problem.time = (+new Date()) - problem.startTime;
 
     var correct = self.isCorrect(problem);
     self.emit('answer', problem, correct);
+
+    problem.points = correct ? Stats.points(Stats.regrade(problem.card_id)) : 0;
+
+    self.updateProblem(problem);
+    self.updatePlayer({
+      last_answer: new Date(),
+      points: self.player().points + problem.points
+    });
+
     return correct;
   }
 
