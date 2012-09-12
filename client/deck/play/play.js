@@ -168,7 +168,7 @@
 					return true;
 				},
 				stats: function() {
-					return null//game.opponentCardStats(this._id);
+					return game.opponentCardStats(this._id);
 				}
 		});
 
@@ -179,12 +179,12 @@
 					$('.cover-semi').hide();
 					console.log('set');
 					// routeSession.set('rotate2', deg);
-					routeSession.set('hide', true);
+					// routeSession.set('hide', true);
 					return ': rotate(180deg);';
 				}
 				else {
 					// routeSession.set('rotate2', 0);
-					routeSession.set('hide', false);
+					// routeSession.set('hide', false);
 					return ': rotate(' + deg + 'deg);';  
 				}
 			},
@@ -194,8 +194,8 @@
 				return ': rotate(' + deg + 'deg);';
 			},
 			hide: function() {
-				var hide = routeSession.get('hide');
-				if(hide)
+				// var hide = routeSession.get('hide');
+				if(this.val*360 > 180)
 					return 'clip: auto;';
 				else
 					return '';

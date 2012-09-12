@@ -176,7 +176,7 @@
 				obj = Cards.findOne(obj);
 			
 			var grade = Stats.computeGrade(obj);
-			if(grade) {
+			if(grade && !Meteor.is_client) {
 				Cards.update(obj._id, {$set: {'stats.grade': grade}});
 			}
 

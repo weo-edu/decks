@@ -49,7 +49,7 @@ Observer.on('complete:card', function(e) {
         update.$set = {last_played: +new Date()}
         console.log('update', update);
         UserCardStats.update(
-          {uid: e.user._id, pid: e.object._id},
+          {uid: e.user._id, cid: e.object._id},
           update,
           {multi: 0, upsert: 1}
         );

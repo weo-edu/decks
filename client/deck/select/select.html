@@ -100,9 +100,9 @@
 <template name='stat_circle'>
 	<li class='stat-circle'>
 		<div class='inner' style='{{hide}}'>
-				<div class='first-semi' style='{{rotate}} '></div>
-				<div class='second-semi' style='{{rotateSecond}}'></div>
+				<div class='first-semi' style='{{prefix}}{{rotate}}'></div>
+				<div class='second-semi' style='{{prefix}}{{rotateSecond}}'></div>
 		</div>
-		<div class='icon'></div>
+		<div class='icon {{name}}'></div>
 	</li>
 </template>
