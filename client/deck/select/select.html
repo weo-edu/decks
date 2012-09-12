@@ -68,18 +68,41 @@
 </template>
 
 <template name='card_selection_view'>
-		{{> card_view}}
-			<div class="selection-count">
-				{{selectionCount}}
-			</div>
-			{{#if selectionCount}}
-				<div class="deselect">
-					-
-				</div>
-			{{/if}}
+	{{#isolate}}
+	{{#if selectionCount}}
+		<div class="selection-count">
+			{{selectionCount}}
 		</div>
+		
+			<!-- <div class="deselect">
+				-
+			</div> -->
+		{{/if}}
+	</div>
+	{{/isolate}}
+	
+	{{> card_view}}
+	<h4 class='deck-title'>{{title}}</div>
 </template>
 
 <template name='card_view'>
-	<div title="{{stats}}" class='card' style='background-image: url({{image}});'></div>
+	<div title="{{stats}}" class='card' style='background-image: url({{image}});'>
+		{{#if showStats}}
+			<div class='stats-box'>
+				<ul>
+					{{> stat_circle}}
+				</ul>
+			</div>
+		{{/if}}
+	</div>
+</template>
+
+<template name='stat_circle'>
+	<li class='stat-circle'>
+		<div class='inner' style='{{hide}}'>
+				<div class='first-semi' style='{{rotate}} '></div>
+				<div class='second-semi' style='{{rotateSecond}}'></div>
+		</div>
+		<div class='icon'></div>
+	</li>
 </template>
