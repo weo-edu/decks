@@ -83,7 +83,7 @@
     } else {
       self.id = id;
     }
-    Meteor.subscribe('userCardStats', self.game().users, self.game().deck.cards);
+    Meteor.subscribe('userCardStats', self.game().users, self.deck().cards);
 	}
 
   utils.inherits(Game, DependsEmitter);
@@ -393,24 +393,33 @@
       self.opponentCardStats = self.options.opponentCardStats;
       return self.opponentCardStats(cardId);
     } else {
+      console.log('cardid', cardId);
       var userStats = UserCardStats.findOne({user: self.opponent()._id, card: cardId});
-      var user_average_speed = userStats.correct_time / ucstats.correct;
+      var accuracy = 0;
+      var retention = 0;
+      var speed = 0;
 
-      var cardStatistics = Stats.cardTime(cardId);
+      if (userStats) {
+        var user_average_speed = userStats.correct_time / ucstats.correct;
 
-      // speed is cumulative density at point user_average_speed on the normal
-      // distribution defined by the card statistics
-      var speed = jstat.pnorm(user_average_speed,cardStatistics.u,cardStatistics.s);
+        var cardStatistics = Stats.cardTime(cardId);
 
-      var t = new Date() - userStats.last_played;
-      t = t/(1000*60*60*24);
-      var retention = Math.exp(-t/userStats.correct);
+        // speed is cumulative density at point user_average_speed on the normal
+        // distribution defined by the card statistics
+        speed = jstat.pnorm(user_average_speed,cardStatistics.u,cardStatistics.s);
+
+        var t = new Date() - userStats.last_played;
+        t = t/(1000*60*60*24);
+        retention = Math.exp(-t/userStats.correct);
+        accuracy = userStats.correct / userStats.attempts
+      }
+      
      
       var stats = {
-        accuracy: userStats.correct / userStats.attempts,
-        speed:  speed,
-        points: Stats.points(Stats.regrade(cardId)),
-        retention: retention
+        accuracy: { name: 'accuracy', val:  accuracy},
+        speed:  { name: 'speed', val: speed },
+        points: { name: 'points', val: Stats.points(Stats.regrade(cardId)) },
+        retention: { name: 'retention', val: retention }
       };
     }
   } 

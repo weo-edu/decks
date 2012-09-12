@@ -166,29 +166,32 @@
 		Template.card_view.helpers({
 				showStats: function() {
 					return true;
+				},
+				stats: function() {
+					return null//game.opponentCardStats(this._id);
 				}
 		});
 
 		Template.stat_circle.helpers({
 			rotate: function() {
-				var deg = 220;
+				var deg = this.val*360;
 				if(deg > 180) {
 					$('.cover-semi').hide();
 					console.log('set');
-					routeSession.set('rotate2', deg);
+					// routeSession.set('rotate2', deg);
 					routeSession.set('hide', true);
-					return transformPrefix + ': rotate(180deg);';
+					return ': rotate(180deg);';
 				}
 				else {
-					routeSession.set('rotate2', 0);
+					// routeSession.set('rotate2', 0);
 					routeSession.set('hide', false);
-					return transformPrefix + ': rotate(' + deg + 'deg);';  
+					return ': rotate(' + deg + 'deg);';  
 				}
 			},
 			rotateSecond: function() {
 				console.log('get');
-				var deg = routeSession.get('rotate2');
-				return transformPrefix + ': rotate(' + deg + 'deg);';
+				var deg = this.val*360;
+				return ': rotate(' + deg + 'deg);';
 			},
 			hide: function() {
 				var hide = routeSession.get('hide');
@@ -196,6 +199,9 @@
 					return 'clip: auto;';
 				else
 					return '';
+			},
+			prefix: function() {
+				return transformPrefix;
 			}
 		});
 		
@@ -214,10 +220,6 @@
 
 		Template.card_selection_view.selectionCount = function() {
 			return selected_cards.get(this._id);
-		}
-
-		Template.card_view.stats = function() {
-			return game.opponentCardStats(this._id);
 		}
 
 
