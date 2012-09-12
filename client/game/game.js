@@ -6,6 +6,7 @@
 
   Game.route = function(deck, user) {
     var game = new Game({deck: deck, user: user});
+    game.invite(game.opponent()._id);
     route(game.url());
   }
 

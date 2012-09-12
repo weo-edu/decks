@@ -256,8 +256,12 @@
 	 			return (val / total) * 100;
 	 		}
 
-	 		Template.progress_bar.created = function() {
+	 		Template.progress_bar.rendered = function() {
+	 			console.log('progress bar created');
 	 			var self = this;
+	 			if(self.firstRendered === false) return;
+
+	 			self.firstRendered = false;
 	 			var handle = ui.autorun(function(){
 					var user = self.data._id === Meteor.user()._id ? 'me' : 'opponent';
 
@@ -287,7 +291,6 @@
 		 	*/
 		 	Template.play_results.created = function() {
 		 		this.results = game.results();
-		 		console.log('results', game.game());
 		 		this.opponent = game.opponent();
 		 		this.me = game.me();
 		 	}
