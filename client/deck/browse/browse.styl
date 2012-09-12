@@ -1,4 +1,4 @@
-@import '../decks/main.styl';
+@import '../decks/mixins.styl';
 
 .awning {
 	height = 55px;
@@ -74,11 +74,41 @@
 .deck {
 	height: 200px;
 	width: 150px;
-	border-radius: 8px;
+	position: relative;
+	z-index: 1;
 	box-shadow: 0 0 15px #333, inset 1px 1px 1px rgba(white, .5), inset -1px -1px 1px rgba(black, .5);
 	background-size: cover;
 	background-position: center center;
 }
+
+// .deck-front {
+// 	height: 200px;
+// 	width: 150px;
+// 	// border-radius: 8px;
+// 	box-shadow: 0 0 15px #333, inset 1px 1px 1px rgba(white, .5), inset -1px -1px 1px rgba(black, .5);
+// 	// box-shadow: inset 1px 1px 1px rgba(white, .5);
+// 	background-size: cover;
+// 	background-position: center center;
+// 	position: absolute;
+// }
+
+// .deck-back {
+// 	display: none;
+// 	content: "";
+// 	height: 200px;
+// 	width: 11px;
+// 	skew = 30deg;
+// 	transform: skew(skew, skew) rotate(skew);
+// 	left: 139px;
+// 	top: -14px;
+// 	box-shadow: 0 0 15px #333, inset 1px 1px 1px rgba(white, .5), inset -1px -1px 1px rgba(black, .5);
+// 	// left: 5px;
+// 	// background-image: url('/app!common/textures/roughcloth.png');
+// 	background-size: cover;
+// 	background-position: center center;
+// 	// top: 5px;
+// 	position: absolute;
+// }
 
 h4.deck-title {
 	width: 150px;
@@ -132,6 +162,7 @@ h4.deck-title {
 			float: none;
 			margin: 10px auto 40px;
 			display: block;
+			position: relative;
 		}
 		p {
 			font-size: 30px;

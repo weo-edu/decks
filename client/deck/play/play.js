@@ -15,9 +15,7 @@
   		var game = null
   			, stateMachineHandle = null
   			, game_id = ctx.params.id;
-
-  		Meteor.subscribe('userCardStats', game.users, game.deck.cards);
-
+  		
 			Template.game.created = function() {
 				var self = this;
 				game = new Game(game_id);
@@ -117,7 +115,6 @@
 					var message = dialog.get('message');
 					return Template[message] && Template[message]();
 				}
-
 			});
 
 			Template.cards_select.events({
@@ -131,36 +128,82 @@
 					Meteor.defer(function(){ game.problems(cards); });
 				},
 				'mousedown .card': function(evt, template) {
-					var data = this;
-					template.handler = ui.down(template,function() {
-						var numSelected = selected_cards.get(data._id);
-						var selectionsLeft = routeSession.get('selectionsLeft')
-						if (selectionsLeft) {
-							selected_cards.set(data._id, numSelected + 1 );
-							routeSession.set('selectionsLeft', selectionsLeft - 1);
-							return true;
-						}
-					});
+					if(evt.which === 1) {
+						var data = this;
+						template.handler = ui.down(template,function() {
+							var numSelected = selected_cards.get(data._id);
+							var selectionsLeft = routeSession.get('selectionsLeft')
+							if (selectionsLeft) {
+								selected_cards.set(data._id, numSelected + 1 );
+								routeSession.set('selectionsLeft', selectionsLeft - 1);
+								return true;
+							}
+						});
+					}
 				},
-				'mousedown .deselect': function(evt, template) {
-					var data = this;
-					template.handler = ui.down(template,function() {
-						var numSelected = selected_cards.get(data._id);
-						var selectionsLeft = routeSession.get('selectionsLeft')
-						if (numSelected > 0) {
-							selected_cards.set(data._id, numSelected - 1 );
-							routeSession.set('selectionsLeft', selectionsLeft + 1);
-							return true;
-						}
-					});
-					evt.preventDefault();
-					evt.stopPropagation();
+				'mousedown .selection-count': function(evt, template) {
+					if(evt.which === 1) {
+						var data = this;
+						template.handler = ui.down(template,function() {
+							var numSelected = selected_cards.get(data._id);
+							var selectionsLeft = routeSession.get('selectionsLeft')
+							if (numSelected > 0) {
+								selected_cards.set(data._id, numSelected - 1 );
+								routeSession.set('selectionsLeft', selectionsLeft + 1);
+								return true;
+							}
+						});
+						evt.preventDefault();
+						evt.stopPropagation();
+					}
 				},
 
 				'mouseup': function (evt, template) {
 					template.handler && template.handler.up();
 				}
 			});
+
+		Template.card_view.helpers({
+				showStats: function() {
+					return true;
+				},
+				stats: function() {
+					return null//game.opponentCardStats(this._id);
+				}
+		});
+
+		Template.stat_circle.helpers({
+			rotate: function() {
+				var deg = this.val*360;
+				if(deg > 180) {
+					$('.cover-semi').hide();
+					console.log('set');
+					// routeSession.set('rotate2', deg);
+					routeSession.set('hide', true);
+					return ': rotate(180deg);';
+				}
+				else {
+					// routeSession.set('rotate2', 0);
+					routeSession.set('hide', false);
+					return ': rotate(' + deg + 'deg);';  
+				}
+			},
+			rotateSecond: function() {
+				console.log('get');
+				var deg = this.val*360;
+				return ': rotate(' + deg + 'deg);';
+			},
+			hide: function() {
+				var hide = routeSession.get('hide');
+				if(hide)
+					return 'clip: auto;';
+				else
+					return '';
+			},
+			prefix: function() {
+				return transformPrefix;
+			}
+		});
 		
 		Template.num_selected.created = function() {
 			this.ncards = game.nCards();
@@ -175,12 +218,8 @@
 			}
 		});
 
-		Template.card_selection_count.selectionCount = function() {
+		Template.card_selection_view.selectionCount = function() {
 			return selected_cards.get(this._id);
-		}
-
-		Template.card_stats.stats = function() {
-			return game.opponentCardStats(this._id);
 		}
 
 
@@ -263,8 +302,12 @@
 	 			return (val / total) * 100;
 	 		}
 
-	 		Template.progress_bar.created = function() {
+	 		Template.progress_bar.rendered = function() {
+	 			console.log('progress bar created');
 	 			var self = this;
+	 			if(self.firstRendered === false) return;
+
+	 			self.firstRendered = false;
 	 			var handle = ui.autorun(function(){
 					var user = self.data._id === Meteor.user()._id ? 'me' : 'opponent';
 
@@ -294,7 +337,6 @@
 		 	*/
 		 	Template.play_results.created = function() {
 		 		this.results = game.results();
-		 		console.log('results', game.game());
 		 		this.opponent = game.opponent();
 		 		this.me = game.me();
 		 	}
@@ -363,7 +405,7 @@
 					return Cards.findOne(this.card_id).image;
 				},
 				correct: function() {
-					return game.isCorrect(this._id) ? 'correct' : 'incorrect';
+					return game.isCorrect(this) ? 'correct' : 'incorrect';
 				},
 				review: function() {
 					return routeSession.get('review');
@@ -376,6 +418,7 @@
  			Template.view_cards.events({
 				'click .card': function(evt, template) {
 					var self = this;
+					console.log(this);
 					$('#slider').addClass('review', 400, 'easeInOutExpo', function(){
 							routeSession.set('review_card', self);
 							routeSession.set('show_cards', 'review');
