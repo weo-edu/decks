@@ -15,7 +15,7 @@
   		var game = null
   			, stateMachineHandle = null
   			, game_id = ctx.params.id;
-
+  		
 			Template.game.created = function() {
 				var self = this;
 				game = new Game(game_id);
@@ -212,9 +212,13 @@
 			}
 		});
 
-			Template.card_selection_view.selectionCount = function() {
-				return selected_cards.get(this._id);
-			}
+		Template.card_selection_view.selectionCount = function() {
+			return selected_cards.get(this._id);
+		}
+
+		Template.card_view.stats = function() {
+			return game.opponentCardStats(this._id);
+		}
 
 
 			/*
@@ -274,9 +278,10 @@
 						var card = _.clone(Cards.findOne(problem.card_id));
 						card.type = 'card';
 						card.title = card.name;
+
 						
 						if(res) {
-							console.log('<table>',problem.points, card.stats.grade, 'points','</table>');
+							console.log('<table>',problem.points, card.stats && card.stats.grade, 'points','</table>');
 						}
 						event({name: 'complete', time: problem.time},
 							card,
@@ -326,6 +331,7 @@
 		 	*/
 		 	Template.play_results.created = function() {
 		 		this.results = game.results();
+		 		console.log('results', game.game());
 		 		this.opponent = game.opponent();
 		 		this.me = game.me();
 		 	}

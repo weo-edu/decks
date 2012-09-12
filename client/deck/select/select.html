@@ -73,10 +73,6 @@
 		<div class="selection-count">
 			{{selectionCount}}
 		</div>
-		
-			<!-- <div class="deselect">
-				-
-			</div> -->
 		{{/if}}
 	</div>
 	{{/isolate}}
@@ -88,11 +84,15 @@
 <template name='card_view'>
 	<div title="{{stats}}" class='card' style='background-image: url({{image}});'>
 		{{#if showStats}}
-			<div class='stats-box'>
-				<ul>
-					{{> stat_circle}}
-				</ul>
-			</div>
+				<div class='stats-box'>
+					<ul>
+						{{#with stats}}
+							{{> stat_circle speed}}
+							{{> stat_circle accuracy}}
+							{{> stat_circle retention}}
+						{{/with}}
+					</ul>
+				</div>
 		{{/if}}
 	</div>
 </template>

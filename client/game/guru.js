@@ -93,10 +93,50 @@
 
 	Guru.prototype.play = function() {
 		var self = this;
-		var problem;
-		while(problem = self.mygame.problem()) {
-			self.mygame.answer(self.answer(problem));
+
+		var time = +new Date();
+		var setTimes = false;
+		var problems = self.mygame.problems();
+
+		_.each(problems, function(problem) {
+			console.log(problem.startTime);
+			if (!problem.startTime) {
+				setTimes = true;
+				var problem_time = self.problemTime(problem);
+				problem.startTime = time;
+				problem.time = problem_time;
+				time += problem_time;
+			}
+		});
+
+		if (setTimes)
+			self.mygame.updatePlayer({problems: problems});
+
+
+		var playerDone = false;
+		var answerTimeout = null;
+		function answer () {
+			var problem = self.mygame.problem();
+			if (problem) {
+				var timeToAnswer = problem.time - (new Date() - problem.startTime);
+				if (timeToAnswer < 0) timeToAnswer = 0;
+				answerTimeout = Meteor.setTimeout(function() {
+					console.log('answer')
+					self.mygame.answer(self.answer(problem));
+					answer();
+				}, playerDone ? 0 : timeToAnswer);
+			}
+
 		}
+
+		answer();
+
+		self.mygame.once('opponentDone', function() {
+			playerDone = true;
+			Meteor.clearTimeout(answerTimeout);
+			answer();
+		});
+		
 	}
 
 	Guru.prototype.beat = function() {
@@ -113,26 +153,8 @@
 		self.mygame.stop();
 	}
 
-	function time_stats(problem) {
-		var card = Cards.findOne(problem.card_id);
-		var grade_stats = StatsCollection.findOne({name: 'gradeStats'});
-		if (grade_stats) grade_stats = grade_stats.stats.bins[card.grade];
-		var stats = {};
-		if (card.stats.correct >= 10) {
-			var average_time = card.stats.correct_time / card.stats.correct;
-			stats.u  = average_time;
-			var std = Math.sqrt((card.stats.correct_time_squared/card.stats.correct) - Math.pow(average_time,2));
-			stats.s = std;
-		} else if (grade_stats && grade_stats.correct > 0) {
-			var average_time = grade_stats.correct_time / grade_stats.correct;
-			stats.u = average_time;
-			var std = Math.sqrt((grade_stats.correct_time_squared/grade_stats.correct) - Math.pow(average_time,2));
-			stats.s = std;
-		} else {
-			stats.u = 5;
-			stats.s = 1;
-		}
-		return stats;
+	Guru.prototype.problemTime = function(problem) {
+		return Stats.cardTime(problem.card_id).u;
 	}
 
 
@@ -157,6 +179,8 @@
 
 		if(answer < difficulty)
 			answer = problem.solution;
+
+		console.log('time_stats', Stats.cardTime(problem.card_id));
 
 		return answer;
 	}
