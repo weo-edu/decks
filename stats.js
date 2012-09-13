@@ -30,146 +30,6 @@
 		return theta.dot([percentageCutoff, 1]);
 	}
 
-	/*
-	function computeGrade(obj, fn) {
-		fn = fn || weightedRegression;
-
-		if(! obj.stats || !obj.stats.bins) {
-			obj.stats = {
-				bins: {
-				}
-			};
-			obj.stats.bins[obj.grade] = {};
-			//console.log(obj);
-			//throw new Error('Must call computeGrade on an object with bins');
-		}
-
-		if(obj.grade) {
-			obj.stats.bins.grade = obj.stats.bins.grade || {attempts: 0, correct: 0, time: 0};
-			obj.stats.bins.grade.attempts += initialBoost;
-			obj.stats.bins.grade.correct += Math.floor(initialBoost * percentageCutoff);
-		}
-
-		var sorted = _.sortBy(obj.stats.bins, function(bin, grade) {
-			obj.stats.bins[grade].grade = grade;
-			bin.grade = Number(grade);
-			bin.percentage = Math.floor(bin.correct / bin.attempts * 100);
-			return bin.percentage;
-		});
-
-		var cutoff;
-		_.find(obj.stats.bins, function(bin, grade) {
-			bin.percentage = Math.floor(bin.correct / bin.attempts * 100);
-			bin.grade = Number(grade);
-			if(!cutoff || cutoff.percentage < bin.percentage) {
-				cutoff = grade;
-			}
-
-			if(bin.percentage > percentageCutoff) {
-				cutoff = grade;
-				return true;
-			}
-		});
-
-		if(typeof cutoff === 'undefined') {
-			return obj.grade;
-		}
-
-		var bin = obj.stats.bins[cutoff];
-		var bins = [
-			obj.stats.bins[bin.grade-1],
-			bin,
-			obj.stats.bins[bin.grade+1]
-		];
-
-		bins = _.compact(bins);			
-		var result = obj.grade;
-		try{
-			result = (bins.length > 1 && fn(bins));
-		} catch(e) {
-
-		}
-		return result;
-	}
-
-
-	function regrade(obj) {
-		console.log('regrading card');
-		var grade = computeGrade(obj);
-		if(grade) {
-			Cards.update(obj._id, {$set: {'stats.grade': grade}});
-		}
-	}
-
-	function augmentStats(collection, item, data, bin) {
-		var update = {$inc: {}};
-		_.each(data, function(val, key) {
-			update['$inc']['stats.' + key] = val;
-			if(bin) update['$inc']['stats.bins.' + bin + '.' + key] = val;
-		});
-
-		if(bin) {
-			update['$inc']['stats.updates'] = 1;
-			var obj = collection.findAndModify(item, 
-				[['_id', 'asc']], 
-				update, 
-				{'new': true}, function(err, res) {
-					if(err) throw err;
-					
-					if(res.stats.updates % regradeInterval  === 0) {
-						regrade(res);
-					}
-				});
-		} else {
-			collection.update(item, update, {multi: 0, upsert: 1}, function(err) {
-				err && console.log('augmentStats update error', err);
-			});
-		}
-	}
-
-
-	function augmentPoints(uid, points) {
-		Meteor.users.findAndModify(uid, 
-			[['_id', 'asc']], 
-			{$inc: {points: -points}},
-			{'new': true},
-			function(err, res) {
-				if(err) throw err;
-
-				if(res.points < 0) {
-					console.log('level up', res.username, pointsToNextLevel(res.level+1));
-					//	Level up!
-					Meteor.users.update(uid, {$inc: {level: 1, points: pointsToNextLevel((res.level || 0)+1)}});
-				}
-			}
-		);
-	}
-
-	function displayPoints(g) {
-		var cl = Meteor.user().level;
-		return (points(g) / points(1+cl/60)) * (2*cl+45);
-	}
-	function pointsToNextLevel(l) {
-		return .5*l*(Math.pow(3, 14/(1+Math.exp(-.25*(1+l/60-8)))))+300;
-	}
-
-	function points(g) {
-		return Math.pow(3, 14 / (1 + Math.exp((-.25) * (g - 8))));
-	}
-
-	global.pointTest = function(g) {
-		return 14 / (1 + Math.exp((-.25) * (g-8)));
-	};
-
-	global.regrade = regrade;
-	global.displayPoints = displayPoints;
-	global.augmentPoints = augmentPoints;
-	global.pointsToNextLevel = pointsToNextLevel;
-	global.points = points;
-	global.computeGrade = computeGrade;
-	global.augmentStats = augmentStats;
-	*/
-
 	Stats = {
 		regrade: function(obj) {
 			if(typeof obj === 'string')
@@ -197,11 +57,17 @@
 					if(err) throw err;
 
 					if(res.points < 0) {
+						var newPoints = res.points,
+							newLevel = res.level;
+
+						while(newPoints < 0)
+							newPoints += Stats.levelPoints(++newLevel);
+
 						console.log('level up', res.username, Stats.levelPoints(res.level+1));
 						Meteor.users.update(uid, {
-							$inc: {
-								level: 1, 
-								points: Stats.levelPoints(res.level+1)
+							$set: {
+								level: newLevel, 
+								points: newPoints
 							}
 						});
 					}
@@ -258,7 +124,7 @@
 			if(obj.grade) {
 				bins[obj.grade] = bins[obj.grade] || {attempts: 0, correct: 0, time: 0};
 				bins[obj.grade].attempts += initialBoost;
-				bins[obj.grade].correct += Math.floor(initialBoost * percentageCutoff);
+				bins[obj.grade].correct += Math.floor(initialBoost * (percentageCutoff/100));
 			}
 
 			_.each(bins, function(bin, grade) {

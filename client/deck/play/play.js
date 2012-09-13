@@ -263,8 +263,7 @@
 	 		});
 
 	 		Template.game_points.points = function() {
-	 				console.log('game_points');
-	 				return routeSession.get('myPoints') || 0;
+	 				return routeSession.get('myPoints') || Math.round(game.points(game.me()._id));
 	 		}
 
 	 		Template.current_card.helpers({
@@ -289,7 +288,7 @@
 
 						
 						if(res) {
-							console.log(problem.points, card.stats && card.stats.grade, 'points', game);
+							console.log(problem.points, card.stats && card.stats.grade, 'points', game.game());
 						}
 						event({name: 'complete', time: problem.time},
 							card,
@@ -297,6 +296,39 @@
 							);
 
  						nextCard();
+
+	 					var inc = 1;
+				 		var pointsTimeout = null;
+				 		var curPoints = parseInt(pointsEl.innerHTML, 10);
+				 		var endPoints = Math.round(game.points(game.me()._id));
+				 		var delta = endPoints - curPoints;
+
+	 					var dur = 19;
+		 				if(dur === 19) {
+		 					while(dur < 20) {
+		 					 inc++;
+		 					 dur = 500 / (delta / inc);
+		 					}
+		 				}
+
+				 		function stop() {
+				 			template.pointsInterval && clearInterval(template.pointsInterval);
+				 			template.pointsInterval = null;
+				 		}
+
+				 		stop();
+
+				 		template.pointsInterval = setInterval(function() {
+			 				if(curPoints < endPoints) {
+								curPoints += inc;
+								pointsEl.innerHTML = curPoints;
+								// XXX Switch to jQuery for setTimeout
+							} else {
+								routeSession.set('myPoints', endPoints);
+								stop();
+							}
+				 		}, dur);
+
  						Meteor.defer(function(){ 
  							updatePoints();
  							$('#answer').focus(); 
@@ -355,13 +387,11 @@
  						var answered = game.answered(self.data._id),
  							p = percent(answered, game.nCards());
 
- 							console.log(user, 'animation start');
  						$(container + ' .fill').stop(true, false).animate({'height': p + '%'}, {
  							//step: function(height) {
  							//	self.animHeight = height;
  							//},
  							complete: function() {
- 								console.log(user, 'animation done');
  								routeSession.set('answered_' + self.data._id, answered);
  						} });
  					}
@@ -373,8 +403,6 @@
 	 		}
 
 		 	Template.progress_bar.progress = function(ctx) {
-		 		//var user = this._id === Meteor.user()._id ? 'me' : 'opponent';
-		 		//console.log(user, 'progress bar re-render');
 		 		var answered = routeSession.get('answered_' + this._id);
 		 		return percent(answered, ctx.template.nCards) + '%';
 		 	}
