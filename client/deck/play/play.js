@@ -250,7 +250,7 @@
 	 			message: function() {
 	 				var dialog = ui.get('.dialog');
 	 				var message = dialog.get('message');
-	 				return Template[message] && Spark.isolate(Template[message]());
+	 				return Template[message] && Template[message]();
 	 			}
 	 		});
 
@@ -261,6 +261,12 @@
 	 				return routeSession.get('cur_problem') || Meteor.defer(nextCard);
 	 			}
 	 		});
+
+
+	 		var pointsEl = null;
+	 		Template.game_points.rendered = function() {
+	 			pointsEl = document.getElementById('game-points');
+	 		}
 
 	 		Template.game_points.points = function() {
 	 				console.log('game_points');
@@ -297,44 +303,44 @@
 							);
 
  						nextCard();
+
+	 					var inc = 1;
+				 		var pointsTimeout = null;
+				 		var curPoints = parseInt(pointsEl.innerHTML, 10);
+				 		var endPoints = Math.round(game.points(game.me()._id));
+				 		var delta = endPoints - curPoints;
+
+	 					var dur = 19;
+		 				if(dur === 19) {
+		 					while(dur < 20) {
+		 					 inc++;
+		 					 dur = 500 / (delta / inc);
+		 					}
+		 				}
+
+				 		function stop() {
+				 			template.pointsInterval && clearInterval(template.pointsInterval);
+				 			template.pointsInterval = null;
+				 		}
+
+				 		stop();
+				 		template.pointsInterval = setInterval(function() {
+			 				if(curPoints < endPoints) {
+								curPoints += inc;
+								pointsEl.innerHTML = curPoints;
+								// XXX Switch to jQuery for setTimeout
+							} else {
+								routeSession.set('myPoints', endPoints);
+								stop();
+							}
+				 		}, dur);
+
  						Meteor.defer(function(){ 
- 							updatePoints();
  							$('#answer').focus(); 
  						});
  					}
  				}
 	 		});
-
-	 		var dur = 19;
-	 		var inc = 1;
-	 		var pointsTimeout = null;
-
-	 		function updatePoints() {
-	 			var el = document.getElementById('game-points');
- 				var curPoints = parseInt(el.innerHTML, 10);
- 				var endPoints = Math.round(game.points(game.me()._id));
- 				var delta = endPoints - curPoints;
-
- 				if(dur === 19) {
- 					while(dur < 20) {
- 					 inc++;
- 					 dur = 500 / (delta / inc);
- 					}
- 				}
-
- 				if(curPoints < endPoints) {
-					curPoints += inc;
-					//el.html(curPoints);
-					el.innerHTML = curPoints;
-					// XXX Switch to jQuery for setTimeout
-					pointsTimeout = setTimeout(updatePoints, dur);
-				} else {
-					routeSession.set('myPoints', endPoints);
-					dur = 19;
-					inc = 1;
-					clearTimeout(pointsTimeout);
-				}
-	 		}
 
 	 		function percent(val, total) {
 	 			return (val / total) * 100;
