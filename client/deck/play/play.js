@@ -189,7 +189,6 @@
 				}
 			},
 			rotateSecond: function() {
-				console.log('get');
 				var deg = this.val*360;
 				return ': rotate(' + deg + 'deg);';
 			},

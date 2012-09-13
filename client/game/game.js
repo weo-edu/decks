@@ -393,13 +393,11 @@
       self.opponentCardStats = self.options.opponentCardStats;
       return self.opponentCardStats(cardId);
     } else {
-      console.log('cardid', cardId);
       var userStats = UserCardStats.findOne({uid: self.opponent()._id, cid: cardId});
       var accuracy = 0;
       var retention = 0;
       var speed = 0;
 
-      console.log('userStats', userStats);
       if (userStats && userStats.correct > 0) {
         var user_average_speed = userStats.correct_time / userStats.correct;
 
@@ -422,7 +420,6 @@
         points: { name: 'points', val: Stats.points(Stats.regrade(cardId)) },
         retention: { name: 'retention', val: retention }
       };
-      console.log("stats", stats);
       return stats;
     }
   } 
