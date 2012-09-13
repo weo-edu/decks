@@ -5,10 +5,21 @@
   	},
   	function(ctx, next) {
   		var game = Games.findOne(ctx.params.id);
-  		Meteor.subscribe('userDeckInfo', game.users, game.deck, next);
+  		Meteor.subscribe('userDeckInfo', game.users, game.deck, function() {
+  			if (!UserDeckInfo.findOne({user: Meteor.user()._id, deck: game.deck})) {
+  				UserDeckInfo.insert({ 
+  					user: Meteor.user()._id, 
+  					deck: game.deck, 
+  					mastery: {} 
+  				});
+  			}
+  			next();
+  		});
   	},
   	function(ctx, next) {
+  		
   		//XXX do in parallel
+  		
   		Meteor.subscribe('gradeStats', next);
   	},
   	function(ctx){

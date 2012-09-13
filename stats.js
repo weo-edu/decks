@@ -283,8 +283,8 @@
 			var card = Cards.findOne(cardId);
 			var grade_stats = StatsCollection.findOne({name: 'gradeStats'});
 			if (grade_stats) grade_stats = grade_stats[card.grade];
-			console.log('grad_stats', grade_stats);
-			console.log('card_stats', card.stats);
+			//console.log('grad_stats', grade_stats);
+			//console.log('card_stats', card.stats);
 			var stats = {};
 			if (card.stats && card.stats.correct >= 10) {
 				var average_time = card.stats.correct_time / card.stats.correct;
@@ -301,7 +301,14 @@
 				stats.s = 1;
 			}
 			return stats;
+		},
+
+		normalSample: function(mean, std) {
+			var dist = Math.sqrt(-1 * Math.log(Math.random()));
+			var angle = 2 * Math.PI * Math.random();
+			return dist*Math.sin(angle) * std + mean;
 		}
+
 	}
 
 
