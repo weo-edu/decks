@@ -490,13 +490,34 @@
 				level: function() {
 					return Meteor.user().level;
 				},
-				points: function() {
-					return Math.round(Stats.levelPoints(Meteor.user().level) - Meteor.user().points);
+				rotate: function() {
+					var degs = getDegs(Meteor.user());
+					if(degs > 180)
+						return ': rotate(180deg); width: 16px;';
+					else
+						return ': rotate(' + degs + 'deg);';  
 				},
-				pointsNeeded: function() {
-					return Math.round(Stats.levelPoints(Meteor.user().level));
+				rotateSecond: function() {
+					var degs = getDegs(Meteor.user());
+					return ': rotate(' + degs + 'deg);';
+				},
+				hide: function() {
+					var degs = getDegs(Meteor.user());
+					if(degs > 180)
+						return 'clip: auto;';
+					else
+						return '';
+				},
+				prefix: function() {
+					return transformPrefix;
 				}
-			})
+			});
+
+			function getDegs(user) {
+					var levelPoints = Stats.levelPoints(user.level) - user.points;
+					var levelPointsNeeded = Stats.levelPoints(user.level);
+					return (levelPoints / levelPointsNeeded)*360;
+			}
 
 		 	view.render('game');
 		});

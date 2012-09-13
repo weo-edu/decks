@@ -48,7 +48,9 @@
 
 <template name='user'>
 	<div class='user'>
-		<div class='avatar-tmb' style='background-image: url({{avatar}})'></div>
+		<div class='avatar-tmb' style='background-image: url({{avatar}})'>
+			<div id='level-progress'> {{> level_progress}} </div>
+		</div>
 		<p>{{username}}</p>
 		{{#unless select}}
 			{{> progress_bar}}
@@ -82,7 +84,7 @@
 </template>
 
 <template name='card_view'>
-	<div title="Grade: {{grade}}" class='card' style='background-image: url({{image}});'>
+	<div title="{{grade}}" class='card' style='background-image: url({{image}});'>
 		{{#if showStats}}
 			{{#with stats}}
 				<div class='points-banner'>
