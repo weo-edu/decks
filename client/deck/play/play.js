@@ -270,8 +270,8 @@
 	 			card: function() {
 	 				return routeSession.get('cur_problem');
 	 			}
-	 		});
-
+	 		});  
+//
 	 		Template.deck_play.events({
  				'click': function(e, template) {
  					$('#answer').focus();
