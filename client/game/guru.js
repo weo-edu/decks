@@ -29,12 +29,8 @@
 	function Guru(game) {
 		var self = this;
 
-		DependsEmitter.call(self);
-
 		self.game = game;
-		self.autorunHandle = null;
-
-		process.register('guru', self);
+		self.autorunHandle = null;	
 
 		game.on('stop', function() {
 			self.stop();
