@@ -484,17 +484,50 @@
 				}
 			});
 
+			// Template.level_progress.helpers({
+			// 	level: function() {
+			// 		return Meteor.user().level;
+			// 	},
+			// 	points: function() {
+			// 		return Math.round(Stats.levelPoints(Meteor.user().level) - Meteor.user().points);
+			// 	},
+			// 	pointsNeeded: function() {
+			// 		return Math.round(Stats.levelPoints(Meteor.user().level));
+			// 	},
+			// 	rotate: function() {
+
+			// 	}
+			// })
+
 			Template.level_progress.helpers({
 				level: function() {
-					return Meteor.user().level;
+					return game.me().level;
 				},
-				points: function() {
-					return Math.round(Stats.levelPoints(Meteor.user().level) - Meteor.user().points);
+				rotate: function() {
+					var user = game.me(),
+						deg = Math.round((Stats.levelPoints(user.level) - user.points) / (Stats.levelPoints(user.level))*360);
+					if(deg > 180)
+						return ': rotate(180deg); width: 16px;';
+					else
+						return ': rotate(' + deg + 'deg);';  
 				},
-				pointsNeeded: function() {
-					return Math.round(Stats.levelPoints(Meteor.user().level));
+				rotateSecond: function() {
+					var user = game.me(),
+						deg = Math.round((Stats.levelPoints(user.level) - user.points) / (Stats.levelPoints(user.level))*360);
+					return ': rotate(' + deg + 'deg);';
+				},
+				hide: function() {
+					var user = Meteor.user(),
+						deg = Math.round((Stats.levelPoints(user.level) - user.points) / (Stats.levelPoints(user.level))*360);
+					if(deg > 180)
+						return 'clip: auto;';
+					else
+						return '';
+				},
+				prefix: function() {
+					return transformPrefix;
 				}
-			})
+			});
 
 		 	view.render('game');
 		});

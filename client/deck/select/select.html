@@ -48,7 +48,9 @@
 
 <template name='user'>
 	<div class='user'>
-		<div class='avatar-tmb' style='background-image: url({{avatar}})'></div>
+		<div class='avatar-tmb' style='background-image: url({{avatar}})'>
+			<div id='level-progress'> {{> level_progress}} </div>
+		</div>
 		<p>{{username}}</p>
 		{{#unless select}}
 			{{> progress_bar}}

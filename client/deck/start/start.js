@@ -5,6 +5,29 @@ Template.card_view.helpers({
 	}
 });
 
+// Template.stat_circle.helpers({
+// 	rotate: function() {
+// 		var deg = this.val*360;
+// 		if(deg > 180)
+// 			return ': rotate(180deg); width: 16px;';
+// 		else
+// 			return ': rotate(' + deg + 'deg);';  
+// 	},
+// 	rotateSecond: function() {
+// 		var deg = this.val*360;
+// 		return ': rotate(' + deg + 'deg);';
+// 	},
+// 	hide: function() {
+// 		if(this.val*360 > 180)
+// 			return 'clip: auto;';
+// 		else
+// 			return '';
+// 	},
+// 	prefix: function() {
+// 		return transformPrefix;
+// 	}
+// });
+
 Template.back_button.events({
 	'click .back-button': function() {
 		route('/');
