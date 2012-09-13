@@ -60,11 +60,13 @@
 <template name='view_cards'>
 	{{> review_problem review_card}}
 	<div class='slide'>
-		<div id='card-grid'>
+		<div id='deck-grid'>
 			<div class='shelf-wrapper'>
 			{{#each cards}}
-				<div class='card {{correct this}}' style='background-image: url({{image}});'>
-					<div class='x'>X</div>
+				<div class='deck-container review-card'>
+					<div class='card {{correct this}}' style='background-image: url({{image}});'>
+						<div class='x'>X</div>
+					</div>
 				</div>
 			{{/each}}
 			</div>
@@ -72,7 +74,7 @@
 		<div class='next'></div>
 
 		<ul id='view-cards-nav'>
-			<li class='results'>Back to Results</li>
+			<li class='results'></li>
 		</ul>
 	</div>
 </template>

@@ -165,7 +165,8 @@
 
 		Template.card_view.helpers({
 				showStats: function() {
-					return true;
+					if(game)
+						return true;
 				},
 				stats: function() {
 					return game.opponentCardStats(this._id);
@@ -175,26 +176,16 @@
 		Template.stat_circle.helpers({
 			rotate: function() {
 				var deg = this.val*360;
-				if(deg > 180) {
-					$('.cover-semi').hide();
-					console.log('set');
-					// routeSession.set('rotate2', deg);
-					// routeSession.set('hide', true);
+				if(deg > 180)
 					return ': rotate(180deg); width: 16px;';
-				}
-				else {
-					// routeSession.set('rotate2', 0);
-					// routeSession.set('hide', false);
+				else
 					return ': rotate(' + deg + 'deg);';  
-				}
 			},
 			rotateSecond: function() {
-				console.log('get');
 				var deg = this.val*360;
 				return ': rotate(' + deg + 'deg);';
 			},
 			hide: function() {
-				// var hide = routeSession.get('hide');
 				if(this.val*360 > 180)
 					return 'clip: auto;';
 				else
@@ -262,6 +253,18 @@
 	 			}
 	 		});
 
+	 		Template.game_points.points = function() {
+	 				var points = routeSession.get('myPoints')
+	 				if(!points)
+	 					points = 0;
+
+	 				return points;
+	 		}
+
+	 		Template.problem_container.rendered = function() {
+	 			
+	 		}
+
 	 		Template.current_card.helpers({
 	 			card: function() {
 	 				return routeSession.get('cur_problem');
@@ -274,6 +277,7 @@
  				},
  				'keypress': function(e, template) {
  					if(e.which === 13) {
+ 						clearTimeout(pointsTimeout);
 						var res = game.answer(parseInt($('#answer').val(), 10)),
 							problem = game.lastAnsweredProblem();
 
@@ -283,7 +287,7 @@
 
 						
 						if(res) {
-							console.log('<table>',problem.points, card.stats && card.stats.grade, 'points','</table>');
+							console.log(problem.points, card.stats && card.stats.grade, 'points', game);
 						}
 						event({name: 'complete', time: problem.time},
 							card,
@@ -291,19 +295,48 @@
 							);
 
  						nextCard();
+ 						updatePoints();
  						Meteor.defer(function(){ $('#answer').focus(); });
  					}
  				}
 	 		});
 
-	 		//Meteor.deps.Context.logInvalidateStack = true;
+	 		var dur = 9;
+	 		var inc = 1;
+	 		var pointsTimeout = null;
+
+	 		function updatePoints() {
+	 			var el = $('#game-points');
+ 				var curPoints = parseInt(el.html(), 10);
+ 				var endPoints = Math.round(game.points(Meteor.user()._id));
+ 				var delta = endPoints - curPoints;
+
+ 				if(dur === 9) {
+ 					while(dur < 10) {
+ 					 inc++;
+ 					 dur = 300 / (delta / inc);
+ 					}
+ 				}
+
+ 				if(curPoints < endPoints) {
+					curPoints += inc;
+					el.html(curPoints);
+					routeSession.set('myPoints', curPoints);
+					// XXX Switch to jQuery for setTimeout
+					pointsTimeout = setTimeout(updatePoints, dur);
+				} else {
+					routeSession.set('myPoints', endPoints);
+					dur = 9;
+					inc = 1;
+					clearTimeout(pointsTimeout);
+				}
+	 		}
 
 	 		function percent(val, total) {
 	 			return (val / total) * 100;
 	 		}
 
 	 		Template.progress_bar.rendered = function() {
-	 			console.log('progress bar created');
 	 			var self = this;
 	 			if(self.firstRendered === false) return;
 
@@ -418,7 +451,6 @@
  			Template.view_cards.events({
 				'click .card': function(evt, template) {
 					var self = this;
-					console.log(this);
 					$('#slider').addClass('review', 400, 'easeInOutExpo', function(){
 							routeSession.set('review_card', self);
 							routeSession.set('show_cards', 'review');

@@ -167,11 +167,9 @@
 
     if (p) {
       if (! p.startTime) {
-        console.log('update start Time');
         var update = {};
         update[self.me()._id+'.problems.'+p_idx + '.startTime'] = +new Date();
         Games.update(self.game()._id, {$set: update});
-        console.log('game', self.game(), update);
       }
     } else
       self.mystate('await_results');
@@ -393,13 +391,11 @@
       self.opponentCardStats = self.options.opponentCardStats;
       return self.opponentCardStats(cardId);
     } else {
-      console.log('cardid', cardId);
       var userStats = UserCardStats.findOne({uid: self.opponent()._id, cid: cardId});
       var accuracy = 0;
       var retention = 0;
       var speed = 0;
 
-      console.log('userStats', userStats);
       if (userStats && userStats.correct > 0) {
         var user_average_speed = userStats.correct_time / userStats.correct;
 
@@ -407,7 +403,6 @@
 
         // speed is cumulative density at point user_average_speed on the normal
         // distribution defined by the card statistics
-        console.log(user_average_speed, cardStatistics.u, cardStatistics.s);
         speed = jstat.pnorm(user_average_speed,cardStatistics.u,cardStatistics.s);
 
         var t = new Date() - userStats.last_played;
@@ -422,7 +417,6 @@
         points: { name: 'points', val: Math.round(Stats.points(Stats.regrade(cardId))) },
         retention: { name: 'retention', val: retention }
       };
-      console.log("stats", stats);
       return stats;
     }
   } 

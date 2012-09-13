@@ -21,17 +21,20 @@
 			bottom: 0%;
 		}
 	}
-	#card-grid {
-		position: absolute;
-		top: 8%;
-		left: 50%;
-		margin-left: -350px;
 
+	#deck-grid {
+		height: 672px;
+	}
+	.review-card {
 		.card {
-			transition: box-shadow .2s;
+			transition: all .2s;
 		}
 		.card:hover {
-			box-shadow: 0px 0px 25px #000;
+				box-shadow: inset 0 0 15px #333, 0 0 25px #000;
+			.x {
+				transform: scale(2);
+				opacity: 0;
+			}
 		}
 
 		.correct {
@@ -47,7 +50,7 @@
 				transform: scale(1);
 				opacity: 1;
 				size = 90px;
-				font: 90px/1em Nuku;
+				font: 90px/1em 'Nuku Nuku';
 				text-align: center;
 				color: #FFF;
 				background: #E60000;
@@ -60,11 +63,10 @@
 				margin-top: size*-.5;
 				left: 50%;
 				margin-left: size*-.5;
-				box-shadow: 1px 1px 10px #333;
+				box-shadow: inset 1px 1px 0 rgba(white, .5), inset -1px -1px 0 rgba(black, .5), 0px 0px 10px #333;
 				text-shadow: -1px -1px 0 rgba(black, .5);
 				&:hover {
-					transform: scale(2);
-					opacity: 0;
+					
 				}
 			}
 		}
@@ -80,7 +82,7 @@
 
 	.review-back, .solution {
 		position: absolute;
-		font: 47px/40px Nuku;
+		font: 47px/40px 'Nuku Nuku';
 		color: #B3895D;
 		text-shadow: -1px -1px 0 rgba(black, .5);
 		transition: text-shadow .2s;
@@ -124,6 +126,7 @@ width = 740px;
 		font-size: 30px;
 		line-height: 1.5em;
 		text-align: center;
+		font-family: 'Fresca';
 	}
 	.inner-results {
 		padding: 20px;
@@ -141,21 +144,21 @@ width = 740px;
 		border-radius: 50%;
 		background: #E31A21;
 		font-size: 45px;
-		font-family: "Nuku";
+		font-family: 'Nuku Nuku';
 		text-align: center;
 		color: white;
 		.winner {
 			margin-top: 140px;
 		}
 		.winner-name {
-			font: 28px "Fresca";
+			font: 28px 'Fresca';
 		}
 	}
 
 	.results {
 		float: left;
 		margin-top: height - 270px;
-		font: 30px/1.3em "MayonaiseCondRegular";
+		font: 30px/1.3em "Fresca";
 		text-transform: uppercase;
 		text-align: center;
 		width: 260px;
@@ -231,11 +234,11 @@ width = 740px;
 	}
 }
 
-#results-nav, #view-cards-nav {
+#results-nav {
 	position: absolute;
 	bottom: 50px;
 	clear: both;
-	font: 56px Nuku;
+	font: 56px 'Nuku Nuku';
 	margin-left: 175px;
 	color: #B3895D;
 	li {
@@ -257,7 +260,6 @@ width = 740px;
 
 #view-cards-nav {
 	li {
-		width: 700px;
-		text-align: center;
+		back-button();
 	}
 }

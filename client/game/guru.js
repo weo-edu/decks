@@ -99,7 +99,6 @@
 		var problems = self.mygame.problems();
 
 		_.each(problems, function(problem) {
-			console.log(problem.startTime);
 			if (!problem.startTime) {
 				setTimes = true;
 				var problem_time = self.problemTime(problem);
@@ -121,7 +120,6 @@
 				var timeToAnswer = problem.time - (new Date() - problem.startTime);
 				if (timeToAnswer < 0) timeToAnswer = 0;
 				answerTimeout = Meteor.setTimeout(function() {
-					console.log('answer')
 					self.mygame.answer(self.answer(problem));
 					answer();
 				}, playerDone ? 0 : timeToAnswer);
@@ -179,8 +177,6 @@
 
 		if(answer < difficulty)
 			answer = problem.solution;
-
-		console.log('time_stats', Stats.cardTime(problem.card_id));
 
 		return answer;
 	}
