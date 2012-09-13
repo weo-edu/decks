@@ -57,6 +57,9 @@
 			},
 			opponent: function() {
 				return Meteor.user();
+			},
+			opponentCardStats: function() {
+				return self.cardStats();
 			}
 		};
 
@@ -179,6 +182,10 @@
 		console.log('time_stats', Stats.cardTime(problem.card_id));
 
 		return answer;
+	}
+
+	Guru[MASTERY.PROFICIENT].prototype.cardStats = function(cardId) {
+
 	}
 
 	
