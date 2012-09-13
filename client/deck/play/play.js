@@ -180,7 +180,7 @@
 					console.log('set');
 					// routeSession.set('rotate2', deg);
 					// routeSession.set('hide', true);
-					return ': rotate(180deg);';
+					return ': rotate(180deg); width: 16px;';
 				}
 				else {
 					// routeSession.set('rotate2', 0);
