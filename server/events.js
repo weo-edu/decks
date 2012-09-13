@@ -1,7 +1,6 @@
 Observer.on('complete:deck', function(e) {
     //console.log('complete:deck', e);
     Fiber(function() {
-        console.log('test');
         Decks.update(
             { title: e.object.name }, 
             { $inc:
@@ -25,7 +24,16 @@ Observer.on('complete:card', function(e) {
         var match = {_id: e.object._id};
         var card = Cards.findOne(e.object._id);
         var time = e.action.time || 0;
+        var capped_time = time;
         var correct = ~e.action.adverbs.indexOf('correctly') ? 1 : 0;
+        if (card.stats.correct >= 10) {
+          var u_time = card.stats.correct_time / card.stats.correct;
+          var s_time = Math.sqrt((card.stats.correct_time_squared / card.stats.correct) - Math.pow(u_time,2));
+          if ( (time - u_time) / s_time > 5) {
+            capped_time = u_time + 5 * s_time;
+          }
+            
+        }
 
         //XXX time_squared is used for variance calc
         // we may want to use an incremental variance calculation instead
@@ -34,8 +42,8 @@ Observer.on('complete:card', function(e) {
           time: time,
           time_squared: Math.pow(time, 2),
           correct: correct,
-          correct_time: correct ? time : 0,
-          correct_time_squared: correct ? Math.pow(time, 2) : 0
+          correct_time: correct ? capped_time : 0,
+          correct_time_squared: correct ? Math.pow(capped_time, 2) : 0
         };
 
         // card stats update
@@ -47,7 +55,6 @@ Observer.on('complete:card', function(e) {
           update.$inc[name] = stat;
         });
         update.$set = {last_played: +new Date()}
-        console.log('update', update);
         UserCardStats.update(
           {uid: e.user._id, cid: e.object._id},
           update,
@@ -59,7 +66,6 @@ Observer.on('complete:card', function(e) {
         _.each(stats,function(stat, name) {
           update.$inc[card.grade + '.' + name] = stat;
         });
-        console.log('update', update);
         StatsCollection.update(
           {name: 'gradeStats'},
           update,
@@ -75,7 +81,6 @@ Observer.on('complete:card', function(e) {
             card = Cards.findOne(e.object._id);
           }
 
-          console.log('grade', card.stats.grade);
           var pts = Stats.points(card.stats.grade || card.grade);
           Stats.augmentPoints(e.user._id, pts);
         }
@@ -94,7 +99,6 @@ Observer.on('complete:game', function(e) {
   Fiber(function() {
     var match = e.object;
     var action = e.action;
-    console.log('complete game', match, action);
     var mod = { attempts: 1 };
     if (action.adverbs.indexOf('andWon') >= 0) {
       mod.wins = 1;

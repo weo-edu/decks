@@ -379,9 +379,8 @@
 
   Game.prototype.opponentCardStats = function (cardId) {
     var self = this;
-    if (self.options.opponentCardStats) {
-      self.opponentCardStats = self.options.opponentCardStats;
-      return self.opponentCardStats(cardId);
+    if (self.opponent().synthetic) {
+      return self.player(self.opponent()._id).stats[cardId];
     } else {
       var userStats = UserCardStats.findOne({uid: self.opponent()._id, cid: cardId});
       var accuracy = 0;
@@ -395,7 +394,7 @@
 
         // speed is cumulative density at point user_average_speed on the normal
         // distribution defined by the card statistics
-        speed = jstat.pnorm(user_average_speed,cardStatistics.u,cardStatistics.s);
+        speed = 1-jstat.pnorm(user_average_speed,cardStatistics.u,cardStatistics.s);
 
         var t = new Date() - userStats.last_played;
         t = t/(1000*60*60*24);

@@ -27,13 +27,11 @@
 	});
 
 	Meteor.publish('gradeStats', function() {
-		console.log('publish gradeStats');
 		return StatsCollection.find({name: 'gradeStats'});
 	});
 
 	Meteor.publish('userCardStats', function (users, cards) {
 		users = _.without(users,1);
-		console.log('users', users, 'cards', cards);
 		return UserCardStats.find({ uid: {$in: users}, cid: {$in: cards} });
 	});
 
