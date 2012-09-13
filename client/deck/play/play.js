@@ -250,7 +250,7 @@
 	 			message: function() {
 	 				var dialog = ui.get('.dialog');
 	 				var message = dialog.get('message');
-	 				return Template[message] && Template[message]();
+	 				return Template[message] && Spark.isolate(Template[message]());
 	 			}
 	 		});
 
@@ -261,12 +261,6 @@
 	 				return routeSession.get('cur_problem') || Meteor.defer(nextCard);
 	 			}
 	 		});
-
-
-	 		var pointsEl = null;
-	 		Template.game_points.rendered = function() {
-	 			pointsEl = document.getElementById('game-points');
-	 		}
 
 	 		Template.game_points.points = function() {
 	 				console.log('game_points');
@@ -303,44 +297,44 @@
 							);
 
  						nextCard();
-
-	 					var inc = 1;
-				 		var pointsTimeout = null;
-				 		var curPoints = parseInt(pointsEl.innerHTML, 10);
-				 		var endPoints = Math.round(game.points(game.me()._id));
-				 		var delta = endPoints - curPoints;
-
-	 					var dur = 19;
-		 				if(dur === 19) {
-		 					while(dur < 20) {
-		 					 inc++;
-		 					 dur = 500 / (delta / inc);
-		 					}
-		 				}
-
-				 		function stop() {
-				 			template.pointsInterval && clearInterval(template.pointsInterval);
-				 			template.pointsInterval = null;
-				 		}
-
-				 		stop();
-				 		template.pointsInterval = setInterval(function() {
-			 				if(curPoints < endPoints) {
-								curPoints += inc;
-								pointsEl.innerHTML = curPoints;
-								// XXX Switch to jQuery for setTimeout
-							} else {
-								routeSession.set('myPoints', endPoints);
-								stop();
-							}
-				 		}, dur);
-
  						Meteor.defer(function(){ 
+ 							updatePoints();
  							$('#answer').focus(); 
  						});
  					}
  				}
 	 		});
+
+	 		var dur = 19;
+	 		var inc = 1;
+	 		var pointsTimeout = null;
+
+	 		function updatePoints() {
+	 			var el = document.getElementById('game-points');
+ 				var curPoints = parseInt(el.innerHTML, 10);
+ 				var endPoints = Math.round(game.points(game.me()._id));
+ 				var delta = endPoints - curPoints;
+
+ 				if(dur === 19) {
+ 					while(dur < 20) {
+ 					 inc++;
+ 					 dur = 500 / (delta / inc);
+ 					}
+ 				}
+
+ 				if(curPoints < endPoints) {
+					curPoints += inc;
+					//el.html(curPoints);
+					el.innerHTML = curPoints;
+					// XXX Switch to jQuery for setTimeout
+					pointsTimeout = setTimeout(updatePoints, dur);
+				} else {
+					routeSession.set('myPoints', endPoints);
+					dur = 19;
+					inc = 1;
+					clearTimeout(pointsTimeout);
+				}
+	 		}
 
 	 		function percent(val, total) {
 	 			return (val / total) * 100;
@@ -504,28 +498,27 @@
 
 			// 	}
 			// })
+			// 
+			// 
 
 			Template.level_progress.helpers({
 				level: function() {
-					return game.me().level;
+					return Meteor.user().level;
 				},
 				rotate: function() {
-					var user = game.me(),
-						deg = Math.round((Stats.levelPoints(user.level) - user.points) / (Stats.levelPoints(user.level))*360);
-					if(deg > 180)
+					var degs = getDegs(Meteor.user());
+					if(degs > 180)
 						return ': rotate(180deg); width: 16px;';
 					else
-						return ': rotate(' + deg + 'deg);';  
+						return ': rotate(' + degs + 'deg);';  
 				},
 				rotateSecond: function() {
-					var user = game.me(),
-						deg = Math.round((Stats.levelPoints(user.level) - user.points) / (Stats.levelPoints(user.level))*360);
-					return ': rotate(' + deg + 'deg);';
+					var degs = getDegs(Meteor.user());
+					return ': rotate(' + degs + 'deg);';
 				},
 				hide: function() {
-					var user = Meteor.user(),
-						deg = Math.round((Stats.levelPoints(user.level) - user.points) / (Stats.levelPoints(user.level))*360);
-					if(deg > 180)
+					var degs = getDegs(Meteor.user());
+					if(degs > 180)
 						return 'clip: auto;';
 					else
 						return '';
@@ -534,6 +527,12 @@
 					return transformPrefix;
 				}
 			});
+
+			function getDegs(user) {
+					var levelPoints = Stats.levelPoints(user.level) - user.points;
+					var levelPointsNeeded = Stats.levelPoints(user.level);
+					return (levelPoints / levelPointsNeeded)*360;
+			}
 
 		 	view.render('game');
 		});
