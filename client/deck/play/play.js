@@ -269,8 +269,7 @@
 	 		}
 
 	 		Template.game_points.points = function() {
-	 				console.log('game_points');
-	 				return routeSession.get('myPoints') || 0;
+	 				return routeSession.get('myPoints') || Math.round(game.points(game.me()._id));
 	 		}
 
 	 		Template.current_card.helpers({
@@ -295,7 +294,7 @@
 
 						
 						if(res) {
-							console.log(problem.points, card.stats && card.stats.grade, 'points', game);
+							console.log(problem.points, card.stats && card.stats.grade, 'points', game.game());
 						}
 						event({name: 'complete', time: problem.time},
 							card,
@@ -324,6 +323,7 @@
 				 		}
 
 				 		stop();
+
 				 		template.pointsInterval = setInterval(function() {
 			 				if(curPoints < endPoints) {
 								curPoints += inc;
@@ -361,13 +361,11 @@
  						var answered = game.answered(self.data._id),
  							p = percent(answered, game.nCards());
 
- 							console.log(user, 'animation start');
  						$(container + ' .fill').stop(true, false).animate({'height': p + '%'}, {
  							//step: function(height) {
  							//	self.animHeight = height;
  							//},
  							complete: function() {
- 								console.log(user, 'animation done');
  								routeSession.set('answered_' + self.data._id, answered);
  						} });
  					}
@@ -379,8 +377,6 @@
 	 		}
 
 		 	Template.progress_bar.progress = function(ctx) {
-		 		//var user = this._id === Meteor.user()._id ? 'me' : 'opponent';
-		 		//console.log(user, 'progress bar re-render');
 		 		var answered = routeSession.get('answered_' + this._id);
 		 		return percent(answered, ctx.template.nCards) + '%';
 		 	}
