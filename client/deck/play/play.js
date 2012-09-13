@@ -255,10 +255,6 @@
 	 		var problemRendered = null;
 	 		Template.problem_container.helpers({
 	 			card: function() {
-	 				Meteor.defer(function() {
-	 					$('#problem-container').addClass('show', 0);
-	 				});
-
 	 				problemRendered = (new Date()).getTime();
 	 				return routeSession.get('cur_problem') || Meteor.defer(nextCard);
 	 			}
