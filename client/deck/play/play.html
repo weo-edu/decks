@@ -18,6 +18,9 @@
 	{{#ui "dialog"}}
 		{{{ message }}}
 	{{/ui}}
+	{{#constant}}
+		<div id='bonus'></div>
+	{{/constant}}
 </template>
 
 <template name="await_results">
@@ -31,6 +34,11 @@
 		<input type="text" id="answer"/>
 	</div>
 	{{/with}}
+	{{> game_points}}
+</template>
+
+<template name='game_points'>
+	<div id='game-points'>{{points}}</div>
 </template>
 
 <template name="current_card">

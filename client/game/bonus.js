@@ -6,8 +6,8 @@
 				var self = this;
 				game.on('answer', _.bind(nInARow(3), self));
 			},
-			name: '3 in a row',
-			message: 'You got 3 in a row!',
+			name: 'spree',
+			message: '3 Card Spree!',
 			points: 100
 		},
 		{
@@ -32,8 +32,8 @@
 				});
 			},
 			points: 100,
-			name: 'Critical Strike',
-			message: 'Critical Strike!'
+			name: 'critical',
+			message: 'Critical!'
 		}
 	];
 
@@ -82,8 +82,24 @@
 			self.message[utils.rand_int(0, self.message.length-1)] 
 			: self.message;
 
-		msg += ' +' + points + ' points';
-		console.log(msg);
+		msg += '<br/>' + points;
+		if(self.game.me()._id !== 1) {
+			$('#bonus').attr('style', ' ').html(msg).attr('class', self.name)
+				.stop(true, false)
+				.animate({'margin': 0, 'opacity': 1, 'font-size': '50px'}, 100, 'easeOutSine')
+				.delay(1000)
+				.animate({'margin': 0, 'font-size': '70px'}, 50, 'easeOutSine')
+				.animate({'margin': '0 0 0 -300px', 'opacity': 0, 'font-size': 0}, 80, 'easeOutQuart');
+				
+				// .stop(true, false)
+				// .attr('class', 'start ' + self.name)
+				// .switchClass('start', 'displayed', 100)
+				// .addClass('big', 1300)
+				// .switchClass('displayed big', 'end', 100, function() {
+
+				// });
+		}
+		// console.log(msg, self);
 	}
 
 	global.Bonus = Bonus;

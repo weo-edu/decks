@@ -159,11 +159,9 @@
 
     if (p) {
       if (! p.startTime) {
-        console.log('update start Time');
         var update = {};
         update[self.me()._id+'.problems.'+p_idx + '.startTime'] = +new Date();
         Games.update(self.game()._id, {$set: update});
-        console.log('game', self.game(), update);
       }
     } else
       self.mystate('await_results');
@@ -397,7 +395,6 @@
 
         // speed is cumulative density at point user_average_speed on the normal
         // distribution defined by the card statistics
-        console.log(user_average_speed, cardStatistics.u, cardStatistics.s);
         speed = jstat.pnorm(user_average_speed,cardStatistics.u,cardStatistics.s);
 
         var t = new Date() - userStats.last_played;
