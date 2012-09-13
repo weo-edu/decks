@@ -250,7 +250,7 @@
 	 			message: function() {
 	 				var dialog = ui.get('.dialog');
 	 				var message = dialog.get('message');
-	 				return Template[message] && Spark.isolate(Template[message]());
+	 				return Template[message] && Template[message]();
 	 			}
 	 		});
 
@@ -261,6 +261,12 @@
 	 				return routeSession.get('cur_problem') || Meteor.defer(nextCard);
 	 			}
 	 		});
+
+
+	 		var pointsEl = null;
+	 		Template.game_points.rendered = function() {
+	 			pointsEl = document.getElementById('game-points');
+	 		}
 
 	 		Template.game_points.points = function() {
 	 				return routeSession.get('myPoints') || Math.round(game.points(game.me()._id));
@@ -330,43 +336,11 @@
 				 		}, dur);
 
  						Meteor.defer(function(){ 
- 							updatePoints();
  							$('#answer').focus(); 
  						});
  					}
  				}
 	 		});
-
-	 		var dur = 19;
-	 		var inc = 1;
-	 		var pointsTimeout = null;
-
-	 		function updatePoints() {
-	 			var el = document.getElementById('game-points');
- 				var curPoints = parseInt(el.innerHTML, 10);
- 				var endPoints = Math.round(game.points(game.me()._id));
- 				var delta = endPoints - curPoints;
-
- 				if(dur === 19) {
- 					while(dur < 20) {
- 					 inc++;
- 					 dur = 500 / (delta / inc);
- 					}
- 				}
-
- 				if(curPoints < endPoints) {
-					curPoints += inc;
-					//el.html(curPoints);
-					el.innerHTML = curPoints;
-					// XXX Switch to jQuery for setTimeout
-					pointsTimeout = setTimeout(updatePoints, dur);
-				} else {
-					routeSession.set('myPoints', endPoints);
-					dur = 19;
-					inc = 1;
-					clearTimeout(pointsTimeout);
-				}
-	 		}
 
 	 		function percent(val, total) {
 	 			return (val / total) * 100;
@@ -511,23 +485,6 @@
 					alert(routeSession.get('review_card').solution);
 				}
 			});
-
-			// Template.level_progress.helpers({
-			// 	level: function() {
-			// 		return Meteor.user().level;
-			// 	},
-			// 	points: function() {
-			// 		return Math.round(Stats.levelPoints(Meteor.user().level) - Meteor.user().points);
-			// 	},
-			// 	pointsNeeded: function() {
-			// 		return Math.round(Stats.levelPoints(Meteor.user().level));
-			// 	},
-			// 	rotate: function() {
-
-			// 	}
-			// })
-			// 
-			// 
 
 			Template.level_progress.helpers({
 				level: function() {
