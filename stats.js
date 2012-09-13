@@ -134,9 +134,13 @@
 
 			var cluster = Stats.getBinCluster(bins),
 				result = null;
-			try{
-				if(cluster && cluster.length > 1)
-					result = fn(cluster);
+			try {
+				if(cluster && cluster.length > 1) {
+					if(cluster[0].percentage >= cluster[1].percentage)
+						result = cluster[0].grade;
+					else
+						result = fn(cluster);
+				}
 				else
 					result = obj.grade;
 			} finally {
