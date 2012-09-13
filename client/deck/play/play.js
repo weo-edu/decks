@@ -219,6 +219,7 @@
 			*/
 			Template.deck_play.created = function() {
 				this.deck = game.deck();
+				this.me = game.me();
 				this.opponent = game.opponent();
 		 	};
 
@@ -232,12 +233,13 @@
 		 	}
 
 	 		Template.deck_play.helpers({
+	 			me: function(ctx) { return ctx.template.me; },
 	 			opponent: function(ctx){ return ctx.template.opponent; },
 	 			deck: function(ctx) { return ctx.template.deck; },
 	 			message: function() {
 	 				var dialog = ui.get('.dialog');
 	 				var message = dialog.get('message');
-	 				return Template[message] && Template[message]();
+	 				return Template[message] && Spark.isolate(Template[message]());
 	 			}
 	 		});
 
@@ -250,15 +252,8 @@
 	 		});
 
 	 		Template.game_points.points = function() {
-	 				var points = routeSession.get('myPoints')
-	 				if(!points)
-	 					points = 0;
-
-	 				return points;
-	 		}
-
-	 		Template.problem_container.rendered = function() {
-	 			
+	 				console.log('game_points');
+	 				return routeSession.get('myPoints') || 0;
 	 		}
 
 	 		Template.current_card.helpers({
@@ -291,38 +286,40 @@
 							);
 
  						nextCard();
- 						updatePoints();
- 						Meteor.defer(function(){ $('#answer').focus(); });
+ 						Meteor.defer(function(){ 
+ 							updatePoints();
+ 							$('#answer').focus(); 
+ 						});
  					}
  				}
 	 		});
 
-	 		var dur = 9;
+	 		var dur = 19;
 	 		var inc = 1;
 	 		var pointsTimeout = null;
 
 	 		function updatePoints() {
-	 			var el = $('#game-points');
- 				var curPoints = parseInt(el.html(), 10);
- 				var endPoints = Math.round(game.points(Meteor.user()._id));
+	 			var el = document.getElementById('game-points');
+ 				var curPoints = parseInt(el.innerHTML, 10);
+ 				var endPoints = Math.round(game.points(game.me()._id));
  				var delta = endPoints - curPoints;
 
- 				if(dur === 9) {
- 					while(dur < 10) {
+ 				if(dur === 19) {
+ 					while(dur < 20) {
  					 inc++;
- 					 dur = 300 / (delta / inc);
+ 					 dur = 500 / (delta / inc);
  					}
  				}
 
  				if(curPoints < endPoints) {
 					curPoints += inc;
-					el.html(curPoints);
-					routeSession.set('myPoints', curPoints);
+					//el.html(curPoints);
+					el.innerHTML = curPoints;
 					// XXX Switch to jQuery for setTimeout
 					pointsTimeout = setTimeout(updatePoints, dur);
 				} else {
 					routeSession.set('myPoints', endPoints);
-					dur = 9;
+					dur = 19;
 					inc = 1;
 					clearTimeout(pointsTimeout);
 				}
@@ -332,9 +329,11 @@
 	 			return (val / total) * 100;
 	 		}
 
+
 	 		Template.progress_bar.rendered = function() {
 	 			var self = this;
 	 			if(self.firstRendered === false) return;
+	 			self.nCards = game.nCards();
 
 	 			self.firstRendered = false;
 	 			var handle = ui.autorun(function(){
@@ -345,9 +344,15 @@
  						var answered = game.answered(self.data._id),
  							p = percent(answered, game.nCards());
 
- 						$(container + ' .fill').animate({'height': p + '%'}, function() {
- 							routeSession.set('answered_' + self.data._id, answered);
- 						});
+ 							console.log(user, 'animation start');
+ 						$(container + ' .fill').stop(true, false).animate({'height': p + '%'}, {
+ 							//step: function(height) {
+ 							//	self.animHeight = height;
+ 							//},
+ 							complete: function() {
+ 								console.log(user, 'animation done');
+ 								routeSession.set('answered_' + self.data._id, answered);
+ 						} });
  					}
 	 			});
 
@@ -357,8 +362,10 @@
 	 		}
 
 		 	Template.progress_bar.progress = function(ctx) {
+		 		//var user = this._id === Meteor.user()._id ? 'me' : 'opponent';
+		 		//console.log(user, 'progress bar re-render');
 		 		var answered = routeSession.get('answered_' + this._id);
-		 		return percent(answered, game.nCards()) + '%';
+		 		return percent(answered, ctx.template.nCards) + '%';
 		 	}
 
 		 	/*

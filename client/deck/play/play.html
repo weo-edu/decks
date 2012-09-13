@@ -4,16 +4,15 @@
 			{{> problem_container}}
 		</div>
 		<div id='players-area'>
-				<div id='me' class='user-1'>
-					{{> user currentUser}}
-				</div>
-				{{> current_card}}
-					<!-- <h4 class='deck-title'>{{title}}</h4> -->
-
-				<div id='opponent' class='user-2'>
-					{{> user opponent}}
-				</div>
+			<div id='me' class='user-1'>
+				{{> user me}}
 			</div>
+			{{> current_card}}
+
+			<div id='opponent' class='user-2'>
+				{{> user opponent}}
+			</div>
+		</div>
 	</div>
 	{{#ui "dialog"}}
 		{{{ message }}}
@@ -46,69 +45,3 @@
 		<div title="{{stats}}" class='card' style='background-image: url({{image}});'></div>
 	{{/with}}
 </template>
-
-
-<!-- <template name="deck_play">
-	<div id='playground'>
-		<div id='play-area'></div>
-		<div id='play-meta'>
-			<div id='bar'>
-				<div class='fill'></div>
-			</div>
-		</div>
-	</div>
-	<div id='deck-dock'>
-		{{#with deck}}
-		<div id='answered'>
-			<div class='deck-container'>
-				<div class="deck">
-						<div class='front' style='background-image: url(/{{graphic}}); background-color:{{primary_color}};'>
-						</div>
-						<div class='back'>
-							<div class="deck-title">{{title}}</div>
-							<div rel='/deck/play/{{title}}' class='play'>PLAY</div>
-						</div>
-				</div>
-			</div>
-		</div>
-		{{> unanswered}}
-		{{/with}}
-	</div>
-</template>
-
-<template name="unanswered">
-	<div id='unanswered'>
-		{{#iter cards}}
-			{{> deck_card}}
-		{{/iter}}
-	</div>
-</template>
-
-<template name="deck_card">
-	<div data='{{idx}}' class='card-container'>
-	<div class='card'>
-		<div class='front' style='background-image: url(/{{graphic}});'></div>
-
-		<div class='back' style='background-color: {{main-color}}'>
-			<div class='back-content'>
-				<h3>{{name}}</h3>
-				<div class='question'>
-					{{question}}
-				</div>
-			</div>
-			<label for='answer'>Answer</label>
-			<input type='text' name='solution' class='solution' />
-
-		</div>
-	</div>
-</div>
-	
-</template>
-
-<template name="deck_results">
-	<div id='playground'>
-		<h3>Results</h3>
-		You got {{correct}} out of {{total}} right!
-		<a href='/deck/browse'>Decks</a>
-	</div>
-</template> -->
