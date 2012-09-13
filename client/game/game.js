@@ -6,7 +6,7 @@
 
   Game.route = function(deck, user) {
     var game = new Game({deck: deck, user: user});
-    game.invite(game.opponent()._id);
+    game.invite();
     route(game.url());
   }
 
@@ -139,17 +139,9 @@
   /*
     Invite another user to join the game
   */
-  Game.prototype.invite = function(uid) {
-    var self = this;
-    self.update({ $addToSet: { users: uid } }, function(err) {
-      if(!err) {
-        self.message('invite:game', self.id);
-      } else {
-        console.warn(err);
-      }
-    });
-
-    return self;
+  Game.prototype.invite = function() {
+    this.message('invite:game', this.id);
+    return this;
   }
 
   /*
