@@ -86,20 +86,22 @@
 		if(self.game.me()._id !== 1) {
 			$('#bonus').attr('style', ' ').html(msg).attr('class', self.name)
 				.stop(true, false)
-				.animate({'margin': 0, 'opacity': 1, 'font-size': '50px'}, 100, 'easeOutSine')
+				.animate({
+					'margin'		: 0,
+					'opacity'		: 1, 
+					'font-size'	: '50px'
+				}, 100, 'easeOutSine')
 				.delay(1000)
-				.animate({'margin': 0, 'font-size': '70px'}, 50, 'easeOutSine')
-				.animate({'margin': '0 0 0 -300px', 'opacity': 0, 'font-size': 0}, 80, 'easeOutQuart');
-				
-				// .stop(true, false)
-				// .attr('class', 'start ' + self.name)
-				// .switchClass('start', 'displayed', 100)
-				// .addClass('big', 1300)
-				// .switchClass('displayed big', 'end', 100, function() {
-
-				// });
+				.animate({
+					'margin'		: 0,
+					'font-size'	: '70px'
+				}, 50, 'easeOutSine')
+				.animate({
+					'margin'		: '0 0 0 -300px',
+					'opacity'		: 0,
+					'font-size'	: 0
+				}, 80, 'easeInSine');
 		}
-		// console.log(msg, self);
 	}
 
 	global.Bonus = Bonus;
