@@ -6,6 +6,7 @@ route('/', function(ctx, next) {
 Meteor.subscribe('Decks');
 Meteor.subscribe('Cards');
 Meteor.subscribe('mydeckinfo');
+Meteor.subscribe('mydecks');
 
 
 

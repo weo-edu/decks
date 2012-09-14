@@ -51,9 +51,7 @@
       //  If we don't already have a local state, then we joined a new game
       //  so we set our state to 'await join'
       self.mystate() || self.mystate('await_join') 
-    });
 
-    self.on('start', function() {
       Game.emit('start', self);
     });
 

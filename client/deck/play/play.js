@@ -49,8 +49,6 @@
 				stateMachineHandle = ui.autorun(function() {
 					machine.state([game.mystate()]);
 				});
-
-
 			}
 
 			Template.game.destroyed = function() {
