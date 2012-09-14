@@ -238,13 +238,12 @@ Meteor.startup(function() {
       return Cards.find({});
   });
 
-
-  Meteor.publish('mydecks', function() {
-    return findUserDecks(this.userId());
+  Meteor.publish('UserDeckInfo', function(uid) {
+    return UserDeckInfo.find({user: uid});
   });
 
-  Meteor.publish('mydeckinfo', function() {
-    return UserDeckInfo.find({user: this.userId()});
+  Meteor.publish('UsersDecks', function(uid) {
+    return findUserDecks(uid);
   });
 
   Observer.start();
