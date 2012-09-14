@@ -303,6 +303,8 @@
 
  						nextCard();
 
+ 						// animateLevel(game.me());
+
 	 					var inc = 1;
 				 		var pointsTimeout = null;
 				 		var curPoints = parseInt(pointsEl.innerHTML, 10);
@@ -488,21 +490,28 @@
 
 			Template.level_progress.helpers({
 				level: function() {
-					return Meteor.user().level;
+					var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
+					return user.level;
 				},
 				rotate: function() {
-					var degs = getDegs(Meteor.user());
+					var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
+					var degs = getDegs(user);
+
 					if(degs > 180)
 						return ': rotate(180deg); width: 16px;';
 					else
 						return ': rotate(' + degs + 'deg);';  
 				},
 				rotateSecond: function() {
-					var degs = getDegs(Meteor.user());
+					var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
+					var degs = getDegs(user);
+
 					return ': rotate(' + degs + 'deg);';
 				},
 				hide: function() {
-					var degs = getDegs(Meteor.user());
+					var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
+					var degs = getDegs(user);
+
 					if(degs > 180)
 						return 'clip: auto;';
 					else
@@ -512,6 +521,39 @@
 					return transformPrefix;
 				}
 			});
+
+			// function animateLevel(user) {
+			// 	var degs = getDegs(user);
+			// 	var who = 'me';
+			// 	var firstSemi = $('#' + who + ' .first-semi');
+			// 	var secondSemi = $('#' + who + ' .second-semi');
+			// 	var inner = $('#' + who + ' .inner');
+			// 	var levelEl = $('#' + who + ' .stat-circle .stage');
+
+			// 	if(user.level !== parseInt(levelEl.html(), 10)) {
+			// 		firstSemi.attr('style', '');
+			// 		secondSemi.attr('style', '');
+			// 		inner.css('clip', 'rect(0px, 30px, 30px, 15px)');
+			// 		levelEl.html(user.level);
+			// 	}
+
+			// 	if(degs > 180) {
+			// 		firstSemi.attr('style', transformPrefix + ': rotate(180deg); width: 16px;');
+			// 		secondSemi.attr('style', transformPrefix + ': rotate(' + degs + 'deg)');
+			// 		secondSemi.animate( { textIndent: degs },
+			// 		{
+			// 			step: function(now,fx) {
+			// 				console.log(now);
+			// 				if(now > 182)
+			// 					inner.css('clip', 'auto');
+			// 			}
+			// 		});
+			// 	} else {
+			// 		firstSemi.attr('style', transformPrefix + ': rotate(' + degs + 'deg)');
+			// 		secondSemi.attr('style', transformPrefix + ': rotate(' + degs + 'deg)');
+			// 		inner.css('clip', 'rect(0px, 30px, 30px, 15px)');
+			// 	}				
+			// }
 
 			function getDegs(user) {
 					var levelPoints = Stats.levelPoints(user.level) - user.points;

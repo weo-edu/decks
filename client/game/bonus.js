@@ -90,7 +90,7 @@
 					'margin'		: 0,
 					'opacity'		: 1, 
 					'font-size'	: '50px'
-				}, 100, 'easeOutSine')
+				}, 130, 'easeOutSine')
 				.delay(1000)
 				.animate({
 					'margin'		: 0,
