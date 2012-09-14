@@ -1,15 +1,11 @@
 ;(function(){
   route('/game/:id', 
   	function(ctx, next) {
- 			Meteor.subscribe('game', ctx.params.id, function() {
- 				console.log('first');
- 				next();
- 			});
+ 			Meteor.subscribe('game', ctx.params.id, next);
   	},
   	function(ctx, next) {
   		var game = Games.findOne(ctx.params.id);
   		Meteor.subscribe('userDeckInfo', game.users, game.deck, function() {
-  			console.log('second');
   			if (!UserDeckInfo.findOne({user: Meteor.user()._id, deck: game.deck})) {
   				UserDeckInfo.insert({ 
   					user: Meteor.user()._id, 
@@ -24,10 +20,7 @@
   		
   		//XXX do in parallel
   		
-  		Meteor.subscribe('gradeStats', function() {
-  			console.log('third');
-  			next();
-  		});
+  		Meteor.subscribe('gradeStats', next);
   	},
   	function(ctx){
   		var game = null
