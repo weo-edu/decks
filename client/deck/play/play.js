@@ -491,7 +491,11 @@
 			Template.level_progress.helpers({
 				level: function() {
 					var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
-					return user.level;
+					return user.level%60;
+				},
+				stage: function(){
+					var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
+					return 'stage-' + Math.ceil((user.level+1)/60);
 				},
 				rotate: function() {
 					var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);

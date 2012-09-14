@@ -222,7 +222,6 @@
 		height: size;
 		border-radius: (size/2) 0 0 (size/2);
 		position: absolute;
-		background: gold;
 	}
 	.inner {
 		width: size;
@@ -243,14 +242,43 @@
 	
 }
 
+halfStage() {
+	.stage { 
+		background: red;
+	}
+}
+
+.stage-1 { .first-semi, .second-semi { background-color: gold; } }
+.stage-2 { .first-semi, .second-semi { background-color: gold; } halfStage(); }
+.stage-3 { .first-semi, .second-semi { background-color: #5BC05A; } }
+.stage-4 { .first-semi, .second-semi { background-color: #5BC05A; } halfStage(); }
+.stage-5 { .first-semi, .second-semi { background-color: #2AABE2; } }
+.stage-6 { .first-semi, .second-semi { background-color: #2AABE2; } halfStage(); }
+.stage-7 { .first-semi, .second-semi { background-color: #F7931D; } }
+.stage-8 { .first-semi, .second-semi { background-color: #F7931D; } halfStage(); }
+.stage-9 { .first-semi, .second-semi { background-color: #ED1B24; } }
+.stage-10 { .first-semi, .second-semi { background-color: #ED1B24; } .stage { background: black; } }
+.stage-11 { .first-semi, .second-semi { background-color: #FFF; } .stage { color: black; text-shadow: 0 0 0;}}
+.stage-12 { .first-semi, .second-semi { background-color: #FFF; } halfStage(); }
+.stage-13 { .first-semi, .second-semi { background-color: #C69C6D; } }
+.stage-14 { .first-semi, .second-semi { background-color: #C69C6D; } halfStage(); }
+.stage-15 { .first-semi, .second-semi { background-color: #D5D5D5; } }
+.stage-16 { .first-semi, .second-semi { background-color: #D5D5D5; } halfStage(); }
+.stage-17 { .first-semi, .second-semi { background-color: #7B2D91; } }
+.stage-18 { .first-semi, .second-semi { background-color: #7B2D91; } halfStage(); }
+.stage-19 { .first-semi, .second-semi { background-color: black; } }
+.stage-20 { .first-semi, .second-semi { background-color: black; } halfStage(); }
+
 .stat-circle.stage {
 	position: absolute;
 	top: 100px;
 	left: 100px;
 	.stage {
+		border-radius: 50%;
 		position: absolute;
-		width: 28px;
-		line-height: 30px;
+		size = 18px;
+		font: 16px/20px 'Fresca';
+		absoluteCenter(size);
 		text-align: center;
 	}
 }
