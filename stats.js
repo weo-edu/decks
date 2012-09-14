@@ -136,7 +136,8 @@
 				result = null;
 			try {
 				if(cluster && cluster.length > 1) {
-					if(cluster[0].percentage >= cluster[1].percentage)
+					if(cluster[0].percentage >= cluster[1].percentage
+						|| cluster[0].percentage >= percentageCutoff)
 						result = cluster[0].grade;
 					else
 						result = fn(cluster);

@@ -139,18 +139,15 @@
 
 	Guru.prototype.beat = function() {
 		var self = this;
-		var mastery = self.mastery();
-		if (mastery.winsAtRank >= 2) {
-			UserDeckInfo.update(
-				{ user: self.mygame.opponent()._id, deck: self.mygame.deck()._id },
-				{$set: { 'mastery.winsAtRank': 0}, $inc: {'mastery.rank': 1,'mastery.wins': 1}}
-			);
-		} else {
-			UserDeckInfo.update(
-				{ user: self.mygame.opponent()._id, deck: self.mygame.deck()._id },
-				{$inc: { 'mastery.wins': 1, 'mastery.winsAtRank': 1}}
-			);
-		}		
+		var mastery = self.mastery(),
+			modify = {$inc: {'mastery.rank': 1, 'mastery.wins': 1}};
+		if (mastery.winsAtRank >= 2)
+			modify['$set'] = {'mastery.winsAtRank': 0};
+
+		UserDeckInfo.update(
+			{ user: self.mygame.opponent()._id, deck: self.mygame.deck()._id },
+			modify
+		);		
 	}
 
 	Guru.prototype.mastery = function() {

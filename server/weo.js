@@ -236,7 +236,16 @@ Meteor.startup(function() {
 
   Meteor.publish('Cards', function(){
       return Cards.find({});
-  })
+  });
 
-	Observer.start();
+
+  Meteor.publish('mydecks', function() {
+    return findUserDecks(this.userId());
+  });
+
+  Meteor.publish('mydeckinfo', function() {
+    return UserDeckInfo.find({user: this.userId()});
+  });
+
+  Observer.start();
 });
