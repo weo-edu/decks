@@ -31,7 +31,7 @@
 <template name='problem_container'>
 	{{#with card}}
 	<div id='problem'>
-		{{html}}<br/>
+		{{#markdown}}{{{html}}}{{/markdown}}<br/>
 		<input type="text" id="answer"/>
 	</div>
 	{{/with}}
