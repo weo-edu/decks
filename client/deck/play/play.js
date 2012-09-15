@@ -131,6 +131,8 @@
 
 			Template.cards_select.events({
 				'click .play-button': function(e, template) {
+					if (! routeSession.equals('selectionsLeft', 0))
+						return;
 					var cards = [];
 					_.each(selected_cards.all(), function(num, _id) {
 						_.times(num, function() {
@@ -138,6 +140,27 @@
 						});
 					});
 					Meteor.defer(function(){ game.problems(cards); });
+				},
+				'click .randomize-button': function(e, template) {
+					var cardsLeft = routeSession.get('selectionsLeft');
+					var deck = game.deck();
+					var card_id = null;
+
+					if (!cardsLeft) {
+						_.each(deck.cards, function(card_id) {
+							selected_cards.set(card_id,0);
+						});
+						cardsLeft = game.nCards();
+					}
+
+					_.times(cardsLeft, function() {
+						card_id = deck.cards[utils.rand_int(deck.cards.length)];
+						var numSelected = selected_cards.get(card_id);
+						selected_cards.set(card_id, numSelected + 1 );
+						
+					});
+					routeSession.set('selectionsLeft', 0);
+
 				},
 				'mousedown .card': function(evt, template) {
 					if(evt.which === 1) {
