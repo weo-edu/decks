@@ -493,7 +493,11 @@
 				},
 				stage: function(){
 					var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
-					return 'stage-' + Math.ceil((user.level+1)/60);
+					var stage = Math.ceil((user.level+1)/60)
+					if(stage % 2 == 0)
+						return 'stage-' + (stage - 1) + ' half';
+					else 
+						return 'stage-' + (stage - 1);
 				},
 				rotate: function() {
 					var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
