@@ -49,8 +49,6 @@
 				stateMachineHandle = ui.autorun(function() {
 					machine.state([game.mystate()]);
 				});
-
-
 			}
 
 			Template.game.destroyed = function() {
@@ -494,7 +492,15 @@
 			Template.level_progress.helpers({
 				level: function() {
 					var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
-					return user.level;
+					return user.level%60;
+				},
+				stage: function(){
+					var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
+					var stage = Math.ceil((user.level+1)/60)
+					if(stage % 2 == 0)
+						return 'stage-' + (stage-1) + ' half';
+					else 
+						return 'stage-' + stage;
 				},
 				rotate: function() {
 					var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);

@@ -26,7 +26,7 @@ Observer.on('complete:card', function(e) {
         var time = e.action.time || 0;
         var capped_time = time;
         var correct = ~e.action.adverbs.indexOf('correctly') ? 1 : 0;
-        if (card.stats.correct >= 10) {
+        if (card.stats && card.stats.correct >= 10) {
           var u_time = card.stats.correct_time / card.stats.correct;
           var s_time = Math.sqrt((card.stats.correct_time_squared / card.stats.correct) - Math.pow(u_time,2));
           if ( (time - u_time) / s_time > 5) {
