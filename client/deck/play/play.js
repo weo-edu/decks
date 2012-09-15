@@ -125,6 +125,9 @@
 					var dialog = ui.get('.dialog');
 					var message = dialog.get('message');
 					return Template[message] && Template[message]();
+				}, 
+				allSelected: function() {
+					return routeSession.equals('selectionsLeft', 0);
 				}
 			});
 
@@ -294,7 +297,7 @@
 
 						
 						if(res) {
-							console.log(problem.points, card.stats && card.stats.grade, 'points', game.game());
+							//console.log(problem.points, card.stats && card.stats.grade, 'points', game.game());
 						}
 						event({name: 'complete', time: problem.time},
 							card,

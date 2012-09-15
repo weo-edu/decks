@@ -323,9 +323,11 @@
     if (!problem.time) problem.time = (+new Date()) - problem.startTime;
 
     var correct = self.isCorrect(problem);
-    self.emit('answer', problem, correct);
+    
 
     problem.points = correct ? Stats.points(Stats.regrade(problem.card_id)) : 0;
+    
+    self.emit('answer', problem, correct);
 
     self.updateProblem(problem);
     self.updatePlayer({

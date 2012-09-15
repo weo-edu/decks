@@ -38,7 +38,9 @@
 
 		game.on('complete', function() {
       // user beat goat guru
+      console.log('game complete')
       var winner = game.winner();
+      console.log('game winenr', winner);
       if (winner && winner.username === Meteor.user().username)
         self.beat();
 		});
@@ -140,9 +142,17 @@
 	Guru.prototype.beat = function() {
 		var self = this;
 		var mastery = self.mastery(),
-			modify = {$inc: {'mastery.rank': 1, 'mastery.wins': 1}};
-		if (mastery.winsAtRank >= 2)
+			modify = {$inc: { 'mastery.wins' : 1 } };
+
+		console.log('mastery', mastery)
+		if (mastery.winsAtRank >= 2) {
 			modify['$set'] = {'mastery.winsAtRank': 0};
+			modify['$inc']['mastery.rank'] = 1;		
+		} else {
+			modify['$inc']['mastery.winsAtRank'] = 1;
+		}
+
+		console.log('modify', modify);
 
 		UserDeckInfo.update(
 			{ user: self.mygame.opponent()._id, deck: self.mygame.deck()._id },
@@ -224,6 +234,7 @@
 
 	Guru[MASTERY.PROFICIENT] = function(game) {
 		Guru.call(this, game);
+		console.log('proficient');
 	}
 
 	utils.inherits(Guru[MASTERY.PROFICIENT], Guru);
@@ -238,6 +249,7 @@
 
 	Guru[MASTERY.ADVANCED] = function(game) {
 		Guru.call(this, game);
+		console.log('advanced');
 	}
 
 	utils.inherits(Guru[MASTERY.ADVANCED], Guru);
@@ -254,6 +266,7 @@
 
 	Guru[MASTERY.EXPERT] = function(game) {
 		Guru.call(this, game);
+		console.log('expert');
 	}
 
 	utils.inherits(Guru[MASTERY.EXPERT], Guru);
@@ -269,6 +282,7 @@
 
 	Guru[MASTERY.GURU] = function(game) {
 		Guru.call(this, game);
+		console.log('guru');
 	}
 
 	utils.inherits(Guru[MASTERY.GURU], Guru);
@@ -283,6 +297,7 @@
 
 	Guru[MASTERY.MASTER_GURU] = function(game) {
 		Guru.call(this, game);
+		console.log('master guru');
 	}
 
 	utils.inherits(Guru[MASTERY.MASTER_GURU], Guru);
@@ -295,7 +310,7 @@
 		}
 	}
 
-	Guru.prototype.beat = function() {
+	Guru[MASTERY.MASTER_GURU].prototype.beat = function() {
 		var self = this;
 		UserDeckInfo.update(
 			{ user: self.mygame.opponent()._id, deck: self.mygame.deck()._id },
