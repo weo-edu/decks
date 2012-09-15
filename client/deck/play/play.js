@@ -495,9 +495,9 @@
 					var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
 					var stage = Math.ceil((user.level+1)/60)
 					if(stage % 2 == 0)
-						return 'stage-' + (stage - 1) + ' half';
+						return 'stage-' + (stage-1) + ' half';
 					else 
-						return 'stage-' + (stage - 1);
+						return 'stage-' + stage;
 				},
 				rotate: function() {
 					var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
