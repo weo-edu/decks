@@ -129,6 +129,30 @@
 				}
 			});
 
+			function randomSelect(force) {
+				var cardsLeft = routeSession.get('selectionsLeft');
+				var deck = game.deck();
+				var card_id = null;
+
+				if (!cardsLeft && !force)
+					return;
+
+				if (!cardsLeft) {
+					_.each(deck.cards, function(card_id) {
+						selected_cards.set(card_id,0);
+					});
+					cardsLeft = game.nCards();
+				}
+
+				_.times(cardsLeft, function() {
+					card_id = deck.cards[utils.rand_int(deck.cards.length)];
+					var numSelected = selected_cards.get(card_id);
+					selected_cards.set(card_id, numSelected + 1 );
+					
+				});
+				routeSession.set('selectionsLeft', 0);
+			}
+
 			Template.cards_select.events({
 				'click .play-button': function(e, template) {
 					if (! routeSession.equals('selectionsLeft', 0))
@@ -142,25 +166,7 @@
 					Meteor.defer(function(){ game.problems(cards); });
 				},
 				'click .randomize-button': function(e, template) {
-					var cardsLeft = routeSession.get('selectionsLeft');
-					var deck = game.deck();
-					var card_id = null;
-
-					if (!cardsLeft) {
-						_.each(deck.cards, function(card_id) {
-							selected_cards.set(card_id,0);
-						});
-						cardsLeft = game.nCards();
-					}
-
-					_.times(cardsLeft, function() {
-						card_id = deck.cards[utils.rand_int(deck.cards.length)];
-						var numSelected = selected_cards.get(card_id);
-						selected_cards.set(card_id, numSelected + 1 );
-						
-					});
-					routeSession.set('selectionsLeft', 0);
-
+					randomSelect(true);
 				},
 				'mousedown .card': function(evt, template) {
 					if(evt.which === 1) {
@@ -195,6 +201,7 @@
 
 				'mouseup': function (evt, template) {
 					template.handler && template.handler.up();
+					template.handler = null;
 				}
 			});
 

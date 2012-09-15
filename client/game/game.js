@@ -55,6 +55,11 @@
       Game.emit('start', self);
     });
 
+  
+    self.on('card_select', function() {
+
+    });
+
 
     self.options = options || {};
 
@@ -533,6 +538,7 @@
 
     var machine = new StateMachine(transitionTable, function(new_state) {
       self.state(new_state);
+      self.emit(new_state)
     });
     self.stateHandle = ui.autorun(function() {
       machine.state([self.state(), self.mystate(), self.opponentState()]);
