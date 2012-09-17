@@ -178,10 +178,11 @@
 		var self = this;
 		var db_stats = self.mygame.player().stats[problem.card_id];
 		var cardDist = Stats.cardTime(problem.card_id);
-		var dist = new NormalDistribution(cardDist.u,cardDist.s);
-		var time = dist.getQuantile(1-db_stats.speed.val * Math.sqrt(db_stats.retention.val));
-		if (time < 100) time = 800;
-		return time;
+		var x = 1 - db_stats.speed.val * Math.sqrt(db_stats.retention.val)
+		var time = Stats.inverseGaussQuantile(x, cardDist.mu, cardDist.lambda);
+		console.log('time', time);
+		if (time < .4) time = .4;
+		return time * 1000;
 	}
 
 	Guru.prototype.answer = function(problem) {
@@ -205,6 +206,7 @@
 
 		var stats = self.cardStats();
 
+		//XXX replave normal sample with inverse sample
 		var stats = {
 			accuracy: {name: 'accuracy', val: cap(Stats.normalSample(stats.accuracy.u,stats.accuracy.s))},
 			speed: { name: 'speed', val: cap(Stats.normalSample(stats.speed.u, stats.speed.s))},
@@ -305,7 +307,7 @@
 	Guru[MASTERY.MASTER_GURU].prototype.cardStats = function() {
 		return {
 			accuracy: {u: .99, s: .002},
-			speed: {u: .99, s: .002},
+			speed: {u: .98, s: .002},
 			retention: {u: .99, s: .002}
 		}
 	}

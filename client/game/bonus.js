@@ -12,8 +12,8 @@
 				var points = .1 * _.reduce(problems, function(memo, problem) {
 					return memo + problem.points;
 				}, 0);
-				console.log('spree', points)
-				return points;
+				console.log('spree', points / 5)
+				return points / 5;
 			}
 		},
 		{
@@ -60,10 +60,12 @@
 				});
 			},
 			points: function(problem) {
-				var time = problem.time;
+				var time = problem.time / 1000;
 				var cardStatistics = Stats.cardTime(problem.card_id);
-				var speed = 1 - jstat.pnorm(time,cardStatistics.u,cardStatistics.s);
-				return problem.points * Math.sqrt(speed) * 2;
+				console.log('card Statistics', cardStatistics);
+				var speed = 1 - Stats.inverseGaussCDF(time, cardStatistics.mu, cardStatistics.lambda);
+				console.log('time bonus', problem.points, time, problem.points * speed);
+				return problem.points * speed;
 
 			},
 			name: 'time',

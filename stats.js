@@ -155,28 +155,108 @@
 			var grade_stats = StatsCollection.findOne({name: 'gradeStats'});
 			if (grade_stats) grade_stats = grade_stats[card.grade];
 			var stats = {};
+			//console.log('grade stats', grade_stats);
+			//console.log('card stats', card.stats);
 			if (card.stats && card.stats.correct >= 10) {
 				var average_time = card.stats.correct_time / card.stats.correct;
-				stats.u  = average_time;
+				stats.mu  = average_time / 1000; // in seconds
 				var std = Math.sqrt((card.stats.correct_time_squared/card.stats.correct) - Math.pow(average_time,2));
-				stats.s = std;
+				stats.s = std / 1000; // in seconds
+
+				//XXX double check this
+				stats.lambda = 1 / ((1000 * card.stats.inverse_correct_time) / card.stats.correct - 1 / stats.mu); //in seconds
+
 			} else if (grade_stats && grade_stats.correct > 0) {
 				var average_time = grade_stats.correct_time / grade_stats.correct;
-				stats.u = average_time;
+				stats.mu = average_time / 1000; // in seconds
 				var std = Math.sqrt((grade_stats.correct_time_squared/grade_stats.correct) - Math.pow(average_time,2));
-				stats.s = std;
+				stats.s = std / 1000; // in seconds
+				stats.lambda = 1 / ((1000 * grade_stats.inverse_correct_time) / grade_stats.correct - 1 / stats.mu); //in seconds
 			} else {
-				stats.u = 5;
+				stats.mu = 1;
 				stats.s = 1;
+				stats.lambda = 1;
 			}
+			console.log('stats', stats);
 			return stats;
+		},
+
+		erf: function(x) {
+	    var sign = x >= 0  ? 1 : -1;
+	    x = Math.abs(x);
+
+	    var a1 =  0.254829592;
+	    var a2 = -0.284496736;
+	    var a3 =  1.421413741;
+	    var a4 = -1.453152027;
+	    var a5 =  1.061405429;
+	    var p  =  0.3275911;
+
+	    var t = 1.0/(1.0 + p*x);
+	    var y = 1.0 - (((((a5*t + a4)*t) + a3)*t + a2)*t + a1)*t*Math.exp(-x*x);
+	    return sign*y; 
+		},
+
+		erfc: function(x) {
+			return 1 - Stats.erf(x);
 		},
 
 		normalSample: function(mean, std) {
 			var dist = Math.sqrt(-1 * Math.log(Math.random()));
 			var angle = 2 * Math.PI * Math.random();
 			return dist*Math.sin(angle) * std + mean;
+		},
+
+		inverseGaussCDF: function(x, mu, lambda, offset) {
+			var offset = 0;
+			var part1 = (jstat.pnorm(Math.sqrt(lambda / (x + offset)) * (((x + offset) / mu) - 1 )));
+			var part2 = Math.exp(2 * lambda / mu);
+			var part3 = jstat.pnorm(-Math.sqrt(lambda / (x + offset)) * (((x + offset) / mu) + 1 ));
+			if (part3 === 0)
+				return part1
+			else
+				return part1 + part2 * part3;
+		},
+
+		inverseGaussSample: function(mu, lambda) {
+			// http://en.wikipedia.org/wiki/Inverse_Gaussian_distribution#Generating_random_variates_from_an_inverse-Gaussian_distribution
+			var v = Stats.normalSample(0, 1);
+			var y = v * v;
+			//XXX wtf
+			//var x = mu + (mu * mu * y) / (2 * lambda) - (mu / (2 * lambda)) * Math.sqrt(4 * mu * lambda * y + mu * mu * y *);
+			var test = Math.random();
+			if (test <= mu / ( mu + x))
+				return x;
+			else
+				return (mu * mu) / x;
+		},
+
+		inverseGaussQuantile: function(x, mu, lambda, options) {
+			options = options || {};
+			var precision = options.precision || .01;
+			var max_iterations = options.max_iterations || 50;
+			var iterations = 0;
+
+			function findQuantile(a, b) {
+				iterations++;
+				var mid = (b - a) / 2 + a;
+				if ( (b - a) < precision || iterations >= max_iterations)
+					return mid;
+
+				var cdf = Stats.inverseGaussCDF(mid, mu, lambda, options.offset);
+				if (x < cdf)
+					return findQuantile(a, mid);
+				else
+					return findQuantile(mid, b);
+
+			}
+
+			// set max to be 5 std deviations from mean
+			return findQuantile(0, 5 * Math.sqrt(Math.pow(mu,3) / lambda) + mu);
+
 		}
+
+
 
 	}
 

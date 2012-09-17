@@ -24,16 +24,7 @@ Observer.on('complete:card', function(e) {
         var match = {_id: e.object._id};
         var card = Cards.findOne(e.object._id);
         var time = e.action.time || 0;
-        var capped_time = time;
         var correct = ~e.action.adverbs.indexOf('correctly') ? 1 : 0;
-        if (card.stats && card.stats.correct >= 10) {
-          var u_time = card.stats.correct_time / card.stats.correct;
-          var s_time = Math.sqrt((card.stats.correct_time_squared / card.stats.correct) - Math.pow(u_time,2));
-          if ( (time - u_time) / s_time > 5) {
-            capped_time = u_time + 5 * s_time;
-          }
-            
-        }
 
         //XXX time_squared is used for variance calc
         // we may want to use an incremental variance calculation instead
@@ -42,9 +33,12 @@ Observer.on('complete:card', function(e) {
           time: time,
           time_squared: Math.pow(time, 2),
           correct: correct,
-          correct_time: correct ? capped_time : 0,
-          correct_time_squared: correct ? Math.pow(capped_time, 2) : 0
+          correct_time: correct ? time : 0,
+          correct_time_squared: correct ? Math.pow(time, 2) : 0,
+          inverse_correct_time: correct ? 1 / time : 0
         };
+
+        console.log('stats', stats);
 
         // card stats update
         Stats.updateCardStats(match, stats, e.user.grade);

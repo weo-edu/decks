@@ -57,7 +57,7 @@
 
   
     self.on('card_select', function() {
-
+      self.updatePlayer({card_select_begin: +new Date()});
     });
 
 
@@ -214,6 +214,7 @@
 
     if(problem) {
       problem.bonuses = bonuses;
+      console.log('problem bonuses', bonuses);
       self.updateProblem(problem);
     } else {
       self.updatePlayer({bonuses: bonuses});
@@ -324,6 +325,7 @@
     problem.answer = answer;
 
     if (!problem.time) problem.time = (+new Date()) - problem.startTime;
+    console.log('problem time', problem.time);
 
     var correct = self.isCorrect(problem);
     
@@ -393,17 +395,18 @@
       var speed = 0;
 
       if (userStats && userStats.correct > 0) {
-        var user_average_speed = userStats.correct_time / userStats.correct;
+        var user_mu = userStats.correct_time / userStats.correct; // in ms
+        user_mu /= 1000; // in seconds
 
         var cardStatistics = Stats.cardTime(cardId);
 
         // speed is cumulative density at point user_average_speed on the normal
         // distribution defined by the card statistics
-        speed = 1-jstat.pnorm(user_average_speed,cardStatistics.u,cardStatistics.s);
+        speed = 1 - Stats.inverseGaussCDF(user_mu,cardStatistics.mu,cardStatistics.lambda);
 
         var t = new Date() - userStats.last_played;
         t = t/(1000*60*60*24);
-        retention = Math.exp(-t/userStats.correct);
+        retention = Math.exp(-t / userStats.correct);
         accuracy = userStats.correct / userStats.attempts
       }
       
