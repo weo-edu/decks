@@ -96,21 +96,21 @@
 			height: 16px;
 			width: 12px;
 			float: left;
-			// margin: 1px;
-			// border-radius: 15%;
+			&.selected .inner { background-color: rgba(white, .9); }
 			.inner {
 				margin: 1px 1px 0 0;
-				background: rgba(211, 211, 211, 0.67);
+				background: rgba(white, .5);
 				&.correct {
-					background-color: #5CC05C;
+					background-color: #2BA6E8;
 				}
 				&.incorrect {
-					background-color: #C52E3A;
+					background-color: #FF7720;
 				}
 				&.current {
-					background-color: rgba(#00AEEF, .7);
+					background-color: #002A54;
 				}
 			}
+			
 		}
 	}
 }
