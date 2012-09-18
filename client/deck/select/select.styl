@@ -47,22 +47,17 @@
 		position: absolute;
 		bottom: 10px;
 		left: 256px;
-		&.active {
+		&:active {
 			bottom: 9px;
 		}
 	}
-	// .selection-count {
-	// 	margin-top: 5px;
-	// 	margin-left: 5px;
-	// }
 
 	#players-area {
 		width: 186px;
-		background: url('/app!common/textures/roughcloth.png');
 	}
 
 	.awning {
-		position: static;
+		position: relative;
 		width: 758px;
 		float: left;
 		box-shadow: 0 0 0;
@@ -73,14 +68,40 @@
 #players-area {
 	float: left;
 	padding: 20px;
-	height: 100%;
+	height: 632px;
 	width: 216px;
+	background: url("/img/woodBg.jpg");
+	background-position: 480px 0px;
+	box-shadow: 0 0 30px black;
+	position: relative;
 	p {
 		color: #222;
 		text-shadow: 1px 1px 0 rgba(white, .5);
 	}
 	.deck {
 		margin-bottom: 2px;
+	}
+
+	#opponent .problem-tracker {
+		transform: rotate(180deg);
+		margin-top: 50px;
+	}
+	.problem-tracker {
+		float: right;
+		width: 52px;
+		margin-right: -5px;
+		height: 160px;
+		.little-card {
+			height: 16px;
+			width: 12px;
+			float: left;
+			// margin: 1px;
+			// border-radius: 15%;
+			.inner {
+				margin: 1px 1px 0 0;
+				background: rgba(211, 211, 211, 0.67);
+			}
+		}
 	}
 }
 
@@ -100,19 +121,11 @@
 	background-repeat: no-repeat;
 	transition: box-shadow .2s;
 	box-shadow: inset 0 0 15px #333, 0 0 15px #333;
-	// box-shadow: 0 0 15px #333, inset 1px 1px 1px rgba(white, .5), inset -1px -1px 1px rgba(black, .5);
 	cursor: pointer;
 	position: relative;
 	&:hover {
 		box-shadow: inset 0 0 15px #333, 0 0 25px #222;
 	}
-
-	user-select: none;
-	// &:hover {
-	// 	.stats-box {
-	// 		opacity: 0;
-	// 	}
-	// }
 }
 
 

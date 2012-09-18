@@ -76,10 +76,6 @@
   			}
   		});
 
-  		Template.user.select = function() {
-  			return routeSession.equals('game_state', 'card_select') || routeSession.equals('game_state', 'await_join');
-  		}
-
 
   		//XXX if you could access a parent template vars this would be unnecessary
   		var selected_cards = null;
@@ -164,6 +160,102 @@
 					template.handler = null;
 				}
 			});
+
+		Template.user.select = function() {
+  			
+  		}
+
+  	var style = '',
+  		innerStyle = '';
+
+  	Template.problem_tracker.created = function() {
+
+  		this.autoHandle = ui.autorun(function(){
+  			var numSelected = game.nCards() - routeSession.get('selectionsLeft');
+  			game.updatePlayer({numSelected: numSelected});
+  		});
+
+			var ratio = 1,
+				width = 12,
+				height = 16,
+				trackerHeight = 160,
+	  		trackerWidth = 52,
+	  		totalHeight = 0,
+	  		cols = 0,
+	  		rows = 0;
+
+			var totalHeight = getHeight();
+
+			while(totalHeight > trackerHeight) {
+			 	ratio = (trackerWidth / (++cols)) / width;
+				width = Math.floor(ratio * width);
+				height = Math.floor(ratio * height);
+				totalHeight = getHeight(width, height, game.nCards());
+			}
+
+			innerStyle = 'style="height:' + (height - 1) +'px; width:' + (width - 1) +'px;"';
+
+			if(width <= 1) {
+				width = 1;
+				innerStyle = 'style="height: ' + (height - 1) + 'px; width: 1px; margin: 0px"';
+			}
+
+			if(height <= 1) {
+				height = 1;
+				innerStyle = 'style="height: 1px; width: 1px; margin: 0px"';
+			}
+
+			style = 'style="height:' + height +'px; width:' + width +'px;"';
+			
+			function getHeight() { 
+				cols = Math.floor(trackerWidth / width);
+				rows = Math.ceil(game.nCards() / cols);
+				return (rows * height);
+			}
+  	}
+
+  	Template.problem_tracker.destroyed = function() {
+  		this.autoHandle.stop();
+  	}
+
+		Template.problem_tracker.helpers({
+			select: function() {
+				return routeSession.equals('game_state', 'card_select') || routeSession.equals('game_state', 'await_join');
+			},
+			selected: function() {
+				var str = '';
+				if(this._id == Meteor.user()._id)
+					var numSelected = game.nCards() - routeSession.get('selectionsLeft');
+				else
+					var numSelected = game.player(game.opponent()._id).numSelected;
+					
+				for(var i = 0; i < numSelected ; i++)
+					str += '<div class="little-card" ' + style + '><div class="inner" '+ innerStyle +'></div></div>';
+
+				return  str;
+			},
+			tracker: function() {
+				// return game.problems();
+			},
+			innerStyle: function() {
+				return innerStyle;
+			}
+
+			
+
+			// nCards: function(){
+
+			// },
+			// numCards: function() {
+			// 	game.nCards();
+
+			// 	var numCards = 0;
+			// 	_.each(selected_cards.all(), function(num) { numCards += num });
+			// 	return numCards;
+			// }
+		});
+
+		
 
 		Template.card_view.helpers({
 				showStats: function() {
@@ -432,12 +524,12 @@
  				} 
 			});
 
-			Template.view_cards.rendered = function() {
-				$('#card-grid').layout({
-					rows: 2,
-					cols: 4
-				});
-			}
+			// Template.view_cards.rendered = function() {
+			// 	$('#card-grid').layout({
+			// 		rows: 2,
+			// 		cols: 4
+			// 	});
+			// }
 
 			Template.view_cards.helpers({
 				cards: function() {

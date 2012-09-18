@@ -4,6 +4,7 @@
 			<div id='players-area'>
 				<div id='me' class='user-1'>
 					{{> user currentUser}}
+					{{> problem_tracker currentUser}}
 				</div>
 
 				{{#with deck}}
@@ -13,6 +14,7 @@
 
 				<div id='opponent' class='user-2'>
 					{{> user opponent}}
+					{{> problem_tracker opponent}}
 				</div>
 			</div>
 			<div class='awning title'>SELECT YOUR OPPONENTS CARDS {{> num_selected}}</div>
@@ -58,10 +60,21 @@
 			<div id='level-progress'> {{> level_progress}} </div>
 		</div>
 		<p>{{username}}</p>
-		{{#unless select}}
-			{{> progress_bar}}
-		{{/unless}}
 	</div>
+</template>
+
+<template name='problem_tracker'>
+ <div class='problem-tracker'>
+ 	{{#if select}}
+ 		{{{selected}}}
+ 	{{else}}
+ 		{{#each tracker}}
+ 			<div class='little-card'>
+ 				<div class='inner' {{{innerStyle}}} ></div>
+ 			</div>
+ 		{{/each}}
+	{{/if}}
+ </div>
 </template>
 
 <template name='progress_bar'>
