@@ -136,6 +136,14 @@
 				}
 			});
 
+			console.log('live');
+			$('#select-screen .dialog, #select-screen .overlay').live('click', function() {
+				console.log('click');
+				$('#select-screen .dialog').addClass('puff', 500, function() {
+					$(this).removeClass('puff');
+				});
+			});
+
 			Template.cards_select.events({
 				'click .play-button': function(e, template) {
 					game.pickSelectedCards();
@@ -237,7 +245,6 @@
 			selected: function() {
 				var str = '';
 				var numSelected = game.player(_.without(game.game().users,this._id)).numSelected;
-				console.log('numSelected', numSelected);
 				var selected = ''
 					
 				for(var i = 0; i < game.nCards() ; i++) {
@@ -447,39 +454,39 @@
 	 		}
 
 
-	 		Template.progress_bar.rendered = function() {
-	 			var self = this;
-	 			if(self.firstRendered === false) return;
-	 			self.nCards = game.nCards();
+	 		// Template.progress_bar.rendered = function() {
+	 		// 	var self = this;
+	 		// 	if(self.firstRendered === false) return;
+	 		// 	self.nCards = game.nCards();
 
-	 			self.firstRendered = false;
-	 			var handle = ui.autorun(function(){
-					var user = self.data._id === Meteor.user()._id ? 'me' : 'opponent';
+	 		// 	self.firstRendered = false;
+	 		// 	var handle = ui.autorun(function(){
+				// 	var user = self.data._id === Meteor.user()._id ? 'me' : 'opponent';
 
- 					animateProgress('#' + user);
- 					function animateProgress(container) {
- 						var answered = game.answered(self.data._id),
- 							p = percent(answered, game.nCards());
+ 			// 		animateProgress('#' + user);
+ 			// 		function animateProgress(container) {
+ 			// 			var answered = game.answered(self.data._id),
+ 			// 				p = percent(answered, game.nCards());
 
- 						$(container + ' .fill').stop(true, false).animate({'height': p + '%'}, {
- 							//step: function(height) {
- 							//	self.animHeight = height;
- 							//},
- 							complete: function() {
- 								routeSession.set('answered_' + self.data._id, answered);
- 						} });
- 					}
-	 			});
+ 			// 			$(container + ' .fill').stop(true, false).animate({'height': p + '%'}, {
+ 			// 				//step: function(height) {
+ 			// 				//	self.animHeight = height;
+ 			// 				//},
+ 			// 				complete: function() {
+ 			// 					routeSession.set('answered_' + self.data._id, answered);
+ 			// 			} });
+ 			// 		}
+	 		// 	});
 
-	 			self.onDestroy(function() {
-	 				handle.stop();
-	 			});
-	 		}
+	 		// 	self.onDestroy(function() {
+	 		// 		handle.stop();
+	 		// 	});
+	 		// }
 
-		 	Template.progress_bar.progress = function(ctx) {
-		 		var answered = routeSession.get('answered_' + this._id);
-		 		return percent(answered, ctx.template.nCards) + '%';
-		 	}
+		 	// Template.progress_bar.progress = function(ctx) {
+		 	// 	var answered = routeSession.get('answered_' + this._id);
+		 	// 	return percent(answered, ctx.template.nCards) + '%';
+		 	// }
 
 		 	/*
 		 		Results

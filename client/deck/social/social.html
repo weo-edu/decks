@@ -8,9 +8,6 @@
 		<div class='decks'>
 			{{> opponent_decks}}
 		</div>
-		<div id='active-friend'>
-			{{> active_friend}}
-		</div>
 		{{> back_button}}
 	</div>
 </template>
@@ -40,20 +37,12 @@
 	</div>
 </template>
 
-<template name='active_friend'>
-	<div class='avatar' style='background-image: url({{active}})';></div>
-	<!-- <div class='play-button'></div> -->
-	<div class='collection-button'></div>
-</template>
-
-
 <template name="opponent_deck_more">
 	{{#with deck}}
 		<h2>{{title}}</h2>
 		<div class='more-info'>
 			<div class='deck-image'>
 				{{> deck_view}}
-				<p> UNLOCKED 1 OF 10 </p>
 			</div>
 			<div class='deck-meta'>
 				<div class='meta'>
