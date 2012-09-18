@@ -247,18 +247,19 @@
 					return '';
 			},
 			isCurrent: function() {
-				if(game.problem()._id === this._id)
+				if(currentProblem(Meteor.user()._id) && currentProblem(Meteor.user()._id)._id === this._id)
 					return 'current';
-				else if (opponentProblem() && opponentProblem()._id === this._id)
+				else 
+				if (currentProblem(game.opponent()._id) && currentProblem(game.opponent()._id)._id === this._id)
 					return  'current';
 				else 
 					return ''
 			}
 		});
 
-		function opponentProblem() {
+		function currentProblem(id) {
 			var opponentProblem = null
-			_.find(game.player(game.opponent()._id).problems, function(p, i) {
+			_.find(game.player(id).problems, function(p, i) {
 						if(typeof p.answer === 'undefined') {
 							opponentProblem = p;
 							return true;
