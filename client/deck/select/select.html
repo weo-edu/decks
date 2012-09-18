@@ -90,12 +90,12 @@
 
 <template name='card_selection_view'>
 	{{#isolate}}
-	{{#if selectionCount}}
-		<div class="selection-count">
-			{{selectionCount}}
+		{{#if selectionCount}}
+			<div class="selection-count">
+				{{selectionCount}}
+			</div>
+			{{/if}}
 		</div>
-		{{/if}}
-	</div>
 	{{/isolate}}
 	
 	{{> card_view}}
@@ -103,7 +103,7 @@
 </template>
 
 <template name='card_view'>
-	<div title="{{grade}}" class='card' style='background-image: url({{image}});'>
+	<div id="{{_id}}" title="{{grade}}" class='card' style='background-image: url({{image}});'>
 		{{#if showStats}}
 			{{#with stats}}
 				<div class='points-banner'>

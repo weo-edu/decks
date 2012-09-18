@@ -93,7 +93,7 @@
 			};
 
 			Template.cards_select.destroyed = function() {
-				game.destroySelection();
+				game && game.destroySelection();
 			}
 
 			Template.cards_select.rendered = function() {
@@ -302,6 +302,12 @@
 				return ctx.template.ncards - routeSession.get('selectionsLeft');
 			}
 		});
+
+
+		Template.card_view.preserve({'.card': function(node) {
+			console.log('preserve', node);
+			return node.id;
+		}});
 
 		Template.card_selection_view.selectionCount = function() {
 			return game.selectionCount(this._id);
