@@ -316,7 +316,8 @@
     var self = this,
       problem = self.problem();
 
-    problem.answer = answer;
+    if(problem)
+      problem.answer = answer;
 
     if (!problem.time) problem.time = (+new Date()) - problem.startTime;
 

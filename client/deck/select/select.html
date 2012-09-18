@@ -55,10 +55,22 @@
 			<div id='level-progress'> {{> level_progress}} </div>
 		</div>
 		<p>{{username}}</p>
-		{{#unless select}}
-			{{> progress_bar}}
-		{{/unless}}
+		{{> problem_tracker}}
 	</div>
+</template>
+
+<template name='problem_tracker'>
+ <div class='problem-tracker'>
+ 	{{#if select}}
+ 		{{{selected}}}
+ 	{{else}}
+ 		{{#each tracker}}
+ 			<div class='little-card'>
+ 				<div class='inner' {{{innerStyle}}} ></div>
+ 			</div>
+ 		{{/each}}
+	{{/if}}
+ </div>
 </template>
 
 <template name='progress_bar'>
