@@ -70,7 +70,7 @@
  	{{else}}
  		{{#each tracker}}
  			<div class='little-card'>
- 				<div class='inner {{isCorrect}} {{isCurrent}}' {{{innerStyle}}} ></div>
+ 				<div class='inner' {{{innerStyle}}} ></div>
  			</div>
  		{{/each}}
 	{{/if}}
@@ -103,7 +103,7 @@
 </template>
 
 <template name='card_view'>
-	<div id="{{_id}}" title="{{grade}}" class='card' style='background-image: url({{image}});'>
+	<div title="{{grade}}" class='card' style='background-image: url({{image}});'>
 		{{#if showStats}}
 			{{#with stats}}
 				<div class='points-banner'>
@@ -120,6 +120,8 @@
 		{{/if}}
 	</div>
 </template>
+
+
 
 <template name='stat_circle'>
 	<li class='stat-circle'>

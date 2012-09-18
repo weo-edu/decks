@@ -169,9 +169,12 @@
   		innerStyle = '';
 
   	Template.problem_tracker.created = function() {
-
-  		this.autoHandle = ui.autorun(function(){
-  			var numSelected = game.nCards() - routeSession.get('selectionsLeft');
+  		var numCards = game.nCards();
+  		this.autoHandle = ui.autorun(function() {
+  			routeSession.get('selectionsLeft');
+  		},
+  		function(){
+  			var numSelected = numCards - routeSession.get('selectionsLeft');
   			game.updatePlayer({numSelected: numSelected});
   		});
 
@@ -267,15 +270,17 @@
 			return opponentProblem;
 		}
 
-		
+		Template.card_view.created = function() {
+			this.stats = game.opponentCardStats(this.data._id);
+		}
 
 		Template.card_view.helpers({
 				showStats: function() {
 					if(game)
 						return true;
 				},
-				stats: function() {
-					return game.opponentCardStats(this._id);
+				stats: function(ctx) {
+					return ctx.template.stats;
 				}
 		});
 
@@ -315,11 +320,6 @@
 			}
 		});
 
-
-		Template.card_view.preserve({'.card': function(node) {
-			console.log('preserve', node);
-			return node.id;
-		}});
 
 		Template.card_selection_view.selectionCount = function() {
 			return game.selectionCount(this._id);
@@ -371,13 +371,13 @@
 
 	 		Template.game_points.points = function() {
 	 				return routeSession.get('myPoints') || Math.round(game.points(game.me()._id));
-	 		}
+	 		} 
 
 	 		Template.current_card.helpers({
-	 			card: function() {
-	 				return routeSession.get('cur_problem');
-	 			}
-	 		});  
+        card: function() {
+          return routeSession.get('cur_problem');
+        }
+     	}); 
 
 	 		Template.deck_play.events({
  				'click': function(e, template) {

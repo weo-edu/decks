@@ -2,7 +2,7 @@
 
   var defaults = {
     nCards: 5,
-    cardSelectTime: 3000
+    cardSelectTime: 30
   };
 
   Game.route = function(deck, user) {
@@ -58,8 +58,9 @@
 
   
     self.on('card_select', function(change) {
+      if (self.me().synthetic) return;
+
       if (change) {
-        console.log('card select change');
         self.updatePlayer({card_select_begin: +new Date()});
       }
       
@@ -223,7 +224,6 @@
     var self = this;
     var select_begin = self.player().card_select_begin;
     var time_to_select = select_begin + defaults.cardSelectTime * 1000 - new Date();
-    console.log('time to select', time_to_select, typeof time_to_select);
     return Math.max(time_to_select, 0);
   }
 
