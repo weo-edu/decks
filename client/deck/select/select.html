@@ -17,7 +17,7 @@
 					{{> problem_tracker opponent}}
 				</div>
 			</div>
-			<div class='awning title'>SELECT YOUR OPPONENTS CARDS {{> num_selected}}</div>
+			<div class='awning title'>SELECT YOUR OPPONENTS CARDS</div>
 			{{#constant}}
 				<div class='timer'></div>
 			{{/constant}}
@@ -32,10 +32,6 @@
 			{{{ message }}}
 		{{/ui}}
 	</div>
-</template>
-
-<template name="num_selected">
-	({{selected}} OF {{nCards}})
 </template>
 
 <template name="await_select">
@@ -69,8 +65,8 @@
  		{{{selected}}}
  	{{else}}
  		{{#each tracker}}
- 			<div class='little-card'>
- 				<div class='inner' {{{innerStyle}}} ></div>
+ 			<div class='little-card selected'>
+ 				<div class='inner {{this}}' {{{innerStyle}}} ></div>
  			</div>
  		{{/each}}
 	{{/if}}

@@ -2,7 +2,7 @@
 
   var defaults = {
     nCards: 5,
-    cardSelectTime: 30
+    cardSelectTime: 3000
   };
 
   Game.route = function(deck, user) {

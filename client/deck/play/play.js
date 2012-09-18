@@ -178,6 +178,9 @@
   			game.updatePlayer({numSelected: numSelected});
   		});
 
+  		this.opponentId = game.opponent()._id
+  		this.myId = Meteor.user()._id
+
 			var ratio = 1,
 				width = 12,
 				height = 16,
@@ -232,36 +235,42 @@
 				else
 					var numSelected = game.player(game.opponent()._id).numSelected;
 					
-				for(var i = 0; i < numSelected ; i++)
-					str += '<div class="little-card" ' + style + '><div class="inner" '+ innerStyle +'></div></div>';
-
+				var selected = ''	
+				for(var i = 0; i < game.nCards() ; i++) {
+					selected = i < numSelected ? 'selected' : '';
+					str += '<div class="little-card ' + selected + '" ' + style + '><div class="inner" '+ innerStyle +'></div></div>';
+				}
+					
 				return  str;
 			},
 			tracker: function() {
-				return game.player(this._id).problems;
+				var problems = game.player(this._id).problems;
+				var cur = currentProblem(problems);
+				var arr = _.map(problems,function(p) {
+					var c = '';
+					if(p.answer !== undefined) {
+						if(game.isCorrect(p))
+							c = 'correct';
+						else
+							c = 'incorrect';
+					}
+					else if(cur && cur._id === p._id)
+						c = 'current';
+
+					return c;
+				});
+
+				return arr;
 			},
 			innerStyle: function() {
 				return innerStyle;
-			},
-			isCorrect: function() {
-				if(this.answer !== undefined) {
-					return game.isCorrect(this) ? 'correct' : 'incorrect';
-				} else
-					return '';
-			},
-			isCurrent: function() {
-				if(game.problem()._id === this._id)
-					return 'current';
-				else if (opponentProblem() && opponentProblem()._id === this._id)
-					return  'current';
-				else 
-					return ''
 			}
 		});
 
-		function opponentProblem() {
+
+		function currentProblem(cards) {
 			var opponentProblem = null
-			_.find(game.player(game.opponent()._id).problems, function(p, i) {
+			_.find(cards, function(p, i) {
 						if(typeof p.answer === 'undefined') {
 							opponentProblem = p;
 							return true;
@@ -307,18 +316,6 @@
 			}
 		});
 		
-		Template.num_selected.created = function() {
-			this.ncards = game.nCards();
-		}
-
-		Template.num_selected.helpers({
-			nCards: function(ctx) {
-				return ctx.template.ncards;
-			},
-			selected: function(ctx) {
-				return ctx.template.ncards - routeSession.get('selectionsLeft');
-			}
-		});
 
 
 		Template.card_selection_view.selectionCount = function() {
