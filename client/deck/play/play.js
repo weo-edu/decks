@@ -93,16 +93,20 @@
 				self.deck = game.deck();
 				self.deck_cards = Cards.find(this.deck.cards).fetch();
 
-				selected_cards = new ReactiveDict();
-
-				_.each(this.deck_cards, function(card) {
-					selected_cards.set(card._id,0);
-				});
-
-				routeSession.set('selectionsLeft', game.nCards());
+				game.initSelection();
 			};
 
+			Template.cards_select.destroyed = function() {
+				game.destroySelection();
+			}
+
 			Template.cards_select.rendered = function() {
+				if (this.firstRender) {
+					var timer = this.find('.timer');
+					ui.timer(game.timeToSelect(), 300, function(time) {
+						timer.innerHTML = Math.round(time / 1000);
+					});
+				}
 				$('#card-grid').layout({
 					rows: 2,
 					cols: 4
@@ -129,56 +133,18 @@
 				}
 			});
 
-			function randomSelect(force) {
-				var cardsLeft = routeSession.get('selectionsLeft');
-				var deck = game.deck();
-				var card_id = null;
-
-				if (!cardsLeft && !force)
-					return;
-
-				if (!cardsLeft) {
-					_.each(deck.cards, function(card_id) {
-						selected_cards.set(card_id,0);
-					});
-					cardsLeft = game.nCards();
-				}
-
-				_.times(cardsLeft, function() {
-					card_id = deck.cards[utils.rand_int(deck.cards.length)];
-					var numSelected = selected_cards.get(card_id);
-					selected_cards.set(card_id, numSelected + 1 );
-					
-				});
-				routeSession.set('selectionsLeft', 0);
-			}
-
 			Template.cards_select.events({
 				'click .play-button': function(e, template) {
-					if (! routeSession.equals('selectionsLeft', 0))
-						return;
-					var cards = [];
-					_.each(selected_cards.all(), function(num, _id) {
-						_.times(num, function() {
-							cards.push(_id);
-						});
-					});
-					Meteor.defer(function(){ game.problems(cards); });
+					game.pickSelectedCards();
 				},
 				'click .randomize-button': function(e, template) {
-					randomSelect(true);
+					game.randomSelect(true);
 				},
 				'mousedown .card': function(evt, template) {
 					if(evt.which === 1) {
 						var data = this;
 						template.handler = ui.down(template,function() {
-							var numSelected = selected_cards.get(data._id);
-							var selectionsLeft = routeSession.get('selectionsLeft')
-							if (selectionsLeft) {
-								selected_cards.set(data._id, numSelected + 1 );
-								routeSession.set('selectionsLeft', selectionsLeft - 1);
-								return true;
-							}
+							return game.incrementSelectedCard(data._id)
 						});
 					}
 				},
@@ -186,13 +152,7 @@
 					if(evt.which === 1) {
 						var data = this;
 						template.handler = ui.down(template,function() {
-							var numSelected = selected_cards.get(data._id);
-							var selectionsLeft = routeSession.get('selectionsLeft')
-							if (numSelected > 0) {
-								selected_cards.set(data._id, numSelected - 1 );
-								routeSession.set('selectionsLeft', selectionsLeft + 1);
-								return true;
-							}
+							return game.decrementSelectedCard(data._id)
 						});
 						evt.preventDefault();
 						evt.stopPropagation();
@@ -252,7 +212,7 @@
 		});
 
 		Template.card_selection_view.selectionCount = function() {
-			return selected_cards.get(this._id);
+			return game.selectionCount(this._id);
 		}
 
 

@@ -155,8 +155,6 @@
 			var grade_stats = StatsCollection.findOne({name: 'gradeStats'});
 			if (grade_stats) grade_stats = grade_stats[card.grade];
 			var stats = {};
-			//console.log('grade stats', grade_stats);
-			//console.log('card stats', card.stats);
 			if (card.stats && card.stats.correct >= 10) {
 				var average_time = card.stats.correct_time / card.stats.correct;
 				stats.mu  = average_time / 1000; // in seconds
@@ -177,7 +175,6 @@
 				stats.s = 1;
 				stats.lambda = 1;
 			}
-			console.log('stats', stats);
 			return stats;
 		},
 
