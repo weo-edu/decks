@@ -4,6 +4,7 @@
 			<div id='players-area'>
 				<div id='me' class='user-1'>
 					{{> user currentUser}}
+					{{> problem_tracker currentUser}}
 				</div>
 
 				{{#with deck}}
@@ -13,9 +14,13 @@
 
 				<div id='opponent' class='user-2'>
 					{{> user opponent}}
+					{{> problem_tracker opponent}}
 				</div>
 			</div>
 			<div class='awning title'>SELECT YOUR OPPONENTS CARDS {{> num_selected}}</div>
+			{{#constant}}
+				<div class='timer'></div>
+			{{/constant}}
 			{{> card_selection cards}}
 
 			<div class='randomize-button'>RANDOM</div>
@@ -55,7 +60,6 @@
 			<div id='level-progress'> {{> level_progress}} </div>
 		</div>
 		<p>{{username}}</p>
-		{{> problem_tracker}}
 	</div>
 </template>
 

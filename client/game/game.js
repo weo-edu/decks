@@ -1,7 +1,8 @@
 ;(function() {
 
   var defaults = {
-    nCards: 5
+    nCards: 5,
+    cardSelectTime: 30
   };
 
   Game.route = function(deck, user) {
@@ -55,6 +56,22 @@
       Game.emit('start', self);
     });
 
+  
+    self.on('card_select', function(change) {
+      if (change) {
+        console.log('card select change');
+        self.updatePlayer({card_select_begin: +new Date()});
+      }
+      
+      Meteor.setTimeout(function() {
+        self.randomSelect();
+        Meteor.setTimeout(function() {
+          self.pickSelectedCards();
+        }, 1000);
+      }, self.timeToSelect());
+      
+    });
+
 
     self.options = options || {};
 
@@ -82,6 +99,7 @@
       self.id = id;
     }
     Meteor.subscribe('userCardStats', self.game().users, self.deck().cards);
+    self.emit(self.game().state)
 	}
 
   utils.inherits(Game, DependsEmitter);
@@ -107,6 +125,106 @@
   */
   Game.prototype.game = function(nonReactive) {
     return Games.findOne(this.id, {reactive: !nonReactive});
+  }
+
+  Game.prototype.initSelection = function() {
+    var self = this;
+
+    self.selected_cards = new ReactiveDict();
+
+    _.each(self.deck().cards, function(card) {
+      self.selected_cards.set(card._id,0);
+    });
+
+    routeSession.set('selectionsLeft', self.nCards());
+  }
+
+  Game.prototype.destroySelection = function() {
+    self.selected_cards = undefined;
+
+    //XXX reactive dict should have a delete func
+    routeSession.set('selectionsLeft', null);
+  }
+
+  Game.prototype.selectionCount = function(cardId) {
+    var self = this;
+    return self.selected_cards.get(cardId);
+  }
+
+  Game.prototype.randomSelect = function(force) {
+    var self = this;
+    var cardsLeft = routeSession.get('selectionsLeft');
+    var deck = self.deck();
+    var card_id = null;
+
+    if (!cardsLeft && !force)
+      return;
+
+    if (!cardsLeft) {
+      _.each(deck.cards, function(card_id) {
+        self.selected_cards.set(card_id,0);
+      });
+      cardsLeft = self.nCards();
+    }
+
+    _.times(cardsLeft, function() {
+      card_id = deck.cards[utils.rand_int(deck.cards.length)];
+      var numSelected = self.selected_cards.get(card_id);
+      self.selected_cards.set(card_id, numSelected + 1 );
+    });
+
+    routeSession.set('selectionsLeft', 0);
+  }
+
+  Game.prototype.selectedCards = function() {
+    var self = this;
+    var cards = [];
+    _.each(self.selected_cards.all(), function(num, _id) {
+      _.times(num, function() {
+        cards.push(_id);
+      });
+    });
+    return cards;
+  }
+
+  Game.prototype.incrementSelectedCard = function(cardId) {
+    var self = this;
+    var numSelected = self.selected_cards.get(cardId);
+    var selectionsLeft = routeSession.get('selectionsLeft')
+    if (selectionsLeft) {
+      self.selected_cards.set(cardId, numSelected + 1 );
+      routeSession.set('selectionsLeft', selectionsLeft - 1);
+      return true;
+    }
+    return false;
+  }
+
+  Game.prototype.decrementSelectedCard = function(cardId) {
+    var self = this;
+    var numSelected = self.selected_cards.get(cardId);
+    var selectionsLeft = routeSession.get('selectionsLeft')
+    if (numSelected > 0) {
+      self.selected_cards.set(cardId, numSelected - 1 );
+      routeSession.set('selectionsLeft', selectionsLeft + 1);
+      return true;
+    }
+    return false;
+  }
+
+  Game.prototype.pickSelectedCards = function() {
+    if (! routeSession.equals('selectionsLeft', 0))
+            return false;
+    var self = this;
+    Meteor.setTimeout(function(){ self.problems(self.selectedCards()); });
+    return true;
+  }
+
+  Game.prototype.timeToSelect = function() {
+    var self = this;
+    var select_begin = self.player().card_select_begin;
+    var time_to_select = select_begin + defaults.cardSelectTime * 1000 - new Date();
+    console.log('time to select', time_to_select, typeof time_to_select);
+    return Math.max(time_to_select, 0);
   }
 
 
@@ -209,6 +327,7 @@
 
     if(problem) {
       problem.bonuses = bonuses;
+      console.log('problem bonuses', bonuses);
       self.updateProblem(problem);
     } else {
       self.updatePlayer({bonuses: bonuses});
@@ -319,6 +438,7 @@
     problem.answer = answer;
 
     if (!problem.time) problem.time = (+new Date()) - problem.startTime;
+    console.log('problem time', problem.time);
 
     var correct = self.isCorrect(problem);
     
@@ -388,17 +508,18 @@
       var speed = 0;
 
       if (userStats && userStats.correct > 0) {
-        var user_average_speed = userStats.correct_time / userStats.correct;
+        var user_mu = userStats.correct_time / userStats.correct; // in ms
+        user_mu /= 1000; // in seconds
 
         var cardStatistics = Stats.cardTime(cardId);
 
         // speed is cumulative density at point user_average_speed on the normal
         // distribution defined by the card statistics
-        speed = 1-jstat.pnorm(user_average_speed,cardStatistics.u,cardStatistics.s);
+        speed = 1 - Stats.inverseGaussCDF(user_mu,cardStatistics.mu,cardStatistics.lambda);
 
         var t = new Date() - userStats.last_played;
         t = t/(1000*60*60*24);
-        retention = Math.exp(-t/userStats.correct);
+        retention = Math.exp(-t / userStats.correct);
         accuracy = userStats.correct / userStats.attempts
       }
       
@@ -486,12 +607,14 @@
   Game.prototype.stateWatcher = function() {
     var self = this;
     self.stateHandle = ui.autorun(function() {
+      //XXX only listen to game state
       var state = self.game().state;
       if (self.opponentState() === 'await_results') {
         self.emit('opponentDone');
       }
       if(!routeSession.equals('game_state', state)) {
         routeSession.set('game_state', state);
+        self.emit(state, true);
       }
     });
   }
@@ -533,6 +656,7 @@
 
     var machine = new StateMachine(transitionTable, function(new_state) {
       self.state(new_state);
+      self.emit(new_state, true)
     });
     self.stateHandle = ui.autorun(function() {
       machine.state([self.state(), self.mystate(), self.opponentState()]);

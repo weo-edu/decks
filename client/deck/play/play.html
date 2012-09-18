@@ -6,11 +6,13 @@
 		<div id='players-area'>
 			<div id='me' class='user-1'>
 				{{> user me}}
+				{{> problem_tracker currentUser}}
 			</div>
 			{{> current_card}}
 
 			<div id='opponent' class='user-2'>
 				{{> user opponent}}
+				{{> problem_tracker opponent}}
 			</div>
 		</div>
 	</div>
