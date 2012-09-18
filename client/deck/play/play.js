@@ -230,12 +230,9 @@
 			},
 			selected: function() {
 				var str = '';
-				if(this._id == Meteor.user()._id)
-					var numSelected = game.player(game.opponent()._id).numSelected;
-				else
-					var numSelected = game.nCards() - routeSession.get('selectionsLeft');
+				var numSelected = game.player(_.without(game.game().users,this._id)).numSelected;
+				var selected = ''
 					
-				var selected = ''	
 				for(var i = 0; i < game.nCards() ; i++) {
 					selected = i < numSelected ? 'selected' : '';
 					str += '<div class="little-card ' + selected + '" ' + style + '><div class="inner" '+ innerStyle +'></div></div>';
