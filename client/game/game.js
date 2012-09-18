@@ -2,7 +2,7 @@
 
   var defaults = {
     nCards: 5,
-    cardSelectTime: 3000
+    cardSelectTime: 1000
   };
 
   Game.route = function(deck, user) {
@@ -63,6 +63,7 @@
       if (change) {
         self.updatePlayer({card_select_begin: +new Date()});
       }
+
       
       Meteor.setTimeout(function() {
         self.randomSelect();
@@ -99,7 +100,13 @@
     } else {
       self.id = id;
     }
+
+    //XXX should unsubscribe at some point
     Meteor.subscribe('userCardStats', self.game().users, self.deck().cards);
+
+    self.me_id = self.me()._id;
+    self.opponent_id = self.opponent()._id;
+
     self.emit(self.game().state)
 	}
 
@@ -137,14 +144,22 @@
       self.selected_cards.set(card._id,0);
     });
 
-    routeSession.set('selectionsLeft', self.nCards());
+    self.numSelected(0);
+    
+  }
+
+  Game.prototype.numSelected = function(val) {
+    var self = this;
+    if(val !== undefined)
+      self.updatePlayer({numSelected: val});
+    else {
+      var player = self.game(true)[self.me_id];
+      return player.numSelected;
+    }
   }
 
   Game.prototype.destroySelection = function() {
-    self.selected_cards = undefined;
-
-    //XXX reactive dict should have a delete func
-    routeSession.set('selectionsLeft', null);
+    this.selected_cards = null;
   }
 
   Game.prototype.selectionCount = function(cardId) {
@@ -154,7 +169,7 @@
 
   Game.prototype.randomSelect = function(force) {
     var self = this;
-    var cardsLeft = routeSession.get('selectionsLeft');
+    var cardsLeft = self.nCards() - self.numSelected();
     var deck = self.deck();
     var card_id = null;
 
@@ -174,7 +189,7 @@
       self.selected_cards.set(card_id, numSelected + 1 );
     });
 
-    routeSession.set('selectionsLeft', 0);
+    self.numSelected(self.nCards());
   }
 
   Game.prototype.selectedCards = function() {
@@ -191,10 +206,10 @@
   Game.prototype.incrementSelectedCard = function(cardId) {
     var self = this;
     var numSelected = self.selected_cards.get(cardId);
-    var selectionsLeft = routeSession.get('selectionsLeft')
-    if (selectionsLeft) {
+    console.log('numSelected', self.numSelected());
+    if (self.numSelected() < self.nCards()) {
       self.selected_cards.set(cardId, numSelected + 1 );
-      routeSession.set('selectionsLeft', selectionsLeft - 1);
+      self.numSelected(self.numSelected() + 1);
       return true;
     }
     return false;
@@ -203,20 +218,21 @@
   Game.prototype.decrementSelectedCard = function(cardId) {
     var self = this;
     var numSelected = self.selected_cards.get(cardId);
-    var selectionsLeft = routeSession.get('selectionsLeft')
     if (numSelected > 0) {
       self.selected_cards.set(cardId, numSelected - 1 );
-      routeSession.set('selectionsLeft', selectionsLeft + 1);
+      self.numSelected(self.numSelected() - 1);
       return true;
     }
     return false;
   }
 
   Game.prototype.pickSelectedCards = function() {
-    if (! routeSession.equals('selectionsLeft', 0))
-            return false;
     var self = this;
-    Meteor.setTimeout(function(){ self.problems(self.selectedCards()); });
+    if (! self.numSelected() === self.nCards())
+      return false;
+    Meteor.setTimeout(function(){ 
+      self.problems(self.selectedCards()); 
+    });
     return true;
   }
 
@@ -497,12 +513,17 @@
       return User.lookup(_.without(self.game().users, self.me()._id)[0]) || Guru.goat();
   }
 
+  Game.prototype.opponentIsGoat = function() {
+    return this.opponent_id === Guru.goat()._id;
+  }
+
   Game.prototype.opponentCardStats = function (cardId) {
     var self = this;
-    if (self.opponent().synthetic) {
-      return self.player(self.opponent()._id).stats[cardId];
+    if (self.opponentIsGoat()) {
+      return self.game(true)[self.opponent_id].stats[cardId];
+      //return self.player(self.opponent_id).stats[cardId];
     } else {
-      var userStats = UserCardStats.findOne({uid: self.opponent()._id, cid: cardId});
+      var userStats = UserCardStats.findOne({uid: self.opponent_id, cid: cardId});
       var accuracy = 0;
       var retention = 0;
       var speed = 0;

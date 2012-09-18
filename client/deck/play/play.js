@@ -90,6 +90,18 @@
 				self.deck_cards = Cards.find(this.deck.cards).fetch();
 
 				game.initSelection();
+
+				self.timer_el = null;
+				function startTimer() {
+					ui.timer(game.timeToSelect(), 500, function(time) {
+						if (self.timer_el)
+							self.timer_el.innerHTML = Math.floor(time / 1000);
+					});
+				}
+				if (game.state() === 'card_select')
+					startTimer();
+				else
+					game.on('card_select', startTimer);
 			};
 
 			Template.cards_select.destroyed = function() {
@@ -98,10 +110,8 @@
 
 			Template.cards_select.rendered = function() {
 				if (this.firstRender) {
-					var timer = this.find('.timer');
-					ui.timer(game.timeToSelect(), 300, function(time) {
-						timer.innerHTML = Math.round(time / 1000);
-					});
+					if (!this.timer_el) 
+						this.timer_el = this.find('.timer');
 				}
 				$('#card-grid').layout({
 					rows: 2,
@@ -123,9 +133,6 @@
 					var dialog = ui.get('.dialog');
 					var message = dialog.get('message');
 					return Template[message] && Template[message]();
-				}, 
-				allSelected: function() {
-					return routeSession.equals('selectionsLeft', 0);
 				}
 			});
 
@@ -161,22 +168,21 @@
 				}
 			});
 
-		Template.user.select = function() {
-  			
-  		}
 
   	var style = '',
   		innerStyle = '';
 
   	Template.problem_tracker.created = function() {
   		var numCards = game.nCards();
-  		this.autoHandle = ui.autorun(function() {
-  			routeSession.get('selectionsLeft');
-  		},
-  		function(){
-  			var numSelected = numCards - routeSession.get('selectionsLeft');
-  			game.updatePlayer({numSelected: numSelected});
-  		});
+
+  			/*this.autoHandle = ui.autorun(function() {
+	  			game.selectionsLeft();
+	  		},
+	  		function(){
+	  			var numSelected = numCards - game.selectionsLeft();
+	  			game.updatePlayer({numSelected: numSelected});
+	  		});*/
+
 
   		this.opponentId = game.opponent()._id
   		this.myId = Meteor.user()._id
@@ -221,7 +227,7 @@
   	}
 
   	Template.problem_tracker.destroyed = function() {
-  		this.autoHandle.stop();
+  		this.autoHandle && this.autoHandle.stop();
   	}
 
 		Template.problem_tracker.helpers({
@@ -231,6 +237,7 @@
 			selected: function() {
 				var str = '';
 				var numSelected = game.player(_.without(game.game().users,this._id)).numSelected;
+				console.log('numSelected', numSelected);
 				var selected = ''
 					
 				for(var i = 0; i < game.nCards() ; i++) {
@@ -276,17 +283,13 @@
 			return opponentProblem;
 		}
 
-		Template.card_view.created = function() {
-			this.stats = game.opponentCardStats(this.data._id);
-		}
-
 		Template.card_view.helpers({
 				showStats: function() {
 					if(game)
 						return true;
 				},
-				stats: function(ctx) {
-					return ctx.template.stats;
+				stats: function() {
+					return game.opponentCardStats(this._id);
 				}
 		});
 
