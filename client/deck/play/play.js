@@ -231,9 +231,9 @@
 			selected: function() {
 				var str = '';
 				if(this._id == Meteor.user()._id)
-					var numSelected = game.nCards() - routeSession.get('selectionsLeft');
-				else
 					var numSelected = game.player(game.opponent()._id).numSelected;
+				else
+					var numSelected = game.nCards() - routeSession.get('selectionsLeft');
 					
 				var selected = ''	
 				for(var i = 0; i < game.nCards() ; i++) {
