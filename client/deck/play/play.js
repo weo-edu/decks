@@ -235,25 +235,37 @@
 				return  str;
 			},
 			tracker: function() {
-				// return game.problems();
+				return game.player(this._id).problems;
 			},
 			innerStyle: function() {
 				return innerStyle;
+			},
+			isCorrect: function() {
+				if(this.answer !== undefined) {
+					return game.isCorrect(this) ? 'correct' : 'incorrect';
+				} else
+					return '';
+			},
+			isCurrent: function() {
+				if(game.problem()._id === this._id)
+					return 'current';
+				else if (opponentProblem() && opponentProblem()._id === this._id)
+					return  'current';
+				else 
+					return ''
 			}
-
-			
-
-			// nCards: function(){
-
-			// },
-			// numCards: function() {
-			// 	game.nCards();
-
-			// 	var numCards = 0;
-			// 	_.each(selected_cards.all(), function(num) { numCards += num });
-			// 	return numCards;
-			// }
 		});
+
+		function opponentProblem() {
+			var opponentProblem = null
+			_.find(game.player(game.opponent()._id).problems, function(p, i) {
+						if(typeof p.answer === 'undefined') {
+							opponentProblem = p;
+							return true;
+						}
+					});
+			return opponentProblem;
+		}
 
 		
 

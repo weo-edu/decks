@@ -84,13 +84,14 @@
 
 	#opponent .problem-tracker {
 		transform: rotate(180deg);
-		margin-top: 50px;
+		margin-top: -172px;
 	}
 	.problem-tracker {
 		float: right;
 		width: 52px;
 		margin-right: -5px;
 		height: 160px;
+		margin-top: -222px
 		.little-card {
 			height: 16px;
 			width: 12px;
@@ -100,6 +101,15 @@
 			.inner {
 				margin: 1px 1px 0 0;
 				background: rgba(211, 211, 211, 0.67);
+				&.correct {
+					background-color: #5CC05C;
+				}
+				&.incorrect {
+					background-color: #C52E3A;
+				}
+				&.current {
+					background-color: rgba(#00AEEF, .7);
+				}
 			}
 		}
 	}
