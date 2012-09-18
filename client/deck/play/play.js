@@ -267,10 +267,16 @@
 				return  str;
 			},
 			tracker: function() {
-				// return game.problems();
+				return game.problems();
 			},
 			innerStyle: function() {
 				return innerStyle;
+			},
+			isCorrect: function() {
+				if(this.answer !== undefined) {
+					return game.isCorrect(this) ? 'correct' : 'incorrect';
+				} else
+					return '';
 			}
 
 			
