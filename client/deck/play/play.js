@@ -202,7 +202,7 @@
 
   	Template.problem_tracker.created = function() {
 
-  		ui.autorun(function(){
+  		this.autoHandle = ui.autorun(function(){
   			var numSelected = game.nCards() - routeSession.get('selectionsLeft');
   			game.updatePlayer({numSelected: numSelected});
   		});
@@ -244,6 +244,10 @@
 				rows = Math.ceil(game.nCards() / cols);
 				return (rows * height);
 			}
+  	}
+
+  	Template.problem_tracker.destroyed = function() {
+  		this.autoHandle.stop();
   	}
 
 		Template.problem_tracker.helpers({
@@ -552,12 +556,12 @@
  				} 
 			});
 
-			Template.view_cards.rendered = function() {
-				$('#card-grid').layout({
-					rows: 2,
-					cols: 4
-				});
-			}
+			// Template.view_cards.rendered = function() {
+			// 	$('#card-grid').layout({
+			// 		rows: 2,
+			// 		cols: 4
+			// 	});
+			// }
 
 			Template.view_cards.helpers({
 				cards: function() {
