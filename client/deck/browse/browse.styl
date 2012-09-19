@@ -97,7 +97,18 @@
 #deck-category {
 	height: 299px;
 	overflow-y: hidden;
-	overflow-x: auto;
+	overflow-x: hidden;
+	position: relative;
+	.shelf-wrapper {
+		padding: 10px 0 25px 45px;
+	}
+	.category-title {
+		font: 30px/52px "Nuku Nuku";
+		color: #9E7850;
+		text-shadow: -1px -1px 0 rgba(black, .5);
+		left: 50px;
+		position: absolute;
+	}
 }
 
 // .deck-front {
