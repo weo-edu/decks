@@ -2,7 +2,7 @@
 
   var defaults = {
     nCards: 5,
-    cardSelectTime: 1000
+    cardSelectTime: 15
   };
 
   Game.route = function(deck, user) {
@@ -228,7 +228,7 @@
 
   Game.prototype.pickSelectedCards = function() {
     var self = this;
-    if (! self.numSelected() === self.nCards())
+    if (! (self.numSelected() === self.nCards()))
       return false;
     Meteor.setTimeout(function(){ 
       self.problems(self.selectedCards()); 
