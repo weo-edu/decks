@@ -4,15 +4,35 @@
 		<div class='browse'>
 			<div class='awning'>
 				CHOOSE A DECK
-			</div>
+			</div><!--
 			<div id='deck-grid' class='shelf'>
 				<div class='shelf-wrapper'>
 					{{> decks}}
+				</div>
+			</div>-->
+			<div id='deck-grid' class='shelf'>
+				<div class='shelf-wrapper'>
+					{{#each categories}}
+						{{> category this}}
+					{{/each}}
 				</div>
 			</div>
 			{{> back_button}}
 		</div>
 	</div>
+	{{#ui "dialog"}}
+		{{> deck_more}}
+	{{/ui}}
+</template>
+
+<template name="category">
+	<!-- <h2>{{name}}</h2> -->
+	{{#each decks}}
+		<div id="deck-{{_id}}" class="deck-container">
+			{{> deck_view}}
+			<h4 class='deck-title'>{{title}}</h4>
+		</div>
+	{{/each}}
 </template>
 
 <template name="decks">

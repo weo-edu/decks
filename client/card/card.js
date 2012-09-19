@@ -6,16 +6,7 @@
 // 		route('/card/edit/' + _id + '/back');
 // 	});
 // });
-
-function isCard(ctx, next) {
-	if(Cards.findOne(ctx.params.id) !== undefined)
-		next();
-	else
-		route.redirect('/deck/create');
-}
-
-
-route('/card/edit/:id', route.requireSubscription('cards'), isCard, function(ctx) {
+route('/card/edit/:id', route.requireSubscriptionById('Card'), function(ctx) {
 	var card_id = ctx.params.id;
 	var card = Cards.findOne(card_id);
 	view.render('card_front');
@@ -29,7 +20,7 @@ route('/card/edit/:id', route.requireSubscription('cards'), isCard, function(ctx
 		return {component: 'form', id: 'info_form'}
 	}
 
-	Template.card_front_form.rendered= function() {
+	Template.card_front_form.rendered = function() {
 		var form = ui.byID('info_form');
 		if(form) form.setFields(card);
 		gs.upload($(this.find('#image-upload')),function(err,data) {
@@ -61,8 +52,7 @@ route('/card/edit/:id', route.requireSubscription('cards'), isCard, function(ctx
 
 });
 
-route('/card/edit/:id/problem', route.requireSubscription('cards'), isCard,
-function(ctx) {
+route('/card/edit/:id/problem', route.requireSubscriptionById('Card'), function(ctx) {
 
 var card_id = ctx.params.id;
 var card = Cards.findOne(card_id);
@@ -85,7 +75,6 @@ card.errorCheck = function() {
 	var self = this;
 	var edited = self.db();
 	edited.problem.rules = self.edited_rules;
-	console.log(self.edited_rules);
 	var p = problemize(edited);
 
 	var error = null;
@@ -111,7 +100,6 @@ card.editRule = function(idx) {
 }
 
 card.setEditRules = function() {
-	console.log('seteditrules');
 	routeSession.set('rules', _.clone(this.edited_rules), false);
 	this.edited_rules = null;
 }
@@ -151,13 +139,9 @@ Template.card_info_form.rendered = function() {
 		});
 
 		ui.autorun(function() {
-			console.log('update rules')
 			Cards.update(ctx.params.id, {$set: {'problem.rules': routeSession.get('rules')}});
 		});
 	}
-	
-
-
 }
 
 Template.card_info_form.helpers({
@@ -226,7 +210,6 @@ function updateRules() {
 Template.rules_form.preserve({
 	'.new-rule[id]': function(node) { return node.id; }
 });
-
 });
 
 function isEmptyCard(id) {

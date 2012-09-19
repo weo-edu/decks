@@ -202,49 +202,52 @@ var cards = [
 
 
 Meteor.startup(function() {
-	// Decks.remove({});
- //    Cards.remove({});
-
- //    _.each(cards, function(card){
- //        Cards.insert(card);
- //    });
-
- //    _.each(decks, function(deck){
- //        deck.cards = _.pluck(Cards.find({}, {fields: ['_id']}).fetch(), '_id');
- //        Decks.insert(deck);
- //    });
-
-  Meteor.publish('decks', function() {
-    return Decks.find({});
-  });
-
   Meteor.publish('UserCardStats', function(uid) {
       return UserCardStats.find({uid: uid});
   });
-
-  Meteor.publish('cards',function() {
-    return Cards.find({});
-  })
 
   Meteor.publish('user', function(identifier) {
     return Meteor.users.find({$or: [{_id: identifier}, {username: identifier}]});
   });
 
-	Meteor.publish('Decks', function(){
+  Meteor.publish('Deck', function(id) {
+    return Decks.find(id);
+  });
+
+  Meteor.publish('Card', function(id) {
+    return Cards.find(id);
+  });
+
+  Meteor.publish('Decks', function(){
     return Decks.find({});
 	});
 
-  Meteor.publish('Cards', function(){
-      return Cards.find({});
+  Meteor.publish('Cards', function(ids){
+    var query = {};
+    if(ids && typeof ids === 'array') query['_id'] = {$in: ids};
+    return Cards.find(query);
   });
 
-  Meteor.publish('UserDeckInfo', function(uid) {
-    return UserDeckInfo.find({user: uid});
+  Meteor.publish('UserDeckInfo', function(uid, did) {
+    if(typeof uid === 'array') uid = _.without(uid, 1);
+    if(did) 
+        return UserDeckInfo.findUserDeck(uid, did);
+    else
+        return UserDeckInfo.findUser(uid);
   });
 
   Meteor.publish('UsersDecks', function(uid) {
-    return findUserDecks(uid);
+    return Decks.findUser(uid);
+  });
+
+  Meteor.publish('HomeDecks', function(uid) {
+    var self = this;
+    _.each(Decks.homeFeeds, function(feed) {
+      self._publishCursor(Decks.feed(feed, uid), 'Decks');
+    });
   });
 
   Observer.start();
 });
+
+

@@ -16,10 +16,10 @@
 
 	Meteor.publish('game', function(id) {
 		return Games.find({_id: id});
-	})
+	});
 
 	Meteor.publish('userDeckInfo', function(users, deck) {
-		users = _.without(users,1);
+		users = _.without(users, 1);
 
 		//XXX index on user,deck
 		return UserDeckInfo.find({user: {$in: users}, deck: deck});

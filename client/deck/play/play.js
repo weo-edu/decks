@@ -1,27 +1,18 @@
 ;(function(){
-  route('/game/:id', 
-  	function(ctx, next) {
- 			Meteor.subscribe('game', ctx.params.id, next);
-  	},
-  	function(ctx, next) {
-  		var game = Games.findOne(ctx.params.id);
-  		Meteor.subscribe('userDeckInfo', game.users, game.deck, function() {
-  			if (!UserDeckInfo.findOne({user: Meteor.user()._id, deck: game.deck})) {
-  				UserDeckInfo.insert({ 
-  					user: Meteor.user()._id, 
-  					deck: game.deck, 
-  					mastery: {} 
-  				});
-  			}
-  			next();
-  		});
-  	},
-  	function(ctx, next) {
-  		
-  		//XXX do in parallel
-  		
-  		Meteor.subscribe('gradeStats', next);
-  	},
+  route('/game/:id',
+  	route.requireSubscriptionById('game'),
+  	route.requireSubscription('UserDeckInfo', 
+  		function(ctx) {
+  			return Games.findOne(ctx.params.id).users;
+  		},
+  		function(ctx) {
+  			return Games.findOne(ctx.params.id).deck;
+  		}
+  	),
+  	route.requireSubscription('Cards', function(ctx) {
+  		return Decks.findOne(Games.findOne(ctx.params.id).deck).cards;
+  	}),
+  	route.requireSubscription('gradeStats'),
   	function(ctx){
   		var game = null
   			, stateMachineHandle = null
@@ -255,6 +246,7 @@
 
   	Template.problem_tracker.destroyed = function() {
   		this.autoHandle && this.autoHandle.stop();
+  		this.autoHandle = null;
   	}
 
 		Template.problem_tracker.helpers({

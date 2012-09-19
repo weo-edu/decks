@@ -4,14 +4,6 @@ route('/deck/browse',function() {
 		return Decks.find({status: 'published'});
 	}
 
-	Template.decks.arrange = function(selector) {
-		
-	}
-
-	Template.deck_browse.mydecks = function(){
-		return Decks.find(Meteor.user().decks);
-	};
-
 	Template.deck_browse.decks = function() {
 		return Decks.find({});
 	};
@@ -19,6 +11,16 @@ route('/deck/browse',function() {
 	Template.deck_more.card = function() {
 		var dialog = ui.get('.dialog');
 		return dialog.get('currentCard');
+	}
+
+	Template.deck_browse.categories = function() {
+		return Decks.homeFeeds;
+	}
+
+	Template.category.decks = function(name) {
+		var feed = Decks.feed(this, Meteor.user()._id);
+		console.log('feed', this);
+		return feed.fetch();
 	}
 
 	Template.deck_browse.events = {
