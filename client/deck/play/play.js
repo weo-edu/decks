@@ -9,6 +9,9 @@
   			return Games.findOne(ctx.params.id).deck;
   		}
   	),
+  	route.requireSubscription('Cards', function(ctx) {
+  		return Decks.findOne(Games.findOne(ctx.params.id).deck).cards;
+  	}),
   	route.requireSubscription('gradeStats'),
   	function(ctx){
   		var game = null

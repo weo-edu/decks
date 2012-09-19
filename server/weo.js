@@ -222,8 +222,10 @@ Meteor.startup(function() {
     return Decks.find({});
 	});
 
-  Meteor.publish('Cards', function(){
-      return Cards.find({});
+  Meteor.publish('Cards', function(ids){
+    var query = {};
+    if(ids && typeof ids === 'array') query['_id'] = {$in: ids};
+    return Cards.find(query);
   });
 
   Meteor.publish('UserDeckInfo', function(uid, did) {
