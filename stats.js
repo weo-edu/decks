@@ -51,8 +51,8 @@
 		augmentPoints: function(uid, points) {
 			Meteor.users.findAndModify(uid,
 				[['_id', 'asc']],
-				{$inc: {points: -points}},
-				{'new': true},
+				{ $inc: { points: -points } },
+				{ 'new': true },
 				function(err, res) {
 					if(err) throw err;
 
@@ -75,7 +75,7 @@
 			);
 		},
 		updateCardStats: function(query, stats, grade) {
-			var update = {$inc: {}};
+			var update = { $inc: { } };
 			_.each(stats, function(val, key) {
 				update['$inc']['stats.' + key] = val;
 				update['$inc']['stats.bins.' + grade + '.' + key] = val;
@@ -245,18 +245,12 @@
 					return findQuantile(a, mid);
 				else
 					return findQuantile(mid, b);
-
 			}
 
 			// set max to be 5 std deviations from mean
 			return findQuantile(0, 5 * Math.sqrt(Math.pow(mu,3) / lambda) + mu);
-
 		}
-
-
-
 	}
-
 
 	global.Stats = Stats;
 })(Meteor.is_client ? window : global);
