@@ -25,7 +25,11 @@
 
 				function showDialog(message) {
 					var dialog = ui.get('.dialog');
-					console.log('show dialog',dialog);
+					if (!dialog) {
+						console.warn('no dialog for message: ' + message);
+						return;
+					}
+						
 					dialog.set('message', message);
 					dialog.await().modal().center().show();
 				}
