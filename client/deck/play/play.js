@@ -23,8 +23,6 @@
 				game = new Game(game_id);
 				game.start();
 
-
-
 				function showDialog(message) {
 					var dialog = ui.get('.dialog');
 					console.log('show dialog',dialog);
@@ -40,8 +38,7 @@
 					} else {
 						console.log('showdialog immediate')
 						showDialog(message);
-					}
-						
+					}						
 				}
 
 				var machine = new StateMachine(
@@ -137,23 +134,6 @@
 				}
 			});
 
-			// $('#select-screen .dialog').live('click', function() {
-			// 	var self = $(this);
-			// 	self.addClass('puff');
-			// 	setTimeout(function() {
-			// 		self.removeClass('puff');
-			// 	}, 150)
-			// });
-
-			// $('#select-screen .overlay').live('click', function() {
-			// 	var self = $(this).next();
-			// 	console.log(self);
-			// 	self.addClass('puff');
-			// 	setTimeout(function() {
-			// 		self.removeClass('puff');
-			// 	}, 150)
-			// });
-
 			Template.cards_select.events({
 				'click .play-button': function(e, template) {
 					game.pickSelectedCards();
@@ -192,15 +172,6 @@
 
   	Template.problem_tracker.created = function() {
   		var numCards = game.nCards();
-
-  			/*this.autoHandle = ui.autorun(function() {
-	  			game.selectionsLeft();
-	  		},
-	  		function(){
-	  			var numSelected = numCards - game.selectionsLeft();
-	  			game.updatePlayer({numSelected: numSelected});
-	  		});*/
-
 
   		this.opponentId = game.opponent()._id
   		this.myId = Meteor.user()._id
@@ -408,18 +379,12 @@
 						card.type = 'card';
 						card.title = card.name;
 
-						
-						if(res) {
-							//console.log(problem.points, card.stats && card.stats.grade, 'points', game.game());
-						}
 						event({name: 'complete', time: problem.time},
 							card,
 							res ? 'correctly' : 'incorrectly'
 							);
 
  						nextCard();
-
- 						// animateLevel(game.me());
 
 	 					var inc = 1;
 				 		var pointsTimeout = null;
@@ -460,45 +425,6 @@
  				}
 	 		});
 
-	 		function percent(val, total) {
-	 			return (val / total) * 100;
-	 		}
-
-
-	 		// Template.progress_bar.rendered = function() {
-	 		// 	var self = this;
-	 		// 	if(self.firstRendered === false) return;
-	 		// 	self.nCards = game.nCards();
-
-	 		// 	self.firstRendered = false;
-	 		// 	var handle = ui.autorun(function(){
-				// 	var user = self.data._id === Meteor.user()._id ? 'me' : 'opponent';
-
- 			// 		animateProgress('#' + user);
- 			// 		function animateProgress(container) {
- 			// 			var answered = game.answered(self.data._id),
- 			// 				p = percent(answered, game.nCards());
-
- 			// 			$(container + ' .fill').stop(true, false).animate({'height': p + '%'}, {
- 			// 				//step: function(height) {
- 			// 				//	self.animHeight = height;
- 			// 				//},
- 			// 				complete: function() {
- 			// 					routeSession.set('answered_' + self.data._id, answered);
- 			// 			} });
- 			// 		}
-	 		// 	});
-
-	 		// 	self.onDestroy(function() {
-	 		// 		handle.stop();
-	 		// 	});
-	 		// }
-
-		 	// Template.progress_bar.progress = function(ctx) {
-		 	// 	var answered = routeSession.get('answered_' + this._id);
-		 	// 	return percent(answered, ctx.template.nCards) + '%';
-		 	// }
-
 		 	/*
 		 		Results
 		 	*/
@@ -527,8 +453,6 @@
 	 			}
 	 		});
 
-
-
 	 		Template.end_game.helpers({
 				show_cards: function() {
 					return routeSession.get('show_cards');
@@ -556,13 +480,6 @@
  					});
  				} 
 			});
-
-			// Template.view_cards.rendered = function() {
-			// 	$('#card-grid').layout({
-			// 		rows: 2,
-			// 		cols: 4
-			// 	});
-			// }
 
 			Template.view_cards.helpers({
 				cards: function() {

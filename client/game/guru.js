@@ -37,9 +37,7 @@
 
 		game.on('complete', function() {
       // user beat goat guru
-      console.log('game complete')
       var winner = game.winner();
-      console.log('game winenr', winner);
       if (winner && winner.username === Meteor.user().username)
         self.beat();
 		});
@@ -143,15 +141,12 @@
 		var mastery = self.mastery(),
 			modify = {$inc: { 'mastery.wins' : 1 } };
 
-		console.log('mastery', mastery)
 		if (mastery.winsAtRank >= 2) {
 			modify['$set'] = {'mastery.winsAtRank': 0};
 			modify['$inc']['mastery.rank'] = 1;		
 		} else {
 			modify['$inc']['mastery.winsAtRank'] = 1;
 		}
-
-		console.log('modify', modify);
 
 		UserDeckInfo.update(
 			{ user: self.mygame.opponent()._id, deck: self.mygame.deck()._id },
@@ -160,11 +155,17 @@
 	}
 
 	Guru.prototype.mastery = function() {
-		var self = this;
-		return UserDeckInfo.findOne({ 
-			user: self.mygame.opponent()._id, 
-			deck: self.mygame.deck()._id }
-		).mastery;
+		var self = this,
+			info = UserDeckInfo.findOne({ 
+				user: self.mygame.opponent()._id, 
+				deck: self.mygame.deck()._id
+			});
+
+		return (info && info.mastery) || {
+			rank: 0,
+			winsAtRank: 0,
+			wins: 0
+		};
 	}
 
 	Guru.prototype.stop = function() {
