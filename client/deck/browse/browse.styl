@@ -32,19 +32,28 @@
 		ipad();
 		position: relative;
 	}
+
+	#browse-categories {
+		height: 617px;
+		width: 100%;
+		overflow-y: auto;
+		overflow-x: hidden;	
+	}
 }
 
-#deck-grid, .create-grid {
+::-webkit-scrollbar { width: 0 }
+
+#deck-grid, .create-grid, #deck-category {
 	height = 299px;
 	width = 150px;
 	height: 617px;
 	width: 100%;
 	overflow-y: auto;
 	overflow-x: hidden;
-	&::-webkit-scrollbar { width: 0 }
+	
 	background-image: url('/img/bigShelf.jpg');
 	.shelf-wrapper {
-		padding: 0 0 30px 40px;
+		padding: 0 0 35px 45px;
 		width: 980px;
 		background-image: url('/img/bigShelf.jpg');
 		background-repeat: repeat;
@@ -83,6 +92,12 @@
 	box-shadow: 0 0 15px #333, inset 1px 1px 1px rgba(white, .5), inset -1px -1px 1px rgba(black, .5);
 	background-size: cover;
 	background-position: center center;
+}
+
+#deck-category {
+	height: 299px;
+	overflow-y: hidden;
+	overflow-x: auto;
 }
 
 // .deck-front {

@@ -4,18 +4,11 @@
 		<div class='browse'>
 			<div class='awning'>
 				CHOOSE A DECK
-			</div><!--
-			<div id='deck-grid' class='shelf'>
-				<div class='shelf-wrapper'>
-					{{> decks}}
-				</div>
-			</div>-->
-			<div id='deck-grid' class='shelf'>
-				<div class='shelf-wrapper'>
-					{{#each categories}}
-						{{> category this}}
-					{{/each}}
-				</div>
+			</div>
+			<div id='browse-categories'>
+				{{#each categories}}
+					{{> category this}}
+				{{/each}}
 			</div>
 			{{> back_button}}
 		</div>
@@ -26,13 +19,16 @@
 </template>
 
 <template name="category">
-	<!-- <h2>{{name}}</h2> -->
-	{{#each decks}}
-		<div id="deck-{{_id}}" class="deck-container">
-			{{> deck_view}}
-			<h4 class='deck-title'>{{title}}</h4>
+	<div id='deck-category'>
+		<div class='shelf-wrapper'>
+			{{#each decks}}
+				<div id="deck-{{_id}}" class="deck-container">
+					{{> deck_view}}
+					<h4 class='deck-title'>{{title}}</h4>
+				</div>
+			{{/each}}
 		</div>
-	{{/each}}
+	</div>
 </template>
 
 <template name="decks">
@@ -59,7 +55,6 @@
 		<div class='more-info'>
 			<div class='deck-image'>
 				{{> deck_view}}
-				<p> UNLOCKED 1 OF 10 </p>
 			</div>
 			<div class='deck-meta'>
 				<div class='meta'>

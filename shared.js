@@ -1,5 +1,5 @@
 _.extend(Decks, {
-	homeFeeds: ['popular', 'featured'],
+	homeFeeds: ['popular', 'featured', 'popular'],
 	feed: function(feed, uid) {
 		var self = this;
 		return self[feed] && self[feed].apply(self, _.toArray(arguments).slice(1));
