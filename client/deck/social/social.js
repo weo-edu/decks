@@ -12,7 +12,7 @@ route('/deck/friends', function(ctx) {
 
 			// $('.buddy.active').removeClass('active');
 			// el.addClass('active');
-			Session.set('active', this);
+			routeSession.set('active', this);
 		},
 		'click .play-button': function(e) {
 			// route('/deck/browse');
@@ -20,12 +20,12 @@ route('/deck/friends', function(ctx) {
 	});
 
 	Template.social.destroyed = function() {
-		Session.set('active', null);
+		routeSession.set('active', null);
 	}
 
 	Template.buddies.helpers({
 	 	'active': function() {
-	 		var active = Session.get('active');
+	 		var active = routeSession.get('active');
 	 		if(active)
 	 			return this._id == active._id ? 'active' : '';
 	 		else
@@ -42,15 +42,15 @@ route('/deck/friends', function(ctx) {
 		}
 	});
 
-	Template.active_friend.helpers({
-		'active': function() {
-			var active = Session.get('active');
-			if(active)
-				return active.avatar;
-			else 
-				return '/app!common/avatars/default.png';
-		}
-	});
+	// Template.active_friend.helpers({
+	// 	'active': function() {
+	// 		var active = routeSession.get('active');
+	// 		if(active)
+	// 			return active.avatar;
+	// 		else 
+	// 			return '/app!common/avatars/default.png';
+	// 	}
+	// });
 
 	Template.opponent_decks.helpers({
 		'decks': function() {
@@ -67,7 +67,7 @@ route('/deck/friends', function(ctx) {
 		'click .challenge-button': function() {
 			var self = this;
   		var deck = Decks.findOne({ title: self.title });
-  		Game.route(deck._id, Session.get('active')._id);
+  		Game.route(deck._id, routeSession.get('active')._id);
 		}
 	});
 

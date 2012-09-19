@@ -27,14 +27,24 @@
 			<div class='play-button'>GO</div>
 			
 		</div>
-		{{#ui "dialog"}}
-			{{{ message }}}
-		{{/ui}}
+		{{> select_dialog}}
 	</div>
 </template>
 
+<template name="select_dialog">
+	{{#ui init}}
+		{{{ message }}}
+	{{/ui}}
+</template>
+
 <template name="await_select">
-	Waiting for the other player to select your cards
+	<h2>One Sec...</h2>
+	<div class='inner-await'>
+		Waiting for the other player to finish selecting your cards
+		<center>
+			<img style='margin: 15px 0 -12px;' src='/app!common/img/wait.gif' />
+		</center>
+	</div>
 </template>
 
 <template name='card_selection'>
@@ -70,12 +80,6 @@
  		{{/each}}
 	{{/if}}
  </div>
-</template>
-
-<template name='progress_bar'>
-	<div class='bar'>
-		<div class='fill' style="height:{{progress}}"></div>
-	</div>
 </template>
 
 <template name='max_cards'>
@@ -115,8 +119,6 @@
 		{{/if}}
 	</div>
 </template>
-
-
 
 <template name='stat_circle'>
 	<li class='stat-circle'>
