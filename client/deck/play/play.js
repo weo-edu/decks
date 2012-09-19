@@ -13,7 +13,7 @@
   		return Decks.findOne(Games.findOne(ctx.params.id).deck).cards;
   	}),
   	route.requireSubscription('gradeStats'),
-  	function(ctx){
+  	function(ctx) {
   		var game = null
   			, stateMachineHandle = null
   			, game_id = ctx.params.id;
@@ -126,7 +126,7 @@
 				});
 			}
 
-			Template.cards_select.helpers( {
+			Template.cards_select.helpers({
 				opponent: function(ctx){
 					return ctx.template.opponent;
 				},

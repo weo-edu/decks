@@ -65,13 +65,12 @@
       }
 
       
-      Meteor.setTimeout(function() {
+      self.selectTimeout = Meteor.setTimeout(function() {
         self.randomSelect();
         Meteor.setTimeout(function() {
           self.pickSelectedCards();
         }, 1000);
       }, self.timeToSelect());
-      
     });
 
 
@@ -154,7 +153,7 @@
       self.updatePlayer({numSelected: val});
     else {
       var player = self.game(true)[self.me_id];
-      return player.numSelected;
+      return parseInt(player.numSelected, 10);
     }
   }
 
@@ -228,11 +227,13 @@
 
   Game.prototype.pickSelectedCards = function() {
     var self = this;
-    if (! (self.numSelected() === self.nCards()))
+    console.log('numSelected', self.numSelected(), 'nCards', self.nCards(), typeof self.numSelected(), typeof self.nCards());
+    if(self.numSelected() !== self.nCards())
       return false;
-    Meteor.setTimeout(function(){ 
-      self.problems(self.selectedCards()); 
-    });
+
+    self.selectTimeout && Meteor.clearTimeout(self.selectTimeout);
+    self.selectTimeout = null;
+    self.problems(self.selectedCards());
     return true;
   }
 
@@ -306,7 +307,7 @@
     XXX: Add run-time config options
   */
   Game.prototype.nCards = function() {
-    return this.deck(true).cardsPerGame || defaults.nCards;
+    return parseInt(this.deck(true).cardsPerGame || defaults.nCards, 10);
   }
 
   Game.prototype.isCorrect = function(problem){
