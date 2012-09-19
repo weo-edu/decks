@@ -23,7 +23,6 @@
 			var guru = Guru.create(game);
 			guru.start();
 		}
-
 	});
 
 	function Guru(game) {
@@ -115,13 +114,13 @@
 
 
 		var playerDone = false;
-		var answerTimeout = null;
+		self.answerTimeout = null;
 		function answer () {
 			var problem = self.mygame.problem();
 			if (problem) {
 				var timeToAnswer = problem.time - (new Date() - problem.startTime);
 				if (timeToAnswer < 0) timeToAnswer = 0;
-				answerTimeout = Meteor.setTimeout(function() {
+				self.answerTimeout = Meteor.setTimeout(function() {
 					self.mygame.answer(self.answer(problem));
 					answer();
 				}, playerDone ? 0 : timeToAnswer);
@@ -133,7 +132,7 @@
 
 		self.mygame.once('opponentDone', function() {
 			playerDone = true;
-			Meteor.clearTimeout(answerTimeout);
+			Meteor.clearTimeout(self.answerTimeout);
 			answer();
 		});
 		
@@ -171,6 +170,9 @@
 	Guru.prototype.stop = function() {
 		var self = this;
 		self.autorunHandle && self.autorunHandle.stop();
+		self.answerTimeout && Meteor.clearTimeout(self.answerTimeout);
+		self.answerTimeout = null;
+		
 		self.mygame.stop();
 	}
 

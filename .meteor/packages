@@ -15,7 +15,6 @@ accounts-passwords
 users
 observer
 showdown
-insecure
 uikit
 streamio
 less
@@ -25,4 +24,3 @@ models
 gsUpload
 edis-cli
 stateMachine
-

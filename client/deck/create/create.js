@@ -18,11 +18,6 @@ Template.create_menu.events({
 
 
 route('/deck/create', function(){
-
-	Template.edit_collection.rendered = function() {
-
-	}
-
 	Template.my_collection.events({
 		'click .deck-container': function(e) {
 			var dialog = ui.get('.dialog');
@@ -86,104 +81,89 @@ route('/deck/create', function(){
 	});
 
 	view.render('edit_collection');
-
 });
 
 
 
-route('/deck/edit/:id', route.requireSubscription('decks'), isDeck,
-function(ctx) {
+route('/deck/edit/:id', route.requireSubscriptionById('Deck'), function(ctx) {
+	var deck_id = ctx.params.id;
+	var deck = Decks.findOne(ctx.params.id);
 
-var deck_id = ctx.params.id;
-var deck = Decks.findOne(ctx.params.id);
+	view.render('deck_edit_info');
 
-view.render('deck_edit_info');
+	Template.deck_info_form.init_form = function() {
+		return {component: 'form', id: 'info_form'}
+	}
 
-Template.deck_info_form.init_form = function() {
-	return {component: 'form', id: 'info_form'}
-}
+	Template.deck_info_form.created = function() {
 
-Template.deck_info_form.created = function() {
-
-	ui.onID('info_form', function(form) {
-		form.onSet('tags', function(tags) {
-			if (_.isArray(tags))
-				return tags.join(', ');
-			else
-				return tags;
-		});
-		form.onGet('tags', function(tags) {
-			if (!tags) return;
-			return _.map(tags.split(','), function(tag) {
-				return tag.trim();
+		ui.onID('info_form', function(form) {
+			form.onSet('tags', function(tags) {
+				if (_.isArray(tags))
+					return tags.join(', ');
+				else
+					return tags;
 			});
+			form.onGet('tags', function(tags) {
+				if (!tags) return;
+				return _.map(tags.split(','), function(tag) {
+					return tag.trim();
+				});
+			});
+			
 		});
 		
-	});
-	
-}
-
-Template.deck_info_form.rendered= function() {
-	var form = ui.byID('info_form');
-	gs.upload($(this.find('#image-upload')),function(err,data) {
-		form && form.setField('image', "/upload/"+data.result.path);
-	});
-
-	if (this.firstRender)  {
-		form.setFields(deck);
-		ui.autorun(function() {
-			Decks.update(ctx.params.id, {$set: form.getFields()});
-		});
 	}
-		
 
-
-}
-
-Template.deck_info_form.destroyed = function() {
-
-}
-
-Template.deck_edit_info.created = function() {
-	// this.onDestroy(function() {
-	// 	console.log('instance destroyed');
-	// });
-}
-Template.deck_edit_info.destroyed = function() {
-	var thisDeck = Decks.findOne(deck_id);
-	if(isEmptyDeck(deck_id))
-		Decks.remove(ctx.params.id);
-	else if(!thisDeck.cards)
-		Decks.update(deck_id, {$set: {status: 'draft'}});
-	else if(thisDeck.cards.length === 0)
-		Decks.update(deck_id, {$set: {status: 'draft'}});
-
-}
-
-Template.deck_edit.events({
-	'click #save-deck': function(e) {
-		if(isEmptyDeck(deck_id))
-			alert('Please fill out the form before you continue');
-		else 
-			route('/deck/edit/' + ctx.params.id + '/select-cards');
-	}
-});
-
-Template.deck_edit.helpers({
-	'deck': function() {
+	Template.deck_info_form.rendered= function() {
 		var form = ui.byID('info_form');
-		return form.getFields();
+		gs.upload($(this.find('#image-upload')),function(err,data) {
+			form && form.setField('image', "/upload/"+data.result.path);
+		});
+
+		if (this.firstRender)  {
+			form.setFields(deck);
+			ui.autorun(function() {
+				Decks.update(ctx.params.id, {$set: form.getFields()});
+			});
+		}
 	}
+
+	Template.deck_edit_info.created = function() {
+		// this.onDestroy(function() {
+		// 	console.log('instance destroyed');
+		// });
+	}
+	Template.deck_edit_info.destroyed = function() {
+		var thisDeck = Decks.findOne(deck_id);
+		if(isEmptyDeck(deck_id))
+			Decks.remove(ctx.params.id);
+		else if(!thisDeck.cards)
+			Decks.update(deck_id, {$set: {status: 'draft'}});
+		else if(thisDeck.cards.length === 0)
+			Decks.update(deck_id, {$set: {status: 'draft'}});
+
+	}
+
+	Template.deck_edit.events({
+		'click #save-deck': function(e) {
+			if(isEmptyDeck(deck_id))
+				alert('Please fill out the form before you continue');
+			else 
+				route('/deck/edit/' + ctx.params.id + '/select-cards');
+		}
+	});
+
+	Template.deck_edit.helpers({
+		'deck': function() {
+			var form = ui.byID('info_form');
+			return form.getFields();
+		}
+	});
 });
 
-});
 
-
-
-
-route('/deck/edit/:id/select-cards', route.requireSubscription('decks'), isDeck,
-function(ctx) {
-	
+route('/deck/edit/:id/select-cards', route.requireSubscriptionById('Deck'), function(ctx) {
 	var deck_id = ctx.params.id;
 	var deck = Decks.findOne(deck_id);
 
@@ -192,8 +172,6 @@ function(ctx) {
 	else
 		view.render('deck_cards_select');
 
-	
-	
 
 	Template.deck_cards_select.destroyed = function() {
 		var thisDeck = Decks.findOne(deck_id);
@@ -264,14 +242,6 @@ function(ctx) {
 	});
 
 });
-
-
-function isDeck(ctx, next) {
-	if(Decks.findOne(ctx.params.id) !== undefined)
-		next();
-	else
-		route.redirect('/deck/create');
-}
 
 function isEmptyDeck(id) {
 	var deck = Decks.findOne(id);
