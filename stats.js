@@ -46,6 +46,7 @@
 			return Math.pow(3, 14 / (1 + Math.exp((-.25) * (g - 8))));
 		},
 		levelPoints: function(l) {
+			l++;
 			return .5*l*(Math.pow(3, 14/(1+Math.exp(-.25*(1+l/60-8)))))+300;
 		},
 		augmentPoints: function(uid, points) {

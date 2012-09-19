@@ -205,7 +205,6 @@ route('/deck/edit/:id/select-cards', route.requireSubscriptionById('Deck'), func
 
 	Template.deck_cards_grid.helpers({
 		'cards': function() {
-			// var deck = Decks.findOne(ctx.params.id);
 			return Cards.find();
 		},
 		'notInDeck': function() {
