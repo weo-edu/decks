@@ -27,10 +27,14 @@
 			<div class='play-button'>GO</div>
 			
 		</div>
-		{{#ui "dialog"}}
-			{{{ message }}}
-		{{/ui}}
+		{{> select_dialog}}
 	</div>
+</template>
+
+<template name="select_dialog">
+	{{#ui init}}
+		{{{ message }}}
+	{{/ui}}
 </template>
 
 <template name="await_select">

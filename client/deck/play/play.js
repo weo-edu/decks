@@ -32,10 +32,25 @@
 				game = new Game(game_id);
 				game.start();
 
+
+
 				function showDialog(message) {
 					var dialog = ui.get('.dialog');
+					console.log('show dialog',dialog);
 					dialog.set('message', message);
-					dialog.overlay().center().show();
+					dialog.await().modal().center().show();
+				}
+
+				function showDialogWrap(message) {
+					if (self.firstRender) {
+						self.onRender(function() {
+							showDialog(message);
+						})
+					} else {
+						console.log('showdialog immediate')
+						showDialog(message);
+					}
+						
 				}
 
 				var machine = new StateMachine(
@@ -43,7 +58,7 @@
 							['await_select', 'await_select'],
 							['await_results', 'await_results']
 						],
-						_.bind(showDialog, window)
+						_.bind(showDialogWrap, window)
 					);
 
 				stateMachineHandle = ui.autorun(function() {
@@ -128,21 +143,25 @@
 				},
 				cards: function(ctx) {
 					return ctx.template.deck_cards;
-				},
-				message: function(name) {
-					var dialog = ui.get('.dialog');
-					var message = dialog.get('message');
-					return Template[message] && Template[message]();
 				}
 			});
 
-			console.log('live');
-			$('#select-screen .dialog, #select-screen .overlay').live('click', function() {
-				console.log('click');
-				$('#select-screen .dialog').addClass('puff', 500, function() {
-					$(this).removeClass('puff');
-				});
-			});
+			// $('#select-screen .dialog').live('click', function() {
+			// 	var self = $(this);
+			// 	self.addClass('puff');
+			// 	setTimeout(function() {
+			// 		self.removeClass('puff');
+			// 	}, 150)
+			// });
+
+			// $('#select-screen .overlay').live('click', function() {
+			// 	var self = $(this).next();
+			// 	console.log(self);
+			// 	self.addClass('puff');
+			// 	setTimeout(function() {
+			// 		self.removeClass('puff');
+			// 	}, 150)
+			// });
 
 			Template.cards_select.events({
 				'click .play-button': function(e, template) {
@@ -634,6 +653,18 @@
 					return transformPrefix;
 				}
 			});
+
+			Template.select_dialog.helpers({
+				init: function() {
+					return {component: 'dialog'};
+				},
+				message: function(ctx) {
+					//console.log(ctx.template.find('.dialog'));
+					var dialog = ui.get('.dialog');
+					var message = dialog.get('message');
+					return Template[message] && Template[message]();
+				}
+			})
 
 			// function animateLevel(user) {
 			// 	var degs = getDegs(user);
