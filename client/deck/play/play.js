@@ -229,6 +229,7 @@
 				return routeSession.equals('game_state', 'card_select') || routeSession.equals('game_state', 'await_join');
 			},
 			selected: function() {
+				// XXX Too slow with large numbers of cards
 				var str = '';
 				var numSelected = game.player(_.without(game.game().users,this._id)).numSelected;
 				var selected = ''
@@ -261,6 +262,9 @@
 			},
 			innerStyle: function() {
 				return innerStyle;
+			},
+			style: function() {
+				return style;
 			}
 		});
 
@@ -528,7 +532,7 @@
 			Template.level_progress.helpers({
 				level: function() {
 					var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
-					return user.level%60;
+					return user.level%60 + 1;
 				},
 				stage: function(){
 					var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
