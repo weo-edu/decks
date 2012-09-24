@@ -40,7 +40,6 @@
 							showDialog(message);
 						})
 					} else {
-						console.log('showdialog immediate')
 						showDialog(message);
 					}						
 				}
@@ -56,14 +55,14 @@
 				stateMachineHandle = ui.autorun(function() {
 					machine.state([game.mystate()]);
 				});
-			}
 
-			Template.game.destroyed = function() {
-				stateMachineHandle && stateMachineHandle.stop();
-  			stateMachineHandle = null;
+				self.onDestroy(function() {
+					stateMachineHandle && stateMachineHandle.stop();
+	  			stateMachineHandle = null;
 
-  			game && game.stop();
-  			game = null;
+	  			game && game.stop();
+	  			game = null;
+				});
 			}
 
   		/*
@@ -385,12 +384,13 @@
 
 						var card = _.clone(Cards.findOne(problem.card_id));
 						card.type = 'card';
-						card.title = card.name;
 
 						event({name: 'complete', time: problem.time},
 							card,
-							res ? 'correctly' : 'incorrectly'
-							);
+							{
+								adverbs: res ? 'correctly' : 'incorrectly',
+								groupId: game.id
+							});
 
  						nextCard();
 

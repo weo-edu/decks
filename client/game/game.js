@@ -2,7 +2,7 @@
 
   var defaults = {
     nCards: 5,
-    cardSelectTime: 15
+    cardSelectTime: 60
   };
 
   Game.route = function(deck, user) {
@@ -656,13 +656,16 @@
       adverb = 'andWon';
     else
       adverb = 'andLost';
-    event('complete', game, adverb);
+    event('complete', game, {
+      adverbs: adverb
+    });
     self.emit('complete');
   }
 
   Game.prototype.stop = function() {
     var self = this;
     self.stateHandle && self.stateHandle.stop();
+    self.stateHandle = null;
     self.emit('stop');
   }
 
@@ -680,6 +683,7 @@
       self.state(new_state);
       self.emit(new_state, true)
     });
+
     self.stateHandle = ui.autorun(function() {
       machine.state([self.state(), self.mystate(), self.opponentState()]);
     });
