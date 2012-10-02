@@ -12,7 +12,6 @@
 				var points = .1 * _.reduce(problems, function(memo, problem) {
 					return memo + problem.points;
 				}, 0);
-				console.log('spree', points / 5)
 				return points / 5;
 			}
 		},
@@ -36,13 +35,11 @@
 
 					var probability = Math.min(self.baseProbability * n, .5);
 					if(Math.random() < probability) {
-						console.log('award critical', game.me()._id);
 						self.award(problem);
 					}
 				});
 			},
 			points: function(problem) {
-				console.log('critical', 2 * problem.points);
 				return 2 * problem.points;
 			},
 			name: 'critical',
@@ -63,8 +60,8 @@
 				var time = problem.time / 1000;
 				var cardStatistics = Stats.cardTime(problem.card_id);
 				console.log('card Statistics', cardStatistics);
+				console.log('time', time);
 				var speed = 1 - Stats.inverseGaussCDF(time, cardStatistics.mu, cardStatistics.lambda);
-				console.log('time bonus', problem.points, time, problem.points * speed);
 				return problem.points * speed;
 
 			},

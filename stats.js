@@ -179,6 +179,33 @@
 			return stats;
 		},
 
+		userCard: function(userId, cardId) {
+			var userStats = UserCardStats.findOne({uid: userId, cid: cardId});
+			var cardStats = Stats.cardTime(cardId);
+
+			var stat = {};
+			stat.correct = (userStats && userStats.correct) || 0;
+			stat.accuracy = 0;
+			stat.time_mu = 0;
+			stat.speed = 0;
+			stat.retention = 0;
+			
+			if (stat.correct > 0) {
+				stat.accuracy = userStats.correct / userStats.attempts
+
+				stat.time_mu = userStats.correct_time / (1000 * userStats.correct); // in seconds
+
+				stat.speed = 1 - Stats.inverseGaussCDF(stat.time_mu,cardStats.mu,cardStats.lambda);
+
+				var t = new Date() - userStats.last_played;
+        t = t/(1000*60*60*24);
+        stat.retention = Math.exp(-t / userStats.correct);
+			}
+
+			return stat;
+
+		},
+
 		erf: function(x) {
 	    var sign = x >= 0  ? 1 : -1;
 	    x = Math.abs(x);

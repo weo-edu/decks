@@ -10,12 +10,16 @@
 			</div>
 			{{> current_card}}
 
+			<div class="quit-button">quit</div>
 			<div id='opponent' class='user-2'>
 				{{> user opponent}}
 				{{> problem_tracker opponent}}
 			</div>
 		</div>
+
 	</div>
+
+
 	
 	{{#ui "dialog"}}
 		{{{ message }}}
@@ -26,7 +30,27 @@
 	{{/constant}}
 </template>
 
-<template name="await_results">
+<template name="play_continue">
+	<h2>Your opponent quit</h2>
+	<div class='inner-await'>
+		<center>
+			<div class="end">end</div>
+			<div class="continue">continue</div>
+		</center>
+	</div>
+</template>
+
+<template name="quit">
+	<h2>You quit</h2>
+	<div class='inner-await'>
+		Check out what the other player is doing
+		<center>
+			<img style='margin: 15px 0 -12px;' src='/app!common/img/wait.gif' />
+		</center>
+	</div>
+</template>
+
+<template name="play_waiting">
 	<h2>One Sec...</h2>
 	<div class='inner-await'>
 		Waiting for your opponent to finish
@@ -44,6 +68,9 @@
 	</div>
 	{{/with}}
 	{{> game_points}}
+	{{#constant}}
+		<span class='timer'></span>
+	{{/constant}}
 </template>
 
 <template name='game_points'>

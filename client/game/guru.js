@@ -29,26 +29,14 @@
 		var self = this;
 
 		self.game = game;
-		self.autorunHandle = null;	
 
 		game.on('stop', function() {
 			self.stop();
-		});
-
-		game.on('complete', function() {
-      // user beat goat guru
-      var winner = game.winner();
-      if (winner && winner.username === Meteor.user().username)
-        self.beat();
 		});
 	}
 
 	Guru.prototype.start = function() {
 		var self = this;
-
-		var transitionTable = null
-			, evaluators = null
-			, machine = null;
 
 		var options = {
 			me: function() {
@@ -61,22 +49,29 @@
 
 		self.mygame = new Game(self.game.id, options);
 
-		transitionTable = [
-			['await_join', function() { }],
-			['card_select', function() { self.choose(); }],
-			['play', function(){ self.play(); }],
-			['results', function() { Meteor.defer(function() { self.stop(); }) }]
-		];
+		self.mygame.on('select', self.choose.bind(self));
 
-		machine = new StateMachine(transitionTable);
-		self.autorunHandle = ui.autorun(
-			function() {
-				self.mygame.state();
-			},
-			function() {
-				machine.state([self.mygame.state()]);
-			}
-		);
+		self.mygame.on('play', self.setupTimes.bind(self));
+		self.mygame.on('play', self.guruRunner.bind(self));
+
+		self.mygame.on('play.', function() {
+			self.answerTimeout && Meteor.clearTimeout(self.answerTimeout);
+			self.guruRunner();
+		});
+
+
+		self.mygame.on('results', function(changed) {
+			self.stop();
+			if (!changed)
+				return
+			var winner = self.mygame.winner();
+      if (winner && winner._id === Guru.goat()._id)
+        self.beat();
+		});
+
+		self.mygame.on('play.continue', function() {
+			self.mygame.dispatch('end');
+		});
 
 		_.each(self.mygame.deck().cards,function(cardId) {
 			self.setCardStats(cardId);
@@ -85,58 +80,57 @@
 		self.mygame.start();
 	}
 
-	Guru.prototype.choose = function() {
+	Guru.prototype.choose = function(changed) {
 		var self = this;
-		self.mygame.problems('random');
+
+		if (!changed)
+			return;
+		console.log('guru choose');
+		self.mygame.initSelection();
+		self.mygame.randomSelect();
+		self.mygame.pickSelectedCards();
+		self.mygame.destroySelection();
 	}
 
-	Guru.prototype.play = function() {
+
+	Guru.prototype.setupTimes = function(changed) {
+		if (!changed)
+			return
+
 		var self = this;
 
 		var time = +new Date();
-		var setTimes = false;
 		var problems = self.mygame.problems();
 
 		_.each(problems, function(problem) {
-			if (!problem.startTime) {
-				setTimes = true;
-				var problem_time = self.problemTime(problem);
-				problem.startTime = time;
-				problem.time = problem_time;
-				time += problem_time;
-			}
+			var problem_time = self.problemTime(problem);
+			problem.startTime = time;
+			problem.time = problem_time;
+			time += problem_time;
 		});
 
-		if (setTimes)
-			self.mygame.updatePlayer({problems: problems});
-
-
-		var playerDone = false;
-		self.answerTimeout = null;
-		function answer () {
-			var problem = self.mygame.problem();
-			if (problem) {
-				var timeToAnswer = problem.time - (new Date() - problem.startTime);
-				if (timeToAnswer < 0) timeToAnswer = 0;
-				self.answerTimeout = Meteor.setTimeout(function() {
-					self.mygame.answer(self.answer(problem));
-					answer();
-				}, playerDone ? 0 : timeToAnswer);
-			}
-
-		}
-
-		answer();
-
-		self.mygame.once('opponentDone', function() {
-			playerDone = true;
-			Meteor.clearTimeout(self.answerTimeout);
-			answer();
-		});
-		
+		self.mygame.updatePlayer({problems: problems});
 	}
 
+	Guru.prototype.guruRunner = function() {
+		var self = this;
+		var problem = self.mygame.nextProblem();
+		if (problem) {
+			var timeToAnswer = problem.time - (new Date() - problem.startTime);
+
+			// if old game or user is finished dont wait
+			if (timeToAnswer < 0 || self.mygame.state() === 'play.') timeToAnswer = 0;
+
+			self.answerTimeout = Meteor.setTimeout(function() {
+				self.mygame.answer(self.answer(problem));
+				self.guruRunner();
+			}, timeToAnswer);
+		}
+	}
+
+
 	Guru.prototype.beat = function() {
+		console.log('beat');
 		var self = this;
 		var mastery = self.mastery(),
 			modify = {$inc: { 'mastery.wins' : 1 } };
@@ -170,7 +164,7 @@
 
 	Guru.prototype.stop = function() {
 		var self = this;
-		self.autorunHandle && self.autorunHandle.stop();
+		console.log('stop guru');
 		self.answerTimeout && Meteor.clearTimeout(self.answerTimeout);
 		self.answerTimeout = null;
 		
@@ -183,7 +177,6 @@
 		var cardDist = Stats.cardTime(problem.card_id);
 		var x = 1 - db_stats.speed.val * Math.sqrt(db_stats.retention.val)
 		var time = Stats.inverseGaussQuantile(x, cardDist.mu, cardDist.lambda);
-		console.log('time', time);
 		if (time < .4) time = .4;
 		return time * 1000;
 	}
@@ -191,6 +184,7 @@
 	Guru.prototype.answer = function(problem) {
 		var self = this;
 		var db_stats = self.mygame.player().stats[problem.card_id];
+		console.log('player', self.mygame.player(), problem);
 		var sample = Math.random();
 		var answer;
 		if(sample < db_stats.accuracy.val * Math.sqrt(db_stats.retention.val))

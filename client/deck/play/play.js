@@ -15,13 +15,12 @@
   	route.requireSubscription('gradeStats'),
   	function(ctx) {
   		var game = null
-  			, stateMachineHandle = null
   			, game_id = ctx.params.id;
   		
 			Template.game.created = function() {
 				var self = this;
 				game = new Game(game_id);
-				game.start();
+
 
 				function showDialog(message) {
 					var dialog = ui.get('.dialog');
@@ -34,34 +33,36 @@
 					dialog.await().modal().center().show();
 				}
 
-				function showDialogWrap(message) {
+				self.showDialogWrap = function(message) {
 					if (self.firstRender) {
 						self.onRender(function() {
 							showDialog(message);
 						})
 					} else {
-						console.log('showdialog immediate')
 						showDialog(message);
 					}						
 				}
 
-				var machine = new StateMachine(
-						[
-							['await_select', 'await_select'],
-							['await_results', 'await_results']
-						],
-						_.bind(showDialogWrap, window)
-					);
+				self.hideDialog = function() {
+					console.log('hide Dialog');
 
-				stateMachineHandle = ui.autorun(function() {
-					machine.state([game.mystate()]);
-				});
+					var dialog = ui.get('.dialog');
+					if (dialog && dialog.isVisible())
+						dialog.hide();
+
+				}
+
+
+
+				/*game.on('quit', function() {
+					showDialogWrap('quit_overlay');
+				});*/
+
+				game.start();
+
 			}
 
 			Template.game.destroyed = function() {
-				stateMachineHandle && stateMachineHandle.stop();
-  			stateMachineHandle = null;
-
   			game && game.stop();
   			game = null;
 			}
@@ -69,17 +70,20 @@
   		/*
   			Game template helpers and events
   		*/
- 			var stateTemplateMap = {
- 				'await_join': 'cards_select',
- 				'card_select': 'cards_select',
- 				'await_select': 'select_wait',
- 				'play': 'deck_play',
- 				'results': 'end_game'
- 			};
+ 			
 
   		Template.game.helpers({
   			state: function() {
-  				return game && stateTemplateMap[game.state()];
+  				var template = Meteor.template;
+  				Meteor.defer(function() {
+  					var dialog_state = game.dialogState();
+	  				if (dialog_state)
+	  					template.showDialogWrap(game.state().replace('.','_'));
+	  				else {
+	  					template.hideDialog();
+	  				}
+  				});
+  				return game && game.renderState();
   			}
   		});
 
@@ -92,7 +96,6 @@
   		Template.cards_select.created = function() {
   			var self = this;
 				self.opponent = game.opponent();
-
 				self.deck = game.deck();
 				self.deck_cards = Cards.find(this.deck.cards).fetch();
 
@@ -105,10 +108,10 @@
 							self.timer_el.innerHTML = Math.floor(time / 1000);
 					});
 				}
-				if (game.state() === 'card_select')
+				if (game.mainState() === 'select')
 					startTimer();
 				else
-					game.on('card_select', startTimer);
+					game.on('select', startTimer);
 			};
 
 			Template.cards_select.destroyed = function() {
@@ -144,6 +147,9 @@
 				},
 				'click .randomize-button': function(e, template) {
 					game.randomSelect(true);
+				},
+				'click .quit-button': function(e, template) {
+					game.quit();
 				},
 				'mousedown .card': function(evt, template) {
 					if(evt.which === 1) {
@@ -226,14 +232,13 @@
 
 		Template.problem_tracker.helpers({
 			select: function() {
-				return routeSession.equals('game_state', 'card_select') || routeSession.equals('game_state', 'await_join');
+				return game.mainState() === 'select';
 			},
 			selected: function() {
 				// XXX Too slow with large numbers of cards
 				var str = '';
-				var numSelected = game.player(_.without(game.game().users,this._id)).numSelected;
+				var numSelected = game.player(_.without(game.get('users'),this._id)).numSelected;
 				var selected = ''
-					
 				for(var i = 0; i < game.nCards() ; i++) {
 					selected = i < numSelected ? 'selected' : '';
 					str += '<div class="little-card ' + selected + '" ' + style + '><div class="inner" '+ innerStyle +'></div></div>';
@@ -242,8 +247,8 @@
 				return  str;
 			},
 			tracker: function() {
-				var problems = game.player(this._id).problems;
-				var cur = currentProblem(problems);
+				var cur = game.currentProblem(this._id);
+				var problems = game.problems(this._id);
 				var arr = _.map(problems,function(p) {
 					var c = '';
 					if(p.answer !== undefined) {
@@ -267,18 +272,6 @@
 				return style;
 			}
 		});
-
-
-		function currentProblem(cards) {
-			var opponentProblem = null
-			_.find(cards, function(p, i) {
-						if(typeof p.answer === 'undefined') {
-							opponentProblem = p;
-							return true;
-						}
-					});
-			return opponentProblem;
-		}
 
 		Template.card_view.helpers({
 				showStats: function() {
@@ -333,11 +326,6 @@
 		 		$('#answer').focus();
 		 	};
 
-		 	function nextCard() {
-		 		var p = game.problem();
-		 		p && routeSession.set('cur_problem', p);
-		 	}
-
 	 		Template.deck_play.helpers({
 	 			me: function(ctx) { return ctx.template.me; },
 	 			opponent: function(ctx){ return ctx.template.opponent; },
@@ -350,10 +338,35 @@
 	 		});
 
 	 		var problemRendered = null;
+	 		Template.problem_container.created = function() {
+	 			var self = this;
+
+	 			self.timer_el = null;
+				function startTimer() {
+					console.log('start timer');
+					ui.timer(game.timeToPlay(), 500, function(time) {
+						if (self.timer_el)
+							self.timer_el.innerHTML = Math.floor(time / 1000);
+					});
+				}
+
+				console.log('problem_container created');
+				if (game.state() === 'play.')
+					startTimer();
+				else
+					game.on('play.', startTimer);
+	 		}
+
+	 		Template.problem_container.rendered = function() {
+	 			if (this.firstRender) {
+	 				if (!this.timer_el)
+	 					this.timer_el = this.find('.timer');
+	 			}
+	 		}
+
 	 		Template.problem_container.helpers({
 	 			card: function() {
-	 				problemRendered = (new Date()).getTime();
-	 				return routeSession.get('cur_problem') || Meteor.defer(nextCard);
+	 				return game.currentProblem();
 	 			}
 	 		});
 
@@ -369,7 +382,7 @@
 
 	 		Template.current_card.helpers({
         card: function() {
-          return routeSession.get('cur_problem');
+          return game.currentProblem();
         }
      	}); 
 
@@ -377,11 +390,14 @@
  				'click': function(e, template) {
  					$('#answer').focus();
  				},
- 				'keypress': function(e, template) {
- 					if(e.which === 13) {
- 						clearTimeout(pointsTimeout);
-						var res = game.answer(parseInt($('#answer').val(), 10)),
-							problem = game.lastAnsweredProblem();
+ 				'click .quit-button': function() {
+ 					console.log('click quit');
+ 					game.quit();
+ 				},
+ 				'keypress input': function(e, template) {
+ 					if(e.which === 13 && game.state() !== 'play.waiting') {
+						var res = game.answer(parseInt($('#answer').val(), 10));
+						var problem = game.currentProblem();
 
 						var card = _.clone(Cards.findOne(problem.card_id));
 						card.type = 'card';
@@ -392,7 +408,8 @@
 							res ? 'correctly' : 'incorrectly'
 							);
 
- 						nextCard();
+						console.log('keypress next problem');
+ 						game.nextProblem();
 
 	 					var inc = 1;
 				 		var pointsTimeout = null;
@@ -433,6 +450,16 @@
  				}
 	 		});
 
+
+			Template.play_continue.events({
+				'click .end': function() {
+					game.dispatch('end');
+				},
+				'click .continue': function() {
+					game.dispatch('continue');
+				}
+			});
+
 		 	/*
 		 		Results
 		 	*/
@@ -464,7 +491,13 @@
 	 		Template.end_game.helpers({
 				show_cards: function() {
 					return routeSession.get('show_cards');
-				}
+				},
+	 			message: function() {
+	 				var dialog = ui.get('.dialog');
+	 				var message = dialog.get('message');
+	 				console.log('message', message);
+	 				return Template[message] && Template[message]();
+	 			}
 			});
 
 			Template.end_game.events({
@@ -581,7 +614,7 @@
 					var message = dialog.get('message');
 					return Template[message] && Template[message]();
 				}
-			})
+			});
 
 			// function animateLevel(user) {
 			// 	var degs = getDegs(user);
