@@ -60,11 +60,10 @@
 
 				game.start();
 
-			}
-
-			Template.game.destroyed = function() {
-  			game && game.stop();
-  			game = null;
+				self.onDestroy(function() {
+	  			game && game.stop();
+	  			game = null;
+				});
 			}
 
   		/*
@@ -103,7 +102,7 @@
 
 				self.timer_el = null;
 				function startTimer() {
-					ui.timer(game.timeToSelect(), 500, function(time) {
+					ui.timer(game.timeToSelect(), function(time) {
 						if (self.timer_el)
 							self.timer_el.innerHTML = Math.floor(time / 1000);
 					});
@@ -150,6 +149,7 @@
 				},
 				'click .quit-button': function(e, template) {
 					game.quit();
+					route('/deck/browse');
 				},
 				'mousedown .card': function(evt, template) {
 					if(evt.which === 1) {
@@ -344,13 +344,12 @@
 	 			self.timer_el = null;
 				function startTimer() {
 					console.log('start timer');
-					ui.timer(game.timeToPlay(), 500, function(time) {
+					ui.timer(game.timeToPlay(), function(time) {
 						if (self.timer_el)
 							self.timer_el.innerHTML = Math.floor(time / 1000);
 					});
 				}
 
-				console.log('problem_container created');
 				if (game.state() === 'play.')
 					startTimer();
 				else
@@ -393,6 +392,7 @@
  				'click .quit-button': function() {
  					console.log('click quit');
  					game.quit();
+ 					route('/deck/browse');
  				},
  				'keypress input': function(e, template) {
  					if(e.which === 13 && game.state() !== 'play.waiting') {
@@ -401,12 +401,13 @@
 
 						var card = _.clone(Cards.findOne(problem.card_id));
 						card.type = 'card';
-						card.title = card.name;
 
 						event({name: 'complete', time: problem.time},
 							card,
-							res ? 'correctly' : 'incorrectly'
-							);
+							{
+								adverbs: res ? 'correctly' : 'incorrectly',
+								groupId: game.id
+							});
 
 						console.log('keypress next problem');
  						game.nextProblem();
@@ -459,6 +460,30 @@
 					game.dispatch('continue');
 				}
 			});
+
+			Template.play_waiting.created = function() {
+				var self = this;
+				self.timer_el = null;
+				function startTimer() {
+					ui.timer(game.timeToPlay(), function(time) {
+						if (self.timer_el)
+							self.timer_el.innerHTML = Math.floor(time / 1000);
+					});
+				}
+
+				if (game.state() === 'play.waiting')
+					startTimer();
+				else
+					game.on('play.waiting', startTimer);
+			}
+
+			Template.play_waiting.rendered = function() {
+	 			if (this.firstRender) {
+	 				if (!this.timer_el)
+	 					this.timer_el = this.find('.timer');
+	 				console.log('timer el', this.timer_el);
+	 			}
+	 		}
 
 		 	/*
 		 		Results

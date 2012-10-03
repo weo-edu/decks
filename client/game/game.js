@@ -3,7 +3,8 @@
   var defaults = {
     nCards: 5,
     cardSelectTime: 30,
-    playPastTime: 30
+    playPastTime: 10,
+    heartbeat_timeout: 2
   };
 
   Game.route = function(deck, user) {
@@ -18,6 +19,8 @@
 	function Game(id, options) {
 		var self = this;
     Emitter.call(self);
+
+    self.timeouts = {};
   
     self.on('select', function(change) {
       if (self.me().synthetic) 
@@ -26,25 +29,51 @@
       if (change)
         self.updatePlayer({card_select_begin: +new Date()});
       
-      self.selectTimeout = Meteor.setTimeout(function() {
+      self.timeouts.select = Meteor.setTimeout(function() {
         self.randomSelect();
         Meteor.setTimeout(function() {
           self.pickSelectedCards();
         }, 1000);
-      }, self.timeToSelect());
+      }, Math.max(self.timeToSelect(), 0));
     });
 
     self.on('play.', function(change) {
-      if (self.me().synthetic) return;
+      if (self.me().synthetic) 
+        return;
 
       if (change)
         self.updatePlayer({play_end: +new Date()});
 
-      self.playTimeout = Meteor.setTimeout(function() {
-        self.dispatch('finished');
+      self.timeouts.play = Meteor.setTimeout(function() {
+        if (self.state() === 'play.')
+          self.dispatch('finished');
       }, self.timeToPlay());
+    });
+
+    self.on('play.waiting', function(change) {
+      if (self.me().synthetic)
+        return;
+
+      if (change) {
+        self.updatePlayer({play_end: +new Date()});
+        console.log('play_end');
+      }
 
 
+      self.timeouts.heartbeat = Meteor.setTimeout(function() {
+        if (self.state() === 'play.waiting')
+          self.heartbeat();
+      }, self.timeToPlay());
+    });
+
+    self.on('select.waiting', function() {
+      if (self.me().synthetic)
+        return;
+      self.timeouts.heartbeat = Meteor.setTimeout(function() {
+        console.log('heartbeat timeout');
+        if (self.state() === 'select.waiting')
+          self.heartbeat();
+      }, self.timeToSelect(), 0);
     });
 
 
@@ -161,6 +190,7 @@
       self.dispatch('joined');
     
     self.stateManager();
+    self.monitor();
 
     /*if (self.pending())
       self.emit('pending', self.pending());*/
@@ -272,8 +302,8 @@
     if(self.numSelected() !== self.nCards())
       return false;
 
-    self.selectTimeout && Meteor.clearTimeout(self.selectTimeout);
-    self.selectTimeout = null;
+    self.timeouts.select && Meteor.clearTimeout(self.timeouts.select);
+    delete self.timeouts.select
     self.setOpponentsProblems(self.selectedCards());
     self.dispatch('selected');
     return true;
@@ -290,6 +320,7 @@
     var self = this;
     var play_end = self.player().play_end;
     var time_to_results = play_end + defaults.playPastTime * 1000 - new Date();
+    console.log('timeToPlay', time_to_results);
     return Math.max(time_to_results, 0);
   }
 
@@ -388,9 +419,6 @@
       self.dispatch('finished');
       return;
     }
-
-    
-
 
     var problem = self.currentProblem();
     if (! problem.startTime) {
@@ -666,7 +694,8 @@
     'play': 'deck_play',
     'results': 'end_game',
     'canceled': 'game_canceled',
-    'quit': 'game_quit'
+    'quit': 'game_quit',
+
   };
   Game.prototype.renderState = function() {
     var state = this.mainState();
@@ -703,7 +732,9 @@
       adverb = 'andWon';
     else
       adverb = 'andLost';
-    event('complete', game, adverb);
+    event('complete', game, {
+      adverbs: adverb
+    });
     self.emit('complete');
   }
 
@@ -713,8 +744,84 @@
 
   Game.prototype.stop = function() {
     var self = this;
+    console.log('stop');
     self.stateHandle && self.stateHandle.stop();
+    self.stateHandle = null;
+    self.monitorHandle && self.monitorHandle.stop();
+    self.monitorHandle = null;
+    self.clearTimeouts();
     self.emit('stop');
+  }
+
+  Game.prototype.clearTimeouts = function(timeouts) {
+    var self = this;
+    timeouts = timeouts || self.timeouts;
+    _.each(timeouts, function(timeout, name) {
+      if ('object' === typeof timeout && timeout !== null)
+        self.clearTimeouts(timeout);
+      else
+        timeout && Meteor.clearTimeout(timeout);
+      delete self.timeouts[name];
+    });
+  }
+
+  Game.prototype.heartbeat = function(timeout) {
+    console.log('heartbeat');
+    var self = this;
+    var h = {
+      _id: Meteor.uuid(),
+      received: false,
+      initiator: self.me_id,
+      time: +new Date(),
+      timeout: (timeout || defaults.heartbeat_timeout) * 1000
+    };
+
+    var update = {$set: {}};
+    update.$set['heartbeats.'+ h._id] = h;
+    self.update(update);
+  }
+
+  Game.prototype.monitor = function() {
+    var self = this;
+    self.timeouts.heartbeats = {};
+    self.monitorHandle = ui.autorun(function() {
+      var update = {};
+      var heartbeats = self.get('heartbeats');
+      console.log('heartbeats autorun', heartbeats);
+      _.each(heartbeats, function(h) {
+        if (h.initiator === self.me_id) {
+          if (h.received) {
+            //if opponenet received heartbeat, clear it
+            if (!update.$unset)
+              update.$unset = {};
+            update.$unset['heartbeats.' + h._id] = true
+            Meteor.clearTimeout(self.timeouts.heartbeats[h._id]);
+            delete self.timeouts.heartbeats[h._id]
+          } else {
+            // if opponent hasnt received heartbeat, 
+            // setTimeout for `opdead` event
+            if (!self.timeouts.heartbeats[h._id]) {
+              self.timeouts.heartbeats[h._id] = Meteor.setTimeout(function() {
+                var update = {};
+                update.$unset = {};
+                update.$unset['heartbeats.' + h._id] = true
+                self.update(update);
+                delete self.timeouts.heartbeats[h._id]
+                self.dispatch('opdead');
+              }, Math.max(h.time + h.timeout - new Date()), 0);
+            }
+          }
+        } else if (!h.received) {
+          console.log('not received');
+          if (!update.$set)
+            update.$set = {};
+          update.$set['heartbeats.' + h._id + '.received'] = true;
+        } 
+      });
+      console.log('update', update);
+      if (update.$set || update.$unset)
+        self.update(update);
+    });
   }
 
   Game.prototype.dispatch = function(type) {
@@ -731,6 +838,8 @@
     update.$set['events.'+ e._id] = e;
     self.update(update);
   }
+
+
 
   Game.prototype.processEvents = function() {
     var self = this;
@@ -757,20 +866,24 @@
       ['limbo.', 'me.joined', 'select'],
       ['select', 'me.selected', 'select.waiting'],
       ['select', 'op.selected', 'select.'],
+      ['select', 'op.quit', 'canceled'],
+      ['select.', 'op.quit', 'canceled'],
+      ['select.', 'op.opdead', 'canceled'],
       ['select.waiting', 'op.selected', 'play'],
+      ['select.waiting', 'op.quit', 'canceled'],
+      ['select.waiting', 'me.opdead', 'canceled'],
       ['select.', 'me.selected', 'play'],
       ['play', 'me.finished', 'play.waiting'],
       ['play', 'op.finished', 'play.'],
-      ['play.waiting', 'op.finished', 'results'],
-      ['play.', 'me.finished', 'results'],
-      ['*', 'me.quit', 'quit'],
-      ['select', 'op.quit', 'canceled'],
-      ['select.', 'op.quit', 'canceled'],
-      ['select.waiting', 'op.quit', 'canceled'],
       ['play', 'op.quit', 'play.continue'],
+      ['play.', 'me.finished', 'results'],
+      ['play.', 'op.opdead', 'results'],
+      ['play.waiting', 'op.finished', 'results'],
+      ['play.waiting', 'op.quit', 'results'],
+      ['play.waiting', 'me.opdead', 'results'],
       ['play.continue', 'me.continue', 'play.'],
       ['play.continue', 'me.end', 'results'],
-      ['play.waiting', 'op.quit', 'results']
+      ['*', 'me.quit', 'quit']
     ];
     var machine = new StateMachine(transitionTable, {
       next: function(new_state) {

@@ -199,7 +199,7 @@ route('/deck/edit/:id/select-cards', route.requireSubscriptionById('Deck'), func
 
 		},
 		'click .selected-card': function() {
-			Decks.update(ctx.params.id, {$pull: {cards: this._id}});
+			Decks.update(ctx.params.id, { $pull: { cards: this._id } });
 		}
 	});
 
@@ -218,7 +218,7 @@ route('/deck/edit/:id/select-cards', route.requireSubscriptionById('Deck'), func
 
 	Template.deck_cards_grid.events({
 		'click .card': function() {
-			Decks.update(ctx.params.id, {$push: {cards: this._id}});
+			Decks.update(ctx.params.id, { $push: { cards: this._id } });
 		}
 	});
 

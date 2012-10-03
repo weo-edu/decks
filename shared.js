@@ -8,13 +8,13 @@ _.extend(Decks, {
 		//	XXX Make this actuall generate a list of popular decks
 		//	tailored to the user
 		var self = this;
-		return self.find({}, {limit: 5, sort: [['_id', 'desc']]});
+		return self.find({status: 'published'}, { limit: 5, sort: [['_id', 'desc']] });
 	},
 	featured: function(uid) {
 		//	XXX Make this actually generate a list of featured decks
 		//	tailored to the user
 		var self = this;
-		return self.find({}, {limit: 5, sort: [['_id', 'asc']]});
+		return self.find({status: 'published'}, { limit: 5, sort: [['_id', 'asc']] });
 	},
 	findUser: function(uid) {
 		var self = this;
@@ -25,10 +25,10 @@ _.extend(Decks, {
 _.extend(UserDeckInfo, {
 	findUser: function(uid, minRank) {
 		var self = this,
-			query = {user: uid};
+			query = { user: uid };
 
-		if(typeof uid === 'array') query['user'] = {$in: uid};
-		if(minRank !== undefined) query['mastery.rank'] = {$gte: minRank};
+		if(typeof uid === 'array') query['user'] = { $in: uid };
+		if(minRank !== undefined) query['mastery.rank'] = { $gte: minRank };
 		return self.find(query);
 	},
 	findUserDeck: function(uid, did) {
