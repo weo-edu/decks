@@ -2,7 +2,10 @@
 
   var defaults = {
     nCards: 5,
-    cardSelectTime: 60
+    cardSelectTime: 30,
+    playPastTime: 1000,
+    heartbeat_timeout: 2,
+    speedBonusCutoff: .5
   };
 
   Game.route = function(deck, user) {
@@ -16,63 +19,7 @@
   */
 	function Game(id, options) {
 		var self = this;
-    DependsEmitter.call(self);
-    self.depends('start', function() {
-      if(typeof Games !== 'undefined' && Games) {
-        return self.game() && self.deck()
-          && self.me() && self.opponent()
-          && Cards.find(self.deck().cards).count() === self.deck().cards.length;
-      } else {
-        var cur = Meteor.deps.Context.current;
-        Meteor.defer(function() {
-          cur.invalidate();
-        });
-      }
-    });
-
-    self.on('start', function() {
-      if(!self.game())
-        throw new Error('Sorry the specified game does not exist');
-
-      Bonus.setup(self);
-      //  Setup the reactive game_state routeSession variable
-      //  We use a routeSession variable so that we can be reactive
-      //  specific to this value instead of the entire game object.
-      //  
-      //  XXX Put this variable on routeSession once its finished
-      //  There is no need to maintain this once the current route
-      //  has been destroyed.
-      routeSession.set('game_state', self.game().state);
-
-      //  The game creator manages the official state, anyone joining
-      //  the game simply watches it.  This is arbitrary, it could be
-      //  either of them, but we just have to choose one.
-      self.mine() ? self.stateManager() : self.stateWatcher();
-
-      //  If we don't already have a local state, then we joined a new game
-      //  so we set our state to 'await join'
-      self.mystate() || self.mystate('await_join') 
-
-      Game.emit('start', self);
-    });
-
-  
-    self.on('card_select', function(change) {
-      if (self.me().synthetic) return;
-
-      if (change) {
-        self.updatePlayer({card_select_begin: +new Date()});
-      }
-
-      
-      self.selectTimeout = Meteor.setTimeout(function() {
-        self.randomSelect();
-        Meteor.setTimeout(function() {
-          self.pickSelectedCards();
-        }, 1000);
-      }, self.timeToSelect());
-    });
-
+    Emitter.call(self);
 
     self.options = options || {};
 
@@ -91,10 +38,9 @@
         creator: Meteor.user()._id,
         deck: deck,
         users: [Meteor.user()._id, user._id],
-        state: 'await_join'
       };
-      game[Meteor.user()._id] = {};
-      game[user._id] = {};
+      game[Meteor.user()._id] = {state: 'limbo'};
+      game[user._id] = {state: 'limbo'};
       self.id = Games.insert(game);
     } else {
       self.id = id;
@@ -106,18 +52,249 @@
     self.me_id = self.me()._id;
     self.opponent_id = self.opponent()._id;
 
-    self.emit(self.game().state)
+
+    /////////////////////
+    // Event Listeners //
+    /////////////////////
+
+    self.on('play', function(changed) {
+      if (changed) {
+        self.sortProblems();
+        self.nextProblem();
+      }
+
+    });
+
+    self.on('results', function(changed) {
+      if (self.me().synthetic || !changed)
+        return;
+      self.complete();
+    });
+
+    // setup bonusus
+    Bonus.setup(self);
+    // update points after bonuses
+    self.on('answer', self.updatePoints.bind(self));
+
+
+    //////////////////////////////
+    // Time Limits and Timeouts //
+    //////////////////////////////
+
+    self.timeouts = {};
+  
+    self.on('select', function(change) {
+      if (self.me().synthetic) 
+        return;
+
+      if (change)
+        self.updatePlayer({card_select_begin: +new Date()});
+      
+      self.timeouts.select = Meteor.setTimeout(function() {
+        self.randomSelect();
+        Meteor.setTimeout(function() {
+          self.pickSelectedCards();
+        }, 1000);
+      }, Math.max(self.timeToSelect(), 0));
+    });
+
+    self.on('play.', function(change) {
+      if (self.me().synthetic) 
+        return;
+
+      if (change)
+        self.updatePlayer({play_end: +new Date()});
+
+      self.timeouts.play = Meteor.setTimeout(function() {
+        if (self.state() === 'play.')
+          self.dispatch('finished');
+      }, self.timeToPlay());
+    });
+
+    self.on('play.waiting', function(change) {
+      if (self.me().synthetic)
+        return;
+
+      if (change) {
+        self.updatePlayer({play_end: +new Date()});
+        console.log('play_end');
+      }
+
+
+      self.timeouts.heartbeat = Meteor.setTimeout(function() {
+        if (self.state() === 'play.waiting')
+          self.heartbeat();
+      }, self.timeToPlay());
+    });
+
+    self.on('select.waiting', function() {
+      if (self.me().synthetic)
+        return;
+      self.timeouts.heartbeat = Meteor.setTimeout(function() {
+        console.log('heartbeat timeout');
+        if (self.state() === 'select.waiting')
+          self.heartbeat();
+      }, self.timeToSelect(), 0);
+    });
+
 	}
 
-  utils.inherits(Game, DependsEmitter);
+  utils.inherits(Game, Emitter);
 
   _.extend(Game, Emitter.prototype);
   Emitter.call(Game);
 
-
   Game.prototype.start = function() {
     var self = this;
-    self.emit('start');
+    if(!self.game())
+        throw new Error('Sorry the specified game does not exist');
+
+    console.log(self.me_id, 'start');
+
+
+
+    if (self.state() === 'limbo')
+      self.dispatch('joined');
+    
+    self.stateManager();
+    self.monitor();
+
+    /*if (self.pending())
+      self.emit('pending', self.pending());*/
+
+    Game.emit('start', self);
+  }
+
+
+  /////////////
+  // Getters //
+  /////////////
+
+  /*
+    Access the game object for the current game
+  */
+  Game.prototype.game = function(nonReactive) {
+    return Games.findOne(this.id, {reactive: !nonReactive});
+  }
+
+  Game.prototype.get = function(field, notReactive) {
+    var self = this;
+    if ('number' === typeof field)
+      field = '' + field;
+    var game = Games.findOne(self.id, {fields: [field], reactive: !notReactive});
+    return LocalCollection._getField(game,field);
+  }
+
+   /*
+    Get the deck for the current game
+  */
+  Game.prototype.deck = function(notReactive) {
+    return Decks.findOne(this.get('deck', notReactive));
+  }
+
+  Game.prototype.player = function(id) {
+    var self = this;
+    id = id || self.me()._id;
+    return self.get(''+ id);
+  }
+
+  /* 
+    Returns the creator of the game's user id
+  */
+  Game.prototype.creator = function() {
+    return this.get('creator');
+  }
+
+  /*
+    Return your opponent's user object
+  */
+  Game.prototype.opponent = function() {
+    var self = this;
+
+    if(self.options.opponent) {
+      self.opponent = self.options.opponent;
+      return self.opponent();
+    } else
+      return User.lookup(_.without(self.get('users', true), self.me()._id)[0]) || Guru.goat();
+  }
+
+  /*
+  */
+  Game.prototype.me = function() {
+    var self = this;
+
+    if(self.options.me) {
+      self.me = self.options.me;
+      return self.me();
+    } else
+      return Meteor.user();
+  }
+
+
+  ////////////
+  // Invite //
+  ////////////
+
+  /*
+    Send a message to your opponent
+  */
+  Game.prototype.message = function(/* arguments */) {
+    var self = this;
+    var opponent = self.opponent();
+    if(opponent.synthetic === true) {
+      opponent = Meteor.user();
+    }
+
+    return (self.message = function(/* arguments */) {
+      var args = [opponent._id].concat(_.toArray(arguments));
+      return message.apply(window, args);
+    }).apply(self, arguments);
+  }
+
+
+  /*
+    Invite another user to join the game
+  */
+  Game.prototype.invite = function() {
+    this.message('invite:game', this.id);
+    return this;
+  }
+
+
+  /////////////
+  // Helpers //
+  /////////////
+
+
+  Game.prototype.opponentIsGoat = function() {
+    return this.opponent_id === Guru.goat()._id;
+  }
+
+  /*
+    Returns boolean indicating whether or not the current user
+    is the creator of the game
+  */
+  Game.prototype.mine = function() {
+    return this.creator() === this.me()._id;
+  }
+
+  /*
+    Returns the number of cards being used in this game.
+    Currently only looks at the defaults object.
+    XXX: Add run-time config options
+  */
+  Game.prototype.nCards = function() {
+    if (!this.ncards)
+      this.ncards = parseInt(this.deck(true).cardsPerGame || defaults.nCards, 10)
+    return this.ncards;
+  }
+
+  Game.prototype.isCorrect = function(problem){
+    return problem.answer === problem.solution;
+  }
+
+  Game.prototype.isIncorrect = function(problem) {
+    return problem.answer !== undefined && problem.answer !== problem.solution;
   }
 
   /*
@@ -127,12 +304,46 @@
     return '/game/' + this.id;
   }
 
-  /*
-    Access the game object for the current game
-  */
-  Game.prototype.game = function(nonReactive) {
-    return Games.findOne(this.id, {reactive: !nonReactive});
+  Game.prototype.opponentCardStats = function (cardId) {
+    var self = this;
+    if (self.opponentIsGoat()) {
+      return self.get(self.opponent_id,true).stats[cardId];
+      //return self.player(self.opponent_id).stats[cardId];
+    } else {
+      var stat = Stats.userCard(self.opponent_id, cardId);
+      var stats = {
+        accuracy: { name: 'accuracy', val:  stat.accuracy},
+        speed:  { name: 'speed', val: stat.speed },
+        points: { name: 'points', val: Math.round(Stats.points(Stats.regrade(cardId))) },
+        retention: { name: 'retention', val: stat.retention }
+      };
+      return stats;
+    }
   }
+
+
+  /////////////////
+  // Time Limits //
+  /////////////////
+
+  Game.prototype.timeToSelect = function() {
+    var self = this;
+    var select_begin = self.player().card_select_begin;
+    var time_to_select = select_begin + defaults.cardSelectTime * 1000 - new Date();
+    return Math.max(time_to_select, 0);
+  }
+
+  Game.prototype.timeToPlay = function() {
+    var self = this;
+    var play_end = self.player().play_end;
+    var time_to_results = play_end + defaults.playPastTime * 1000 - new Date();
+    return Math.max(time_to_results, 0);
+  }
+
+
+  ////////////////////
+  // Card Selection //
+  ////////////////////
 
   Game.prototype.initSelection = function() {
     var self = this;
@@ -149,10 +360,10 @@
 
   Game.prototype.numSelected = function(val) {
     var self = this;
-    if(val !== undefined)
-      self.updatePlayer({numSelected: val});
-    else {
-      var player = self.game(true)[self.me_id];
+    if(val !== undefined) {
+      self.updatePlayer({numSelected: val});      
+    } else {
+      var player = self.get(self.me_id,true);
       return parseInt(player.numSelected, 10);
     }
   }
@@ -205,7 +416,6 @@
   Game.prototype.incrementSelectedCard = function(cardId) {
     var self = this;
     var numSelected = self.selected_cards.get(cardId);
-    console.log('numSelected', self.numSelected());
     if (self.numSelected() < self.nCards()) {
       self.selected_cards.set(cardId, numSelected + 1 );
       self.numSelected(self.numSelected() + 1);
@@ -227,108 +437,185 @@
 
   Game.prototype.pickSelectedCards = function() {
     var self = this;
-    console.log('numSelected', self.numSelected(), 'nCards', self.nCards(), typeof self.numSelected(), typeof self.nCards());
     if(self.numSelected() !== self.nCards())
       return false;
 
-    self.selectTimeout && Meteor.clearTimeout(self.selectTimeout);
-    self.selectTimeout = null;
-    self.problems(self.selectedCards());
+    self.timeouts.select && Meteor.clearTimeout(self.timeouts.select);
+    delete self.timeouts.select
+    self.setProblems(self.selectedCards());
+    self.dispatch('selected');
     return true;
   }
 
-  Game.prototype.timeToSelect = function() {
-    var self = this;
-    var select_begin = self.player().card_select_begin;
-    var time_to_select = select_begin + defaults.cardSelectTime * 1000 - new Date();
-    return Math.max(time_to_select, 0);
-  }
 
-
-  /*
-    Send a message to your opponent
-  */
-  Game.prototype.message = function(/* arguments */) {
-    var self = this;
-    var opponent = self.opponent();
-    if(opponent.synthetic === true) {
-      opponent = Meteor.user();
-    }
-
-    return (self.message = function(/* arguments */) {
-      var args = [opponent._id].concat(_.toArray(arguments));
-      return message.apply(window, args);
-    }).apply(self, arguments);
-  }
-
-
-  /*
-    Get the deck for the current game
-  */
-  Game.prototype.deck = function(nonReactive) {
-    return Decks.findOne(this.game(nonReactive).deck);
-  }
-
-  /*
-    Invite another user to join the game
-  */
-  Game.prototype.invite = function() {
-    this.message('invite:game', this.id);
-    return this;
-  }
+  ////////////////////////
+  // Problem Management //
+  ////////////////////////
 
   /*
     Returns either the current problem or the problem with the
     specified id
   */
-  Game.prototype.problem = function(id) {
+  Game.prototype.problem = function(id, playerId) {
+    return this.problemByIdx(this.problemIdx(id,playerId), playerId);
+  }
+
+  Game.prototype.problemIdx = function(problemId, playerId) {
     var self = this;
-    var p_idx = 0;
-    var p = _.find(self.problems(), function(p, idx) {
-      p_idx = idx;
-      return (id && p._id === id) || typeof p.answer === 'undefined';
+    if ('object' === typeof problemId)
+      problemId = problemId._id;
+
+    playerId = playerId || self.me_id;
+
+    if (!self._problem_idxs)
+      self._problem_idxs = {};
+
+    if (!self._problem_idxs[playerId]) {
+      self._problem_idxs[playerId] = {};
+      var problems = self.problems(playerId);
+      _.each(problems, function(problem,idx) {
+        self._problem_idxs[playerId][problem._id] = idx;
+      });
+    }
+    return self._problem_idxs[playerId][problemId];
+  }
+
+  Game.prototype.problemByIdx = function(idx, playerId) {
+    playerId = playerId || this.me_id;
+    return this.get(playerId + '.problems.' + idx);
+  }
+
+  Game.prototype.currentProblem = function(player_id) {
+    var self = this;
+    player_id = player_id || self.me_id;
+
+    var problem_idx = this.get((player_id || this.me_id)+'.problem');
+    if (problem_idx === undefined)
+      return;
+    else
+      return this.problemByIdx(problem_idx, player_id);
+  }
+
+  Game.prototype.currentSpeed = function() {
+    var self = this;
+    var problem = self.currentProblem();
+    var time = +new Date() - problem.startTime;
+    time /= 1000; // in seconds
+    var cardStatistics = Stats.cardTime(problem.card_id);
+    var speed = 1 - Stats.inverseGaussCDF(time, cardStatistics.mu, cardStatistics.lambda);
+    speed = (speed - defaults.speedBonusCutoff) / ( 1 - defaults.speedBonusCutoff);
+
+    speed = Math.max(speed, 0);
+
+    console.log('speed', speed);    
+    return utils.round(speed,4);
+  }
+
+  Game.prototype.setCurrentProblem = function(idx) {
+    this.updatePlayer({problem: idx});
+  }
+
+  Game.prototype.nextProblem = function() {
+    var self = this;
+    var problem_idx = this.get(self.me_id + '.problem');
+    if (problem_idx === undefined)
+      problem_idx = 0;
+    else if (self.problemByIdx(problem_idx).answer !== undefined)
+      problem_idx++;
+
+    var num_problems = self.problems().length;
+
+    // dont't do anything if next problem is called too many times
+    if (problem_idx > num_problems)
+      return;
+
+    self.setCurrentProblem(problem_idx);
+
+    // when no more problems are left the game is finished
+    if (problem_idx === num_problems) {
+      console.log('dispatch finished', self.me_id);
+      self.dispatch('finished');
+      return;
+    }
+
+    var problem = self.currentProblem();
+    if (! problem.startTime) {
+      self.updateProblem(problem,{startTime: +new Date()});
+    }
+
+    self.emit('next');
+    return problem;
+
+  }
+
+
+  ////////////////////
+  // Update Helpers //
+  ////////////////////
+
+  Game.prototype._updateProblem = function(problem, mod) {
+    var self = this;
+    var update = {}
+    var p_idx = self.problemIdx(problem);
+    if (p_idx === undefined)
+      throw new Error('didnt find problem idx');
+    _.each(mod, function(val, field) {
+      update[self.me_id + '.problems.' + p_idx + '.' + field] = val;
     });
+    return update;
+  }
 
-
-    if (p) {
-      if (! p.startTime) {
-        var update = {};
-        update[self.me()._id+'.problems.'+p_idx + '.startTime'] = +new Date();
-        Games.update(self.game()._id, {$set: update});
-      }
-    } else
-      self.mystate('await_results');
-    return p;
+  Game.prototype.updateProblem = function(problem, mod) {
+    var self = this;
+    var update = self._updateProblem(problem, mod);
+    Games.update(self.get('_id'), {$set: update});
   }
 
   /*
-    Returns the number of cards being used in this game.
-    Currently only looks at the defaults object.
-    XXX: Add run-time config options
+    Returns the list of problemized cards
+    or sets them for the opponent
   */
-  Game.prototype.nCards = function() {
-    return parseInt(this.deck(true).cardsPerGame || defaults.nCards, 10);
-  }
-
-  Game.prototype.isCorrect = function(problem){
-    return problem.answer === problem.solution;
-  }
-
-  Game.prototype.player = function(id) {
+  Game.prototype.problems = function(player_id) {
     var self = this;
-    id = id || self.me()._id;
-    return self.game()[id];
+    return self.get((player_id || self.me_id) + '.problems');
+  }
+
+  Game.prototype.setProblems = function(cards) {
+    var self = this;
+  
+    var problems = _.map(cards, function(c) { 
+      var problem = problemize(Cards.findOne(c));
+      // allows players to sort in same order
+      problem.order = Math.random();
+      self.emit('problemInstantiated', problem);
+      return problem; 
+    });
+
+    var update = {$pushAll: {}};
+    update.$pushAll[self.me_id + '.problems'] = problems;
+    update.$pushAll[self.opponent_id + '.problems'] = problems;
+    self.update(update);
+  }
+
+  Game.prototype.sortProblems = function() {
+    var self = this;
+    var problems = self.get(self.me_id + '.problems');
+    problems = _.sortBy(problems, function(problem) {
+      return problem.order + problem._id;
+    });
+    self.updatePlayer({
+      problems: problems
+    });
   }
 
   Game.prototype.updatePlayer = function(o, id) {
     var self = this,
       update = {$set: {}};
 
-    id = id || self.me()._id;
+    id = id || self.me_id;
     _.each(o, function(val, key) {
       update['$set'][id + '.' + key] = val;
     });
-
     self.update(update);
   }
 
@@ -336,54 +623,134 @@
     Games.update(this.id, update, cb);
   }
 
-  Game.prototype.bonus = function(pts, reason, problem) {
-    var self = this;
-    var bonuses = problem ? (problem.bonuses || {}) : (self.player().bonuses || {});
-    bonuses[reason] = bonuses[reason] || 0;
-    bonuses[reason] += pts;
 
-    if(problem) {
-      problem.bonuses = bonuses;
-      console.log('problem bonuses', bonuses);
-      self.updateProblem(problem);
-    } else {
-      self.updatePlayer({bonuses: bonuses});
-    }
+  ////////////////////
+  // Answer Problem //
+  ////////////////////
+
+  /*
+    Record an answer to a problem
+  */
+  Game.prototype.answer = function(answer) {
+    var self = this,
+      problem = self.currentProblem();
+
+    problem.answer = answer;
+    if (!problem.time) 
+      problem.time = (+new Date()) - problem.startTime;
+
+    var correct = self.isCorrect(problem);
+    
+
+    problem.points = correct ? Stats.points(Stats.regrade(problem.card_id)) : 0;
+    
+    self.updateProblem(problem, {
+      answer: answer, 
+      points: problem.points, 
+      time: problem.time
+    });
+
+    self.emit('answer', problem, correct);
+
+    return correct;
+  }
+
+
+  ////////////////////////
+  // Point Accumulation //
+  ////////////////////////
+
+  Game.prototype.bonus = function(points, reason, problem) {
+    var self = this;
+
+    //problem update
+    problem.bonuses = problem.bonuses || {};
+    var bonuses = problem.bonuses;
+    bonuses[reason] = points;
+
+    //db update
+    var mod = {};
+    mod['bonuses.' + reason] = points;
+    self.updateProblem(problem, mod);
+  }
+
+  Game.prototype.multiplier = function(mult, problem) {
+    var self = this;
+    var problem_update = self._updateProblem(problem, {multiplier: mult});
+    var inc = {};
+    inc[self.me_id + '.multiplier'] = mult;
+    self.update({$inc: inc, $set: problem_update});
+  }
+
+  Game.prototype.getMultiplier = function() {
+    var self = this;
+    return self.get(self.me_id + '.multiplier') || 0;
+  }
+
+  Game.prototype.resetMultiplier = function() {
+    var self = this;
+    var update = {$set: {}};
+    update.$set[self.me_id + '.multiplier'] = 0;
+    self.update(update);
+  }
+
+  Game.prototype.updatePoints = function(problem) {
+    var self = this;
+    var points = self.get(self.me_id + '.points');
+    var multiplier = 1 + self.get(self.me_id + '.multiplier');
+    var bonus = _.reduce(problem.bonuses, function(memo, bonus) {
+      return memo + bonus;
+    }, 0);
+    points += (problem.points || 0) * multiplier + bonus;
+    self.updatePlayer({points: points});
   }
 
   Game.prototype.points = function(uid) {
     var self = this;
-    uid = uid || self.me()._id;
-
-    var points = _.reduce(self.player(uid).problems, function(memo, problem) {
-      return memo + (problem.points || 0) + _.reduce(problem.bonuses, function(memo, bonus) {
-        return memo + bonus;
-      }, 0);
-    }, 0);
-
-    points += _.reduce(self.player(uid).bonuses, function(memo, bonus) {
-      return memo + bonus;
-    }, 0);
-
-    return points;
+    uid = uid || self.me_id;
+    return self.get(uid + '.points') || 0;
   }
- 
-  /*  
-    Return the number of problems yet to be
-    answered
-  */
-  Game.prototype.answered = function(id) {
-    id = id || this.me()._id;
-    var problems = this.player(id).problems,
-      rest = _.filter(problems, function(p) {
-        return p.hasOwnProperty('answer');
-      });
-    return rest && rest.length;
+
+
+  //////////////
+  // End Game //
+  //////////////
+  
+  Game.prototype.complete = function() {
+    var self = this;
+
+    var game = Games.findOne(self.id);
+    game.type = 'game';
+    game.title = self.deck().title + ': ' + self.me().username + ' vs ' + self.opponent().username;
+    var adverb = null;
+    var winner = self.winner();
+    if (winner === null)
+      adverb = 'andTied';
+    else if (winner.username === Meteor.user().username)
+      adverb = 'andWon';
+    else
+      adverb = 'andLost';
+    console.log('complete event');
+    event('complete', game, {
+      adverbs: adverb
+    });
+    self.emit('complete');
   }
 
   Game.prototype.winner = function() {
     var self = this;
     var res = self.results();
+
+    var state = self.state();
+    var opState = self.opponentState();
+    if (state === 'quit') {
+      if (opState !== 'quit')
+        return self.opponent();
+      else 
+        return null;
+    } else if (opState === 'quit') {
+      return self.me();
+    }
 
     if(Math.round(res.me.points) === Math.round(res.opponent.points))
       return null;
@@ -406,286 +773,237 @@
       };
     } else {
       var problems = self.player(id).problems,
-        correct = 0;
+        correct = 0,
+        incorrect = 0;
 
       _.each(problems, function(p, key) {
         if(self.isCorrect(p)) {
           correct++;
+        } else if (self.isIncorrect(p)) {
+          incorrect++;
         }
       });
 
       return {
         correct: correct,
-        incorrect: problems.length - correct,
+        incorrect: incorrect,
         total: problems.length,
         points: self.points(id)
       };
     }
   }
 
-  Game.prototype.lastAnsweredProblem = function() {
-    var self = this;
-    return _.find(self.problems().reverse(), function(p, i) {
-      return typeof p.answer !== 'undefined';
-    });
-  }
-
-  Game.prototype.updateProblem = function(problem) {
-    var self = this,
-      idx = null,
-      problems = self.problems();
-
-    _.find(problems, function(p, i) {
-      if(p._id === problem._id) {
-        problems[i] = problem;
-        return true;
-      }
-    });
-
-    self.updatePlayer({problems: problems});
-  }
-
-  /*
-    Record an answer to a problem
-  */
-  Game.prototype.answer = function(answer) {
-    var self = this,
-      problem = self.problem();
-
-    problem.answer = answer;
-
-    if (!problem.time) problem.time = (+new Date()) - problem.startTime;
-    console.log('problem time', problem.time);
-
-    var correct = self.isCorrect(problem);
-    
-
-    problem.points = correct ? Stats.points(Stats.regrade(problem.card_id)) : 0;
-    
-    self.emit('answer', problem, correct);
-
-    self.updateProblem(problem);
-    self.updatePlayer({
-      last_answer: new Date(),
-      points: self.player().points + problem.points
-    });
-
-    return correct;
-  }
-
-  /*
-    Returns the list of problemized cards
-    or sets them for the opponent
-  */
-  Game.prototype.problems = function(cards) {
-    var self = this,
-      deck = self.deck(),
-      update = { $set: {} };
-
-    if(cards) {
-      if(cards === 'random') {
-        cards = _.map(_.range(self.nCards()), function() {
-          return deck.cards[utils.rand_int(deck.cards.length)];
-        });
-      } else {
-        cards = _.shuffle(cards);
-      }
-
-      self.updatePlayer({
-        problems: _.map(cards, function(c) { return problemize(Cards.findOne(c)); })
-      }, 
-      self.opponent()._id);
-      self.mystate('await_select');
-    }
-
-    return self.player().problems;
-  }
-
-  /*
-    Return your opponent's user object
-  */
-  Game.prototype.opponent = function() {
-    var self = this;
-
-    if(self.options.opponent) {
-      self.opponent = self.options.opponent;
-      return self.opponent();
-    } else
-      return User.lookup(_.without(self.game().users, self.me()._id)[0]) || Guru.goat();
-  }
-
-  Game.prototype.opponentIsGoat = function() {
-    return this.opponent_id === Guru.goat()._id;
-  }
-
-  Game.prototype.opponentCardStats = function (cardId) {
-    var self = this;
-    if (self.opponentIsGoat()) {
-      return self.game(true)[self.opponent_id].stats[cardId];
-      //return self.player(self.opponent_id).stats[cardId];
-    } else {
-      var userStats = UserCardStats.findOne({uid: self.opponent_id, cid: cardId});
-      var accuracy = 0;
-      var retention = 0;
-      var speed = 0;
-
-      if (userStats && userStats.correct > 0) {
-        var user_mu = userStats.correct_time / userStats.correct; // in ms
-        user_mu /= 1000; // in seconds
-
-        var cardStatistics = Stats.cardTime(cardId);
-
-        // speed is cumulative density at point user_average_speed on the normal
-        // distribution defined by the card statistics
-        speed = 1 - Stats.inverseGaussCDF(user_mu,cardStatistics.mu,cardStatistics.lambda);
-
-        var t = new Date() - userStats.last_played;
-        t = t/(1000*60*60*24);
-        retention = Math.exp(-t / userStats.correct);
-        accuracy = userStats.correct / userStats.attempts
-      }
-      
-      var stats = {
-        accuracy: { name: 'accuracy', val:  accuracy},
-        speed:  { name: 'speed', val: speed },
-        points: { name: 'points', val: Math.round(Stats.points(Stats.regrade(cardId))) },
-        retention: { name: 'retention', val: retention }
-      };
-      return stats;
-    }
-  } 
-
-  /*
-  */
-  Game.prototype.me = function() {
-    var self = this;
-
-    if(self.options.me) {
-      self.me = self.options.me;
-      return self.me();
-    } else
-      return Meteor.user();
-  }
-
-  /* 
-    Returns the creator of the game's user id
-  */
-  Game.prototype.creator = function() {
-    return this.game().creator;
-  }
-
-  /*
-    Returns boolean indicating whether or not the current user
-    is the creator of the game
-  */
-  Game.prototype.mine = function() {
-    return this.creator() === this.me()._id;
-  }
-
-  /*
-  */
-  Game.prototype.mystate = function(state) {
-    return this.localState(this.me()._id, state);
-  }
-
-  Game.prototype.opponentState = function(state) {
-    return this.localState(this.opponent()._id, state);
-  }
-
-  
-
-  /*
-  */
-  Game.prototype.localState = function(uid, state) {
-    var self = this;
-    state && self.updatePlayer({state: state}, uid);
-    return self.player(uid).state;
-  }
-
-  /*
-    Reactive function that returns and/or sets
-    the current state of the game.  Only the creator
-    of the game may change its state.  Updating the
-    game state also updates each player's local state.
-  */
-	Game.prototype.state = function(state) {
-    var self = this;
-    if(state) {
-      var update = {$set: {'state': state}};
-      update['$set'][self.me()._id + '.state'] = state;
-      update['$set'][self.opponent()._id + '.state'] = state;
-      self.update(update);
-      if(!routeSession.equals('game_state', state)) {
-        routeSession.set('game_state', state);
-        if (state === 'results')
-          self.complete();
-      }
-        
-    }
-
-    return routeSession.get('game_state');
-	}
-
-  Game.prototype.stateWatcher = function() {
-    var self = this;
-    self.stateHandle = ui.autorun(function() {
-      //XXX only listen to game state
-      var state = self.game().state;
-      if (self.opponentState() === 'await_results') {
-        self.emit('opponentDone');
-      }
-      if(!routeSession.equals('game_state', state)) {
-        routeSession.set('game_state', state);
-        self.emit(state, true);
-      }
-    });
-  }
-
-
-  Game.prototype.complete = function() {
-    var self = this;
-
-    var game = Games.findOne(self.id);
-    game.type = 'game';
-    game.title = self.deck().title + ': ' + self.me().username + ' vs ' + self.opponent().username;
-    var adverb = null;
-    var winner = self.winner();
-    if (winner === null)
-      adverb = 'andTied';
-    else if (winner.username === Meteor.user().username)
-      adverb = 'andWon';
-    else
-      adverb = 'andLost';
-    event('complete', game, {
-      adverbs: adverb
-    });
-    self.emit('complete');
+  Game.prototype.quit = function() {
+    this.dispatch('quit');
   }
 
   Game.prototype.stop = function() {
     var self = this;
     self.stateHandle && self.stateHandle.stop();
     self.stateHandle = null;
+    self.monitorHandle && self.monitorHandle.stop();
+    self.monitorHandle = null;
+    self.clearTimeouts();
     self.emit('stop');
+  }
+
+  Game.prototype.clearTimeouts = function(timeouts) {
+    var self = this;
+    timeouts = timeouts || self.timeouts;
+    _.each(timeouts, function(timeout, name) {
+      if ('object' === typeof timeout && timeout !== null)
+        self.clearTimeouts(timeout);
+      else
+        timeout && Meteor.clearTimeout(timeout);
+      delete self.timeouts[name];
+    });
+  }
+
+
+  ////////////////
+  // Heartbeats //
+  ////////////////
+
+  Game.prototype.heartbeat = function(timeout) {
+    var self = this;
+    var h = {
+      _id: Meteor.uuid(),
+      received: false,
+      initiator: self.me_id,
+      time: +new Date(),
+      timeout: (timeout || defaults.heartbeat_timeout) * 1000
+    };
+
+    var update = {$set: {}};
+    update.$set['heartbeats.'+ h._id] = h;
+    self.update(update);
+  }
+
+  Game.prototype.monitor = function() {
+    var self = this;
+    self.timeouts.heartbeats = {};
+    self.monitorHandle = ui.autorun(function() {
+      var update = {};
+      var heartbeats = self.get('heartbeats');
+      _.each(heartbeats, function(h) {
+        if (h.initiator === self.me_id) {
+          if (h.received) {
+            //if opponenet received heartbeat, clear it
+            if (!update.$unset)
+              update.$unset = {};
+            update.$unset['heartbeats.' + h._id] = true
+            Meteor.clearTimeout(self.timeouts.heartbeats[h._id]);
+            delete self.timeouts.heartbeats[h._id]
+          } else {
+            // if opponent hasnt received heartbeat, 
+            // setTimeout for `opdead` event
+            if (!self.timeouts.heartbeats[h._id]) {
+              self.timeouts.heartbeats[h._id] = Meteor.setTimeout(function() {
+                var update = {};
+                update.$unset = {};
+                update.$unset['heartbeats.' + h._id] = true
+                self.update(update);
+                delete self.timeouts.heartbeats[h._id]
+                self.dispatch('opdead');
+              }, Math.max(h.time + h.timeout - new Date()), 0);
+            }
+          }
+        } else if (!h.received) {
+          if (!update.$set)
+            update.$set = {};
+          update.$set['heartbeats.' + h._id + '.received'] = true;
+        } 
+      });
+      if (update.$set || update.$unset)
+        self.update(update);
+    });
+  }
+
+
+  ///////////////////
+  // State machine //
+  ///////////////////
+  
+  /*
+  */
+  Game.prototype.state = function(state) {
+    var self = this;
+    if (state) {
+      self.updatePlayer({state: state}, self.me_id);
+      self.emit(state, true);
+    }
+    return self.get(self.me_id + '.state');
+  }
+
+  Game.prototype.opponentState = function() {
+    return this.get(this.opponent_id + '.state');
+  }
+
+  var stateTemplateMap = {
+    'limbo': 'cards_select',
+    'select': 'cards_select',
+    'play': 'deck_play',
+    'results': 'end_game',
+    'canceled': 'game_canceled',
+    'quit': 'game_quit',
+
+  };
+  Game.prototype.renderState = function() {
+    var state = this.mainState();
+    if (state === 'quit') {
+      var opponentState = this.opponentState().split('.')[0];
+      return stateTemplateMap[opponentState];
+    } else
+      return stateTemplateMap[state];
+  }
+
+  Game.prototype.mainState = function() {
+    return this.state().split('.')[0];
+  }
+
+  Game.prototype.dialogState = function() {
+    var state = this.state();
+    if (state === 'quit')
+      return 'quit'
+    else
+      return this.state().split('.')[1];
+  }
+
+  Game.prototype.dispatch = function(type) {
+    var self = this;
+    var e = {
+      _id: Meteor.uuid(),
+      time: +new Date(), 
+      type: type, 
+      actor: self.me_id,
+      processed: {}
+    };
+    var update = {$set: {}};
+    update.$set['events.'+ e._id] = e;
+    self.update(update);
+  }
+
+  Game.prototype.processEvents = function() {
+    var self = this;
+    var events = self.get('events');
+    var unprocessed = [];
+    _.each(events, function(e, id) {
+      if (!e.processed[self.me_id]) {
+        var update = {$set: {}};
+        update.$set['events.' + id + '.processed.' + self.me_id] = true;
+        self.update(update);
+        unprocessed.push(e);
+      }
+    });
+    return _.sortBy(unprocessed, 'time');
   }
 
   Game.prototype.stateManager = function() {
     var self = this;
     var transitionTable = [
-      // game state   local state      local state      new state
-      ['await_join',  'await_join',    'await_join',    'card_select'],
-      ['card_select', 'await_select',  'await_select',  'play'],
-      ['play',        'await_results', 'await_results', 'results']//,
-      //['results', null, null, _.bind(self.destroy, self)]
+      //state    event          new state
+      ['limbo', 'me.joined', 'limbo.waiting'],
+      ['limbo', 'op.joined', 'limbo.'],
+      ['limbo.waiting', 'op.joined', 'select'],
+      ['limbo.', 'me.joined', 'select'],
+      ['select', 'me.selected', 'select.waiting'],
+      ['select', 'op.selected', 'select.'],
+      ['select', 'op.quit', 'canceled'],
+      ['select.', 'op.quit', 'canceled'],
+      ['select.', 'op.opdead', 'canceled'],
+      ['select.waiting', 'op.selected', 'play'],
+      ['select.waiting', 'op.quit', 'canceled'],
+      ['select.waiting', 'me.opdead', 'canceled'],
+      ['select.', 'me.selected', 'play'],
+      ['play', 'me.finished', 'play.waiting'],
+      ['play', 'op.finished', 'play.'],
+      ['play', 'op.quit', 'play.continue'],
+      ['play.', 'me.finished', 'results'],
+      ['play.', 'op.opdead', 'results'],
+      ['play.waiting', 'op.finished', 'results'],
+      ['play.waiting', 'op.quit', 'results'],
+      ['play.waiting', 'me.opdead', 'results'],
+      ['play.continue', 'me.continue', 'play.'],
+      ['play.continue', 'me.end', 'results'],
+      ['*', 'me.quit', 'quit']
     ];
-
-    var machine = new StateMachine(transitionTable, function(new_state) {
-      self.state(new_state);
-      self.emit(new_state, true)
+    var machine = new StateMachine(transitionTable, {
+      next: function(new_state) {
+        if (self.state() !== new_state)
+          self.state(new_state);
+      },
+      miss_logs: true
     });
 
+    self.emit(self.state(), false);
+
     self.stateHandle = ui.autorun(function() {
-      machine.state([self.state(), self.mystate(), self.opponentState()]);
+      var events = self.processEvents();
+      _.each(events, function(e) {
+        var e_string = e.actor === self.me_id ? 'me.' : 'op.';
+        e_string += e.type;
+        machine.newEvent(self.state(), e_string);
+      });
     });
   }
 

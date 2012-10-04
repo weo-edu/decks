@@ -2,73 +2,54 @@
 
 	var bonuses = [
 		{
-			setup: function(game) {
-				var self = this;
-				game.on('answer', _.bind(nInARow(5), self));
+			baseProbability: .25,
+			init: function(problem) {
+				problem.critical = Math.random();
 			},
-			name: 'spree',
-			message: '5 Card Spree!',
-			points: function(problems) {
-				var points = .1 * _.reduce(problems, function(memo, problem) {
-					return memo + problem.points;
+			shouldAward: function(problem, correct) {
+				if(!correct) 
+					return;
+				var self = this;
+				//	Scale the probability up each time the card appears
+				//	Initialize to 1 because the answer event gets emitted
+				//	before the answer is applied to the problem
+				var problem_found = false;
+				var n = _.reduce(self.game.problems(), function(memo, p) {
+					if (problem_found) return memo;
+					if (problem._id === p._id) problem_found = true;
+					return memo + (p.card_id === problem.card_id ? 1 : 0);
 				}, 0);
-				console.log('spree', points / 5)
-				return points / 5;
-			}
-		},
-		{
-			onProblem: true,
-			baseProbability: .05,
-			setup: function(game) {
-				var self = this;
-				game.on('answer', function(problem, correct) {
-					if(!correct) return;
 
-					//	Scale the probability up each time the card appears
-					//	Initialize to 1 because the answer event gets emitted
-					//	before the answer is applied to the problem
-					var problem_found = false;
-					var n = _.reduce(self.game.problems(), function(memo, p) {
-						if (problem_found) return memo;
-						if (problem._id === p._id) problem_found = true;
-						return memo + (p.card_id === problem.card_id ? 1 : 0);
-					}, 0);
-
-					var probability = Math.min(self.baseProbability * n, .5);
-					if(Math.random() < probability) {
-						console.log('award critical', game.me()._id);
-						self.award(problem);
-					}
-				});
+				var probability = Math.min(self.baseProbability * n, .5);
+				if(problem.critical < probability)
+					return true;
 			},
-			points: function(problem) {
-				console.log('critical', 2 * problem.points);
+			value: function(problem) {
 				return 2 * problem.points;
 			},
 			name: 'critical',
 			message: 'Critical!'
 		},
 		{
-			onProblem: true,
-			setup: function(game) {
-				var self = this;
-				game.on('answer', function(problem, correct) {
-					if (!correct) return;
-
-					self.award(problem);
-
-				});
+			type: 'multiplier',
+			shouldAward: function(problem, correct) {
+				return correct;
 			},
-			points: function(problem) {
+			value: function(problem) {
 				var time = problem.time / 1000;
 				var cardStatistics = Stats.cardTime(problem.card_id);
-				console.log('card Statistics', cardStatistics);
 				var speed = 1 - Stats.inverseGaussCDF(time, cardStatistics.mu, cardStatistics.lambda);
-				console.log('time bonus', problem.points, time, problem.points * speed);
-				return problem.points * speed;
 
+				var cutoff = .5
+				var max_inc = .1;
+				console.log('speed', speed);
+				if (speed > cutoff)
+					return utils.round((speed - cutoff) / (1 - cutoff) * max_inc, 2);
+				else
+					return 0;
 			},
-			name: 'time',
+			name: 'multiplier',
+			message: 'Multiplier!',
 			notify: function(){}
 		}
 	];
@@ -90,27 +71,39 @@
 	}
 
 	Bonus.setup = function(game) {
-		_.each(bonuses, function(b, i) {
-			b = new Bonus(b, game);
-			b.setup(game);
+		_.each(bonuses, function(bonus) {
+			var b = Bonus.create(bonus, game);
+			game.on('answer', function(problem, correct) {
+				if (b.shouldAward(problem, correct))
+					b.award(problem);
+				else if (b.miss)
+					b.miss(problem);
+			});
+			game.on('problemInstantiated', function(problem) {
+				if (b.init)
+					b.init(problem);
+			});
 		});
 	}
 
-	function Bonus(o, game) {
+	function Bonus(bonus, game) {
 		var self = this;
-		if(! (self instanceof Bonus)) {
-			return new Bonus(o);
-		}
-
-		_.extend(self, o);
+		_.extend(self, bonus);
 		self.game = game;
 	}
 
+	Bonus.create = function(bonus, game) {
+		if (!bonus.type)
+			return new Bonus(bonus, game);
+		else if (bonus.type === 'multiplier')
+			return new Multiplier(bonus, game);
+	}
+
 	Bonus.prototype.award = function(problem) {
-		var self = this,
-			points = typeof self.points === 'function' ? self.points(problem) : self.points;
+		var self = this;
+		var points = typeof self.value === 'function' ? self.value(problem) : self.value;
 		points = Math.round(points);
-		self.game.bonus(points, self.name, self.onProblem ? problem : undefined);
+		self.game.bonus(points, self.name, problem);
 		self.notify(points);
 	}
 
@@ -142,6 +135,25 @@
 				}, 80, 'easeInSine');
 		}
 	}
+
+	function Multiplier(o, game) {
+		Bonus.call(this, o, game);
+	}
+
+	utils.inherits(Multiplier, Bonus);
+
+	Multiplier.prototype.award = function(problem) {
+		var self = this;
+		var mult_inc = self.value(problem);
+		self.game.multiplier(mult_inc, problem);
+		self.notify(mult_inc);
+	}
+
+	Multiplier.prototype.miss = function() {
+		var self = this;
+		self.game.resetMultiplier();
+	}
+
 
 	global.Bonus = Bonus;
 })(typeof window === 'undefined' ? exports : window);

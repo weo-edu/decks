@@ -19,7 +19,6 @@ route('/deck/browse',function() {
 
 	Template.category.decks = function(name) {
 		var feed = Decks.feed(this, Meteor.user()._id);
-		console.log('feed', this);
 		return feed.fetch();
 	}
 

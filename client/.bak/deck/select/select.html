@@ -22,6 +22,8 @@
 			{{/constant}}
 			{{> card_selection cards}}
 
+			<div class="quit-button">quit</div>
+
 			<div class='randomize-button'>RANDOM</div>
 
 			<div class='play-button'>GO</div>
@@ -31,16 +33,45 @@
 	</div>
 </template>
 
+<template name='game_canceled'>
+	<h1>Game canceled</h1>
+	{{> select_dialog}}
+</template>
+
+<template name='game_quit'>
+	<h1>Quit</h1>
+</template>
+
 <template name="select_dialog">
 	{{#ui init}}
 		{{{ message }}}
 	{{/ui}}
 </template>
 
-<template name="await_select">
+<template name="select_waiting">
 	<h2>One Sec...</h2>
 	<div class='inner-await'>
 		Waiting for the other player to finish selecting your cards
+		<center>
+			<img style='margin: 15px 0 -12px;' src='/app!common/img/wait.gif' />
+		</center>
+	</div>
+</template>
+
+<template name="limbo_waiting">
+	<h2>One Sec...</h2>
+	<div class='inner-await'>
+		Waiting for the other player to join the game
+		<center>
+			<img style='margin: 15px 0 -12px;' src='/app!common/img/wait.gif' />
+		</center>
+	</div>
+</template>
+
+<template name="quit_overlay">
+	<h2>You Quit</h2>
+	<div class='inner-await'>
+		Watch the other player
 		<center>
 			<img style='margin: 15px 0 -12px;' src='/app!common/img/wait.gif' />
 		</center>
