@@ -5,22 +5,14 @@
 </head>
 
 <body>
-	<div id="content">
+	{{> sun}}
+	<div id="content" class='{{currentPage}}'>
 		<div class="container">
 			{{{render currentPage}}}
 		</div>
 	</div>
 </body>
 
-
-<template name='greeting'>
-	{{#if currentUser}}
-		Hi, {{currentUser.username}}
-	{{else}}
-		Hi, guest
-	{{/if}}
-</template>
-
-<template name='back_button'>
-	<div class='back-button'></div>
+<template name='sun'>
+	<img id='sun' src='/app!decks/img/sun.png' />
 </template>

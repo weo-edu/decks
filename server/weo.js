@@ -229,7 +229,9 @@ Meteor.startup(function() {
   });
 
   Meteor.publish('UserDeckInfo', function(uid, did) {
-    if(typeof uid === 'array') uid = _.without(uid, 1);
+    console.log('pubish', uid, did);
+    if(_.isArray(uid)) 
+        uid = _.without(uid, 1);
     if(did) 
         return UserDeckInfo.findUserDeck(uid, did);
     else

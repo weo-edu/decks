@@ -1,9 +1,69 @@
-//
-route('/', function(ctx, next) {
-  route.redirect('/deck/start');
-});
-
 Meteor.subscribe('Decks');
 Meteor.subscribe('Cards');
 Meteor.subscribe('UserDeckInfo', Meteor.user()._id);
 Meteor.subscribe('UserDecks', Meteor.user()._id);
+
+Template.level_progress.helpers({
+	level: function() {
+		var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
+		return user.level%60 + 1;
+	},
+	stage: function(){
+		var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
+		var stage = Math.ceil((user.level+1)/60)
+		if(stage % 2 == 0)
+			return 'stage-' + (stage-1) + ' half';
+		else 
+			return 'stage-' + stage;
+	},
+	progress: function() {
+		var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
+		var levelPoints = Stats.levelPoints(user.level) - user.points;
+		var levelPointsNeeded = Stats.levelPoints(user.level);
+		return (levelPoints / levelPointsNeeded)*100;
+	}
+});
+
+Template.dojo.created = function() {
+	this.doResize = function(){
+		var height = $(window).height() - $('#nav').height();
+		$('#browse-view').outerHeight(height, true);
+	}
+}
+
+Template.dojo.rendered = function() {
+	if (this.firstRender) {
+		this.doResize();
+		$(window).resize(this.doResize);
+	}
+}
+
+Template.dojo.destroyed = function() {
+	$(window).unbind('resize', this.doResize);
+}
+
+function animateBg() {
+	var sun = document.getElementById('sun'),
+		deg = 0;
+	
+	Meteor.defer(function(){
+		sun.addEventListener(transitionEndEvent, rotateSun);	
+		rotateSun();	
+	})
+
+	function rotateSun() {
+		deg +=360;
+		$(sun).css(transitionPrefix, 'all 200s linear');
+		$(sun).css(transformPrefix, 'rotate(' + deg + 'deg)');
+	}	
+}
+
+function hideTome() {
+	// Session.set('animate_tome', false);
+	// if( Session.get('show_tome') ) {
+	// 	console.log('hide')
+	// 	$('#tome-view').animate({'top': '-100%'}, 500, function() {
+			Session.set('show_tome', false);
+	// 	});		
+	// }
+}
