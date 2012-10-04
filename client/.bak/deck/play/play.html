@@ -1,0 +1,57 @@
+<template name='deck_play'>
+	<div id='deck-play-screen'>
+		<div id='problem-container'>
+			{{> problem_container}}
+		</div>
+		<div id='players-area'>
+			<div id='me' class='user-1'>
+				{{> user me}}
+				{{> problem_tracker currentUser}}
+			</div>
+			{{> current_card}}
+
+			<div id='opponent' class='user-2'>
+				{{> user opponent}}
+				{{> problem_tracker opponent}}
+			</div>
+		</div>
+	</div>
+	
+	{{#ui "dialog"}}
+		{{{ message }}}
+	{{/ui}}
+
+	{{#constant}}
+		<div id='bonus'></div>
+	{{/constant}}
+</template>
+
+<template name="await_results">
+	<h2>One Sec...</h2>
+	<div class='inner-await'>
+		Waiting for your opponent to finish
+		<center>
+			<img style='margin: 15px 0 -12px;' src='/app!common/img/wait.gif' />
+		</center>
+	</div>
+</template>
+
+<template name='problem_container'>
+	{{#with card}}
+	<div id='problem'>
+		{{#markdown}}{{{html}}}{{/markdown}}<br/>
+		<input type="text" id="answer"/>
+	</div>
+	{{/with}}
+	{{> game_points}}
+</template>
+
+<template name='game_points'>
+	<div id='game-points'>{{points}}</div>
+</template>
+
+<template name="current_card">
+	{{#with card}}
+		<div title="{{stats}}" class='card' style='background-image: url({{image}});'></div>
+	{{/with}}
+</template>

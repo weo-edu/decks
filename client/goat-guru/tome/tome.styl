@@ -1,0 +1,119 @@
+@import 'nib';
+@import '../decks/client/mixins.styl';
+
+.tome-container {
+	cursor: pointer;
+}
+
+#tome-view {
+	position: absolute;
+	left: 0;
+	z-index: 2;
+	width: 100%;
+	height: 100%;
+	background: url('/app!decks/img/woodRepeat.jpg');
+	woodSides();
+	// top: -100%;
+	.tome-bg{
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: url('/app!common/textures/handmadepaperA85.png')		
+	}
+
+	&:before, &:after {
+			top: 0px;
+	}
+
+	.practice {
+		red-button();
+		font-size: 30px;
+		text-transform: uppercase;
+		position: absolute;
+		top: 120px;
+		right: 30px;
+		&:active {
+			top: 121px;
+		}
+	}
+
+	.goat-left {
+		margin-left: 712px;
+	}
+
+	.tome-center {
+		position: relative;
+		width: 526px;
+		height: 100%;
+		box-shadow: 0 0 20px rgba(black, 1);
+		margin: 0 auto;
+		padding: 0 17px;
+		woodSides();
+		background: url('/app!common/textures/handmadepaperA85.png')
+		z-index: 3
+		.tome-more {	
+			height: 100%;
+			overflow-y: auto;
+			font: 16px 'Fresca';
+			center {
+				width: 370px;
+				margin: 0 auto;
+			}
+			.active-user {
+				float: left;
+			}
+
+			h2 {
+				padding-top: 40px;
+				text-align: center;
+				color: #666;
+			}
+			h3 {
+				font: 25px/45px 'Fresca';
+				text-transform: uppercase;
+				color: #333;
+				text-shadow: 0 0 0;
+			}
+		}
+
+		&:before, &:after {
+			top: 0px;
+		}
+		
+	}
+
+	.shelf.connect.right {
+		position: absolute;
+		top: 76px;
+		right: 17px;
+		width: 208px;
+		z-index: 2;
+	}
+
+	.buddy-list {
+		overflow-y: auto;
+		height: 100%
+		width: 226px;
+		position: absolute !important;
+		top: 0;
+		margin-left: 0px !important;
+		.sidebar-inner {
+			background: none !important;
+		}
+	}
+}
+
+// .friends_browse #tome-view{
+// 	width: 771px;
+// 	left: auto;
+// 	right: 0;
+// 	.tome-center{
+// 		margin: 0;			
+// 	}
+
+// 	.goat-left {
+// 		margin-left: 503px;
+// 	}
+// }

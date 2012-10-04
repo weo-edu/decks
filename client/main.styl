@@ -1,0 +1,238 @@
+@import '../decks/client/mixins.styl';
+@import 'nib';
+global-reset();
+
+@font-face {
+    font-family: 'BleakChop';
+    src: url('/app!decks/fonts/bleakchopweo-webfont.eot');
+    src: url('/app!decks/fonts/bleakchopweo-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/app!decks/fonts/bleakchopweo-webfont.woff') format('woff'),
+         url('/app!decks/fonts/bleakchopweo-webfont.ttf') format('truetype'),
+         url('/app!decks/fonts/bleakchopweo-webfont.svg#bleak_chop_weoregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td { user-select: none; }
+
+h1, h2, h3, h4, h5 {
+	font-family: 'BleakChop';
+}
+
+h2 {
+	font: 50px/55px 'BleakChop';
+	text-shadow: 1px 1px 0 black;
+	color: white;
+}
+
+h3 {
+	font: 40px/45px 'BleakChop';
+	text-shadow: 1px 1px 0 black;
+	color: #666;
+}
+
+h4 {
+	font: 15px 'Fresca';
+	text-shadow: 1px 1px 0 black;
+	color: white;	
+}
+
+/**
+ * Main
+ */
+
+html, body, #content, #content > .container {
+	height: 100%;
+	min-height: 600px;
+}
+
+html, body {
+	  background: linear-gradient(top,  #9DD6D0, #FFF);
+	  overflow: hidden;
+}
+
+.shelf {
+	border-bottom: 10px solid #42210B;
+	box-shadow: 0 10px 8px rgba(black, .15);
+	margin: 15px 10px 20px;
+	&:after {
+		content: '';
+		border-width: 0 18px 6px;
+		border-color: transparent transparent #603813;
+		border-style: solid;
+		display: block;
+	}
+	&.connect {
+		position: relative;
+		margin-right: -7px;
+		margin-left: -7px;
+		z-index: 2;
+		&:after {
+			border-width: 0 8px 6px;
+			border-color: transparent transparent lighten(#603813, 10);
+		}
+	}
+}
+
+
+.avatar {
+	border-radius: 50%;
+	height: 95px;
+	width: 95px;
+	background-size: cover;
+	box-shadow: inset 1px 1px rgba(white, .5), inset -1px -1px rgba(black, .5), 0 0 5px #333;
+}
+
+/**
+ * Background
+ */
+
+#sun {
+	position: absolute;
+	height: 3000px;
+	width: 3000px;
+	top: 50%;
+	left: 50%;
+	margin-top: -1500px;
+	margin-left: -1500px;
+	transition-origin: 50% 50%;
+}
+
+#content {
+	height: 100%;
+	position: relative;
+	background-color: transparent;
+	background-image: url('../img/greenmountains.png');
+	background-size: cover;
+	background-position: center;
+	overflow: hidden;
+	> .container {
+		position: relative;
+		width: 980px;
+		margin: 0 auto;
+	}
+}
+
+
+/**
+ * Nav
+ */
+
+#nav {
+	clear: both;
+	height: 141px;
+	width: 1026px;
+	margin-left: ((1026 - 980) / -2px);
+	background: url('/app!decks/img/nav.png') center bottom no-repeat;
+	position: relative;
+	z-index: 99;
+	.goat-nav, .friends-nav {
+		position: absolute;
+		top: 30px;
+		left: 60px;
+		display: block;
+		float: left;
+		background: url('../img/nav-buttons.png');
+		height: 160px;
+		width: 120px;
+		&:hover {
+			background-position: 0 173px;
+		}
+		&:active {
+			background-position: 0px 0px;
+		}
+	}
+
+	.friends-nav {
+		height: 130px;
+		left: 180px;
+		background-position: 125px 0px;
+		&:hover {
+			background-position: 125px 168px;
+		}
+		&:active {
+			background-position: 125px 0px;
+		}
+	}
+
+	.nav-title {
+		width: 350px;
+		height: 80px;
+		background: url('/app!common/textures/handmadepaper.png')
+		border: 10px solid black;
+		position: absolute;
+		left: 50%;
+		margin-left: -175px;
+		top: 50px;
+	}
+
+	#nav-me {
+		position: absolute;
+		top: 45px;
+		right: 0;
+		width: 295px;
+		height: 101px;
+		.avatar {
+			position: absolute;
+			z-index: 1;
+			left: 40px;
+			border: 5px solid #FFF;
+			box-shadow: 0 0 10px rgba(black, .7);
+			cursor: pointer;
+			&:hover {
+				box-shadow: 0 0 15px rgba(black, 1);
+				margin-top: -1px;
+			}
+			&:active {
+				box-shadow: 0 0 10px rgba(black, .7);
+				margin-top: 0px;
+			}
+		}
+		.progress-bar {
+			width: 125px;
+			height: 18px;
+			background: red;
+			position: absolute;
+			bottom: 15px;
+			left: 132px;
+			&:before, &:after {
+				top: 0;
+				content: '';
+				display: block;
+				background: rgba(white, .15);
+				height: 4px;
+				width: 100%;
+				position: absolute;
+			}
+			&:after {
+				background: rgba(black, .1);
+				top: auto;
+				bottom: 0px;
+				height: 8px;
+			}
+			.inner-bar {
+				height: 100%;
+				background: #F9B900;
+			}
+		}
+
+		.level {
+			position: absolute; 
+			bottom: 0;
+			size = 43px;
+			height: size;
+			width: size;
+			border-radius: 50%;
+			font: 25px/46px 'Fresca';
+			color: #FFF;
+			text-shadow: 1px 1px 0 rgba(black, .5);
+			text-align: center;
+			background: red;
+			border: 4px solid #FFF;
+			box-shadow: 0 0 10px rgba(black, .7);
+			// box-shadow: 0 0 5px black, inset 1px 1px 0 rgba(white, .5), inset -1px -1px 0 rgba(black, .5);			
+		}
+	}
+
+}
+

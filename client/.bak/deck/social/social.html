@@ -1,0 +1,68 @@
+<template name='social'>
+	<div id='social-screen'>
+		<div class='awning'>Friends</div>
+		<div id='buddy-list'>
+			{{> buddies}}
+		</div>
+		
+		<div class='decks'>
+			{{> opponent_decks}}
+		</div>
+		{{> back_button}}
+	</div>
+</template>
+
+<template name='buddies'>
+	{{#each friends}}
+		<div id='buddy-{{_id}}' class='buddy {{active}}'>
+			<div id='avatar-{{idx}}' class='avatar-tmb-small' style='background-image: url({{avatar}});'></div>
+			<p>{{username}}</p>
+		</div>
+	{{/each}}
+</template>
+
+<template name='opponent_decks'>
+	<div class='small-grid'>
+		<div class='shelf-wrapper'>
+		{{#each decks}}
+			<div class='deck-container'>
+				<div id='deck-{{_id}}' class='deck {{selected}}' style='background-image: url({{image}});'></div>
+				<h4 class='deck-title'>{{title}}</h4>
+			</div>
+		{{/each}}
+		{{#ui "dialog"}}
+			{{> opponent_deck_more}}
+		{{/ui}}
+		</div>
+	</div>
+</template>
+
+<template name="opponent_deck_more">
+	{{#with deck}}
+		<h2>{{title}}</h2>
+		<div class='more-info'>
+			<div class='deck-image'>
+				{{> deck_view}}
+			</div>
+			<div class='deck-meta'>
+				<div class='meta'>
+					<h3>DESCRIPTION:</h3>
+					<p>{{description}}</p>
+					<div class='clear'></div>
+				</div>
+				<div class='meta'>
+					<h3>Categories:</h3>
+					<p>{{tags}}</p>
+					<div class='clear'></div>
+				</div>
+				<div class='meta'>
+					<h3>Grade Level:</h3>
+					<p>{{gradePrior}}</p>
+					<div class='clear'></div>
+				</div>
+				<div class='challenge-button'>CHALLENGE</div>
+			</div>
+		</div>
+	{{/with}}
+
+</template>

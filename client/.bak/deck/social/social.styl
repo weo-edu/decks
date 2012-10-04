@@ -1,0 +1,77 @@
+@import '../decks/mixins.styl';
+
+height = 617px;
+
+#social-screen {
+	ipad();
+	height: 100%;
+	background: url('/img/woodBg.jpg') center no-repeat;
+	.chat {
+		width: 216px;
+		height: height;
+		background: #FFF;
+		float: left;
+		padding: 20px;
+	}
+
+	.challenge-button {
+		right: 8px;
+		bottom: 5px;
+		&:active {
+			bottom: 4px;
+		}
+	}
+}
+
+#buddy-list {
+	width: 226px;
+	float: left;
+	height: height;
+	background-image: url('/app!common/textures/roughcloth.png');
+	box-shadow: 0 0 40px #000;
+	overflow-y: auto;
+	.buddy{
+		width: 186px;
+		background-position:  center center;
+		background-repeat: repeat-x;
+		cursor: pointer;
+		transition: background-color .3s;
+		padding: 10px 20px;
+	}
+	.buddy-list-bg {
+		position: absolute;
+		top: 0;
+		pointer-events: none;
+	}
+
+	.avatar-tmb-small {
+		box-shadow: 0 0 0px #333, inset 0 0 20px #111;
+		size = 40px;		
+		height: size;
+		width: size;
+		float: left;
+		display: block;
+		margin-right: 15px;
+		transition: all .3s;
+		background-repeat: no-repeat;
+		background-size: size;
+		background-position: center;
+	}
+
+	p {
+		font: 18px/43px 'Fresca';
+		color: #333;
+		text-shadow: -1px -1px 0 rgba(white, .5);	
+	}
+
+	.buddy:hover { 
+		background-color: rgba(black, .08);
+	}
+
+	.buddy.active { 
+		background-color: rgba(black, .12);
+		.avatar-tmb-small {
+			box-shadow: 0 0 10px #111, inset 0 0 0 #000;
+		}
+	}
+}

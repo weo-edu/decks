@@ -1,0 +1,253 @@
+@import '../decks/mixins.styl';
+
+.awning {
+	height = 55px;
+	height: height;
+	background: url("/app!common/textures/blue-scale.png");
+	box-shadow(0 3px 15px #333);
+	font-family: 'Fresca';
+	font-size: 40px;
+	color: #EEE;
+	line-height: height;
+	padding: 0 20px;
+	position: relative;
+	z-index: 999;
+}
+
+#browse-screen {
+	width: 1024px * 2;
+	position: absolute;
+	left: -1024px;
+
+	.select-placeholder{
+		float: left;
+		height: 100%;
+		background: url('/img/woodBg.jpg') center center no-repeat;
+		ipad();
+	}
+	.browse{
+		float: left;
+		height: 100%;
+		background: url('/img/bigShelf.jpg') center 55px;
+		ipad();
+		position: relative;
+	}
+
+	#browse-categories {
+		height: 617px;
+		width: 100%;
+		overflow-y: auto;
+		overflow-x: hidden;	
+	}
+}
+
+::-webkit-scrollbar { width: 0 }
+
+#deck-grid, .create-grid, #deck-category {
+	height = 299px;
+	width = 150px;
+	height: 617px;
+	width: 100%;
+	overflow-y: auto;
+	overflow-x: hidden;
+	
+	background-image: url('/img/bigShelf.jpg');
+	.shelf-wrapper {
+		padding: 0 0 35px 45px;
+		width: 980px;
+		background-image: url('/img/bigShelf.jpg');
+		background-repeat: repeat;
+		background-attachment: scroll;
+		clearfix();
+	}
+	.deck-container {
+		cursor: pointer;
+		width: width;
+		height: 263px;
+		padding-top: 35px;
+		float: left;
+		background-position: center center;
+		position: relative;
+		margin: 0 40px;
+		.card {
+			float: none;
+		}
+		.shadow {
+			position: absolute;
+			bottom: 5px;
+			border-radius: 45% 45% 65% 65%;
+			background: rgba(#333, .3);
+			width: 95px;
+			height: 18px;
+			left: 25px;
+		}
+	}
+}
+
+.deck {
+	height: 200px;
+	width: 150px;
+	position: relative;
+	z-index: 1;
+	box-shadow: 0 0 15px #333, inset 1px 1px 1px rgba(white, .5), inset -1px -1px 1px rgba(black, .5);
+	background-size: cover;
+	background-position: center center;
+}
+
+#deck-category {
+	height: 299px;
+	overflow-y: hidden;
+	overflow-x: hidden;
+	position: relative;
+	.shelf-wrapper {
+		padding: 10px 0 25px 45px;
+	}
+	.category-title {
+		font: 30px/52px "Nuku Nuku";
+		color: #9E7850;
+		text-shadow: -1px -1px 0 rgba(black, .5);
+		left: 50px;
+		position: absolute;
+	}
+}
+
+// .deck-front {
+// 	height: 200px;
+// 	width: 150px;
+// 	// border-radius: 8px;
+// 	box-shadow: 0 0 15px #333, inset 1px 1px 1px rgba(white, .5), inset -1px -1px 1px rgba(black, .5);
+// 	// box-shadow: inset 1px 1px 1px rgba(white, .5);
+// 	background-size: cover;
+// 	background-position: center center;
+// 	position: absolute;
+// }
+
+// .deck-back {
+// 	display: none;
+// 	content: "";
+// 	height: 200px;
+// 	width: 11px;
+// 	skew = 30deg;
+// 	transform: skew(skew, skew) rotate(skew);
+// 	left: 139px;
+// 	top: -14px;
+// 	box-shadow: 0 0 15px #333, inset 1px 1px 1px rgba(white, .5), inset -1px -1px 1px rgba(black, .5);
+// 	// left: 5px;
+// 	// background-image: url('/app!common/textures/roughcloth.png');
+// 	background-size: cover;
+// 	background-position: center center;
+// 	// top: 5px;
+// 	position: absolute;
+// }
+
+h4.deck-title {
+	width: 150px;
+	margin: 8px 0;
+	text-align: center;
+	font: 18px/19px 'Fresca';
+	color: #FFF;
+	text-shadow: 1px 1px 0 rgba(black, .5);
+}
+
+.dialog {
+	width: 700px;
+	.content {
+		padding: 0;
+	}
+	h2 {
+		background: #333;
+		color: #FFF;
+		padding: 0 10px;
+		font-size: 30px;
+		line-height: 1.5em;
+		text-align: center;
+	}
+	.close {
+		size = 20px;
+		height: size;
+		width: size;
+		line-height: size;
+		font-size: size;
+		border-radius: 50%;
+		text-align: center;
+		top: 8px;
+		right: 8px;
+		color: #DDD;
+		border: 2px solid;
+		border-color: #DDD;
+		background: #222;
+		&:hover {
+			color: #FFF;
+			border-color: #FFF;
+		}	
+	}
+
+	.deck-image {
+		padding: 30px;
+		float: left;
+		width: 250px;
+		height: 300px;
+		background: #DDD url("/img/deckBurst.png") 14px 33px no-repeat
+		.deck {
+			float: none;
+			margin: 40px auto;
+			display: block;
+			position: relative;
+		}
+		p {
+			font-size: 30px;
+			font-family: MayonaiseCondRegular;
+			text-align: center;
+		}
+	}
+	.deck-meta {
+		float: right;
+		padding: 30px;
+		width: 330px;
+		.meta {
+			clear: both;
+			min-height: 30px;
+			margin-bottom: 10px;
+		}
+		h3 {
+			font: 23px/16px 'Fresca';
+			float: left;
+			width: 140px;
+		}
+		p {
+			float: left;
+			width: 180px;
+			font: 20px/20px 'Fresca';
+		}
+		.clear {
+			clear: both;
+		}
+		
+	}
+}
+
+.challenge-button, .play-button {
+	cursor: pointer;
+	float: right;
+	clear: both;
+	margin: 0;
+	position: absolute;
+}
+
+.challenge-button {
+	right: 176px;
+	bottom: 13px;
+	wood-button();
+	&:active{
+		bottom: 12px;
+	}
+}
+
+.play-button {
+	right: 5px;
+	bottom: 10px;
+	red-button();
+	&:active{
+		bottom: 9px;
+	}
+}

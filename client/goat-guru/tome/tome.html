@@ -1,0 +1,52 @@
+<template name='tome'>
+	<img src='/app!decks/img/tome.png' />
+</template>
+
+<template name='empty_dojo'>
+	{{> main-nav}}
+	<div id='browse-view'>
+		{{> dojo init_dojo}}
+	</div>
+</template>
+
+<template name='tome_view'>
+	
+		{{#if show}}
+			<div id='tome-view'>		
+				<div class='tome-bg'></div>
+				<div class='tome-center'>
+					<div class='tome-more'>
+						{{> tome_more tome}}
+					</div>
+				</div>
+				{{> inner_tome}}
+			</div>		
+		{{/if}}
+		
+</template>
+
+<template name='inner_tome'>
+	<div class='shelf connect right'></div>
+	<div class='sidebar buddy-list'>
+		<div class='sidebar-inner'>
+			{{> buddies}}
+		</div>
+	</div>
+	<div class='practice'>PRACTICE</div>
+	<img class='goat-left' src='/app!decks/img/goat-left.png' />
+</template>
+
+
+<template name='tome_more'>
+	<h2>{{title}}</h2>
+	<center>
+		<img width='260px' src='/app!decks/img/tome.png' />
+		<h3>Game Length:</h3>
+		<p>{{cardsPerGame}}</p>
+		<h3>Description:</h3>
+		<p>{{description}}</p>
+		<h3>Categories:</h3>
+		<p>{{tags}}</p>
+		<p>This is a test to see what is looks like when there is a lot of test in this place.  Chaka kahn</p>
+	</center>
+</template>

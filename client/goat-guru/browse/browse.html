@@ -1,0 +1,86 @@
+<template name="dojo">
+	<div class="dojo">
+		{{{page}}}
+		{{> tome_view}}
+	</div>
+</template>
+
+<!-- Goat Browse -->
+
+<template name='goat_browse'>
+	{{> main-nav}}
+	<div id='browse-view'>
+		{{> dojo init_dojo}}
+	</div>
+</template>
+
+<template name='goat_inner'>
+	<div class='browse'>
+		{{#each categories}}
+					{{> category this}}
+		{{/each}}
+	</div>
+	<div class='sidebar'>
+		<div class='cloud'>Namaste!</div>
+		<img class='goat-left' src='/app!decks/img/goat-left.png' />
+	</div>
+</template>
+
+<template name="category">
+	<div class='category'>
+		<h2 class='category-title'>{{this}}</h2>
+		<div class='inner-category'>
+			{{#each tomes}}
+				<div class='tome-container'>
+					{{> tome}}
+					<h4 class='tome-title'>{{title}}</h4>
+				</div>
+			{{/each}}
+		</div>
+	</div>
+	<div class='shelf'></div>
+</template>
+
+<!-- Social Browse -->
+
+<template name='friends_browse'>
+	{{> main-nav}}
+	<div id='browse-view' class='friends-browse'>
+		{{> dojo init_dojo}}
+	</div>
+</template>
+
+<template name='friends_inner'>
+	<div class='sidebar buddy-list'>
+		<div class='sidebar-inner'>
+			{{> buddies}}
+		</div>
+	</div>
+	<div class='browse'>
+		{{> opponent_decks}}
+	</div>
+</template>
+
+<template name='buddies'>
+	<h3>Friends</h3>
+	<div class='shelf connect'></div>
+	{{#each friends}}
+		<div id='buddy-{{_id}}' class='buddy {{active}}'>
+			<div id='avatar-{{idx}}' class='avatar avatar-thumb' style='background-image: url({{avatar}});'></div>
+			<p>{{username}}</p>
+		</div>
+	{{/each}}
+</template>
+
+<template name='opponent_decks'>
+	<div class='category'>
+	<h2 class='category-title'>{{user}}</h2>
+	<div class='shelf'></div>
+	{{#each decks}}
+		<div class='tome-container'>
+			{{> tome}}
+			<h4 class='tome-title'>{{title}}</h4>
+		</div>
+	{{/each}}
+	</div>
+</template>

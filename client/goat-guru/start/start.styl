@@ -1,0 +1,37 @@
+@import '../decks/client/mixins.styl';
+
+#title {
+	margin: 10px auto 0;
+}
+
+#island {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+#start-button {
+	position: absolute;
+	right: 120px;
+	bottom: 180px;
+	width: 300px;
+	height: 75px;
+	background-image: url('/app!decks/img/redcloth.jpg');
+	border: 4px solid #FFF;
+	border-radius: 8px;
+	color: black;
+	font: 50px/72px 'NukuNuku';
+	text-align: center;
+	transition: all .2s;
+	text-shadow: 1px 1px 1px rgba(white, .5);
+	box-shadow: inset 0 0 0 4px black, 0 0 15px black;
+	&:hover {
+		text-shadow: -1px -1px 1px rgba(white, .5);
+		box-shadow: inset 0 0 0 4px black, 0 0 30px black;
+	}
+	&:active {
+		transition: all 0s;
+		text-shadow: 1px 1px 1px rgba(white, .5);
+		box-shadow: inset 0 0 0 4px black, 0 0 15px black;
+	}
+}
