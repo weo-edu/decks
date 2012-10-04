@@ -27,18 +27,23 @@ _.extend(UserDeckInfo, {
 		var self = this,
 			query = { user: uid };
 
-		if(typeof uid === 'array') query['user'] = { $in: uid };
-		if(minRank !== undefined) query['mastery.rank'] = { $gte: minRank };
+		if(_.isArray(uid)) 
+			query['user'] = { $in: uid };
+		if(minRank !== undefined) 
+			query['mastery.rank'] = { $gte: minRank };
+
 		return self.find(query);
 	},
 	findUserDeck: function(uid, did) {
 		var self = this,
 			query = {user: uid};
 
-		if(typeof user === 'array') 
+		console.log('findUSerDeck', uid, did);
+		if(_.isArray(uid)) 
 			query = {user: {$in: uid}};
 
 		query['deck'] = did;
+		console.log(self.find(query).fetch());
 		return self.find(query);
 	}
 });

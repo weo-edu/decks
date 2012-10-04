@@ -68,6 +68,8 @@
 	</div>
 	{{/with}}
 	{{> game_points}}
+	{{> game_multiplier}}
+	{{> problem_speed}}
 	{{#constant}}
 		<span class='timer'></span>
 	{{/constant}}
@@ -75,6 +77,14 @@
 
 <template name='game_points'>
 	<div id='game-points'>{{points}}</div>
+</template>
+
+<template name='game_multiplier'>
+	<div id="game-multiplier">Multiplier: {{multiplier}}</div>
+</template>
+
+<template name="problem_speed">
+	<div id="problem-speed">Speed {{speed}}</div>
 </template>
 
 <template name="current_card">

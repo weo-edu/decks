@@ -6,6 +6,7 @@
   			return Games.findOne(ctx.params.id).users;
   		},
   		function(ctx) {
+  			console.log('deck', Games.findOne(ctx.params.id).deck);
   			return Games.findOne(ctx.params.id).deck;
   		}
   	),
@@ -44,8 +45,6 @@
 				}
 
 				self.hideDialog = function() {
-					console.log('hide Dialog');
-
 					var dialog = ui.get('.dialog');
 					if (dialog && dialog.isVisible())
 						dialog.hide();
@@ -343,7 +342,6 @@
 
 	 			self.timer_el = null;
 				function startTimer() {
-					console.log('start timer');
 					ui.timer(game.timeToPlay(), function(time) {
 						if (self.timer_el)
 							self.timer_el.innerHTML = Math.floor(time / 1000);
@@ -379,18 +377,57 @@
 	 				return routeSession.get('myPoints') || Math.round(game.points(game.me()._id));
 	 		} 
 
+	 		Template.game_multiplier.helpers({
+	 			multiplier: function() {
+	 				return utils.round(game.getMultiplier(),2);
+	 			}
+	 		});
+
+	 		Template.problem_speed.created = function() {
+	 			var self = this;
+	 			//XXX shouldnt use spark for rendering of this
+	 			self.store.set('speed', game.currentSpeed());
+	 			self.speedUpdate = function() {
+		 				self.interval = Meteor.setInterval(function() {
+			 				var speed = game.currentSpeed();
+			 				self.store.set('speed', speed);
+			 				if ( !speed) {
+			 					Meteor.clearInterval(self.interval)
+			 					self.interval = null;
+			 				}
+			 			}, 200);
+	 			}
+	 			game.on('next', function() {
+	 				if (!self.interval)
+	 					self.speedUpdate();
+	 			});
+	 			self.speedUpdate();
+	 		}
+
+	 		Template.problem_speed.rendered = function() {
+	 			console.log('problem speed rendered');
+	 		}
+
+	 		Template.problem_speed.speed = function(opts) {
+	 			return opts.template.get('speed');
+	 		}
+
+	 		Template.problem_speed.destroyed = function() {
+	 			Meteor.clearInterval(this.interval);
+	 		}
+
 	 		Template.current_card.helpers({
         card: function() {
           return game.currentProblem();
         }
      	}); 
 
+
 	 		Template.deck_play.events({
  				'click': function(e, template) {
  					$('#answer').focus();
  				},
  				'click .quit-button': function() {
- 					console.log('click quit');
  					game.quit();
  					route('/deck/browse');
  				},
@@ -409,7 +446,6 @@
 								groupId: game.id
 							});
 
-						console.log('keypress next problem');
  						game.nextProblem();
 
 	 					var inc = 1;
@@ -481,7 +517,6 @@
 	 			if (this.firstRender) {
 	 				if (!this.timer_el)
 	 					this.timer_el = this.find('.timer');
-	 				console.log('timer el', this.timer_el);
 	 			}
 	 		}
 
@@ -520,7 +555,6 @@
 	 			message: function() {
 	 				var dialog = ui.get('.dialog');
 	 				var message = dialog.get('message');
-	 				console.log('message', message);
 	 				return Template[message] && Template[message]();
 	 			}
 			});

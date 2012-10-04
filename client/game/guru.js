@@ -3,8 +3,10 @@
 	Guru.create  = function (game) {
 		var deck_id = game.deck()._id;
 		var deck_info = UserDeckInfo.findOne({user: Meteor.user()._id, deck: deck_id});
-		if (!deck_info)
+		if (!deck_info) {
+			UserDeckInfo.insert({user: Meteor.user()._id, deck: deck_id});
 			return new Guru[MASTERY.PROFICIENT](game);
+		}
 		else
 			return new (Guru[deck_info.mastery.rank || 0] || Guru[MASTERY.MASTER_GURU])(game);
 	}
@@ -61,11 +63,13 @@
 
 
 		self.mygame.on('results', function(changed) {
+			console.log('guru results');
 			self.stop();
 			if (!changed)
 				return
 			var winner = self.mygame.winner();
-      if (winner && winner._id === Guru.goat()._id)
+			console.log('winner', winner);
+      if (winner && winner._id !== Guru.goat()._id)
         self.beat();
 		});
 
@@ -145,7 +149,9 @@
 		UserDeckInfo.update(
 			{ user: self.mygame.opponent()._id, deck: self.mygame.deck()._id },
 			modify
-		);		
+		);
+
+		console.log(UserDeckInfo.findOne({user: self.mygame.opponent()._id, deck: self.mygame.deck()._id}));		
 	}
 
 	Guru.prototype.mastery = function() {
@@ -272,7 +278,7 @@
 
 	Guru[MASTERY.EXPERT].prototype.cardStats = function() {
 		return {
-			accuracy: {u: .90, s: .03},
+			accuracy: {u: .95, s: .03},
 			speed: {u: .80, s: .03},
 			retention: {u: .90, s: .10}
 		}
@@ -288,9 +294,9 @@
 
 	Guru[MASTERY.GURU].prototype.cardStats = function() {
 		return {
-			accuracy: {u: .96, s: .02},
-			speed: {u: .95, s: .04},
-			retention: {u: .95, s: .10}
+			accuracy: {u: .99, s: .01},
+			speed: {u: .90, s: .04},
+			retention: {u: .99, s: .01}
 		}
 	}
 
@@ -303,8 +309,8 @@
 
 	Guru[MASTERY.MASTER_GURU].prototype.cardStats = function() {
 		return {
-			accuracy: {u: .99, s: .002},
-			speed: {u: .98, s: .002},
+			accuracy: {u: .995, s: .002},
+			speed: {u: .94, s: .002},
 			retention: {u: .99, s: .002}
 		}
 	}

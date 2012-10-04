@@ -90,13 +90,19 @@ Observer.on('complete:card', function(e) {
  */
 
 Observer.on('complete:game', function(e) {
+  console.log('complete game event', e);
   Fiber(function() {
     var match = e.object;
     var action = e.action;
     var mod = { attempts: 1 };
+    // XXX ugly multiplayer check
+    if (match.users.indexOf(1) === -1)
+      mod.multiAttempts = 1;
     if (action.adverbs.indexOf('andWon') >= 0) {
       mod.wins = 1;
+      if (match.users.indexOf(1) === -1)
+        modl.multiWins = 1;
     }
-    UserDeckInfo.update({user: e.user, deck: match.deck}, {$inc: mod}, {multi: 0, upsert: true});
+    UserDeckInfo.update({user: e.user._id, deck: match.deck}, {$inc: mod}, {multi: 0, upsert: true});
   }).run();
 });
