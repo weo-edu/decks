@@ -29,7 +29,7 @@
 	<div class='shelf connect right'></div>
 	<div class='sidebar buddy-list'>
 		<div class='sidebar-inner'>
-			{{> buddies}}
+			{{> tome_buddies}}
 		</div>
 	</div>
 	<div class='practice'>PRACTICE</div>
@@ -49,4 +49,17 @@
 		<p>{{tags}}</p>
 		<p>This is a test to see what is looks like when there is a lot of test in this place.  Chaka kahn</p>
 	</center>
+</template>
+
+<template name='tome_buddies'>
+	<h3>Friends</h3>
+	<div class='shelf connect'></div>
+	{{#each friends}}
+		<div id='buddy-{{_id}}' class='buddy {{active}} tome-buddy'>
+			<center>
+				<div id='avatar-{{idx}}' class='avatar avatar-thumb' style='background-image: url({{avatar}});'></div>
+				<p class='user'>{{username}}</p>
+			</center>
+		</div>
+	{{/each}}
 </template>

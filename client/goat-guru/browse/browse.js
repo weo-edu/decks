@@ -27,10 +27,10 @@ route('/friends',function() {
 		return {page: Template.friends_inner()}
 	}
 
+
 	Template.buddies.events({
 		'click .buddy': function(e) {
 			Session.set('active', this);
-			Meteor.subscribe('UserDeckInfo', this._id);
 		},
 	});
 
@@ -58,6 +58,8 @@ route('/friends',function() {
 		'decks': function() {
 			var active = Session.get('active');
 			if(active) {
+				Meteor.subscribe('UserDeckInfo', active._id);
+
 				var deckInfos = UserDeckInfo.find({user: active._id}).fetch();
 				_.each(deckInfos, function(i) {
 					_.extend(i, Decks.findOne(i.deck)); 

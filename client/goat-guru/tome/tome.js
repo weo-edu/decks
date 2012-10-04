@@ -4,32 +4,42 @@ Template.tome.events({
 	}
 });
 
+Template.tome_view.helpers({
+	'show': function() {
+		return Session.get('show_tome');
+	}
+});
+
 Template.tome_view.preserve(['#tome-view']);
 
-route('/tome/:id', function(ctx) {
-
-	Meteor.subscribe('UserDeckInfo', friend_ids, tomeId);
+route('/tome/:id', 
+	route.requireUser(), 
+	route.requireSubscription('userList'), 
+	function(ctx) {
 
 	var tomeId = ctx.params.id;
 	var curTome = Decks.findOne(tomeId);
+
 	var friend_ids = _.map(User.friends().fetch(), function(friend) {
 			return friend._id;
 		});
 
-	if (!Session.get('currentPage') || Session.get('currentPage') == 'empty_dojo' || ! view.rendered()) {
-		view.render('empty_dojo');
-	}
-		
+	Meteor.subscribe('UserDeckInfo', friend_ids, tomeId);
 
-	Session.set('show_tome', true);
+
+	var curPage = Session.get('currentPage');
+	if (!curPage || curPage == 'empty_dojo' || view.rendered())
+		view.render('empty_dojo');
+	// else
+	// 	//XXX Shouldnt need to do this.  Breaks first time if not here though.
+	// 	view.render(curPage);
+
+
 	// Session.set('animate_tome', true);
 
 	Template.tome_view.helpers({
-		'show': function() {
-			return Session.get('show_tome');
-		},
 		'tome': function() {
-			return curTome;
+			return Decks.findOne(tomeId);
 		}
 	});
 
@@ -53,7 +63,7 @@ route('/tome/:id', function(ctx) {
 		
 	}
 
-	Template.buddies.friends = function() {
+	Template.tome_buddies.friends = function() {
 		var user_decks = UserDeckInfo.find({
 			user: {$in: friend_ids}, 
 			deck: tomeId
@@ -67,5 +77,7 @@ route('/tome/:id', function(ctx) {
 			}
 		});
 	}
+
+	Session.set('show_tome', true);
 
 });
