@@ -1,0 +1,61 @@
+@import '../decks/client/mixins.styl';
+
+
+#nav.game-nav {
+
+	#game-opponent, #game-me {
+		width: 428px;
+	}
+
+	#game-opponent, #game-me, #vs {
+		float: left;
+		position: relative;
+	}
+
+	#vs {
+		top: 31px;
+		img {
+			margin-left: -2px;
+		}
+	}
+	.nav-user {
+		position: relative;
+		width: 100%;
+	}
+
+	#game-opponent {
+		.nav-user {
+			.avatar {
+				left: -10px;
+			}
+			.level {
+				left: 80px;
+			}
+			.progress-bar {
+				left: 142px;
+				width: 165px;
+			}
+		}
+	}
+
+	#game-me {
+		.nav-user {
+			.avatar {
+				left: auto;
+				right: -10px;
+			}
+			.level {
+				left: auto;
+				right: 80px;
+			}
+			.progress-bar {
+				left: auto;
+				right: 142px;
+				width: 165px;
+				.inner-bar {
+					float: right;
+				}
+			}
+		}
+	}
+}

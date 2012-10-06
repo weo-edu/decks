@@ -1,0 +1,168 @@
+@import '../decks/client/mixins.styl';
+
+/**
+ * Select Screen
+ */
+
+#select-screen {
+	height: 100%;
+}
+
+.tracker {
+	background: url('/app!decks/img/tracker.png') center bottom no-repeat;
+	height: 425px;
+	width: 224px;
+	float: left;
+	h4 {
+		padding-top: 10px;
+		text-align: center;
+	}
+
+	.problem-tracker {
+		width: 96px;
+		margin: 72px auto 0;
+		height: 222px;
+		transform: rotate(180deg);
+		.little-scroll {
+			opacity: .35;
+			float: right;
+			&.selected {
+				opacity: 1;
+			}
+			.little-scroll-inner {
+				background: rgba(darken(#CDC4AA, 30), 1);
+				background-size: cover;
+				box-shadow: 0 0 4px rgba(black, .6);
+				position: relative;
+				&:after {
+					content: '';
+					position: absolute;
+					width: 100%;
+					height: 100%;
+					background: url('/app!common/textures/roughcloth.png');
+					box-shadow: inset 0 0 10px darken(#CDC4AA, 50);
+					opacity: .5;
+				}
+			}
+			&.correct, &.incorrect {
+				opacity: 1;
+				.little-scroll-inner {
+					background: darken(#0071BC, 18);	
+					box-shadow: 0 0 4px rgba(black, 1);
+					&:after {
+						opacity: .3;
+					}	
+				}
+				
+			}
+
+			&.incorrect .little-scroll-inner { background: darken(red, 5);	 }	
+
+			&.current { 
+				opacity: 1;
+				&:after {
+					opacity: .5;
+				}
+			}
+		}
+	}
+}
+
+#scroll-select-view {
+	float: left;
+	width: 498px;
+	padding: 0 16px;
+	position: relative;
+	height: 100%;
+	background: url('/app!common/textures/handmadepaper.png');
+	.scroll-select-inner {
+		woodSides();
+		&:before, &:after {
+			top: 0;
+		}
+	}
+
+	.tome-title {
+		padding-top: 20px;
+		margin-bottom: -10px;
+		text-align: center;
+		color: black;
+		text-shadow: 0 0 0;
+	}
+}
+
+#scroll-select-table {
+	width: 100%;
+	border: 0;
+	font: 26px 'BleakChop';
+	text-shadow: 0 0 0;
+	color: black;
+	.scroll-select-info {
+		cursor: pointer;
+		clearfix();
+		&:nth-child(odd) {
+				background: rgba(black, .2);				
+		}
+		&:hover {
+				background: rgba(black, .35);
+		}
+		td {
+			height: 40px;
+			padding: 5px 8px;
+		}
+
+		.selection-counter {
+			min-width: 15px;
+		}
+	}
+	
+	.stats-box > div {
+		width: 80px;
+		margin: 0 auto;
+	}
+
+	.scroll-stat {
+		float: left;
+		width: 20px;
+		height: 40px;
+		margin-right: 10px;
+		position: relative;
+		background: #EEE;
+		box-shadow: inset 0 0 6px #222;
+		&:last-child {
+			margin-right: 0;
+		}
+		.scroll-stat-inner {
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+			background-color: red;
+		}
+	}
+}
+
+.quit-button, .randomize-button, .play-button {
+	red-button();
+	float: right;
+}
+
+/**
+ * Play Screen
+ */
+
+
+#problem-container {
+	background: url("/app!decks/img/playground.png");
+	height: 514px;
+	width: 548px;
+	margin: 10px -8px 0;
+	float: left;
+}
+
+#problem {
+	height: 425px;
+	width: 487px;
+	margin: 46px auto 0;
+	font: 25px/1.2em  'BleakChop';
+	text-align: center;
+}

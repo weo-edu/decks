@@ -1,0 +1,99 @@
+<template name="end_game">
+	<div id='play-results'>
+		<div id='slider' class='{{show_cards}}'>
+			{{> view_cards}}
+			<div class='slide'>
+				{{> play_results}}
+				<ul id='results-nav'>
+					<li class='view-cards'>View Cards</li>
+					<li class='rematch'>Rematch</li>
+					<li class='back'>Menu</li>
+				</ul>
+			</div>
+		</div>
+		{{#ui "dialog"}}
+			{{{ message }}}
+		{{/ui}}
+	</div>
+</template>
+
+<template name="play_results">
+	<div id='result-box'>
+		<h2>RESULTS</h2>
+		<div class='inner-results'>
+			{{#with results}}
+				<div class='winner-circle'>
+					<div class='winner'>WINNER</div>
+					<div class='winner-name'>{{winner}}</div>
+				</div>
+				<div id='me' class='user-1'>
+					{{> user currentUser}}
+				</div>
+				{{> individual_results}}
+
+				<div id='opponent' class='user-1'>
+					{{> user opponent}}
+				</div>
+			{{/with}}
+		</div>
+	</div>
+</template>
+
+<template name="individual_results">
+	<div class='results'>
+		<div>
+			<span class='score left'>{{me.correct}}</span>
+			<span class='label'>Correct</span>
+		 	<span class='score right'>{{opponent.correct}}</span>
+		</div>
+		<div>
+			<span class='score left'>{{me.incorrect}}</span>
+			<span class='label'>Incorrect</span>
+		 	<span class='score right'>{{opponent.incorrect}}</span>
+		</div>
+		<div class='rule'></div>
+		<div>
+			<span class='score left'>{{round me.points}}</span>
+			<span class='label'>Points</span>
+		 	<span class='score right'>{{round opponent.points}}</span>
+		</div>
+	</div>
+</template>
+
+<template name='view_cards'>
+	{{> review_problem review_card}}
+	<div class='slide'>
+		<div id='deck-grid'>
+			<div class='shelf-wrapper'>
+			{{#each cards}}
+				<div class='deck-container review-card'>
+					<div class='card {{correct this}}' style='background-image: url({{image}});'>
+						<div class='x'>X</div>
+					</div>
+				</div>
+			{{/each}}
+			</div>
+		</div>
+		<div class='next'></div>
+
+		<ul id='view-cards-nav'>
+			<li class='results'></li>
+		</ul>
+	</div>
+</template>
+
+<template name='review_problem'>
+	<div class='slide'>
+		<div class='review-back'>B</br>A</br>C</br>K</br></div>
+		<div id='problem-container'>
+			<div id='problem'>
+				{{#markdown}}{{{html}}}{{/markdown}}<br/>
+				<input type="text" id="answer"/>
+			</div>
+		</div>
+		<div class='solution'>S<br/>H<br/>O<br/>W<br/><br/>S<br/>O<br/>L<br/>U<br/>T<br/>I<br/>O<br/>N<br/></div>
+	</div>
+</template>
+
+
+
