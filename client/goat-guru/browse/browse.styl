@@ -1,47 +1,7 @@
 @import 'nib';
 @import '../decks/client/mixins.styl'
 
-#browse-view {
-	dojo();
 
-
-	.cloud, .goat-left {
-		position: fixed;
-		bottom: -15px;
-		margin-left: -25px;
-		pointer-events: none;
-		z-index: 3;
-	}
-
-	.cloud {
-		bottom: 280px;
-		margin-left: 15px;
-		z-index: 2;
-	}
-}
-
-.category {
-	clearfix();
-	overflow: hidden;
-	.category-title {
-		margin-left: 30px;
-		margin-bottom: -5px;
-	}
-	.inner-category {
-		width: 200%;
-	}
-	&:first-child .category-title{
-		margin-top: 40px;
-	}
-}
-
-.tome-container {
-	float: left;
-	.tome-title {
-		margin-top: -10px;
-		text-align: center;
-	}
-}
 
 /**
  * Goat Browse

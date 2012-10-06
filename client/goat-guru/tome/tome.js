@@ -26,16 +26,9 @@ route('/tome/:id',
 
 	Meteor.subscribe('UserDeckInfo', friend_ids, tomeId);
 
-
-	var curPage = Session.get('currentPage');
-	if (!curPage || curPage == 'empty_dojo' || view.rendered())
-		view.render('empty_dojo');
-	// else
-	// 	//XXX Shouldnt need to do this.  Breaks first time if not here though.
-	// 	view.render(curPage);
-
-
-	// Session.set('animate_tome', true);
+	Template.tome_view.init_dojo = function() {
+		return {page: Template.tome_outer()}
+	}
 
 	Template.tome_view.helpers({
 		'tome': function() {
@@ -78,6 +71,6 @@ route('/tome/:id',
 		});
 	}
 
-	Session.set('show_tome', true);
+	dojo.render('tome_view');
 
 });
