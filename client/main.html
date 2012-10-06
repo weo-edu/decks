@@ -1,19 +1,19 @@
-<template name='main-nav'>
+<template name='main_nav'>
 	<div id='nav'>
 		<a class='goat-nav' href='/goat'></a>
 		<a class='friends-nav' href='/friends'></a>
 		<div class='nav-title'>
 			<img width='350' src='/app!decks/img/title.png' />
 		</div>
-		<div id='nav-me'>
-			{{> nav_me currentUser}}
-		</div>
+		{{> nav_user currentUser}}
 	</div>
 </template>
 
-<template name='nav_me'>
-	<img class='avatar' style='background-image: url({{avatar}});' />
-	{{> level_progress}}
+<template name='nav_user'>
+	<div class='nav-user'>
+		<img class='avatar' style='background-image: url({{avatar}});' />
+		{{> level_progress}}
+	</div>
 </template>
 
 <template name='level_progress'>

@@ -1,7 +1,6 @@
 route('/goat',function() { 
 
 	view.render('goat_browse');
-	Meteor.defer(hideTome);
 
 	Template.goat_inner.categories = function() {
 		return Decks.homeFeeds;
@@ -21,7 +20,6 @@ route('/goat',function() {
 route('/friends',function() { 
 
 	view.render('friends_browse');
-	Meteor.defer(hideTome);
 
 	Template.friends_browse.init_dojo = function() {
 		return {page: Template.friends_inner()}

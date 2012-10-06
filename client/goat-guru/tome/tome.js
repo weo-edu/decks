@@ -60,7 +60,7 @@ route('/tome/:id',
 	}
 
 	Template.tome_more.destroyed = function() {
-		
+		hideTome();
 	}
 
 	Template.tome_buddies.friends = function() {

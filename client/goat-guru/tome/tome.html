@@ -3,7 +3,7 @@
 </template>
 
 <template name='empty_dojo'>
-	{{> main-nav}}
+	{{> main_nav}}
 	<div id='browse-view'>
 		{{> dojo init_dojo}}
 	</div>
@@ -58,7 +58,7 @@
 		<div id='buddy-{{_id}}' class='buddy {{active}} tome-buddy'>
 			<center>
 				<div id='avatar-{{idx}}' class='avatar avatar-thumb' style='background-image: url({{avatar}});'></div>
-				<p class='user'>{{username}}</p>
+				<p class='tome-username'>{{username}}</p>
 			</center>
 		</div>
 	{{/each}}

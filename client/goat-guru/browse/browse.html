@@ -8,7 +8,7 @@
 <!-- Goat Browse -->
 
 <template name='goat_browse'>
-	{{> main-nav}}
+	{{> main_nav}}
 	<div id='browse-view'>
 		{{> dojo init_dojo}}
 	</div>
@@ -33,7 +33,7 @@
 			{{#each tomes}}
 				<div class='tome-container'>
 					{{> tome}}
-					<h4 class='tome-title'>{{title}}</h4>
+					<h5 class='tome-title'>{{title}}</h5>
 				</div>
 			{{/each}}
 		</div>
@@ -44,7 +44,7 @@
 <!-- Social Browse -->
 
 <template name='friends_browse'>
-	{{> main-nav}}
+	{{> main_nav}}
 	<div id='browse-view' class='friends-browse'>
 		{{> dojo init_dojo}}
 	</div>
@@ -79,7 +79,7 @@
 	{{#each decks}}
 		<div class='tome-container'>
 			{{> tome}}
-			<h4 class='tome-title'>{{title}}</h4>
+			<h5 class='tome-title'>{{title}}</h5>
 		</div>
 	{{/each}}
 	</div>
