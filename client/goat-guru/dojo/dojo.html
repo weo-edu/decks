@@ -1,0 +1,21 @@
+<template name="dojo_view">
+	{{{navRender}}}
+	<div class="dojo">
+		<div id="browse-view">
+			{{{dojoRender}}}
+		</div>
+	</div>
+</template>
+
+<template name='dojo_browse_nav'>
+	<div id='nav'>
+		<a class='goat-nav' href='/goat'></a>
+		<a class='friends-nav' href='/friends'></a>
+		<div class='nav-title'>
+			<img width='350' src='/app!decks/img/title.png' />
+		</div>
+		<div id='nav-user'>
+			{{> nav_user currentUser}}
+		</div>
+	</div>
+</template>

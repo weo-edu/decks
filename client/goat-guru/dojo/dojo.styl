@@ -1,0 +1,70 @@
+@import 'nib';
+@import '../decks/client/mixins.styl'
+
+.dojo {
+
+	height: 100%;
+	background: url('/app!decks/img/woodRepeat.jpg');
+	#browse-view {
+		background: url('/app!decks/img/woodRepeat.jpg');
+		padding: 0px 17px;
+		position: relative;
+		height: 100%;
+		overflow: hidden;
+		clearfix();
+		// > div {
+		// 	float: left;
+		// }
+		.browse {
+			overflow-y: auto;
+			height: 100%
+			padding: 0 10px;
+			width: 700px;
+			float: left;
+		}
+		.sidebar {
+			overflow-y: auto;
+			height: 100%
+			width: 226px;
+			float: left;
+		}
+	}
+	woodSides();
+
+	.cloud, .goat-left {
+		position: fixed;
+		bottom: -15px;
+		margin-left: -25px;
+		pointer-events: none;
+		z-index: 3;
+	}
+
+	.cloud {
+		bottom: 280px;
+		margin-left: 15px;
+		z-index: 2;
+	}
+}
+
+.category {
+	clearfix();
+	overflow: hidden;
+	.category-title {
+		margin-left: 30px;
+		margin-bottom: -5px;
+	}
+	.inner-category {
+		width: 200%;
+	}
+	&:first-child .category-title{
+		margin-top: 40px;
+	}
+}
+
+.tome-container {
+	float: left;
+	.tome-title {
+		margin-top: -10px;
+		text-align: center;
+	}
+}
