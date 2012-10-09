@@ -14,6 +14,10 @@ route('/goat',function() {
 });
 
 route('/friends',function() { 
+
+	Template.friends_browse.rendered = function() {
+		console.log('rendered friend browse');
+	}
 	Template.buddies.events({
 		'click .buddy': function(e) {
 			Session.set('active', this);

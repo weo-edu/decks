@@ -1,10 +1,18 @@
 <template name="game">
-	<div id='game-template'>
+	{{> game_nav}}
+	<div id='browse-view'>
 		{{{render state}}}
 	</div>
 </template>
 
-
+<template name='game_nav'>
+	<div id='nav' class='game-nav'>
+		<div class='nav-title'></div>
+		<div id='game-me'>{{> nav_user currentUser}}</div>
+		<div id='vs'><img src='/app!decks/img/vs.png' /></div>
+		<div id='game-opponent'>{{> nav_user opponent}}</div>
+	</div>
+</template>
 
 <template name="game_wait">
 	Waiting for other player to accept
@@ -23,4 +31,13 @@
 
 <template name="game_finish">
 	Finish
+</template>
+
+<template name='game_canceled'>
+	<h1>Game canceled</h1>
+	{{> select_dialog}}
+</template>
+
+<template name='game_quit'>
+	<h1>Quit</h1>
 </template>

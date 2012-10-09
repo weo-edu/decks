@@ -26,10 +26,6 @@ route('/tome/:id',
 
 	Meteor.subscribe('UserDeckInfo', friend_ids, tomeId);
 
-	Template.tome_view.init_dojo = function() {
-		return {page: Template.tome_outer()}
-	}
-
 	Template.tome_view.helpers({
 		'tome': function() {
 			return Decks.findOne(tomeId);
@@ -42,19 +38,6 @@ route('/tome/:id',
 		}
 	});
 
-
-	Template.tome_more.rendered = function() {
-		// console.log('rendered', Session.get('currentPage'));
-		// if( Session.get('show_tome') && Session.get('animate_tome')) {
-		// 	$('#tome-view').css('top', '-100%');	
-		// 	$('#tome-view').animate({'top': 0}, 500, 'linear');
-		// }
-			
-	}
-
-	Template.tome_more.destroyed = function() {
-		
-	}
 
 	Template.tome_buddies.friends = function() {
 		var user_decks = UserDeckInfo.find({

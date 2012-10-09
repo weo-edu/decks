@@ -85,13 +85,19 @@
   			}
   		});
 
+  		Template.game_nav.helpers({
+  			opponent: function(){
+					return game.opponent();
+				}
+  		})
+
 
   		//XXX if you could access a parent template vars this would be unnecessary
   		var selected_cards = null;
   		/*
   			Cards select template helpers and events
   		*/
-  		Template.cards_select.created = function() {
+  		Template.select_view.created = function() {
   			var self = this;
 				self.opponent = game.opponent();
 				self.deck = game.deck();
@@ -112,23 +118,19 @@
 					game.on('select', startTimer);
 			};
 
-			Template.cards_select.destroyed = function() {
+			Template.select_view.destroyed = function() {
 				game && game.destroySelection();
 			}
 
-			Template.cards_select.rendered = function() {
+			Template.select_view.rendered = function() {
 				if (this.firstRender) {
 					if (!this.timer_el) 
 						this.timer_el = this.find('.timer');
 				}
-				$('#card-grid').layout({
-					rows: 2,
-					cols: 4
-				});
 			}
 
-			Template.cards_select.helpers({
-				opponent: function(ctx){
+			Template.select_view.helpers({
+				opponent: function(ctx) {
 					return ctx.template.opponent;
 				},
 				deck: function(ctx){
@@ -139,7 +141,7 @@
 				}
 			});
 
-			Template.cards_select.events({
+			Template.select_view.events({
 				'click .play-button': function(e, template) {
 					game.pickSelectedCards();
 				},
@@ -150,7 +152,7 @@
 					game.quit();
 					route('/deck/browse');
 				},
-				'mousedown .card': function(evt, template) {
+				'mousedown .scroll-select-info': function(evt, template) {
 					if(evt.which === 1) {
 						var data = this;
 						template.handler = ui.down(template,function() {
@@ -168,7 +170,6 @@
 						evt.stopPropagation();
 					}
 				},
-
 				'mouseup': function (evt, template) {
 					template.handler && template.handler.up();
 					template.handler = null;
@@ -180,16 +181,16 @@
   		innerStyle = '';
 
   	Template.problem_tracker.created = function() {
-  		var numCards = game.nCards();
+  		var numCards = game.nCards() * 2;
 
   		this.opponentId = game.opponent()._id
   		this.myId = Meteor.user()._id
 
 			var ratio = 1,
-				width = 12,
-				height = 16,
-				trackerHeight = 160,
-	  		trackerWidth = 52,
+				width = 32,
+				height = 42,
+				trackerHeight = 222,
+	  		trackerWidth = 96,
 	  		totalHeight = 0,
 	  		cols = 0,
 	  		rows = 0;
@@ -200,10 +201,10 @@
 			 	ratio = (trackerWidth / (++cols)) / width;
 				width = Math.floor(ratio * width);
 				height = Math.floor(ratio * height);
-				totalHeight = getHeight(width, height, game.nCards());
+				totalHeight = getHeight(width, height, game.nCards() * 2);
 			}
 
-			innerStyle = 'style="height:' + (height - 1) +'px; width:' + (width - 1) +'px;"';
+			innerStyle = 'style="margin: 0 auto; height:' + (height - 5) +'px; width:' + (width - 5) +'px;"';
 
 			if(width <= 1) {
 				width = 1;
@@ -219,7 +220,8 @@
 			
 			function getHeight() { 
 				cols = Math.floor(trackerWidth / width);
-				rows = Math.ceil(game.nCards() / cols);
+				rows = Math.ceil((game.nCards() * 2) / cols);
+				console.log(cols, rows);
 				return (rows * height);
 			}
   	}
@@ -236,11 +238,12 @@
 			selected: function() {
 				// XXX Too slow with large numbers of cards
 				var str = '';
-				var numSelected = game.player(_.without(game.get('users'),this._id)).numSelected;
+				//var numSelected = game.player(_.without(game.get('users'),this._id)).numSelected;
+				var numSelected = game.player(this._id).numSelected;
 				var selected = ''
 				for(var i = 0; i < game.nCards() ; i++) {
 					selected = i < numSelected ? 'selected' : '';
-					str += '<div class="little-card ' + selected + '" ' + style + '><div class="inner" '+ innerStyle +'></div></div>';
+					str += '<div class="little-scroll ' + selected + '" ' + style + '><div class="little-scroll-inner" '+ innerStyle +'></div></div>';
 				}
 					
 				return  str;
@@ -272,17 +275,22 @@
 			}
 		});
 
-		Template.card_view.helpers({
-				showStats: function() {
-					if(game)
-						return true;
+		Template.scroll_select_view.helpers({
+				myStats: function() {
+					return game.myCardStats(this._id);
 				},
-				stats: function() {
+				opponentStats: function() {
 					return game.opponentCardStats(this._id);
+				},
+				selectionCount: function() {
+					return game.selectionCount(this._id);
 				}
 		});
 
-		Template.stat_circle.helpers({
+		Template.scroll_stat.helpers({
+			height: function() {
+				return (this.val * 100) + '%';
+			},
 			rotate: function() {
 				var deg = this.val*360;
 				if(deg > 180)
@@ -304,28 +312,22 @@
 				return transformPrefix;
 			}
 		});
-		
-
-
-		Template.card_selection_view.selectionCount = function() {
-			return game.selectionCount(this._id);
-		}
 
 
 			/*
 				Deck play template helpers and events
 			*/
-			Template.deck_play.created = function() {
+			Template.play_view.created = function() {
 				this.deck = game.deck();
 				this.me = game.me();
 				this.opponent = game.opponent();
 		 	};
 
-		 	Template.deck_play.rendered = function() {
+		 	Template.play_view.rendered = function() {
 		 		$('#answer').focus();
 		 	};
 
-	 		Template.deck_play.helpers({
+	 		Template.play_view.helpers({
 	 			me: function(ctx) { return ctx.template.me; },
 	 			opponent: function(ctx){ return ctx.template.opponent; },
 	 			deck: function(ctx) { return ctx.template.deck; },
@@ -423,7 +425,7 @@
      	}); 
 
 
-	 		Template.deck_play.events({
+	 		Template.play_view.events({
  				'click': function(e, template) {
  					$('#answer').focus();
  				},
@@ -621,47 +623,6 @@
 				}
 			});
 
-			Template.level_progress.helpers({
-				level: function() {
-					var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
-					return user.level%60 + 1;
-				},
-				stage: function(){
-					var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
-					var stage = Math.ceil((user.level+1)/60)
-					if(stage % 2 == 0)
-						return 'stage-' + (stage-1) + ' half';
-					else 
-						return 'stage-' + stage;
-				},
-				rotate: function() {
-					var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
-					var degs = getDegs(user);
-
-					if(degs > 180)
-						return ': rotate(180deg); width: 16px;';
-					else
-						return ': rotate(' + degs + 'deg);';  
-				},
-				rotateSecond: function() {
-					var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
-					var degs = getDegs(user);
-
-					return ': rotate(' + degs + 'deg);';
-				},
-				hide: function() {
-					var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
-					var degs = getDegs(user);
-
-					if(degs > 180)
-						return 'clip: auto;';
-					else
-						return '';
-				},
-				prefix: function() {
-					return transformPrefix;
-				}
-			});
 
 			Template.select_dialog.helpers({
 				init: function() {
@@ -674,45 +635,6 @@
 					return Template[message] && Template[message]();
 				}
 			});
-
-			// function animateLevel(user) {
-			// 	var degs = getDegs(user);
-			// 	var who = 'me';
-			// 	var firstSemi = $('#' + who + ' .first-semi');
-			// 	var secondSemi = $('#' + who + ' .second-semi');
-			// 	var inner = $('#' + who + ' .inner');
-			// 	var levelEl = $('#' + who + ' .stat-circle .stage');
-
-			// 	if(user.level !== parseInt(levelEl.html(), 10)) {
-			// 		firstSemi.attr('style', '');
-			// 		secondSemi.attr('style', '');
-			// 		inner.css('clip', 'rect(0px, 30px, 30px, 15px)');
-			// 		levelEl.html(user.level);
-			// 	}
-
-			// 	if(degs > 180) {
-			// 		firstSemi.attr('style', transformPrefix + ': rotate(180deg); width: 16px;');
-			// 		secondSemi.attr('style', transformPrefix + ': rotate(' + degs + 'deg)');
-			// 		secondSemi.animate( { textIndent: degs },
-			// 		{
-			// 			step: function(now,fx) {
-			// 				console.log(now);
-			// 				if(now > 182)
-			// 					inner.css('clip', 'auto');
-			// 			}
-			// 		});
-			// 	} else {
-			// 		firstSemi.attr('style', transformPrefix + ': rotate(' + degs + 'deg)');
-			// 		secondSemi.attr('style', transformPrefix + ': rotate(' + degs + 'deg)');
-			// 		inner.css('clip', 'rect(0px, 30px, 30px, 15px)');
-			// 	}				
-			// }
-
-			function getDegs(user) {
-					var levelPoints = Stats.levelPoints(user.level) - user.points;
-					var levelPointsNeeded = Stats.levelPoints(user.level);
-					return (levelPoints / levelPointsNeeded)*360;
-			}
 
 		 	view.render('game');
 		});

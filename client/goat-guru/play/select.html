@@ -1,0 +1,166 @@
+<template name='select_view'>
+	<div id='select-screen'>
+		<div id='my-tracker' class='tracker'>
+			{{> problem_tracker currentUser}}
+		</div>
+
+		<div id='scroll-select-view'>
+			<div class='scroll-select-inner'>
+				{{#with deck}}
+					<h3 class='tome-title'>{{title}}</h4>
+					<div class='shelf connect'></div>
+				{{/with}}
+				
+				{{> scroll_select_table cards}}
+			</div>
+		</div>
+
+		<div id='opponent-tracker' class='tracker'>
+			{{> problem_tracker opponent}}
+		</div>
+			
+		<div class="quit-button">Quit</div>
+		<div class='randomize-button'>Random</div>
+		<div class='play-button'>Go</div>
+		{{#constant}}
+		<div class='awning title'>SELECT YOUR OPPONENTS CARDS (<span class='timer'></span>)</div>
+		{{/constant}}
+	</div>
+	{{> select_dialog}}
+</template>
+
+<template name='problem_tracker'>
+	<h4>{{username}}</h4>
+ <div class='problem-tracker'>
+ 	{{#if select}}
+ 		{{{selected}}}
+ 	{{else}}
+ 		{{#each tracker}}
+ 			<div class='little-scroll {{this}}' {{{style}}}>
+ 				<div class='little-scroll-inner' {{{innerStyle}}} ></div>
+ 			</div>
+ 		{{/each}}
+	{{/if}}
+ </div>
+</template>
+
+<template name='max_cards'>
+	<h2>Whoops!</h2>
+	<p>You've already selected the maximum number of cards allowed per game.</p>
+</template>
+
+<template name='scroll_select_table'>
+	<table id='scroll-select-table'>
+		{{#each this}}
+				{{> scroll_select_view}}
+		{{/each}}
+	</table>
+</template>
+
+<template name='scroll_select_view'>
+	<tr class='scroll-select-info'>
+		<td>
+			<div class='scroll-title'>{{title}}</div>
+		</td>
+		{{#with myStats}}
+		<td>
+			<div class='points'>{{points.val}}</div>
+		</td>
+		<td class='stats-box'>
+			<div>
+				{{> scroll_stat speed}}
+				{{> scroll_stat accuracy}}
+				{{> scroll_stat retention}}
+			</div>
+		</td>
+		{{/with}}
+		<td class='stats-box'>
+			{{#with opponentStats}}
+				<div>
+					{{> scroll_stat speed}}
+					{{> scroll_stat accuracy}}
+					{{> scroll_stat retention}}
+				</div>
+			{{/with}}
+		</td>
+		<td class='selection-counter'>
+			{{#isolate}}
+				{{#if selectionCount}}
+					<div class="selection-count">
+						{{selectionCount}}
+					</div>
+					<div class='subtract'></div>
+				{{/if}}
+			{{/isolate}}
+		</td>
+	</tr>
+</template>
+
+
+
+<template name='scroll_stat'>
+	<div class='scroll-stat'>
+		<div class='scroll-stat-inner' style='height: {{height}}'></div>
+	</div>
+</template>
+
+
+<!--  Here so create doesn't break and confuse me later.  Needs to change and move -->
+
+<template name='card_view'>
+	<div title="{{grade}}" class='card' style='background-image: url({{image}});'>
+		{{#if showStats}}
+			{{#with stats}}
+				<div class='points-banner'>
+					<div class='points'>{{points.val}}</div>
+				</div>
+				<div class='stats-box'>
+					<ul>
+						{{> scroll_stat speed}}
+						{{> scroll_stat accuracy}}
+						{{> scroll_stat retention}}
+					</ul>	
+				</div>
+				{{/with}}
+		{{/if}}
+	</div>
+</template>
+
+
+<!-- Dialogs -->
+
+<template name="select_dialog">
+	{{#ui init}}
+		{{{ message }}}
+	{{/ui}}
+</template>
+
+<template name="select_waiting">
+	<h2>One Sec...</h2>
+	<div class='inner-await'>
+		Waiting for the other player to finish selecting your cards
+		<center>
+			<img style='margin: 15px 0 -12px;' src='/app!common/img/wait.gif' />
+		</center>
+	</div>
+</template>
+
+<template name="limbo_waiting">
+	<h2>One Sec...</h2>
+	<div class='inner-await'>
+		Waiting for the other player to join the game
+		<center>
+			<img style='margin: 15px 0 -12px;' src='/app!common/img/wait.gif' />
+		</center>
+	</div>
+</template>
+
+<template name="quit_overlay">
+	<h2>You Quit</h2>
+	<div class='inner-await'>
+		Watch the other player
+		<center>
+			<img style='margin: 15px 0 -12px;' src='/app!common/img/wait.gif' />
+		</center>
+	</div>
+</template>

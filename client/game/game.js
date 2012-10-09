@@ -2,7 +2,7 @@
 
   var defaults = {
     nCards: 5,
-    cardSelectTime: 30,
+    cardSelectTime: 99999,
     playPastTime: 1000,
     heartbeat_timeout: 2,
     speedBonusCutoff: .5
@@ -319,6 +319,17 @@
       };
       return stats;
     }
+  }
+
+  Game.prototype.myCardStats = function (cardId) {
+    var stat = Stats.userCard(Meteor.user()._id, cardId);
+    var stats = {
+      accuracy: { name: 'accuracy', val:  stat.accuracy},
+      speed:  { name: 'speed', val: stat.speed },
+      points: { name: 'points', val: Math.round(Stats.points(Stats.regrade(cardId))) },
+      retention: { name: 'retention', val: stat.retention }
+    };
+    return stats;
   }
 
 
@@ -900,9 +911,9 @@
   }
 
   var stateTemplateMap = {
-    'limbo': 'cards_select',
-    'select': 'cards_select',
-    'play': 'deck_play',
+    'limbo': 'select_view',
+    'select': 'select_view',
+    'play': 'play_view',
     'results': 'end_game',
     'canceled': 'game_canceled',
     'quit': 'game_quit',

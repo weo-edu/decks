@@ -3,16 +3,14 @@
 <!-- Goat Browse -->
 
 <template name='goat_browse'>
-	<div id='browse-view'>
-		<div class='browse'>
-			{{#each categories}}
-				{{> category this}}
-			{{/each}}
-		</div>
-		<div class='sidebar'>
-			<div class='cloud'>Namaste!</div>
-			<img class='goat-left' src='/app!decks/img/goat-left.png' />
-		</div>
+	<div class='browse'>
+		{{#each categories}}
+			{{> category this}}
+		{{/each}}
+	</div>
+	<div class='sidebar'>
+		<div class='cloud'>Namaste!</div>
+		<img class='goat-left' src='/app!decks/img/goat-left.png' />
 	</div>
 </template>
 
@@ -23,7 +21,7 @@
 			{{#each tomes}}
 				<div class='tome-container'>
 					{{> tome}}
-					<h4 class='tome-title'>{{title}}</h4>
+					<h5 class='tome-title'>{{title}}</h5>
 				</div>
 			{{/each}}
 		</div>
@@ -34,7 +32,7 @@
 <!-- Social Browse -->
 
 <template name='friends_browse'>
-	<div id='browse-view' class='friends-browse'>
+	<div class='friends-browse'>
 		<div class='sidebar buddy-list'>
 			<div class='sidebar-inner'>
 				{{> buddies}}
@@ -65,7 +63,7 @@
 	{{#each decks}}
 		<div class='tome-container'>
 			{{> tome}}
-			<h4 class='tome-title'>{{title}}</h4>
+			<h5 class='tome-title'>{{title}}</h5>
 		</div>
 	{{/each}}
 	</div>
