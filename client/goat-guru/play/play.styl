@@ -8,11 +8,16 @@
 	height: 100%;
 }
 
+.tracker-container {
+	float: left;
+	width: 224px;
+}
+
 .tracker {
 	background: url('/app!decks/img/tracker.png') center bottom no-repeat;
 	height: 425px;
 	width: 224px;
-	float: left;
+	margin-bottom: -35px;
 	h4 {
 		padding-top: 10px;
 		text-align: center;
@@ -100,19 +105,54 @@
 	.scroll-select-info {
 		cursor: pointer;
 		clearfix();
-		&:nth-child(odd) {
+		&:nth-child(even) {
 				background: rgba(black, .2);				
 		}
 		&:hover {
 				background: rgba(black, .35);
+				text-shadow: -1px -1px 0 rgba(white, .3)
 		}
-		td {
+		&:first-child:hover {
+			cursor: default;
+			background: none;
+		}
+		th {
+			color: #555;
+			font-size: 22px;
+			&.center {
+				text-align: center;
+			}
+		}
+		td, th {
 			height: 40px;
 			padding: 5px 8px;
 		}
 
 		.selection-counter {
-			min-width: 15px;
+			min-width: 18px;
+			.selection-count, .subtract {
+				margin: 0 auto;
+				border-radius: 50%;
+				height: 18px;
+				width: 18px;
+				background: blue;
+				font: 16px/18px 'Fresca';
+				text-align: center;
+				color: white;
+				text-shadow: 1px 1px 0 rgba(black, .5);
+				box-shadow: inset 1px 1px 0 rgba(white, .5), inset -1px -1px 0 rgba(black, .5), 0 0 5px rgba(black, .5);
+				&:hover {
+					box-shadow: inset 1px 1px 0 rgba(white, .5), inset -1px -1px 0 rgba(black, .5), 0 0 7px rgba(black, .7);
+				}
+				&:active {
+					box-shadow: inset 1px 1px 0 rgba(white, .5), inset -1px -1px 0 rgba(black, .5), 0 0 5px rgba(black, .5);
+				}
+			}
+			.subtract {
+				background: red;
+				margin-top: 4px;
+				font-size: 20px;
+			}
 		}
 	}
 	
@@ -129,6 +169,7 @@
 		position: relative;
 		background: #EEE;
 		box-shadow: inset 0 0 6px #222;
+		outline: 1px solid #999;
 		&:last-child {
 			margin-right: 0;
 		}
@@ -136,14 +177,13 @@
 			position: absolute;
 			bottom: 0;
 			width: 100%;
-			background-color: red;
 		}
 	}
 }
 
 .quit-button, .randomize-button, .play-button {
 	red-button();
-	float: right;
+	margin: 0 auto;
 }
 
 /**
@@ -157,12 +197,63 @@
 	width: 548px;
 	margin: 10px -8px 0;
 	float: left;
+	position: relative;
 }
 
 #problem {
-	height: 425px;
-	width: 487px;
-	margin: 46px auto 0;
+	// height: 425px;
+	top: 50%;
+	left: 50%
+	margin-left: -244px;
+	position: absolute;
+	width: 488px;
 	font: 25px/1.2em  'BleakChop';
 	text-align: center;
+}
+
+#game-points {
+	text-align: center;
+	font: 23px/35px 'BleakChop';
+	color: #FFF;
+	text-shadow: 1px 1px 0 rgba(black, .5);
+}
+
+#speed-bar {
+	height: 20px;
+	width: 120px;
+	margin: 0 auto;
+	background: #EEE;
+	box-shadow: inset 0 0 6px #222;
+	.inner-speed-bar {
+		height: 20px;
+		background-color: blue;
+	}
+}
+
+#multiplier {
+	font: 17px/25px 'BleakChop';
+	color: #FFF;
+	text-align: center;
+}
+
+#bonus {
+	position: absolute;
+	bottom: 20px;
+	z-index: 999;
+	width: 548px;
+	height: 100px;
+	font: 0px/50px 'BleakChop';
+	text-align: center;
+	text-shadow: 5px 5px 0px #454545;
+	margin: 0 0 100px 0;
+	&.critical {
+		color = lighten(#CF0000, 10);
+		-webkit-text-stroke: 2px darken(color, 20);
+		color: color;
+	}
+	&.spree {
+		color = #3FA9F5;
+		-webkit-text-stroke: 2px darken(color, 20);
+		color: color;
+	}	
 }

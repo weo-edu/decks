@@ -114,7 +114,7 @@
 			self.message[utils.rand_int(0, self.message.length-1)] 
 			: self.message;
 
-		msg += '<br/>' + points;
+		msg += '<br/>+' + points;
 		if(self.game.me()._id !== 1) {
 			$('#bonus').attr('style', ' ').html(msg).attr('class', self.name)
 				.stop(true, false)

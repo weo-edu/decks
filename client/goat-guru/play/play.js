@@ -150,7 +150,7 @@
 				},
 				'click .quit-button': function(e, template) {
 					game.quit();
-					route('/deck/browse');
+					route('/goat');
 				},
 				'mousedown .scroll-select-info': function(evt, template) {
 					if(evt.which === 1) {
@@ -160,7 +160,7 @@
 						});
 					}
 				},
-				'mousedown .selection-count': function(evt, template) {
+				'mousedown .subtract': function(evt, template) {
 					if(evt.which === 1) {
 						var data = this;
 						template.handler = ui.down(template,function() {
@@ -291,351 +291,391 @@
 			height: function() {
 				return (this.val * 100) + '%';
 			},
-			rotate: function() {
-				var deg = this.val*360;
-				if(deg > 180)
-					return ': rotate(180deg); width: 16px;';
-				else
-					return ': rotate(' + deg + 'deg);';  
-			},
-			rotateSecond: function() {
-				var deg = this.val*360;
-				return ': rotate(' + deg + 'deg);';
-			},
-			hide: function() {
-				if(this.val*360 > 180)
-					return 'clip: auto;';
-				else
-					return '';
-			},
-			prefix: function() {
-				return transformPrefix;
+			backgroundColor: function() {
+				var p = (this.val * 100);
+				var color = '#D31F2C';
+				if ( p > 95)
+					color = '#29ABE2';		
+				else if (p > 75)
+					color = '#52BF46';
+				else if (p > 40)
+					color = '#FED53A';
+
+				return color;
+			}
+		});
+
+		Template.scroll_select_table.helpers({
+			opponent: function() {
+				return game.opponent();
 			}
 		});
 
 
-			/*
-				Deck play template helpers and events
-			*/
-			Template.play_view.created = function() {
-				this.deck = game.deck();
-				this.me = game.me();
-				this.opponent = game.opponent();
-		 	};
+		/*
+			Deck play template helpers and events
+		*/
+		Template.play_view.created = function() {
+			this.deck = game.deck();
+			this.me = game.me();
+			this.opponent = game.opponent();
+	 	};
 
-		 	Template.play_view.rendered = function() {
-		 		$('#answer').focus();
-		 	};
+	 	Template.play_view.rendered = function() {
+	 		$('#answer').focus();
+	 	};
 
-	 		Template.play_view.helpers({
-	 			me: function(ctx) { return ctx.template.me; },
-	 			opponent: function(ctx){ return ctx.template.opponent; },
-	 			deck: function(ctx) { return ctx.template.deck; },
-	 			message: function() {
-	 				var dialog = ui.get('.dialog');
-	 				var message = dialog.get('message');
-	 				return Template[message] && Template[message]();
-	 			}
-	 		});
+ 		Template.play_view.helpers({
+ 			me: function(ctx) { return ctx.template.me; },
+ 			opponent: function(ctx){ return ctx.template.opponent; },
+ 			deck: function(ctx) { return ctx.template.deck; },
+ 			message: function() {
+ 				var dialog = ui.get('.dialog');
+ 				var message = dialog.get('message');
+ 				return Template[message] && Template[message]();
+ 			}
+ 		});
 
-	 		var problemRendered = null;
-	 		Template.problem_container.created = function() {
-	 			var self = this;
+ 		var problemRendered = null;
+ 		Template.problem_container.created = function() {
+ 			var self = this;
 
-	 			self.timer_el = null;
-				function startTimer() {
-					ui.timer(game.timeToPlay(), function(time) {
-						if (self.timer_el)
-							self.timer_el.innerHTML = Math.floor(time / 1000);
-					});
-				}
+ 			self.timer_el = null;
+			function startTimer() {
+				ui.timer(game.timeToPlay(), function(time) {
+					if (self.timer_el)
+						self.timer_el.innerHTML = Math.floor(time / 1000);
+				});
+			}
 
-				if (game.state() === 'play.')
-					startTimer();
-				else
-					game.on('play.', startTimer);
-	 		}
+			if (game.state() === 'play.')
+				startTimer();
+			else
+				game.on('play.', startTimer);
+ 		}
 
-	 		Template.problem_container.rendered = function() {
-	 			if (this.firstRender) {
-	 				if (!this.timer_el)
-	 					this.timer_el = this.find('.timer');
-	 			}
-	 		}
+ 		Template.problem_container.created = function() {
+ 			this.alignProblem = function() {
+ 				$('#problem').css({
+ 					'margin-top': -(($('#problem').height() / 2))
+ 				});
+ 			}
+ 		}
 
-	 		Template.problem_container.helpers({
-	 			card: function() {
-	 				return game.currentProblem();
-	 			}
-	 		});
+ 		Template.problem_container.rendered = function() {
+ 			if (this.firstRender) {
+ 				if (!this.timer_el)
+ 					this.timer_el = this.find('.timer');
+ 			}
 
+ 			this.alignProblem();
+ 		}
 
-	 		var pointsEl = null;
-	 		Template.game_points.rendered = function() {
-	 			pointsEl = document.getElementById('game-points');
-	 		}
-
-	 		Template.game_points.points = function() {
-	 				return routeSession.get('myPoints') || Math.round(game.points(game.me()._id));
-	 		} 
-
-	 		Template.game_multiplier.helpers({
-	 			multiplier: function() {
-	 				return utils.round(game.getMultiplier(),2);
-	 			}
-	 		});
-
-	 		Template.problem_speed.created = function() {
-	 			var self = this;
-	 			//XXX shouldnt use spark for rendering of this
-	 			self.store.set('speed', game.currentSpeed());
-	 			self.speedUpdate = function() {
-		 				self.interval = Meteor.setInterval(function() {
-			 				var speed = game.currentSpeed();
-			 				self.store.set('speed', speed);
-			 				if ( !speed) {
-			 					Meteor.clearInterval(self.interval)
-			 					self.interval = null;
-			 				}
-			 			}, 200);
-	 			}
-	 			game.on('next', function() {
-	 				if (!self.interval)
-	 					self.speedUpdate();
-	 			});
-	 			self.speedUpdate();
-	 		}
-
-	 		Template.problem_speed.rendered = function() {
-	 			console.log('problem speed rendered');
-	 		}
-
-	 		Template.problem_speed.speed = function(opts) {
-	 			return opts.template.get('speed');
-	 		}
-
-	 		Template.problem_speed.destroyed = function() {
-	 			Meteor.clearInterval(this.interval);
-	 		}
-
-	 		Template.current_card.helpers({
-        card: function() {
-          return game.currentProblem();
-        }
-     	}); 
+ 		Template.problem_container.helpers({
+ 			card: function() {
+ 				return game.currentProblem();
+ 			}
+ 		});
 
 
-	 		Template.play_view.events({
- 				'click': function(e, template) {
- 					$('#answer').focus();
- 				},
- 				'click .quit-button': function() {
- 					game.quit();
- 					route('/deck/browse');
- 				},
- 				'keypress input': function(e, template) {
- 					if(e.which === 13 && game.state() !== 'play.waiting') {
-						var res = game.answer(parseInt($('#answer').val(), 10));
-						var problem = game.currentProblem();
+ 		var pointsEl = null;
+ 		Template.game_points.rendered = function() {
+ 			pointsEl = document.getElementById('game-points');
+ 		}
 
-						var card = _.clone(Cards.findOne(problem.card_id));
-						card.type = 'card';
+ 		Template.game_points.points = function() {
+ 				return routeSession.get('myPoints') || Math.round(game.points(game.me()._id));
+ 		} 
 
-						event({name: 'complete', time: problem.time},
-							card,
-							{
-								adverbs: res ? 'correctly' : 'incorrectly',
-								groupId: game.id
-							});
-
- 						game.nextProblem();
-
-	 					var inc = 1;
-				 		var pointsTimeout = null;
-				 		var curPoints = parseInt(pointsEl.innerHTML, 10);
-				 		var endPoints = Math.round(game.points(game.me()._id));
-				 		var delta = endPoints - curPoints;
-
-	 					var dur = 19;
-		 				if(dur === 19) {
-		 					while(dur < 20) {
-		 					 inc++;
-		 					 dur = 500 / (delta / inc);
-		 					}
+ 		Template.game_multiplier.created = function() {
+ 			var self = this;
+ 			//XXX shouldnt use spark for rendering of this
+ 			self.store.set('speed', game.currentSpeed());
+ 			self.speedUpdate = function() {
+	 				self.interval = Meteor.setInterval(function() {
+		 				var speed = game.currentSpeed();
+		 				self.store.set('speed', speed);
+		 				if ( !speed) {
+		 					Meteor.clearInterval(self.interval)
+		 					self.interval = null;
 		 				}
+		 			}, 200);
+ 			}
+ 			game.on('next', function() {
+ 				if (!self.interval)
+ 					self.speedUpdate();
+ 			});
+ 			self.speedUpdate();
+ 		}
 
-				 		function stop() {
-				 			template.pointsInterval && clearInterval(template.pointsInterval);
-				 			template.pointsInterval = null;
-				 		}
+ 		Template.game_multiplier.helpers({
+ 			'speed': function(opts) {
+	 			return opts.template.get('speed') * 100;
+	 		},
+	 		multiplier: function() {
+	 			var multiplier = utils.round(game.getMultiplier(),2);
+	 			return multiplier ? ('x' + multiplier) : '';
+ 			}
+ 		}); 
 
-				 		stop();
+ 		Template.game_multiplier.destroyed = function() {
+ 			Meteor.clearInterval(this.interval);
+ 		}
 
-				 		template.pointsInterval = setInterval(function() {
-			 				if(curPoints < endPoints) {
-								curPoints += inc;
-								pointsEl.innerHTML = curPoints;
-								// XXX Switch to jQuery for setTimeout
-							} else {
-								routeSession.set('myPoints', endPoints);
-								stop();
-							}
-				 		}, dur);
-
- 						Meteor.defer(function(){ 
- 							$('#answer').focus(); 
- 						});
- 					}
- 				}
-	 		});
+ 		Template.current_card.helpers({
+      card: function() {
+        return game.currentProblem();
+      }
+   	}); 
 
 
-			Template.play_continue.events({
-				'click .end': function() {
-					game.dispatch('end');
+ 		Template.play_view.events({
+				'click': function(e, template) {
+					$('#answer').focus();
 				},
-				'click .continue': function() {
-					game.dispatch('continue');
-				}
-			});
+				'click .quit-button': function() {
+					game.quit();
+					route('/goat');
+				},
+				'keypress input': function(e, template) {
+					if(e.which === 13 && game.state() !== 'play.waiting') {
+					var res = game.answer(parseInt($('#answer').val(), 10));
+					var problem = game.currentProblem();
 
-			Template.play_waiting.created = function() {
-				var self = this;
-				self.timer_el = null;
-				function startTimer() {
-					ui.timer(game.timeToPlay(), function(time) {
-						if (self.timer_el)
-							self.timer_el.innerHTML = Math.floor(time / 1000);
+					var card = _.clone(Cards.findOne(problem.card_id));
+					card.type = 'card';
+
+					event({name: 'complete', time: problem.time},
+						card,
+						{
+							adverbs: res ? 'correctly' : 'incorrectly',
+							groupId: game.id
+						});
+
+						game.nextProblem();
+
+ 					var inc = 1;
+			 		var pointsTimeout = null;
+			 		var curPoints = parseInt(pointsEl.innerHTML, 10);
+			 		var endPoints = Math.round(game.points(game.me()._id));
+			 		var delta = endPoints - curPoints;
+
+ 					var dur = 19;
+	 				if(dur === 19) {
+	 					while(dur < 20) {
+	 					 inc++;
+	 					 dur = 500 / (delta / inc);
+	 					}
+	 				}
+
+			 		function stop() {
+			 			template.pointsInterval && clearInterval(template.pointsInterval);
+			 			template.pointsInterval = null;
+			 		}
+
+			 		stop();
+
+			 		template.pointsInterval = setInterval(function() {
+		 				if(curPoints < endPoints) {
+							curPoints += inc;
+							pointsEl.innerHTML = curPoints;
+							// XXX Switch to jQuery for setTimeout
+						} else {
+							routeSession.set('myPoints', endPoints);
+							stop();
+						}
+			 		}, dur);
+
+					Meteor.defer(function(){ 
+						$('#answer').focus(); 
 					});
 				}
+			}
+		});
 
-				if (game.state() === 'play.waiting')
-					startTimer();
-				else
-					game.on('play.waiting', startTimer);
+
+		Template.play_continue.events({
+			'click .end': function() {
+				game.dispatch('end');
+			},
+			'click .continue': function() {
+				game.dispatch('continue');
+			}
+		});
+
+		Template.play_waiting.created = function() {
+			var self = this;
+			self.timer_el = null;
+			function startTimer() {
+				ui.timer(game.timeToPlay(), function(time) {
+					if (self.timer_el)
+						self.timer_el.innerHTML = Math.floor(time / 1000);
+				});
 			}
 
-			Template.play_waiting.rendered = function() {
-	 			if (this.firstRender) {
-	 				if (!this.timer_el)
-	 					this.timer_el = this.find('.timer');
-	 			}
+			if (game.state() === 'play.waiting')
+				startTimer();
+			else
+				game.on('play.waiting', startTimer);
+		}
+
+		Template.play_waiting.rendered = function() {
+ 			if (this.firstRender) {
+ 				if (!this.timer_el)
+ 					this.timer_el = this.find('.timer');
+ 			}
+ 		}
+
+	 	/*
+	 		Results
+	 	*/
+	 	Template.results_view.helpers({
+ 			winner: function(ctx) {
+ 				var winner = game.winner();
+ 				return winner && winner.username || 'TIE';
+ 			}
+	 	});
+
+	 	Template.results_table.created = function() {
+	 		this.results = game.results();
+	 		this.me = game.me();
+	 		this.opponent = game.opponent();
+	 		this.bonuses = {
+	 			me: game.breakdown(this.me._id), 
+	 			opponent: game.breakdown(this.opponent._id)
+	 		};
+	 	}
+
+	 	Template.results_table.helpers({
+	 		results: function(ctx) {
+ 				return ctx.template.results;
+ 			},
+ 			// XXX ?
+	 		opponentName: function() {
+	 			return game.opponent().username;
+	 		},
+ 			round: function(points) {
+ 				return Math.round(points);
+ 			},
+ 			bonuses: function() {
+ 				return Meteor.template.bonuses;
+ 			}
+ 		});
+
+	 	
+
+	 	Template.results_view.events({
+	 		'click .rematch-button': function() {
+	 			var deckId = game.deck()._id;
+				var uid = game.opponent().synthetic ? game.me()._id : game.opponent()._id;
+
+				Game.route(deckId, uid);
 	 		}
+	 	});
 
-		 	/*
-		 		Results
-		 	*/
-		 	Template.play_results.created = function() {
-		 		this.results = game.results();
-		 		this.opponent = game.opponent();
-		 		this.me = game.me();
-		 	}
+ 	// 	Template.end_game.helpers({
+ 	// 		results: function(ctx) {
+ 	// 			return ctx.template.results;
+ 	// 		},
+ 	// 		opponent: function() {
+ 	// 			console.log('game',game.me());
+ 	// 			return game.opponent();
+ 	// 		},
+ 	// 		winner: function(ctx) {
+ 	// 			var winner = game.winner();
+ 	// 			return winner && winner.username || 'TIE';
+ 	// 		},
+		// 	show_cards: function() {
+		// 		return routeSession.get('show_cards');
+		// 	},
+ 	// 		message: function() {
+ 	// 			var dialog = ui.get('.dialog');
+ 	// 			var message = dialog.get('message');
+ 	// 			return Template[message] && Template[message]();
+ 	// 		}
+		// });
 
-	 		Template.play_results.helpers({
-	 			results: function(ctx) {
-	 				return ctx.template.results;
-	 			},
-	 			opponent: function(ctx) {
-	 				return ctx.template.opponent;
-	 			},
-	 			winner: function(ctx) {
-	 				var winner = game.winner();
-	 				return winner && winner.username || 'TIE';
-	 			}
-	 		});
+		// Template.end_game.events({
+		// 		'click #results-nav .rematch': function() {
+		// 			var deckId = game.deck()._id;
+		// 			var uid = game.opponent().synthetic ? game.me()._id : game.opponent()._id;
 
-	 		Template.individual_results.helpers({
-	 			round: function(points) {
-	 				return Math.round(points);
-	 			}
-	 		});
+		// 			Game.route(deckId, uid);
+		// 		},
+		// 		'click #results-nav .back': function() {
+		// 			route('/');
+		// 		},
+		// 		'click #view-cards-nav .results': function(evt, template) {
+		// 			$('#slider').removeClass('show-cards', 400, 'easeInOutExpo', function(){
+		// 					routeSession.set('show_cards', '');
+		// 			});
+		// 		},
+		// 		'click #results-nav .view-cards': function(evt, template) {
+		// 			$('#slider').addClass('show-cards', 400, 'easeInOutExpo', function(){
+		// 					routeSession.set('show_cards', 'show-cards');
+		// 			});
+		// 		} 
+		// });
 
-	 		Template.end_game.helpers({
-				show_cards: function() {
-					return routeSession.get('show_cards');
-				},
-	 			message: function() {
-	 				var dialog = ui.get('.dialog');
-	 				var message = dialog.get('message');
-	 				return Template[message] && Template[message]();
-	 			}
-			});
+		// Template.individual_results.helpers({
+ 	// 		round: function(points) {
+ 	// 			return Math.round(points);
+ 	// 		}
+ 	// 	});
 
-			Template.end_game.events({
- 				'click #results-nav .rematch': function() {
- 					var deckId = game.deck()._id;
- 					var uid = game.opponent().synthetic ? game.me()._id : game.opponent()._id;
-
- 					Game.route(deckId, uid);
- 				},
- 				'click #results-nav .back': function() {
- 					route('/');
- 				},
- 				'click #view-cards-nav .results': function(evt, template) {
- 					$('#slider').removeClass('show-cards', 400, 'easeInOutExpo', function(){
- 							routeSession.set('show_cards', '');
- 					});
- 				},
- 				'click #results-nav .view-cards': function(evt, template) {
- 					$('#slider').addClass('show-cards', 400, 'easeInOutExpo', function(){
- 							routeSession.set('show_cards', 'show-cards');
- 					});
- 				} 
-			});
-
-			Template.view_cards.helpers({
-				cards: function() {
-					return game.problems();
-				},
-				image: function() {
-					return Cards.findOne(this.card_id).image;
-				},
-				correct: function() {
-					return game.isCorrect(this) ? 'correct' : 'incorrect';
-				},
-				review: function() {
-					return routeSession.get('review');
-				},
-				review_card: function() {
-					return routeSession.get('review_card');
-				}
-			});
-
- 			Template.view_cards.events({
-				'click .card': function(evt, template) {
-					var self = this;
-					$('#slider').addClass('review', 400, 'easeInOutExpo', function(){
-							routeSession.set('review_card', self);
-							routeSession.set('show_cards', 'review');
-					});
-				}
-			});
-
-
-			Template.review_problem.events({
-				'click .review-back': function() {
-					$('#slider').switchClass('review', 'show-cards', 400, 'easeInOutExpo', function(){
- 							routeSession.set('show_cards', 'show-cards');
- 					});
-				},
-				'click .solution': function() {
-					alert(routeSession.get('review_card').solution);
-				}
-			});
-
-
-			Template.select_dialog.helpers({
-				init: function() {
-					return {component: 'dialog'};
-				},
-				message: function(ctx) {
-					//console.log(ctx.template.find('.dialog'));
-					var dialog = ui.get('.dialog');
-					var message = dialog.get('message');
-					return Template[message] && Template[message]();
-				}
-			});
-
-		 	view.render('game');
+		Template.view_cards.helpers({
+			cards: function() {
+				return game.problems();
+			},
+			image: function() {
+				return Cards.findOne(this.card_id).image;
+			},
+			correct: function() {
+				return game.isCorrect(this) ? 'correct' : 'incorrect';
+			},
+			review: function() {
+				return routeSession.get('review');
+			},
+			review_card: function() {
+				return routeSession.get('review_card');
+			}
 		});
+
+			Template.view_cards.events({
+			'click .card': function(evt, template) {
+				var self = this;
+				$('#slider').addClass('review', 400, 'easeInOutExpo', function(){
+						routeSession.set('review_card', self);
+						routeSession.set('show_cards', 'review');
+				});
+			}
+		});
+
+
+		Template.review_problem.events({
+			'click .review-back': function() {
+				$('#slider').switchClass('review', 'show-cards', 400, 'easeInOutExpo', function(){
+							routeSession.set('show_cards', 'show-cards');
+					});
+			},
+			'click .solution': function() {
+				alert(routeSession.get('review_card').solution);
+			}
+		});
+
+
+		Template.select_dialog.helpers({
+			init: function() {
+				return {component: 'dialog'};
+			},
+			message: function(ctx) {
+				//console.log(ctx.template.find('.dialog'));
+				var dialog = ui.get('.dialog');
+				var message = dialog.get('message');
+				return Template[message] && Template[message]();
+			}
+		});
+
+	 	view.render('game');
+	});
 })();

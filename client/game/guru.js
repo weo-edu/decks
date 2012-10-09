@@ -7,8 +7,11 @@
 			UserDeckInfo.insert({user: Meteor.user()._id, deck: deck_id});
 			return new Guru[MASTERY.PROFICIENT](game);
 		}
-		else
-			return new (Guru[deck_info.mastery.rank || 0] || Guru[MASTERY.MASTER_GURU])(game);
+		else {
+			var rank = deck_info.mastery && deck_info.mastery.rank || 0;
+			return new (Guru[rank] || Guru[MASTERY.MASTER_GURU])(game);
+		}
+			
 	}
 
 	Guru.goat = function () {

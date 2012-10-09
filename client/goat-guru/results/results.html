@@ -1,4 +1,83 @@
-<template name="end_game">
+<template name='results_view'>
+	<div id='results-view'>
+		<h2>Winner: {{winner}}</h2>
+		<div class='results-banners'>
+			{{> results_table}}
+			{{> errors}}
+		</div>
+		<div class='rematch-button'>REMATCH?</div>
+	</div>
+</template>
+		
+
+<template name='results_table'>
+	<table id='points-table' class='results-table'>
+			<tr class='results-header'>
+				<th></th>
+				<th>{{currentUser.username}}</th>
+				<th>{{opponentName}}</th>
+			</tr>
+			<!-- <tr>
+				<td>
+					<div class='bonus spree'></div>
+					Sprees:
+				</td>
+				<td></td>
+				<td></td>
+			</tr> -->
+			<tr>
+				<td>
+					<div class='bonus critical'></div>
+					Critical:
+				</td>
+				<td>{{bonuses.me.critical}}</td>
+				<td>{{bonuses.opponent.critical}}</td>
+			</tr>
+			<tr>
+				<td>
+					<div class='bonus time'></div>
+					Multi:
+				</td>
+				<td>{{bonuses.me.multiplier}}</td>
+				<td>{{bonuses.opponent.multiplier}}</td>
+			</tr>
+			<tr>
+				<td>
+					<div class='bonus points'></div>
+					Points:
+				</td>
+				<td>{{bonuses.me.points}}</td>
+				<td>{{bonuses.opponent.points}}</td>
+			</tr>
+			<tr class='total'>
+				{{#with results}}
+					<td>Total:</td>
+					<td>{{round me.points}}</td>
+					<td>{{round opponent.points}}</td>
+				{{/with}}
+			</tr>
+			<tr class='results-footer'><td colspan='3'></td></tr>
+		</table>
+</template>
+
+<template name='errors'>
+	<div id='errors-table' class='results-table'>
+		<div class='results-header'>Errors</div>
+		<div class='errors-table-inner'>
+			{{> error_scroll}}		
+		</div>
+		<div class='results-footer'></div>
+	</div>
+</template>
+
+<template name='error_scroll'>
+</template>
+
+
+
+
+
+<template name="end_game_bak">
 	<div id='play-results'>
 		<div id='slider' class='{{show_cards}}'>
 			{{> view_cards}}
@@ -17,20 +96,20 @@
 	</div>
 </template>
 
-<template name="play_results">
+<template name="play_results_bak">
+	{{#with results}}
 	<div id='result-box'>
-		<h2>RESULTS</h2>
+		
 		<div class='inner-results'>
-			{{#with results}}
+			
 				<div class='winner-circle'>
 					<div class='winner'>WINNER</div>
-					<div class='winner-name'>{{winner}}</div>
+					<div class='winner-name'></div>
 				</div>
 				{{> individual_results}}
-
-			{{/with}}
 		</div>
 	</div>
+	{{/with}}
 </template>
 
 <template name="individual_results">

@@ -1,26 +1,31 @@
 <template name='play_view'>
 	<div id='play-view'>
-			<div id='my-tracker' class='tracker'>
-				{{> problem_tracker currentUser}}
+			<div class='tracker-container'>
+				<div id='my-tracker' class='tracker'>
+					{{> problem_tracker currentUser}}
+				</div>
+				{{> game_points}}
+				{{> game_multiplier}}
 			</div>
 
 			<div id='problem-container'>
 				{{> problem_container}}
 				{{> current_card}}
+				{{#constant}}
+					<div id='bonus'></div>
+				{{/constant}}
 			</div>
 
-			<div id='opponent-tracker' class='tracker'>
-				{{> problem_tracker opponent}}
+			<div class='tracker-container'>
+				<div id='opponent-tracker' class='tracker'>
+					{{> problem_tracker opponent}}
+				</div>
+				<div class="quit-button">Quit</div>
 			</div>
-
-			<div class="quit-button">quit</div>
 	</div>
 	{{#ui "dialog"}}
 		{{{ message }}}
 	{{/ui}}
-	{{#constant}}
-		<div id='bonus'></div>
-	{{/constant}}
 </template>
 
 <template name="play_continue">
@@ -60,9 +65,6 @@
 		<input type="text" id="answer"/>
 	</div>
 	{{/with}}
-	{{> game_points}}
-	{{> game_multiplier}}
-	{{> problem_speed}}
 	{{#constant}}
 		<span class='timer'></span>
 	{{/constant}}
@@ -73,12 +75,12 @@
 </template>
 
 <template name='game_multiplier'>
-	<div id="game-multiplier">Multiplier: {{multiplier}}</div>
+	<div id='speed-bar'>
+		<div class="inner-speed-bar" style='width: {{speed}}%'></div>
+	</div>
+	<div id='multiplier'>{{multiplier}}</div>
 </template>
 
-<template name="problem_speed">
-	<div id="problem-speed">Speed {{speed}}</div>
-</template>
 
 <template name="current_card">
 	{{#with card}}

@@ -1,13 +1,20 @@
 <template name='select_view'>
 	<div id='select-screen'>
-		<div id='my-tracker' class='tracker'>
-			{{> problem_tracker currentUser}}
+		<div class='tracker-container'>
+			<div id='my-tracker' class='tracker'>
+				{{> problem_tracker currentUser}}	
+			</div>
+			<div class='randomize-button'>Random</div>
+			<div class='play-button'>Go</div>
 		</div>
 
 		<div id='scroll-select-view'>
 			<div class='scroll-select-inner'>
 				{{#with deck}}
 					<h3 class='tome-title'>{{title}}</h4>
+					{{#constant}}
+						<div class='timer' style='text-align: center;'></div>
+					{{/constant}}
 					<div class='shelf connect'></div>
 				{{/with}}
 				
@@ -15,16 +22,12 @@
 			</div>
 		</div>
 
-		<div id='opponent-tracker' class='tracker'>
-			{{> problem_tracker opponent}}
+		<div class='tracker-container'>
+			<div id='opponent-tracker' class='tracker'>
+				{{> problem_tracker opponent}}
+			</div>
+			<div class="quit-button">Quit</div>
 		</div>
-			
-		<div class="quit-button">Quit</div>
-		<div class='randomize-button'>Random</div>
-		<div class='play-button'>Go</div>
-		{{#constant}}
-		<div class='awning title'>SELECT YOUR OPPONENTS CARDS (<span class='timer'></span>)</div>
-		{{/constant}}
 	</div>
 	{{> select_dialog}}
 </template>
@@ -51,6 +54,13 @@
 
 <template name='scroll_select_table'>
 	<table id='scroll-select-table'>
+		<tr class='scroll-select-info'>
+			<th>Title</th>
+			<th>Points</th>
+			<th class='center'>{{currentUser.username}}</th>
+			<th class='center'>{{opponent.username}}</th>
+			<th></th>
+		</tr>
 		{{#each this}}
 				{{> scroll_select_view}}
 		{{/each}}
@@ -89,7 +99,7 @@
 					<div class="selection-count">
 						{{selectionCount}}
 					</div>
-					<div class='subtract'></div>
+					<div class='subtract'>-</div>
 				{{/if}}
 			{{/isolate}}
 		</td>
@@ -100,7 +110,7 @@
 
 <template name='scroll_stat'>
 	<div class='scroll-stat'>
-		<div class='scroll-stat-inner' style='height: {{height}}'></div>
+		<div class='scroll-stat-inner' style='height: {{height}}; background-color: {{backgroundColor}}'></div>
 	</div>
 </template>
 

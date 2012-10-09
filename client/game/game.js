@@ -2,7 +2,7 @@
 
   var defaults = {
     nCards: 5,
-    cardSelectTime: 99999,
+    cardSelectTime: 30,
     playPastTime: 1000,
     heartbeat_timeout: 2,
     speedBonusCutoff: .5
@@ -518,7 +518,6 @@
 
     speed = Math.max(speed, 0);
 
-    console.log('speed', speed);    
     return utils.round(speed,4);
   }
 
@@ -691,6 +690,7 @@
     var inc = {};
     inc[self.me_id + '.multiplier'] = mult;
     self.update({$inc: inc, $set: problem_update});
+    console.log('multiplier', mult);
   }
 
   Game.prototype.getMultiplier = function() {
@@ -707,12 +707,13 @@
 
   Game.prototype.updatePoints = function(problem) {
     var self = this;
-    var points = self.get(self.me_id + '.points');
+    var points = self.get(self.me_id + '.points') || 0;
     var multiplier = 1 + self.get(self.me_id + '.multiplier');
     var bonus = _.reduce(problem.bonuses, function(memo, bonus) {
       return memo + bonus;
     }, 0);
     points += (problem.points || 0) * multiplier + bonus;
+    console.log('points',points, problem.points, multiplier, bonus);
     self.updatePlayer({points: points});
   }
 
@@ -801,6 +802,32 @@
         total: problems.length,
         points: self.points(id)
       };
+    }
+  }
+
+  Game.prototype.breakdown = function(uid) {
+    var self = this;
+    var points = 0;
+    var mult = 0;
+    var mult_total = 0;
+    var points_total = 0;
+    var crit = 0;
+    _.each(self.problems(uid), function(problem) {
+      mult =  problem.multiplier ? mult + problem.multiplier : 0;
+      var bonus = _.reduce(problem.bonuses, function(memo, bonus, name) {
+        if (name === 'critical')
+          crit += bonus;
+        return memo + bonus;
+      }, 0);
+      mult_total += problem.points * mult;
+      points_total += problem.points;
+      points += problem.points * (1 + mult) + bonus;
+    });
+    
+    return {
+      critical: crit,
+      multiplier: Math.round(mult_total),
+      points: Math.round(points_total)
     }
   }
 
@@ -914,7 +941,7 @@
     'limbo': 'select_view',
     'select': 'select_view',
     'play': 'play_view',
-    'results': 'end_game',
+    'results': 'results_view',
     'canceled': 'game_canceled',
     'quit': 'game_quit',
 
