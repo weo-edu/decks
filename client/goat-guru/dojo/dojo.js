@@ -1,6 +1,6 @@
 
 
-
+var easing = 'easeInOutExpo';
 var dojoRenderer = view.renderer('dojoRender', {
 	tome_view: {
 		in: function(cb) {
@@ -9,13 +9,13 @@ var dojoRenderer = view.renderer('dojoRender', {
 			el.css('top', -$(window).height());
 			el.animate({
 				top: '0'
-			}, 300, cb);
+			}, 300, easing, cb);
 		}, 
 		out: function(cb) {
 			var $el = $('#tome-view');
 			$el.animate({
 				top: -$(window).height()
-			}, 300, cb);
+			}, 300, easing, cb);
 		}
 	}
 });
