@@ -10,19 +10,15 @@
 </template>
 
 <template name='tome_view'>
-	
-		{{#if show}}
-			<div id='tome-view'>		
-				<div class='tome-bg'></div>
-				<div class='tome-center'>
-					<div class='tome-more'>
-						{{> tome_more tome}}
-					</div>
-				</div>
-				{{> inner_tome}}
-			</div>		
-		{{/if}}
-		
+	<div id='tome-view'>		
+		<div class='tome-bg'></div>
+		<div class='tome-center'>
+			<div class='tome-more'>
+				{{> tome_more tome}}
+			</div>
+		</div>
+		{{> inner_tome}}
+	</div>
 </template>
 
 <template name='inner_tome'>

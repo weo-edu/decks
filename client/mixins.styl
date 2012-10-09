@@ -5,34 +5,6 @@
  * Mixins
  */
 
-dojo() {
-	// background-attachment: fixed;
-	height: 100%;
-	background: url('/app!decks/img/woodRepeat.jpg');
-	.dojo {
-		background: url('/app!decks/img/woodRepeat.jpg');
-		padding: 0px 17px;
-		position: relative;
-		height: 100%;
-		overflow: hidden;
-		clearfix();
-		> div {
-			float: left;
-			&.browse {
-				overflow-y: auto;
-				height: 100%
-				padding: 0 10px;
-				width: 700px;
-			}
-			&.sidebar {
-				overflow-y: auto;
-				height: 100%
-				width: 226px;
-			}
-		}
-	}
-	woodSides();
-}
 
 woodSides() {
 	&:before, &:after {

@@ -1,13 +1,7 @@
 route('/goat',function() { 
 
-	view.render('goat_browse');
-
-	Template.goat_inner.categories = function() {
+	Template.goat_browse.categories = function() {
 		return Decks.homeFeeds;
-	}
-
-	Template.goat_browse.init_dojo = function() {
-		return {page: Template.goat_inner()}
 	}
 
 	Template.category.tomes = function() {
@@ -15,17 +9,15 @@ route('/goat',function() {
 		return feed.fetch();
 	}
 
+	dojo.render('goat_browse');
+
 });
 
 route('/friends',function() { 
 
-	view.render('friends_browse');
-
-	Template.friends_browse.init_dojo = function() {
-		return {page: Template.friends_inner()}
+	Template.friends_browse.rendered = function() {
+		console.log('rendered friend browse');
 	}
-
-
 	Template.buddies.events({
 		'click .buddy': function(e) {
 			Session.set('active', this);
@@ -70,5 +62,7 @@ route('/friends',function() {
 			return active ? active.username : 'Pick a Friend';
 		}
 	});
+
+	dojo.render('friends_browse');
 });
 

@@ -24,23 +24,7 @@ Template.level_progress.helpers({
 	}
 });
 
-Template.dojo.created = function() {
-	this.doResize = function(){
-		var height = $(window).height() - $('#nav').height();
-		$('#browse-view').outerHeight(height, true);
-	}
-}
 
-Template.dojo.rendered = function() {
-	if (this.firstRender) {
-		this.doResize();
-		$(window).resize(this.doResize);
-	}
-}
-
-Template.dojo.destroyed = function() {
-	$(window).unbind('resize', this.doResize);
-}
 
 function animateBg() {
 	var sun = document.getElementById('sun'),
