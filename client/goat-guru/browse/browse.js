@@ -9,11 +9,25 @@ route('/goat',function() {
 		return feed.fetch();
 	}
 
+	Template.tome.events({
+		'click': function() {
+			route('/tome/' + this._id);
+		}
+	});
+
 	dojo.render('goat_browse');
 
 });
 
 route('/friends',function() { 
+
+	Template.tome.events({
+		'click': function() {
+			console.log(this);
+			var friendName = Session.get('active').username;
+			route('/tome/' + friendName + '/' + this._id);
+		}
+	});
 
 	Template.friends_browse.rendered = function() {
 		console.log('rendered friend browse');

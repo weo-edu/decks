@@ -5,11 +5,23 @@
  * Mixins
  */
 
+toggleButton() {
+	cursor: pointer;
+	box-shadow: 0 0 3px rgba(black, .8), inset 1px 1px 0 rgba(white, .5), inset -1px -1px 0 rgba(black, .5);
+	border-radius: 4px;
+	padding: 0 10px;
+	&:hover {
+		box-shadow: 0 0 5px rgba(black, .8), inset 1px 1px 0 rgba(white, .5), inset -1px -1px 0 rgba(black, .5);
+	}
+	&:active, &.active {
+		box-shadow: 0 0 3px rgba(black, .8), inset 1px 1px 0 rgba(black, .3), inset 0 0 7px rgba(black, .5);	
+	}
+}
 
 woodSides() {
 	&:before, &:after {
 		position: absolute;
-		top: 141px;
+		// top: 141px;
 		z-index: 1;
 		left: 0;
 		content: '';

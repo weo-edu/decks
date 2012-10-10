@@ -1,5 +1,6 @@
 <template name='tome'>
-	<img src='/app!decks/img/tome.png' />
+	<!-- <img src='/app!decks/img/tome.png' /> -->
+	<div class='tome-image' style='background-image: url({{image}});'></div>
 </template>
 
 <template name='empty_dojo'>
@@ -13,12 +14,38 @@
 	<div id='tome-view'>		
 		<div class='tome-bg'></div>
 		<div class='tome-center'>
-			<div class='tome-more'>
-				{{> tome_more tome}}
+			<div class='tome-center-inner'>
+				{{currentPage}}
+				{{> tome_nav tome}}
+				{{{tomeRender tome}}}
 			</div>
 		</div>
 		{{> inner_tome}}
 	</div>
+</template>
+
+<template name='tome_friend_view'>
+	<div id='tome-view'>		
+		<div class='tome-bg'></div>
+		<div class='tome-center'>
+			<div class='tome-center-inner'>
+				{{currentPage}}
+				{{> tome_nav tome}}
+				{{> friend_tome_stats tome}}
+			</div>
+		</div>
+		{{> inner_tome}}
+	</div>
+</template>
+
+<template name='tome_nav'>
+	<h2 class='tome-title'>{{title}}</h2>
+	<ul class='tome-nav'> 
+		<li id='tome' class='{{isInfo}}'>Info</li>
+		<li id='stats' class='{{isStats}}'>My Stats</li>
+		<li id='discussion' class='{{isDiscussion}}'>Discussion</li>
+	</ul>
+	<div class='shelf connect'></div>
 </template>
 
 <template name='inner_tome'>
@@ -32,9 +59,21 @@
 	<img class='goat-left' src='/app!decks/img/goat-left.png' />
 </template>
 
+<template name='tome_buddies'>
+	<h3>Friends</h3>
+	<div class='shelf connect'></div>
+	{{#each friends}}
+		<div id='buddy-{{_id}}' class='buddy {{active}} tome-buddy'>
+			<center>
+				<div id='avatar-{{idx}}' class='avatar avatar-thumb' style='background-image: url({{avatar}});'></div>
+				<p class='tome-username'>{{username}}</p>
+			</center>
+		</div>
+	{{/each}}
+</template>
 
-<template name='tome_more'>
-	<h2>{{title}}</h2>
+
+<template name='tome_info'>
 	<center>
 		<img width='260px' src='/app!decks/img/tome.png' />
 		<h3>Game Length:</h3>
@@ -47,15 +86,14 @@
 	</center>
 </template>
 
-<template name='tome_buddies'>
-	<h3>Friends</h3>
-	<div class='shelf connect'></div>
-	{{#each friends}}
-		<div id='buddy-{{_id}}' class='buddy {{active}} tome-buddy'>
-			<center>
-				<div id='avatar-{{idx}}' class='avatar avatar-thumb' style='background-image: url({{avatar}});'></div>
-				<p class='tome-username'>{{username}}</p>
-			</center>
-		</div>
-	{{/each}}
+<template name='my_tome_stats'>
+	Show my stats for the tome here;
+</template>
+
+<template name='tome_discussion'>
+	This is where the discussion section goes
+</template>
+
+<template name='friend_tome_stats'>
+	<div class='challenge-button'>Challenge</div>
 </template>
