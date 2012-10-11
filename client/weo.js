@@ -6,10 +6,12 @@ Meteor.subscribe('UserDecks', Meteor.user()._id);
 Template.level_progress.helpers({
 	level: function() {
 		var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
-		return user.level%60 + 1;
+		return user && user.level%60 + 1;
 	},
 	stage: function(){
 		var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
+		if (!user)
+			return
 		var stage = Math.ceil((user.level+1)/60)
 		if(stage % 2 == 0)
 			return 'stage-' + (stage-1) + ' half';
@@ -18,6 +20,8 @@ Template.level_progress.helpers({
 	},
 	progress: function() {
 		var user = this.synthetic ? Meteor.user() : Meteor.users.findOne(this._id);
+		if (!user)
+			return 0;
 		var levelPoints = Stats.levelPoints(user.level) - user.points;
 		var levelPointsNeeded = Stats.levelPoints(user.level);
 		return (levelPoints / levelPointsNeeded)*100;

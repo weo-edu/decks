@@ -28,10 +28,11 @@ dojo.render = function(name, nav) {
 	if (view.rendered() !== 'dojo_view') {
 		view.render('dojo_view');
 	}
+	
+	dojoRenderer.render(name);
 	nav = nav || 'dojo_browse_nav';
 	if (navRenderer.rendered() !== nav)
 		navRenderer.render(nav);
-	dojoRenderer.render(name);
 }
 
 Template.dojo_view.created = function() {
@@ -42,13 +43,10 @@ Template.dojo_view.created = function() {
 }
 
 Template.dojo_view.rendered = function() {
-	var self = this;
-	if (self.firstRender) {
-		Meteor.defer(function() {
-			self.doResize();
-			$(window).resize(self.doResize);
-		});
-	}	
+	if (this.firstRender) {
+		this.doResize();
+		$(window).resize(this.doResize);
+	}
 }
 
 Template.dojo_view.destroyed = function() {
