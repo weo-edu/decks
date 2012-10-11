@@ -75,9 +75,11 @@
 </template>
 
 <template name='game_multiplier'>
+	{{#constant}}
 	<div id='speed-bar'>
-		<div class="inner-speed-bar" style='width: {{speed}}%'></div>
+		<div class="inner-speed-bar" ></div>
 	</div>
+	{{/constant}}
 	<div id='multiplier'>{{multiplier}}</div>
 </template>
 

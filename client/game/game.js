@@ -144,6 +144,9 @@
       }, self.timeToSelect(), 0);
     });
 
+    self._renderState = new ReactiveVar();
+    self.updateRenderState();
+
 	}
 
   utils.inherits(Game, Emitter);
@@ -528,6 +531,19 @@
     speed = Math.max(speed, 0);
 
     return utils.round(speed,4);
+  }
+
+  Game.prototype.timeForBonus = function() {
+    var self = this;
+    var problem = self.currentProblem();
+    if (!problem)
+      return 0;
+    var time = +new Date() - problem.startTime;
+    time /= 1000; // in seconds
+    var cardStatistics = Stats.cardTime(problem.card_id);
+    var cutoffTime = Stats.inverseGaussQuantile(defaults.speedBonusCutoff, cardStatistics.mu, cardStatistics.lambda);
+    console.log('cutoFFtime', cutoffTime, time);
+    return utils.round(Math.max(cutoffTime-time,0),4);
   }
 
   Game.prototype.setCurrentProblem = function(idx) {
@@ -956,7 +972,8 @@
     if (state) {
       self.updatePlayer({state: state}, self.me_id);
       self.emit(state, true);
-      self.emit('state', state);
+      // XXX use event emitter instead?
+      self.updateRenderState();
     }
     return self.get(self.me_id + '.state');
   }
@@ -974,13 +991,22 @@
     'quit': 'game_quit',
 
   };
-  Game.prototype.renderState = function() {
-    var state = this.mainState();
+
+  Game.prototype.updateRenderState = function(state) {
+    var self = this;
+    var state = self.mainState();
+    var renderState = null;
     if (state === 'quit') {
       var opponentState = this.opponentState().split('.')[0];
-      return stateTemplateMap[opponentState];
+      renderState = stateTemplateMap[opponentState];
     } else
-      return stateTemplateMap[state];
+      renderState = stateTemplateMap[state];
+
+    self._renderState.set(renderState);
+
+  }
+  Game.prototype.renderState = function() {
+    return this._renderState.get();
   }
 
   Game.prototype.mainState = function() {

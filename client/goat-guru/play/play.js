@@ -79,6 +79,7 @@
 
   		Template.game.helpers({
   			renderGame: function() {
+  				console.log('renderGame');
   				var template = Meteor.template;
   				Meteor.defer(function() {
   					var dialog_state = game.dialogState();
@@ -397,34 +398,29 @@
 
  		Template.game_multiplier.created = function() {
  			var self = this;
- 			//XXX shouldnt use spark for rendering of this
- 			self.store.set('speed', game.currentSpeed());
- 			self.speedUpdate = function() {
-	 				/*self.interval = Meteor.setInterval(function() {
-	 					try {
-	 						var speed = game.currentSpeed();
-			 				self.store.set('speed', speed);
-			 				if ( !speed) {
-			 					Meteor.clearInterval(self.interval)
-			 					self.interval = null;
-			 				}
-	 					} catch(e) {
-	 						console.log(e.stack);
-	 					}
-		 				
-		 			}, 200);*/
- 			}
  			game.on('next', function() {
  				if (!self.interval)
  					self.speedUpdate();
  			});
- 			self.speedUpdate();
+
+ 		}
+
+ 		Template.game_multiplier.rendered = function() {
+ 			if (this.firstRender) {
+ 				var self = this;
+	 			//XXX shouldnt use spark for rendering of this
+	 			var el = $("#speed-bar .inner-speed-bar");
+	 			self.speedUpdate = function() {
+	 				el.css({width: (game.currentSpeed() * 100) + '%'});
+		 			el
+		 				.stop(true,false)
+		 				.animate({width: "0%"}, game.timeForBonus() * 1000, 'linear');	
+		 		}
+	 			self.speedUpdate();
+ 			}
  		}
 
  		Template.game_multiplier.helpers({
- 			'speed': function(opts) {
-	 			return opts.template.get('speed') * 100;
-	 		},
 	 		multiplier: function() {
 	 			var multiplier = utils.round(game.getMultiplier(),2);
 	 			return multiplier ? ('x' + multiplier) : '';
