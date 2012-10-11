@@ -2,7 +2,7 @@
 
   var defaults = {
     nCards: 5,
-    cardSelectTime: 30,
+    cardSelectTime: 1000,
     playPastTime: 1000,
     heartbeat_timeout: 2,
     speedBonusCutoff: .5
@@ -12,6 +12,13 @@
     var game = new Game({deck: deck, user: user});
     game.invite();
     route(game.url());
+  }
+
+  var gameRenderer = view.renderer('gameRender');
+  Game.render = function(name) {
+    dojo.render('game', 'game_nav');
+    if (gameRenderer.rendered() !== name)
+      gameRenderer.render(name);
   }
 
   /*
@@ -510,6 +517,8 @@
   Game.prototype.currentSpeed = function() {
     var self = this;
     var problem = self.currentProblem();
+    if (!problem)
+      return 0;
     var time = +new Date() - problem.startTime;
     time /= 1000; // in seconds
     var cardStatistics = Stats.cardTime(problem.card_id);
@@ -653,7 +662,10 @@
     
 
     problem.points = correct ? Stats.points(Stats.regrade(problem.card_id)) : 0;
+    problem.points = Math.round(problem.points);
     
+    if (self.me_id === 1)
+      console.log('update', problem.points);
     self.updateProblem(problem, {
       answer: answer, 
       points: problem.points, 
@@ -686,11 +698,16 @@
 
   Game.prototype.multiplier = function(mult, problem) {
     var self = this;
+    if (self.me_id !== 1)
+      console.log('multiplier', mult);
     var problem_update = self._updateProblem(problem, {multiplier: mult});
-    var inc = {};
-    inc[self.me_id + '.multiplier'] = mult;
-    self.update({$inc: inc, $set: problem_update});
-    console.log('multiplier', mult);
+    if (mult === 0)
+      self.resetMultiplier();
+    else {
+      var inc = {};
+      inc[self.me_id + '.multiplier'] = mult;
+      self.update({$inc: inc, $set: problem_update});
+    }
   }
 
   Game.prototype.getMultiplier = function() {
@@ -709,11 +726,13 @@
     var self = this;
     var points = self.get(self.me_id + '.points') || 0;
     var multiplier = 1 + self.get(self.me_id + '.multiplier');
+    if (self.me_id !== 1)
+      console.log('applied multiplier', multiplier);
     var bonus = _.reduce(problem.bonuses, function(memo, bonus) {
       return memo + bonus;
     }, 0);
-    points += (problem.points || 0) * multiplier + bonus;
-    console.log('points',points, problem.points, multiplier, bonus);
+    var mult = Math.round((problem.points || 0) * multiplier)
+    points += mult + bonus;
     self.updatePlayer({points: points});
   }
 
@@ -742,7 +761,6 @@
       adverb = 'andWon';
     else
       adverb = 'andLost';
-    console.log('complete event');
     event('complete', game, {
       adverbs: adverb
     });
@@ -807,28 +825,37 @@
 
   Game.prototype.breakdown = function(uid) {
     var self = this;
-    var points = 0;
-    var mult = 0;
-    var mult_total = 0;
     var points_total = 0;
-    var crit = 0;
+    var mult = 0;
+
+    var breakdown = {};
+    breakdown.points = 0;
+    breakdown.multiplier = 0;
+    breakdown.critical = 0;
+    breakdown.repeat = 0;
     _.each(self.problems(uid), function(problem) {
       mult =  problem.multiplier ? mult + problem.multiplier : 0;
+      
       var bonus = _.reduce(problem.bonuses, function(memo, bonus, name) {
-        if (name === 'critical')
-          crit += bonus;
+        breakdown[name] += bonus;
         return memo + bonus;
       }, 0);
-      mult_total += problem.points * mult;
-      points_total += problem.points;
-      points += problem.points * (1 + mult) + bonus;
+      var problem_points = problem.points || 0;
+      var points = Math.round(problem_points * (1 + mult));
+      breakdown.points += problem_points;
+      breakdown.multiplier += points - problem_points;
+      if (uid !== 1) {
+        console.log('problem mult', problem.multiplier);
+        console.log('mult', 1 + mult);
+      }
+      points_total += points + bonus;
     });
-    
-    return {
-      critical: crit,
-      multiplier: Math.round(mult_total),
-      points: Math.round(points_total)
-    }
+
+    console.log('points', points_total);
+
+    breakdown.multiplier = Math.round(breakdown.multiplier);
+    breakdown.points = Math.round(breakdown.points);
+    return breakdown;
   }
 
   Game.prototype.quit = function() {
@@ -929,6 +956,7 @@
     if (state) {
       self.updatePlayer({state: state}, self.me_id);
       self.emit(state, true);
+      self.emit('state', state);
     }
     return self.get(self.me_id + '.state');
   }

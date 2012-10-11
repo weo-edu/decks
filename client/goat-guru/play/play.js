@@ -1,4 +1,5 @@
 ;(function(){
+
   route('/game/:id',
   	route.requireSubscriptionById('game'),
   	route.requireSubscription('UserDeckInfo', 
@@ -16,11 +17,16 @@
   	route.requireSubscription('gradeStats'),
   	function(ctx) {
   		var game = null
-  			, game_id = ctx.params.id;
+  			, game_id = ctx.params.id
+  			, gameCreated = new ReactiveVar(false);
+
+  		console.log('route');
   		
 			Template.game.created = function() {
 				var self = this;
 				game = new Game(game_id);
+				gameCreated.set(true);
+				console.log('game created');
 
 
 				function showDialog(message) {
@@ -62,6 +68,7 @@
 				self.onDestroy(function() {
 	  			game && game.stop();
 	  			game = null;
+	  			gameCreated.set(false);
 				});
 			}
 
@@ -71,7 +78,7 @@
  			
 
   		Template.game.helpers({
-  			state: function() {
+  			renderGame: function() {
   				var template = Meteor.template;
   				Meteor.defer(function() {
   					var dialog_state = game.dialogState();
@@ -81,13 +88,14 @@
 	  					template.hideDialog();
 	  				}
   				});
-  				return game && game.renderState();
+  				return Template[game.renderState()]();
   			}
   		});
 
   		Template.game_nav.helpers({
   			opponent: function(){
-					return game.opponent();
+  				if (gameCreated.get())
+						return game.opponent();
 				}
   		})
 
@@ -392,14 +400,19 @@
  			//XXX shouldnt use spark for rendering of this
  			self.store.set('speed', game.currentSpeed());
  			self.speedUpdate = function() {
-	 				self.interval = Meteor.setInterval(function() {
-		 				var speed = game.currentSpeed();
-		 				self.store.set('speed', speed);
-		 				if ( !speed) {
-		 					Meteor.clearInterval(self.interval)
-		 					self.interval = null;
-		 				}
-		 			}, 200);
+	 				/*self.interval = Meteor.setInterval(function() {
+	 					try {
+	 						var speed = game.currentSpeed();
+			 				self.store.set('speed', speed);
+			 				if ( !speed) {
+			 					Meteor.clearInterval(self.interval)
+			 					self.interval = null;
+			 				}
+	 					} catch(e) {
+	 						console.log(e.stack);
+	 					}
+		 				
+		 			}, 200);*/
  			}
  			game.on('next', function() {
  				if (!self.interval)
@@ -676,6 +689,6 @@
 			}
 		});
 
-	 	view.render('game');
+	 	dojo.render('game', 'game_nav');
 	});
 })();

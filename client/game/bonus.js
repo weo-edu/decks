@@ -2,12 +2,30 @@
 
 	var bonuses = [
 		{
-			baseProbability: .25,
+			baseProbability: .05,
 			init: function(problem) {
 				problem.critical = Math.random();
 			},
 			shouldAward: function(problem, correct) {
-				if(!correct) 
+				if (!correct)
+					return
+
+				var self = this;
+				console.log('critical', problem.critical);
+				if(problem.critical < self.baseProbability)
+					return true;
+			},
+			value: function(problem) {
+				return problem.points;
+			},
+			name: 'critical',
+			message: 'Critical!'
+		},
+		{
+			base: .75,
+			nOk: 3,
+			shouldAward: function(problem, correct) {
+				if (!correct)
 					return;
 				var self = this;
 				//	Scale the probability up each time the card appears
@@ -19,16 +37,14 @@
 					if (problem._id === p._id) problem_found = true;
 					return memo + (p.card_id === problem.card_id ? 1 : 0);
 				}, 0);
-
-				var probability = Math.min(self.baseProbability * n, .5);
-				if(problem.critical < probability)
-					return true;
+				self.n = n;
+				return n > self.nOk;
 			},
 			value: function(problem) {
-				return 2 * problem.points;
+				return -problem.points * (1 - Math.pow(this.base,this.n-this.nOk))
 			},
-			name: 'critical',
-			message: 'Critical!'
+			name: 'repeat',
+			message: 'Repeat'
 		},
 		{
 			type: 'multiplier',
@@ -42,7 +58,6 @@
 
 				var cutoff = .5
 				var max_inc = .1;
-				console.log('speed', speed);
 				if (speed > cutoff)
 					return utils.round((speed - cutoff) / (1 - cutoff) * max_inc, 2);
 				else
@@ -114,7 +129,10 @@
 			self.message[utils.rand_int(0, self.message.length-1)] 
 			: self.message;
 
-		msg += '<br/>+' + points;
+		if (points > 0)
+			msg += '<br/>+' + points;
+		else
+			msg += '<br/>' + points
 		if(self.game.me()._id !== 1) {
 			$('#bonus').attr('style', ' ').html(msg).attr('class', self.name)
 				.stop(true, false)

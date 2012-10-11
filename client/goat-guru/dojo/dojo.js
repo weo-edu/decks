@@ -27,10 +27,11 @@ dojo.render = function(name, nav) {
 	if (view.rendered() !== 'dojo_view') {
 		view.render('dojo_view');
 	}
+	
+	dojoRenderer.render(name);
 	nav = nav || 'dojo_browse_nav';
 	if (navRenderer.rendered() !== nav)
 		navRenderer.render(nav);
-	dojoRenderer.render(name);
 }
 
 Template.dojo_view.created = function() {
@@ -41,7 +42,6 @@ Template.dojo_view.created = function() {
 }
 
 Template.dojo_view.rendered = function() {
-	console.log(('dojo view rendered'));
 	if (this.firstRender) {
 		this.doResize();
 		$(window).resize(this.doResize);

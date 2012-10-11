@@ -24,6 +24,7 @@
 	}
 
 	Game.on('start', function(game) {
+		console.log('guru start');
 		if(game.opponent().synthetic) {
 			var guru = Guru.create(game);
 			guru.start();
@@ -193,7 +194,6 @@
 	Guru.prototype.answer = function(problem) {
 		var self = this;
 		var db_stats = self.mygame.player().stats[problem.card_id];
-		console.log('player', self.mygame.player(), problem);
 		var sample = Math.random();
 		var answer;
 		if(sample < db_stats.accuracy.val * Math.sqrt(db_stats.retention.val))
