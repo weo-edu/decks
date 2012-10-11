@@ -12,6 +12,12 @@ Template.tome_view.helpers({
 	}
 });
 
+Template.tome_info.helpers({
+	CPG: function() {
+		return this.cardsPerGame && this.cardsPerGame * 2 || '';
+	}
+})
+
 // Template.tome_view.preserve(['#tome-view']);
 
 function tomeViewSetup(ctx, next) {
@@ -26,7 +32,11 @@ function tomeViewSetup(ctx, next) {
 
 	Template.tome_view.helpers({
 		'tome': function() {
-			return Decks.findOne(tomeId);
+			var curTome = Decks.findOne(tomeId);
+			
+			_.extend(curTome, UserDeckInfo.findOne({deck: tomeId, user: Meteor.user()._id}));
+
+			return curTome;
 		}
 	});
 
@@ -39,7 +49,7 @@ function tomeViewSetup(ctx, next) {
 			return ctx.template.curPage === 'tome_info' ? 'active' : '';
 		},
 		isStats: function(ctx) {
-			return ctx.template.curPage === 'my_tome_stats' ? 'active' : '';
+			return ctx.template.curPage === 'tome_stats' ? 'active' : '';
 		}, 
 		isDiscussion: function(ctx) {
 			return ctx.template.curPage === 'tome_discussion' ? 'active' : '';
@@ -59,26 +69,67 @@ function tomeViewSetup(ctx, next) {
 		}
 	});
 
-	Template.tome_buddies.friends = function() {
-		var user_decks = UserDeckInfo.find({
-			user: {$in: friend_ids}, 
-			deck: tomeId
-		}).fetch();
-		
-		return Meteor.users.find({
-			_id: {
-				$in: _.map(user_decks, function(user_deck) {
-					return user_deck.user;
-				})
-			}
-		});
-	}
+	Template.tome_buddies.helpers({
+		friends: function() {
+			var user_decks = UserDeckInfo.find({
+				user: {$in: friend_ids}, 
+				deck: tomeId
+			}).fetch();
+			
+			return Meteor.users.find({
+				_id: {
+					$in: _.map(user_decks, function(user_deck) {
+						return user_deck.user;
+					})
+				}
+			});
+		},
+		friendMastery: function() {
+			var info = UserDeckInfo.findOne({
+				deck: tomeId, 
+				user: this._id
+			});
+			return info.mastery ? info.mastery.rank : '';
+		}
+	});
 
 	Template.tome_buddies.events({
 		'click .buddy': function() {
 			route('/tome/' + this.username + '/' + tomeId);	
 		}
 	});
+
+	if(ctx.params.username) {
+		ctx.params.friendStats = Decks.findOne(tomeId);
+		_.extend(ctx.params.friendStats, UserDeckInfo.findOne({
+				deck: tomeId, 
+				user: Meteor.users.findOne({username: ctx.params.username})._id
+			}));
+	}
+
+	Template.tome_stats.helpers({
+		winPercent: function() {
+			return getWinPercent(this);
+		},
+		friendName: function() {
+			return ctx.params.username && ctx.params.username + "'s Stats" || '';
+		},
+		friendStats: function() {
+			return ctx.params.friendStats ? ctx.params.friendStats : [];
+		},
+		friendWinPercent: function() {
+				return ctx.params.friendStats ? getWinPercent(ctx.params.friendStats) : '';
+		}
+	});
+
+	function getWinPercent(stats) {
+		var winStr = '';
+		if(stats.mastery && stats.mastery.wins && stats.attempts){
+			var percent = Math.round((stats.mastery.wins / stats.attempts) * 10000)/100  + '%'
+			winStr = stats.mastery.wins + '/' + stats.attempts + ' (' + percent + ')';
+		}
+		return winStr;
+	}
 
 	next();
 }
@@ -88,6 +139,8 @@ route('/tome/:id',
 	route.requireSubscription('userList'), 
 	tomeViewSetup,
 	function(ctx) {
+
+	var myDeckInfo = UserDeckInfo.find({deck: this._id, user: Meteor.user()._id}).fetch();
 
 	tome.render('tome_info');
 
@@ -99,7 +152,7 @@ route('/stats/:id',
 	tomeViewSetup,
 	function(ctx) {
 	
-	tome.render('my_tome_stats');
+	tome.render('tome_stats');
 
 });
 

@@ -11,6 +11,7 @@ route('/goat',function() {
 
 	Template.tome.events({
 		'click': function() {
+			console.log(this._id);
 			route('/tome/' + this._id);
 		}
 	});
@@ -59,12 +60,13 @@ route('/friends',function() {
 	});
 
 	Template.opponent_decks.helpers({
-		'decks': function() {
+		'tomes': function() {
 			var active = Session.get('active');
 			if(active) {
 				Meteor.subscribe('UserDeckInfo', active._id);
 
 				var deckInfos = UserDeckInfo.find({user: active._id}).fetch();
+				console.log(deckInfos);
 				_.each(deckInfos, function(i) {
 					_.extend(i, Decks.findOne(i.deck)); 
 				});

@@ -42,11 +42,13 @@ Template.dojo_view.created = function() {
 }
 
 Template.dojo_view.rendered = function() {
-	console.log(('dojo view rendered'));
-	if (this.firstRender) {
-		this.doResize();
-		$(window).resize(this.doResize);
-	}
+	var self = this;
+	if (self.firstRender) {
+		Meteor.defer(function() {
+			self.doResize();
+			$(window).resize(self.doResize);
+		});
+	}	
 }
 
 Template.dojo_view.destroyed = function() {
