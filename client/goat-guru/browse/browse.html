@@ -60,10 +60,12 @@
 	<div class='category'>
 	<h2 class='category-title'>{{user}}</h2>
 	<div class='shelf'></div>
-	{{#each decks}}
+	{{#each tomes}}
 		<div class='tome-container'>
 			{{> tome}}
+			<div class='twist-stars twist-stars-{{mastery.rank}}'></div>
 			<h5 class='tome-title'>{{title}}</h5>
+			
 		</div>
 	{{/each}}
 	</div>

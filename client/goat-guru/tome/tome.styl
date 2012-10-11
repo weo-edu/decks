@@ -1,12 +1,80 @@
 @import '../decks/client/mixins.styl';
 
-.tome-container {
+/**
+ * Tome Image
+ */
+
+tome(width = 181px, height = 195px) {
 	cursor: pointer;
+	position: relative;
+	width: width;
+	height: height;
+	background: url('/app!decks/img/tome.png') no-repeat ;
+	&:after {
+		content: '';
+		position: absolute;
+		height: 100%;
+		width: 10px;
+		background: url("/app!decks/img/tome.png") no-repeat -189px 0px;
+		left: 36px;
+	}
+	.tome-image {
+		position: absolute;
+		height: 132px;
+		width: 109px;
+		top: 18px;
+		left: 40px;
+		border-radius: 0 14px 14px 0;
+		background-size: cover;
+		background-position: center;
+		box-shadow: inset -1px -1px 0 rgba(black, .5), inset 0px 1px 0 rgba(white, .5);
+		&:after {
+			content: '';
+			position: absolute;
+			height: 100%;
+			width: 100%;
+			border-radius: 0 14px 14px 0;
+			background: url('/app!decks/img/tome-overlay.png');
+			display: none;
+		}
+	}
+	.tome-title {
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+	}
 }
+
+.tome-container {
+	tome();
+}
+
+.big-tome {
+	tome(264px, 287px);
+	cursor: default;
+	background: url('/app!decks/img/big-tome.png') no-repeat;
+	&:after {
+		top: -1px;
+		width: 16px;
+		left: 39px;
+		background: url("/app!decks/img/big-tome.png") no-repeat -295px 0px;	
+	}
+	.tome-image {
+		height: 219px;
+		width: 182px;
+		top: 23px;
+		left: 49px;
+		border-radius: 0 24px 24px 0;
+	}
+}
+
+/**
+ * Tome Drop Down
+ */
 
 #tome-view {
 	position: absolute;
-	left: 0;
+	// left: -17px;
 	z-index: 2;
 	width: 100%;
 	height: 100%;
@@ -51,11 +119,32 @@
 		padding: 0 17px;
 		woodSides();
 		background: url('/app!common/textures/handmadepaperA85.png')
-		z-index: 3
-		.tome-more {	
+		z-index: 3;
+		
+		.tome-center-inner {
+			width: 100%;
+			margin-left: -17px;
+			padding: 0 17px;	
 			height: 100%;
 			overflow-y: auto;
 			font: 16px 'Fresca';
+				h2 { 
+				padding-top: 20px;
+				text-align: center;
+				color: #666;
+			}
+			.tome-nav {
+				text-align: center;
+				font: 20px/1.2em 'BleakChop';
+				margin: 5px auto -5px;
+				width: 340px;
+				clearfix();
+				li{
+					toggleButton();
+					float: left;
+					margin: 0 10px;
+				}
+			}
 			center {
 				width: 370px;
 				margin: 0 auto;
@@ -63,17 +152,15 @@
 			.active-user {
 				float: left;
 			}
-
-			h2 {
-				padding-top: 40px;
-				text-align: center;
-				color: #666;
-			}
 			h3 {
 				font: 25px/45px 'Fresca';
 				text-transform: uppercase;
 				color: #333;
 				text-shadow: 0 0 0;
+			}
+			.challenge-button {
+				red-button();
+				font-size: 30px;
 			}
 		}
 
@@ -105,22 +192,55 @@
 		.tome-buddy {
 			height: auto !important;
 			.tome-username {
-				line-height: 1.1em;
-				clear: both;
+				// line-height: 1.1em;
+				// clear: both;
 			}
+		}
+
+		.mini-stars {
+			margin: 0 auto;
 		}
 	}
 }
 
-// .friends_browse #tome-view{
-// 	width: 771px;
-// 	left: auto;
-// 	right: 0;
-// 	.tome-center{
-// 		margin: 0;			
-// 	}
+/**
+ * Tome Stats View
+ */
 
-// 	.goat-left {
-// 		margin-left: 503px;
-// 	}
-// }
+.tome-stats {
+	width: 527px;
+	margin: -20px auto 0;
+	tr:nth-child(odd) {
+		background: rgba(black, .15);
+	}
+	tr:nth-child(even) {
+		background: rgba(black, .05);
+	}
+	td, th {
+		padding: 10px;
+	}
+	.table-header {
+
+		font: 22px 'BleakChop';
+		color: #FFF;
+		text-shadow: 1px 1px 0 rgba(black, .5);
+	}
+	th {
+		background: blue;
+		border-bottom: 10px solid black;
+		// box-shadow: 0 10px 25px rgba(black, .5);
+	}	
+}
+
+.mini-stars {
+	background: url("/app!decks/img/mini-stars.png") 105px -1px;
+	height: 20px;
+	width: 102px;
+}
+
+.mini-stars- { height: 0; width: 0; &.show-zero { height: 20px; width: 102px; } }
+.mini-stars-1 { background-position: 125px -1px }
+.mini-stars-2 { background-position: 146px -1px }
+.mini-stars-3 { background-position: 166px -1px }
+.mini-stars-4 { background-position: 187px -1px }
+.mini-stars-5 { background-position: 207px -1px }

@@ -1,6 +1,6 @@
 
 
-var easing = 'easeInOutExpo';
+var easing = 'easeInQuad';
 var dojoRenderer = view.renderer('dojoRender', {
 	tome_view: {
 		in: function(cb) {
@@ -12,8 +12,9 @@ var dojoRenderer = view.renderer('dojoRender', {
 			}, 300, easing, cb);
 		}, 
 		out: function(cb) {
-			var $el = $('#tome-view');
-			$el.animate({
+			var el = $('#tome-view');
+			el.parent().css('z-index', 98);
+			el.animate({
 				top: -$(window).height()
 			}, 300, easing, cb);
 		}
@@ -37,7 +38,7 @@ dojo.render = function(name, nav) {
 Template.dojo_view.created = function() {
 	this.doResize = function(){
 		var height = $(window).height() - $('#nav').height();
-		$('#browse-view').outerHeight(height, true);
+		$('.dojo').outerHeight(height, true);
 	}
 }
 
