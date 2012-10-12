@@ -78,6 +78,12 @@
       self.complete();
     });
 
+    self.on('quit', function(changed) {
+      if (self.me().synthetic || !changed)
+        return;
+      self.complete();
+    })
+
     // setup bonusus
     Bonus.setup(self);
     // update points after bonuses
@@ -789,6 +795,7 @@
 
     var state = self.state();
     var opState = self.opponentState();
+    //XXX can both states be quit?
     if (state === 'quit') {
       if (opState !== 'quit')
         return self.opponent();
@@ -970,6 +977,7 @@
   Game.prototype.state = function(state) {
     var self = this;
     if (state) {
+      console.log('state', state);
       self.updatePlayer({state: state}, self.me_id);
       self.emit(state, true);
       // XXX use event emitter instead?

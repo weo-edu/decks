@@ -126,6 +126,8 @@ Observer.on('complete:game', function(e) {
       if (multi)
         inc.multiLosses = 1;
     }
+
+    update.$set = {last_played: e.time};
     
     update.$inc = inc;
     UserDeckInfo.update({user: e.user._id, deck: match.deck}, update, {multi: 0, upsert: true});
