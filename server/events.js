@@ -94,15 +94,40 @@ Observer.on('complete:game', function(e) {
   Fiber(function() {
     var match = e.object;
     var action = e.action;
-    var mod = { attempts: 1 };
-    // XXX ugly multiplayer check
-    if (match.users.indexOf(1) === -1)
-      mod.multiAttempts = 1;
+    
+
+    var result = null;
     if (action.adverbs.indexOf('andWon') >= 0) {
-      mod.wins = 1;
-      if (match.users.indexOf(1) === -1)
-        modl.multiWins = 1;
+      result = 'won';
+    } else if (action.adverbs.indexOf('andTied') >= 0) {
+      result = 'tied';
+    } else {
+      result = 'lost';
     }
-    UserDeckInfo.update({user: e.user._id, deck: match.deck}, {$inc: mod}, {multi: 0, upsert: true});
+
+    // XXX ugly multiplayer check
+    var multi = match.users.indexOf(1) === -1 ? true : false;
+
+    var update = {};
+    var inc = { attempts: 1 };
+
+    if (multi) {
+      inc.multiAttempts = 1;
+      var opponent = _.without(match.users, e.user._id)[0];
+      update.$push = { history: {time: e.time, opponent: opponent, result: result}};
+    }
+      
+    if (result === 'won') {
+      inc.wins = 1;
+      if (multi)
+        inc.multiWins = 1;
+    } else if (result === 'lost') {
+      inc.losses = 1;
+      if (multi)
+        inc.multiLosses = 1;
+    }
+    
+    update.$inc = inc;
+    UserDeckInfo.update({user: e.user._id, deck: match.deck}, update, {multi: 0, upsert: true});
   }).run();
 });
