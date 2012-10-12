@@ -45,17 +45,19 @@ route('/friends',function() {
 		}
 	});
 
-	Template.buddies.friends = function() {
-		return User.friends();
-	}
-
 	Template.buddies.helpers({
+		'friends': function() {
+			return User.friends();
+		},
 	 	'active': function() {
 	 		var active = Session.get('active');
 	 		if(active)
 	 			return this._id == active._id ? 'active' : '';
 	 		else
 	 			return '';
+	 	},
+	 	'isConnected': function() {
+	 		return this.connected ? 'connected' : 'disconnected';
 	 	}
 	});
 
@@ -66,7 +68,6 @@ route('/friends',function() {
 				Meteor.subscribe('UserDeckInfo', active._id);
 
 				var deckInfos = UserDeckInfo.find({user: active._id}).fetch();
-				console.log(deckInfos);
 				_.each(deckInfos, function(i) {
 					_.extend(i, Decks.findOne(i.deck)); 
 				});
@@ -75,10 +76,34 @@ route('/friends',function() {
 		},
 		'user': function() {
 			var active = Session.get('active');
-			return active ? active.username : 'Pick a Friend';
+			return active ? active : false;
 		}
 	});
 
 	dojo.render('friends_browse');
 });
 
+
+route('/inventory', function() {
+
+	Template.tome.events({
+		'click': function() {
+			console.log(this._id);
+			route('/tome/' + this._id);
+		}
+	});
+
+	Template.my_collection.helpers({
+		tomes: function() {
+			var deckInfos = UserDeckInfo.find({user: Meteor.user()._id}).fetch();
+			
+			_.each(deckInfos, function(i) {
+				_.extend(i, Decks.findOne(i.deck)); 
+			});
+			
+			return deckInfos; 
+		}
+	});
+
+	dojo.render('my_collection');
+});

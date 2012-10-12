@@ -82,7 +82,7 @@ function tomeViewSetup(ctx, next) {
 						return user_deck.user;
 					})
 				}
-			});
+			}, {sort: {connected: -1, username: 1}});
 		},
 		friendMastery: function() {
 			var info = UserDeckInfo.findOne({
@@ -90,6 +90,9 @@ function tomeViewSetup(ctx, next) {
 				user: this._id
 			});
 			return info.mastery ? info.mastery.rank : '';
+		},
+		isConnected: function() {
+			return this.connected ? 'connected' : 'disconnected';
 		}
 	});
 
@@ -183,9 +186,18 @@ route('/tome/:username/:id',
 		}
 	});
 
-	Template.tome_buddies.active = function() {
-		return this._id === friendId ? 'active' : '';
-	}
+	Template.friend_tome_stats.helpers({
+		isConnected: function() {
+			return Meteor.users.findOne({username: ctx.params.username}).connected;
+		}
+	});
+
+	Template.tome_buddies.helpers({
+		active: function() {
+			return this._id === friendId ? 'active' : '';
+		}
+	});
+	
 
 	tome.render('friend_tome_stats');
 

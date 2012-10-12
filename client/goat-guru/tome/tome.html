@@ -51,7 +51,7 @@
 	<h3>Friends</h3>
 	<div class='shelf connect'></div>
 	{{#each friends}}
-		<div id='buddy-{{_id}}' class='buddy {{active}} tome-buddy'>
+		<div id='buddy-{{_id}}' class='buddy {{active}} {{isConnected}} tome-buddy'>
 				<div id='avatar-{{idx}}' class='avatar avatar-thumb' style='background-image: url({{avatar}});'></div>
 				<p class='tome-username'>{{username}}</p>
 				<div class='show-zero mini-stars mini-stars-{{friendMastery}}'></div>
@@ -108,5 +108,7 @@
 
 <template name='friend_tome_stats'>
 	{{> tome_stats}}
-	<div class='challenge-button'>Challenge</div>
+	{{#if isConnected}}
+		<div class='challenge-button'>Challenge</div>
+	{{/if}}
 </template>

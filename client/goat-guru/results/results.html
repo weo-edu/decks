@@ -6,6 +6,18 @@
 			{{> errors}}
 		</div>
 		<div class='rematch-button'>REMATCH?</div>
+		{{> solution_dialog}}
+	</div>
+</template>
+
+<template name='solution_dialog'>
+	<div class='solution-dialog'>
+	{{#ui "dialog"}}
+		<div id='problem'>
+			{{#markdown}}{{{scroll.html}}}{{/markdown}}<br/>
+			{{scroll.solution}}
+		</div>
+	{{/ui}}
 	</div>
 </template>
 		
@@ -64,7 +76,6 @@
 					<td>{{round opponent.points}}</td>
 				{{/with}}
 			</tr>
-			<tr class='results-footer'><td colspan='3'></td></tr>
 		</table>
 </template>
 
@@ -74,11 +85,17 @@
 		<div class='errors-table-inner'>
 			{{> error_scroll}}		
 		</div>
-		<div class='results-footer'></div>
 	</div>
 </template>
 
 <template name='error_scroll'>
+	{{#constant}}
+	{{#each scrolls}}
+		{{#unless correct}}
+			<div class='error-scroll'><div class='title'>{{title}}</div><div class='solution'>View Solution</div></div>
+		{{/unless}}
+	{{/each}}
+	{{/constant}}
 </template>
 
 
@@ -118,27 +135,6 @@
 		</div>
 	</div>
 	{{/with}}
-</template>
-
-<template name="individual_results">
-	<div class='results'>
-		<div>
-			<span class='score left'>{{me.correct}}</span>
-			<span class='label'>Correct</span>
-		 	<span class='score right'>{{opponent.correct}}</span>
-		</div>
-		<div>
-			<span class='score left'>{{me.incorrect}}</span>
-			<span class='label'>Incorrect</span>
-		 	<span class='score right'>{{opponent.incorrect}}</span>
-		</div>
-		<div class='rule'></div>
-		<div>
-			<span class='score left'>{{round me.points}}</span>
-			<span class='label'>Points</span>
-		 	<span class='score right'>{{round opponent.points}}</span>
-		</div>
-	</div>
 </template>
 
 <template name='view_cards'>

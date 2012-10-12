@@ -49,7 +49,7 @@
 	<h3>Friends</h3>
 	<div class='shelf connect'></div>
 	{{#each friends}}
-		<div id='buddy-{{_id}}' class='buddy {{active}}'>
+		<div id='buddy-{{_id}}' class='buddy {{isConnected}} {{active}}'>
 			<div id='avatar-{{idx}}' class='avatar avatar-thumb' style='background-image: url({{avatar}});'></div>
 			<p>{{username}}</p>
 		</div>
@@ -58,15 +58,44 @@
 
 <template name='opponent_decks'>
 	<div class='category'>
-	<h2 class='category-title'>{{user}}</h2>
+	{{#if user}}
+		{{> browse_user user}}
+	{{else}}
+		<h2 class='category-title'>Pick a Friend</h2>
+	{{/if}}
 	<div class='shelf'></div>
 	{{#each tomes}}
-		<div class='tome-container'>
+		<div class='tome-container stars'>
 			{{> tome}}
 			<div class='twist-stars twist-stars-{{mastery.rank}}'></div>
 			<h5 class='tome-title'>{{title}}</h5>
-			
 		</div>
 	{{/each}}
+	</div>
+</template>
+
+<template name='browse_user'>
+	<div class='browse-user'>
+		<img class='avatar' style='background-image: url({{avatar}});' />
+		<h2 class='category-title'>{{username}}</h2>
+		{{> level_progress}}
+	</div>
+</template>
+
+<!-- Inventory -->
+
+<template name='my_collection'>
+	<div class='collection-browse'>
+		<div class='category'>
+			<h2 class='category-title'>{{currentUser.username}}</h2>
+			<div class='shelf'></div>
+			{{#each tomes}}
+				<div class='tome-container stars'>
+					{{> tome}}
+					<div class='twist-stars twist-stars-{{mastery.rank}}'></div>
+					<h5 class='tome-title'>{{title}}</h5>
+				</div>
+			{{/each}}
+		</div>
 	</div>
 </template>

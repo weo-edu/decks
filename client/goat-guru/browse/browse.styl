@@ -20,17 +20,59 @@
  * Friend Browse
  */
 
+.browse-user {
+	clearfix();
+	position relative;
+	.avatar {
+		margin: 30px 10px 0 20px;
+		float: left;
+		z-index: 1;
+		position: relative;
+	}
+	.category-title {
+		margin-top: 25px !important;
+	}
+	.level {
+		level();
+		z-index: 0;
+		border: 0;
+		left: 100px;
+		box-shadow: inset 1px 1px 0 rgba(white, .5), inset -1px -1px 0 rgba(black, .5);
+	}
+}
+
+status-icon(color) {
+	content: '';
+	color: #FFF;
+	height: 10px;
+	width: 10px;
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	margin-top: -5px;
+	background: color;
+	border-radius: 50%;
+	box-shadow: inset 1px 1px 0 rgba(white, .3), inset -1px -1px 0 rgba(black, .3);
+}
+
+.friends-browse {
+	.disconnected {
+		position: relative;
+		&:after {
+			status-icon(red);
+		}
+	}
+	.connected {
+		position: relative;
+		&:after {
+			status-icon(lighten(green, 10));
+		}
+	}
+}
+
 .friends-browse, #tome-view {
 	height: 100%;
 	.browse {
-		.tome-container {
-			height: 213px;
-			margin-bottom: 15px;
-			.tome-title {
-				top: 3px;
-				height: 1em;
-			}
-		}
 		width: 724px !important;
 		padding: 0 0 0 3px !important;
 		float: none !important;
@@ -85,6 +127,15 @@
 			}
 		}
 	}
+}
+
+/**
+ * My Collection
+ */
+
+.collection-browse {
+	width: 920px;
+	margin: 0 auto;
 }
 
 .twist-stars {

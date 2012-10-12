@@ -28,8 +28,6 @@ Template.level_progress.helpers({
 	}
 });
 
-
-
 function animateBg() {
 	var sun = document.getElementById('sun'),
 		deg = 0;

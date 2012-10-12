@@ -5,9 +5,16 @@
 <template name='game_nav'>
 	<div id='nav' class='game-nav'>
 		<div class='nav-title'></div>
-		<div id='game-me'>{{> nav_user currentUser}}</div>
+		<div id='game-me'>{{> game_user currentUser}}</div>
 		<div id='vs'><img src='/app!decks/img/vs.png' /></div>
-		<div id='game-opponent'>{{> nav_user opponent}}</div>
+		<div id='game-opponent'>{{> game_user opponent}}</div>
+	</div>
+</template>
+
+<template name='game_user'>
+	<div class='nav-user game-user'>
+		<img class='avatar' style='background-image: url({{avatar}});' />
+		{{> level_progress}}
 	</div>
 </template>
 

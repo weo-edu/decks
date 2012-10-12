@@ -47,6 +47,14 @@ tome(width = 181px, height = 195px) {
 
 .tome-container {
 	tome();
+	&.stars {
+		height: 213px;
+		margin-bottom: 15px;
+		.tome-title {
+			top: 3px;
+			height: 1em;
+		}
+	}
 }
 
 .big-tome {
@@ -185,6 +193,10 @@ tome(width = 181px, height = 195px) {
 		position: absolute !important;
 		top: 0;
 		margin-left: 0px !important;
+		.disconnected {
+			-webkit-filter: grayscale(100%);	
+			opacity: .5;
+		}
 		.sidebar-inner {
 			background: none !important;
 		}
@@ -210,11 +222,8 @@ tome(width = 181px, height = 195px) {
 .tome-stats {
 	width: 527px;
 	margin: -20px auto 0;
-	tr:nth-child(odd) {
-		background: rgba(black, .15);
-	}
-	tr:nth-child(even) {
-		background: rgba(black, .05);
+	tr {
+		table-rows();
 	}
 	td, th {
 		padding: 10px;
