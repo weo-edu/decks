@@ -57,7 +57,17 @@
 
 				}
 
+				var dialogHandle = ui.autorun(function() {
+					var dialog_state = game.dialogState();
+					Meteor.defer(function() {
+	  				if (dialog_state)
+	  					self.showDialogWrap(game.state().replace('.','_'));
+	  				else {
+	  					self.hideDialog();
+	  				}
+  				});
 
+				});
 
 				/*game.on('quit', function() {
 					showDialogWrap('quit_overlay');
@@ -69,6 +79,7 @@
 	  			game && game.stop();
 	  			game = null;
 	  			gameCreated.set(false);
+	  			dialogHandle.stop();
 				});
 			}
 
@@ -79,18 +90,9 @@
 
   		Template.game.helpers({
   			renderGame: function() {
-  				console.log('renderGame');
-  				var template = Meteor.template;
-  				Meteor.defer(function() {
-  					var dialog_state = game.dialogState();
-	  				if (dialog_state)
-	  					template.showDialogWrap(game.state().replace('.','_'));
-	  				else {
-	  					template.hideDialog();
-	  				}
-  				});
   				return Template[game.renderState()]();
   			}
+
   		});
 
   		Template.game_nav.helpers({
