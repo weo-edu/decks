@@ -81,23 +81,34 @@
 		</tr>
 		<tr>
 			<td>LAST PLAYED</td>
-			<td>{{helperTest}}</td>
-			<td></td>
+			<td>{{prettyTime friendLastPlayed}}</td>
+			<td>{{prettyTime last_played}}</td>
 		</tr>
 		<tr>
 			<td>RANK</td>
-			<td><div class='mini-stars mini-stars-{{friendStats.mastery.rank}}'></div></td>
+			<td><div class='mini-stars mini-stars-{{friendStats "mastery.rank"}}'></div></td>
 			<td><div class='show-zero mini-stars mini-stars-{{mastery.rank}}'></div></td>
 		</tr>
-		<tr>
-			<td>SINGLE PLAYER RECORD</td>
-			<td>{{friendWinPercent}}</td>
-			<td>{{winPercent}}</td>
+		<tr class='table-sub-header'>
+			<th>Multi Player</th><th></th><th></th>
 		</tr>
 		<tr>
-			<td>MULTI PLAYER RECORD</td>
-			<td>{{friendWinPercent}}</td>
-			<td>{{winPercent}}</td>
+			<td>Wins</td>
+			<td>{{friendStats "multiWins"}}</td>
+			<td>{{multiWins}}</td>
+		</tr>
+		<tr>
+			<td>Losses</td>
+			<td>{{friendStats "multiLosses"}}</td>
+			<td>{{multiLosses}}</td>
+		</tr>
+		<tr class='table-sub-header'>
+			<th>History</th><th></th><th></th>
+		</tr>
+		<tr>
+			<td>Losses</td>
+			<td>{{friendStats "multiLosses"}}</td>
+			<td>{{multiLosses}}</td>
 		</tr>
 	</table>
 </template>
