@@ -1,8 +1,12 @@
 <template name="dojo_view">
+	{{#isolate}}
 	{{{navRender}}}
+	{{/isolate}}
 	<div class="dojo">
 		<div id="browse-view">
+			{{#isolate}}
 			{{{dojoRender}}}
+			{{/isolate}}
 		</div>
 	</div>
 </template>

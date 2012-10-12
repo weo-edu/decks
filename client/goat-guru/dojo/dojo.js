@@ -29,11 +29,13 @@ dojo.render = function(name, nav) {
 		view.render('dojo_view');
 	}
 	
-	dojoRenderer.render(name);
+
 	nav = nav || 'dojo_browse_nav';
 	console.log('nav',nav, navRenderer.rendered());
 	if (navRenderer.rendered() !== nav)
 		navRenderer.render(nav);
+
+	dojoRenderer.render(name);
 }
 
 Template.dojo_view.created = function() {

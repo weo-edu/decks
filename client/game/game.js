@@ -78,6 +78,12 @@
       self.complete();
     });
 
+    self.on('quit', function(changed) {
+      if (self.me().synthetic || !changed)
+        return;
+      self.complete();
+    })
+
     // setup bonusus
     Bonus.setup(self);
     // update points after bonuses
@@ -789,6 +795,7 @@
 
     var state = self.state();
     var opState = self.opponentState();
+    //XXX can both states be quit?
     if (state === 'quit') {
       if (opState !== 'quit')
         return self.opponent();
