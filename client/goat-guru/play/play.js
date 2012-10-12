@@ -30,6 +30,7 @@
 
 
 				function showDialog(message) {
+					console.log('show dialog');
 					var dialog = ui.get('.dialog');
 					if (!dialog) {
 						console.warn('no dialog for message: ' + message);

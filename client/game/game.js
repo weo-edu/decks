@@ -970,6 +970,7 @@
   Game.prototype.state = function(state) {
     var self = this;
     if (state) {
+      console.log('state', state);
       self.updatePlayer({state: state}, self.me_id);
       self.emit(state, true);
       // XXX use event emitter instead?

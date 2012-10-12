@@ -31,6 +31,7 @@ dojo.render = function(name, nav) {
 	
 	dojoRenderer.render(name);
 	nav = nav || 'dojo_browse_nav';
+	console.log('nav',nav, navRenderer.rendered());
 	if (navRenderer.rendered() !== nav)
 		navRenderer.render(nav);
 }
