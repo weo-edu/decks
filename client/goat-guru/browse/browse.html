@@ -79,6 +79,11 @@
 		<img class='avatar' style='background-image: url({{avatar}});' />
 		<h2 class='category-title'>{{username}}</h2>
 		{{> level_progress}}
+		<div class='filters'>
+			<div class='browse-button'>Collected</div>
+			<div class='browse-button'>Created</div>
+			<input class='browse-filter' type='text' placeholder='Filter' />
+		</div>
 	</div>
 </template>
 
@@ -87,7 +92,19 @@
 <template name='my_collection'>
 	<div class='collection-browse'>
 		<div class='category'>
-			<h2 class='category-title'>{{currentUser.username}}</h2>
+			
+			<div class='collection-nav'>
+				<h2 class='category-title'>{{currentUser.username}}</h2>
+				<div class='filters'>
+					<div class='browse-button'>Collected</div>
+					<div class='browse-button'>Created</div>
+					<input class='browse-filter' type='text' placeholder='Filter' />
+				</div>
+				<div class='create-buttons'>
+					<div class='create-button'>Add Scrolls</div>
+					<div class='create-button'>Add Tomes</div>
+				</div>
+			</div>
 			<div class='shelf'></div>
 			{{#each tomes}}
 				<div class='tome-container stars'>

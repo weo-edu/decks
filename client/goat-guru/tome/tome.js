@@ -24,6 +24,7 @@ function tomeViewSetup(ctx, next) {
 	var tomeId = ctx.params.id;
 	var curTome = Decks.findOne(tomeId);
 	var username = ctx.params.username;
+	var friendId = username && Meteor.users.findOne({username: username})._id;
 
 	var friend_ids = _.map(User.friends().fetch(), function(friend) {
 			return friend._id;
@@ -34,10 +35,13 @@ function tomeViewSetup(ctx, next) {
 	Template.tome_view.helpers({
 		'tome': function() {
 			var curTome = Decks.findOne(tomeId);
-			
-			_.extend(curTome, UserDeckInfo.findOne({deck: tomeId, user: Meteor.user()._id}));
 
-			return curTome && numberizeStats(curTome);
+			_.extend(curTome, UserDeckInfo.findOne({
+				deck: tomeId, 
+				user: friendId || Meteor.user()._id
+			}));
+
+			return curTome;	
 		}
 	});
 
@@ -103,51 +107,20 @@ function tomeViewSetup(ctx, next) {
 		}
 	});
 
-	Template.tome_stats.created = function() {
-		this.friendStats = function(name) {
-			var info = UserDeckInfo.findOne({deck: tomeId, user: Meteor.users.findOne({username: username})._id}, {fields: [name]});
-			return LocalCollection._getField(info, name);
-		}
-	}
-
 	Template.tome_stats.helpers({
-		friendName: function() {
-			console.log(this);
-			return username && username + "'s Stats" || '';
-		},
-		friendStats: function(name) {
-			return username ? Meteor.template.friendStats(name) || 0 : '';
-		},
-		friendLastPlayed: function() {
-			return username ? Meteor.template.friendStats('last_played') : '';
-		},
-		pastGames: function() {
-			return username ? _.clone(Meteor.template.friendStats('history') || []).reverse() : _.clone(this.history || []).reverse();
-		},
 		opponentName: function() {
 			return Meteor.users.findOne(this.opponent).username;
 		},
+		pastGames: function() {
+			return _.clone(this.history || []).reverse();
+		},
 		player: function() {
-			return username ? username + "'s" : 'My';
+			return username ? username + "'s Stats" : Meteor.user().username + "'s Stats";
+		},
+		number: function(opts) {
+			return opts || 0;
 		}
 	});
-
-	function numberizeStats(stats) {
-		var numStats = {
-			mastery : { rank : stats.mastery && stats.mastery.rank || 0 },
-			attempts : stats.attempts || 0,
-			wins : stats.wins || 0,
-			losses : stats.losses || 0,
-			multiAttempts : stats.multiAttempts || 0,
-			multiWins : stats.multiWins || 0,
-			multiLosses : stats.multiLosses || 0,
-			singleAttempts : (stats.attempts - stats.multiAttempts) || 0,
-			singleWins : (stats.wins - stats.multiWins) || 0,
-			singleLosses : (stats.losses - stats.multiLosses) || 0 
-		}
-
-		return _.extend(stats, numStats);
-	}
 
 	next();
 }

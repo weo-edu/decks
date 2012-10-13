@@ -646,9 +646,6 @@
 			correct: function() {
 				return game.isCorrect(this);
 			},
-			review: function() {
-				return routeSession.get('review');
-			},
 			review_card: function() {
 				return routeSession.get('review_card');
 			}
@@ -656,21 +653,21 @@
 
 		Template.error_scroll.events({
 			'click .error-scroll': function(evt){
-				console.log(this);
+				console.log(evt, this)
 				routeSession.set('review-scroll', this);
 				ui.get('.dialog').closable().overlay().center().show();
 			}
 		});
 
-		Template.view_cards.events({
-			'click .card': function(evt, template) {
-				var self = this;
-				$('#slider').addClass('review', 400, 'easeInOutExpo', function(){
-						routeSession.set('review_card', self);
-						routeSession.set('show_cards', 'review');
-				});
-			}
-		});
+		// Template.view_cards.events({
+		// 	'click .card': function(evt, template) {
+		// 		var self = this;
+		// 		$('#slider').addClass('review', 400, 'easeInOutExpo', function(){
+		// 				routeSession.set('review_card', self);
+		// 				routeSession.set('show_cards', 'review');
+		// 		});
+		// 	}
+		// });
 
 		Template.solution_dialog.created = function() {
  			this.alignProblem = function() {
@@ -697,7 +694,6 @@
 				return {component: 'dialog'};
 			},
 			message: function(ctx) {
-				//console.log(ctx.template.find('.dialog'));
 				var dialog = ui.get('.dialog');
 				var message = dialog.get('message');
 				return Template[message] && Template[message]();
