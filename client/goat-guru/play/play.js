@@ -30,18 +30,18 @@
 
 
 				function showDialog(message) {
-					console.log('show dialog');
+					console.log('show dialog', message);
 					var dialog = ui.get('.dialog');
 					if (!dialog) {
 						console.warn('no dialog for message: ' + message);
 						return;
 					}
-						
 					dialog.set('message', message);
 					dialog.await().modal().center().show();
 				}
 
 				self.showDialogWrap = function(message) {
+					console.log('show dialog');
 					if (self.firstRender) {
 						self.onRender(function() {
 							showDialog(message);
@@ -52,6 +52,7 @@
 				}
 
 				self.hideDialog = function() {
+					console.log('hide dialog');
 					var dialog = ui.get('.dialog');
 					if (dialog && dialog.isVisible())
 						dialog.hide();
@@ -61,6 +62,7 @@
 				var dialogHandle = ui.autorun(function() {
 					var dialog_state = game.dialogState();
 					Meteor.defer(function() {
+						console.log('defer dialog state');
 	  				if (dialog_state)
 	  					self.showDialogWrap(game.state().replace('.','_'));
 	  				else {
@@ -188,8 +190,7 @@
 				}
 			});
 
-
-  	var style = '',
+		var style = '',
   		innerStyle = '';
 
   	Template.problem_tracker.created = function() {
@@ -229,18 +230,13 @@
 			}
 
 			style = 'style="height:' + height +'px; width:' + width +'px;"';
-			
+
 			function getHeight() { 
 				cols = Math.floor(trackerWidth / width);
 				rows = Math.ceil((game.nCards() * 2) / cols);
 				console.log(cols, rows);
 				return (rows * height);
 			}
-  	}
-
-  	Template.problem_tracker.destroyed = function() {
-  		this.autoHandle && this.autoHandle.stop();
-  		this.autoHandle = null;
   	}
 
 		Template.problem_tracker.helpers({
@@ -257,7 +253,7 @@
 					selected = i < numSelected ? 'selected' : '';
 					str += '<div class="little-scroll ' + selected + '" ' + style + '><div class="little-scroll-inner" '+ innerStyle +'></div></div>';
 				}
-					
+
 				return  str;
 			},
 			tracker: function() {
@@ -288,15 +284,15 @@
 		});
 
 		Template.scroll_select_view.helpers({
-				myStats: function() {
-					return game.myCardStats(this._id);
-				},
-				opponentStats: function() {
-					return game.opponentCardStats(this._id);
-				},
-				selectionCount: function() {
-					return game.selectionCount(this._id);
-				}
+			myStats: function() {
+				return game.myCardStats(this._id);
+			},
+			opponentStats: function() {
+				return game.opponentCardStats(this._id);
+			},
+			selectionCount: function() {
+				return game.selectionCount(this._id);
+			}
 		});
 
 		Template.scroll_stat.helpers({
@@ -323,7 +319,9 @@
 			}
 		});
 
-
+		Template.play_view_dialog.rendered = function() {
+			console.log('play view dialog');
+		}
 		/*
 			Deck play template helpers and events
 		*/
@@ -340,13 +338,16 @@
  		Template.play_view.helpers({
  			me: function(ctx) { return ctx.template.me; },
  			opponent: function(ctx){ return ctx.template.opponent; },
- 			deck: function(ctx) { return ctx.template.deck; },
+ 			deck: function(ctx) { return ctx.template.deck; }
+ 		});
+
+ 		Template.play_view_dialog.helpers({
  			message: function() {
  				var dialog = ui.get('.dialog');
  				var message = dialog.get('message');
  				return Template[message] && Template[message]();
  			}
- 		});
+ 		})
 
  		var problemRendered = null;
  		Template.problem_container.created = function() {
@@ -364,10 +365,8 @@
 				startTimer();
 			else
 				game.on('play.', startTimer);
- 		}
 
- 		Template.problem_container.created = function() {
- 			this.alignProblem = function() {
+			this.alignProblem = function() {
  				$('#problem').css({
  					'margin-top': -(($('#problem').height() / 2))
  				});
@@ -375,6 +374,7 @@
  		}
 
  		Template.problem_container.rendered = function() {
+ 			console.log('problem_container rendered');
  			if (this.firstRender) {
  				if (!this.timer_el)
  					this.timer_el = this.find('.timer');
@@ -440,6 +440,10 @@
       }
    	}); 
 
+   	Template.play_view.rendered = function() {
+   		console.log('play view rendered');
+   	}
+
 
  		Template.play_view.events({
 				'click': function(e, template) {
@@ -499,6 +503,7 @@
 			 		}, dur);
 
 					Meteor.defer(function(){ 
+						console.log('answer focus');
 						$('#answer').focus(); 
 					});
 				}
