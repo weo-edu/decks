@@ -148,7 +148,7 @@ tome(width = 181px, height = 195px) {
 				width: 340px;
 				clearfix();
 				li{
-					toggleButton();
+					toggle-button();
 					float: left;
 					margin: 0 10px;
 				}
@@ -203,10 +203,6 @@ tome(width = 181px, height = 195px) {
 
 		.tome-buddy {
 			height: auto !important;
-			.tome-username {
-				// line-height: 1.1em;
-				// clear: both;
-			}
 		}
 
 		.mini-stars {
@@ -222,6 +218,18 @@ tome(width = 181px, height = 195px) {
 .tome-stats {
 	width: 527px;
 	margin: -20px auto 0;
+	&.stats {
+		td, th {
+			width: 102px;
+		}
+	}
+	&.history {
+		margin-top: 0px;
+		th {
+			border-bottom: 0;
+			background: #333;
+		}
+	}
 	tr {
 		table-rows();
 	}
@@ -236,18 +244,14 @@ tome(width = 181px, height = 195px) {
 	}
 	th {
 		background: blue;
-		border-bottom: 10px solid black;
-		// box-shadow: 0 10px 25px rgba(black, .5);
 	}	
 	.table-sub-header {
 		font: 18px 'BleakChop';
-		color: #CCC;
 		text-shadow: 0 0 0;
 		th {
-			box-shadow: inset 0 1px 0 rgba(white, .5), inset 0 -1px 0 rgba(black, .2);
 			padding: 5px 10px;
-			background: #333;
-			border-bottom: 0;
+			background: blue;
+			text-shadow: 1px 1px 0 rgba(black, .5);
 		}
 	}
 }
