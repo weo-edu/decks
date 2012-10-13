@@ -476,31 +476,34 @@
 			 		var endPoints = Math.round(game.points(game.me()._id));
 			 		var delta = endPoints - curPoints;
 
- 					var dur = 19;
-	 				if(dur === 19) {
+			 		if (res) {
+			 			var dur = 19;
 	 					while(dur < 20) {
 	 					 inc++;
 	 					 dur = 500 / (delta / inc);
 	 					}
-	 				}
 
-			 		function stop() {
-			 			template.pointsInterval && clearInterval(template.pointsInterval);
-			 			template.pointsInterval = null;
+	 					function stop() {
+				 			template.pointsInterval && clearInterval(template.pointsInterval);
+				 			template.pointsInterval = null;
+				 		}
+
+				 		stop();
+
+				 		template.pointsInterval = setInterval(function() {
+			 				if(curPoints < endPoints) {
+								curPoints += inc;
+								pointsEl.innerHTML = curPoints;
+								// XXX Switch to jQuery for setTimeout
+							} else {
+								routeSession.set('myPoints', endPoints);
+								stop();
+							}
+				 		}, dur);
+				 		
 			 		}
 
-			 		stop();
-
-			 		template.pointsInterval = setInterval(function() {
-		 				if(curPoints < endPoints) {
-							curPoints += inc;
-							pointsEl.innerHTML = curPoints;
-							// XXX Switch to jQuery for setTimeout
-						} else {
-							routeSession.set('myPoints', endPoints);
-							stop();
-						}
-			 		}, dur);
+			 		
 
 					Meteor.defer(function(){ 
 						console.log('answer focus');
