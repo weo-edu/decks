@@ -47,6 +47,14 @@ tome(width = 181px, height = 195px) {
 
 .tome-container {
 	tome();
+	&.stars {
+		height: 213px;
+		margin-bottom: 15px;
+		.tome-title {
+			top: 3px;
+			height: 1em;
+		}
+	}
 }
 
 .big-tome {
@@ -185,6 +193,10 @@ tome(width = 181px, height = 195px) {
 		position: absolute !important;
 		top: 0;
 		margin-left: 0px !important;
+		.disconnected {
+			-webkit-filter: grayscale(100%);	
+			opacity: .5;
+		}
 		.sidebar-inner {
 			background: none !important;
 		}
@@ -210,16 +222,13 @@ tome(width = 181px, height = 195px) {
 .tome-stats {
 	width: 527px;
 	margin: -20px auto 0;
-	tr:nth-child(odd) {
-		background: rgba(black, .15);
-	}
-	tr:nth-child(even) {
-		background: rgba(black, .05);
+	tr {
+		table-rows();
 	}
 	td, th {
 		padding: 10px;
 	}
-	.table-header {
+	.table-header, .table-sub-header {
 
 		font: 22px 'BleakChop';
 		color: #FFF;
@@ -230,6 +239,17 @@ tome(width = 181px, height = 195px) {
 		border-bottom: 10px solid black;
 		// box-shadow: 0 10px 25px rgba(black, .5);
 	}	
+	.table-sub-header {
+		font: 18px 'BleakChop';
+		color: #CCC;
+		text-shadow: 0 0 0;
+		th {
+			box-shadow: inset 0 1px 0 rgba(white, .5), inset 0 -1px 0 rgba(black, .2);
+			padding: 5px 10px;
+			background: #333;
+			border-bottom: 0;
+		}
+	}
 }
 
 .mini-stars {

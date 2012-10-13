@@ -23,6 +23,7 @@ Template.tome_info.helpers({
 function tomeViewSetup(ctx, next) {
 	var tomeId = ctx.params.id;
 	var curTome = Decks.findOne(tomeId);
+	var username = ctx.params.username;
 
 	var friend_ids = _.map(User.friends().fetch(), function(friend) {
 			return friend._id;
@@ -36,7 +37,7 @@ function tomeViewSetup(ctx, next) {
 			
 			_.extend(curTome, UserDeckInfo.findOne({deck: tomeId, user: Meteor.user()._id}));
 
-			return curTome;
+			return numberizeStats(curTome);
 		}
 	});
 
@@ -82,7 +83,7 @@ function tomeViewSetup(ctx, next) {
 						return user_deck.user;
 					})
 				}
-			});
+			}, {sort: {connected: -1, username: 1}});
 		},
 		friendMastery: function() {
 			var info = UserDeckInfo.findOne({
@@ -90,6 +91,9 @@ function tomeViewSetup(ctx, next) {
 				user: this._id
 			});
 			return info.mastery ? info.mastery.rank : '';
+		},
+		isConnected: function() {
+			return this.connected ? 'connected' : 'disconnected';
 		}
 	});
 
@@ -99,36 +103,41 @@ function tomeViewSetup(ctx, next) {
 		}
 	});
 
-	if(ctx.params.username) {
-		ctx.params.friendStats = Decks.findOne(tomeId);
-		_.extend(ctx.params.friendStats, UserDeckInfo.findOne({
-				deck: tomeId, 
-				user: Meteor.users.findOne({username: ctx.params.username})._id
-			}));
+	Template.tome_stats.created = function() {
+		if(username)
+			this.friendStats = function(name) {
+				var info = UserDeckInfo.findOne({deck: tomeId, user: Meteor.users.findOne({username: username})._id}, {fields: [name]});
+				return LocalCollection._getField(info, name);
+			}
 	}
 
 	Template.tome_stats.helpers({
-		winPercent: function() {
-			return getWinPercent(this);
-		},
 		friendName: function() {
-			return ctx.params.username && ctx.params.username + "'s Stats" || '';
+			return username && username + "'s Stats" || '';
 		},
-		friendStats: function() {
-			return ctx.params.friendStats ? ctx.params.friendStats : [];
+		friendStats: function(name) {
+			return username ? Meteor.template.friendStats(name) || 0 : '';
 		},
-		friendWinPercent: function() {
-				return ctx.params.friendStats ? getWinPercent(ctx.params.friendStats) : '';
+		friendLastPlayed: function() {
+			return username ? Meteor.template.friendStats('last_played') : '';
 		}
 	});
 
-	function getWinPercent(stats) {
-		var winStr = '';
-		if(stats.mastery && stats.mastery.wins && stats.attempts){
-			var percent = Math.round((stats.mastery.wins / stats.attempts) * 10000)/100  + '%'
-			winStr = stats.mastery.wins + '/' + stats.attempts + ' (' + percent + ')';
+	function numberizeStats(stats) {
+		var numStats = {
+			mastery : { rank : stats.mastery && stats.mastery.rank || 0 },
+			attempts : stats.attempts || 0,
+			wins : stats.wins || 0,
+			losses : stats.losses || 0,
+			multiAttempts : stats.multiAttempts || 0,
+			multiWins : stats.multiWins || 0,
+			multiLosses : stats.multiLosses || 0,
+			singleAttempts : (stats.attempts - stats.multiAttempts) || 0,
+			singleWins : (stats.wins - stats.multiWins) || 0,
+			singleLosses : (stats.losses - stats.multiLosses) || 0 
 		}
-		return winStr;
+
+		return _.extend(stats, numStats);
 	}
 
 	next();
@@ -178,14 +187,22 @@ route('/tome/:username/:id',
 
 	Template.friend_tome_stats.events({
 		'click .challenge-button': function() {
-			console.log(tomeId, friendId);
 			Game.route(tomeId, friendId);
 		}
 	});
 
-	Template.tome_buddies.active = function() {
-		return this._id === friendId ? 'active' : '';
-	}
+	Template.friend_tome_stats.helpers({
+		isConnected: function() {
+			return Meteor.users.findOne({username: ctx.params.username}).connected;
+		}
+	});
+
+	Template.tome_buddies.helpers({
+		active: function() {
+			return this._id === friendId ? 'active' : '';
+		}
+	});
+	
 
 	tome.render('friend_tome_stats');
 

@@ -51,7 +51,7 @@
 	<h3>Friends</h3>
 	<div class='shelf connect'></div>
 	{{#each friends}}
-		<div id='buddy-{{_id}}' class='buddy {{active}} tome-buddy'>
+		<div id='buddy-{{_id}}' class='buddy {{active}} {{isConnected}} tome-buddy'>
 				<div id='avatar-{{idx}}' class='avatar avatar-thumb' style='background-image: url({{avatar}});'></div>
 				<p class='tome-username'>{{username}}</p>
 				<div class='show-zero mini-stars mini-stars-{{friendMastery}}'></div>
@@ -81,23 +81,34 @@
 		</tr>
 		<tr>
 			<td>LAST PLAYED</td>
-			<td>{{helperTest}}</td>
-			<td></td>
+			<td>{{prettyTime friendLastPlayed}}</td>
+			<td>{{prettyTime last_played}}</td>
 		</tr>
 		<tr>
 			<td>RANK</td>
-			<td><div class='mini-stars mini-stars-{{friendStats.mastery.rank}}'></div></td>
+			<td><div class='mini-stars mini-stars-{{friendStats "mastery.rank"}}'></div></td>
 			<td><div class='show-zero mini-stars mini-stars-{{mastery.rank}}'></div></td>
 		</tr>
-		<tr>
-			<td>SINGLE PLAYER RECORD</td>
-			<td>{{friendWinPercent}}</td>
-			<td>{{winPercent}}</td>
+		<tr class='table-sub-header'>
+			<th>Multi Player</th><th></th><th></th>
 		</tr>
 		<tr>
-			<td>MULTI PLAYER RECORD</td>
-			<td>{{friendWinPercent}}</td>
-			<td>{{winPercent}}</td>
+			<td>Wins</td>
+			<td>{{friendStats "multiWins"}}</td>
+			<td>{{multiWins}}</td>
+		</tr>
+		<tr>
+			<td>Losses</td>
+			<td>{{friendStats "multiLosses"}}</td>
+			<td>{{multiLosses}}</td>
+		</tr>
+		<tr class='table-sub-header'>
+			<th>History</th><th></th><th></th>
+		</tr>
+		<tr>
+			<td>Losses</td>
+			<td>{{friendStats "multiLosses"}}</td>
+			<td>{{multiLosses}}</td>
 		</tr>
 	</table>
 </template>
@@ -108,5 +119,7 @@
 
 <template name='friend_tome_stats'>
 	{{> tome_stats}}
-	<div class='challenge-button'>Challenge</div>
+	{{#if isConnected}}
+		<div class='challenge-button'>Challenge</div>
+	{{/if}}
 </template>

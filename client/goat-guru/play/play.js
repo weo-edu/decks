@@ -546,12 +546,23 @@
 	 	/*
 	 		Results
 	 	*/
-	 	Template.results_view.helpers({
+	 
+ 	 	Template.results_view.helpers({
  			winner: function(ctx) {
  				var winner = game.winner();
  				return winner && winner.username || 'TIE';
  			}
 	 	});
+
+	 	Template.results_view.events({
+	 		'click .rematch-button': function() {
+	 			var deckId = game.deck()._id;
+				var uid = game.opponent().synthetic ? game.me()._id : game.opponent()._id;
+
+				Game.route(deckId, uid);
+	 		}
+	 	});
+	 	
 
 	 	Template.results_table.created = function() {
 	 		this.results = game.results();
@@ -578,17 +589,6 @@
  				return Meteor.template.bonuses;
  			}
  		});
-
-	 	
-
-	 	Template.results_view.events({
-	 		'click .rematch-button': function() {
-	 			var deckId = game.deck()._id;
-				var uid = game.opponent().synthetic ? game.me()._id : game.opponent()._id;
-
-				Game.route(deckId, uid);
-	 		}
-	 	});
 
  	// 	Template.end_game.helpers({
  	// 		results: function(ctx) {
@@ -640,15 +640,16 @@
  	// 		}
  	// 	});
 
-		Template.view_cards.helpers({
-			cards: function() {
+		Template.error_scroll.helpers({
+			scrolls: function() {
+				console.log(game.problems());
 				return game.problems();
 			},
-			image: function() {
-				return Cards.findOne(this.card_id).image;
+			title: function() {
+				return Cards.findOne(this.card_id).title;
 			},
 			correct: function() {
-				return game.isCorrect(this) ? 'correct' : 'incorrect';
+				return game.isCorrect(this);
 			},
 			review: function() {
 				return routeSession.get('review');
@@ -658,7 +659,15 @@
 			}
 		});
 
-			Template.view_cards.events({
+		Template.error_scroll.events({
+			'click .error-scroll': function(evt){
+				console.log(this);
+				routeSession.set('review-scroll', this);
+				ui.get('.dialog').closable().overlay().center().show();
+			}
+		});
+
+		Template.view_cards.events({
 			'click .card': function(evt, template) {
 				var self = this;
 				$('#slider').addClass('review', 400, 'easeInOutExpo', function(){
@@ -668,17 +677,24 @@
 			}
 		});
 
+		Template.solution_dialog.created = function() {
+ 			this.alignProblem = function() {
+ 				$('#problem').css({
+ 					'margin-top': -(($('#problem').height() / 2))
+ 				});
+ 			}
+ 		}
 
-		Template.review_problem.events({
-			'click .review-back': function() {
-				$('#slider').switchClass('review', 'show-cards', 400, 'easeInOutExpo', function(){
-							routeSession.set('show_cards', 'show-cards');
-					});
-			},
-			'click .solution': function() {
-				alert(routeSession.get('review_card').solution);
+ 		Template.solution_dialog.rendered = function() {
+ 			this.alignProblem();
+ 		}
+
+		Template.solution_dialog.helpers({
+			scroll: function() {
+				var scroll = routeSession.get('review-scroll');
+				return scroll;
 			}
-		});
+		})
 
 
 		Template.select_dialog.helpers({

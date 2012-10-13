@@ -18,7 +18,7 @@
 	border: 15px solid black;
 	font: 35px/50px 'BleakChop';
 	box-shadow: 0 0 10px rgba(black);
-	.results-header, .results-footer {
+	.results-header {
 		font: 35px/50px 'BleakChop';
 		color: white;
 		text-shadow: 1px 1px 0 rgba(black, .8);
@@ -85,10 +85,33 @@
 
 	.errors-table-inner {
 		overflow-y: auto;
-		height: 190px;
-		padding: 48px 0 20px;
-		> div {
-			padding: 10px;
+		height: 202px;
+		padding: 48px 0 0;
+		.error-scroll {
+			clearfix();
+			font-size: 16px;
+			line-height: 1.2em;
+			padding: 5px 10px;
+			table-rows();
+			cursor: pointer;
+			transition: all .2s;
+			div {
+				float: left;
+				&.title {
+					width: 103px;
+					overflow: ellipsis;
+				}
+			}
+			&:hover {
+				background: rgba(black, .25);
+			}
+			.solution {
+				float: right;
+				font-size: 12px;
+			}
+			&.reviewed {
+				background-color: rgba(green, .6);
+			}
 		} 
 	}
 }
@@ -97,6 +120,42 @@
 	red-button();
 	clear: both;
 	float: right;
-	margin-right: 20px;
+	margin: -10px 30px 0 0;
 	font-size: 30px;
+}
+
+.solution-dialog {
+	.dialog {
+		background: transparent;
+		box-shadow: 0 0 0;
+	}
+	.close {
+		size = 19px;
+		line-height: size;
+		font-family: 'BleakChop';
+		height: size;
+		width: size;
+		border-radius: 50%;
+		border: 2px solid #FFF;
+		background: black;
+		text-align: center;
+		color: #FFF;
+		top: 16px;
+		right: 25px;
+		box-shadow: 0 0 8px rgba(black, .6);
+		&:hover {
+			color: #FFF;
+			border: 2px solid #FFF;
+			box-shadow: 0 0 13px rgba(black, 1);
+		}
+		&:active {
+			box-shadow: 0 0 8px rgba(black, .6);
+		}
+	}
+	.content {	
+		background: url("/app!decks/img/playground.png") center no-repeat;
+		height: 514px;
+		width: 548px;
+		// margin-left: -174px;
+	}
 }
