@@ -589,6 +589,26 @@
 
   }
 
+  Game.prototype.problemsStatus = function(user) {
+    var self = this;
+    var cur = self.currentProblem(user);
+    var problems = self.problems(user);
+    var arr = _.map(problems, function(p) {
+      var c = '';
+      if(p.answer !== undefined) {
+        if(self.isCorrect(p))
+          c = 'correct';
+        else
+          c = 'incorrect';
+      }
+      else if(cur && cur._id === p._id)
+        c = 'current';
+
+      return c;
+    });
+
+    return arr;
+  }
 
   ////////////////////
   // Update Helpers //

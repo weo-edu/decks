@@ -2,7 +2,7 @@
 	<div id='play-view'>
 			<div class='tracker-container'>
 				<div id='my-tracker' class='tracker'>
-					{{> problem_tracker currentUser}}
+					{{> problem_tracker me}}
 				</div>
 				{{> game_points}}
 				{{> game_multiplier}}
@@ -23,6 +23,10 @@
 				<div class="quit-button">Quit</div>
 			</div>
 	</div>
+	{{> play_view_dialog}}
+</template>
+
+<template name="play_view_dialog">
 	{{#ui "dialog"}}
 		{{{ message }}}
 	{{/ui}}
