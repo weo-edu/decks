@@ -89,27 +89,34 @@
 			<td><div class='mini-stars mini-stars-{{friendStats "mastery.rank"}}'></div></td>
 			<td><div class='show-zero mini-stars mini-stars-{{mastery.rank}}'></div></td>
 		</tr>
-		<tr class='table-sub-header'>
-			<th>Multi Player</th><th></th><th></th>
-		</tr>
 		<tr>
-			<td>Wins</td>
+			<td>WINS</td>
 			<td>{{friendStats "multiWins"}}</td>
 			<td>{{multiWins}}</td>
 		</tr>
 		<tr>
-			<td>Losses</td>
+			<td>LOSSES</td>
 			<td>{{friendStats "multiLosses"}}</td>
 			<td>{{multiLosses}}</td>
+		</tr>
+	</table>
+
+	<table class='tome-stats history'>
+		<tr class='table-header'>
+			<th>{{player}} History</th><th></th><th></th>
 		</tr>
 		<tr class='table-sub-header'>
-			<th>History</th><th></th><th></th>
+			<th>Opponent</th>
+			<th>Result</th>
+			<th>Date</th>
 		</tr>
-		<tr>
-			<td>Losses</td>
-			<td>{{friendStats "multiLosses"}}</td>
-			<td>{{multiLosses}}</td>
-		</tr>
+		{{#each pastGames}}
+			<tr>
+				<td style='text-transform: uppercase;'>{{opponentName}}</td>
+				<td>{{result}}</td>
+				<td>{{prettyTime time}}</td>
+			</tr>
+		{{/each}}
 	</table>
 </template>
 

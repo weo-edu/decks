@@ -37,7 +37,7 @@ function tomeViewSetup(ctx, next) {
 			
 			_.extend(curTome, UserDeckInfo.findOne({deck: tomeId, user: Meteor.user()._id}));
 
-			return numberizeStats(curTome);
+			return curTome && numberizeStats(curTome);
 		}
 	});
 
@@ -104,15 +104,15 @@ function tomeViewSetup(ctx, next) {
 	});
 
 	Template.tome_stats.created = function() {
-		if(username)
-			this.friendStats = function(name) {
-				var info = UserDeckInfo.findOne({deck: tomeId, user: Meteor.users.findOne({username: username})._id}, {fields: [name]});
-				return LocalCollection._getField(info, name);
-			}
+		this.friendStats = function(name) {
+			var info = UserDeckInfo.findOne({deck: tomeId, user: Meteor.users.findOne({username: username})._id}, {fields: [name]});
+			return LocalCollection._getField(info, name);
+		}
 	}
 
 	Template.tome_stats.helpers({
 		friendName: function() {
+			console.log(this);
 			return username && username + "'s Stats" || '';
 		},
 		friendStats: function(name) {
@@ -120,6 +120,15 @@ function tomeViewSetup(ctx, next) {
 		},
 		friendLastPlayed: function() {
 			return username ? Meteor.template.friendStats('last_played') : '';
+		},
+		pastGames: function() {
+			return username ? _.clone(Meteor.template.friendStats('history') || []).reverse() : _.clone(this.history || []).reverse();
+		},
+		opponentName: function() {
+			return Meteor.users.findOne(this.opponent).username;
+		},
+		player: function() {
+			return username ? username + "'s" : 'My';
 		}
 	});
 
