@@ -31,20 +31,27 @@
 				//	Scale the probability up each time the card appears
 				//	Initialize to 1 because the answer event gets emitted
 				//	before the answer is applied to the problem
-				var problem_found = false;
-				var n = _.reduce(self.game.problems(), function(memo, p) {
-					if (problem_found) return memo;
-					if (problem._id === p._id) problem_found = true;
-					return memo + (p.card_id === problem.card_id ? 1 : 0);
-				}, 0);
+				var problems = self.game.problems();
+				var i, p;
+				var n = 0;
+				for (i = 0; i < problems.length; i++) {
+					p = problems[i];
+					if (p.card_id === problem.card_id && self.game.me_id === p.picker)
+						n++;
+					if (p._id === problem._id)
+						break;
+				}
+
 				self.n = n;
+				console.log('n', n);
 				return n > self.nOk;
 			},
 			value: function(problem) {
 				return -problem.points * (1 - Math.pow(this.base,this.n-this.nOk))
 			},
 			name: 'repeat',
-			message: 'Repeat'
+			message: 'Repeat',
+			notify: function() {}
 		},
 		{
 			type: 'multiplier',
@@ -89,7 +96,7 @@
 		_.each(bonuses, function(bonus) {
 			var b = Bonus.create(bonus, game);
 			game.on('answer', function(problem, correct) {
-				if (b.shouldAward(problem, correct))
+				if (b.shouldAward(problem, correct, game))
 					b.award(problem);
 				else if (b.miss)
 					b.miss(problem);

@@ -1,5 +1,7 @@
 ;(function() {
 
+	var topSpeed = 1.0; //seconds
+
 	Guru.create  = function (game) {
 		var deck_id = game.deck()._id;
 		var deck_info = UserDeckInfo.findOne({user: Meteor.user()._id, deck: deck_id});
@@ -95,11 +97,60 @@
 			return;
 		console.log('guru choose');
 		self.mygame.initSelection();
-		self.mygame.randomSelect();
+		self.select();
 		self.mygame.pickSelectedCards();
 		self.mygame.destroySelection();
 	}
 
+	Guru.prototype.select = function() {
+		var self = this;
+    var game = self.mygame;
+    var cardsLeft = game.nCards() - game.numSelected();
+    console.log('gardsLeft');
+    var deck = game.deck();
+
+    var stats = {};
+    _.each(deck.cards, function(cardId) {
+    	if (! stats[cardId])
+      	stats[cardId] = game.opponentCardStats(cardId);
+    });
+
+    var maxAdvantage = null;
+    var maxCardId = null;
+    var goatScore = null;
+    var playerScore = null;
+    var advantage = null;
+    _.times(cardsLeft, function() {
+      maxAdvantage = null;
+      maxCardId = null;
+
+      _.each(deck.cards, function(cardId) {
+      	// goat does not pick based on card difficulty
+      	// only player accuracy, speed and retention
+      	// goat's score is included in decision making to make it indeterminant
+
+        goatScore = self.getCardStats(cardId).accuracy.val; //accuracy
+        goatScore *= self.getCardStats(cardId).speed.val; //speed
+        goatScore *= (1 - Math.pow(game.selected_cards.get(cardId) * .2, 2)); //repeat deduction
+
+        playerScore = stats[cardId].accuracy.val; //accuracy
+        playerScore *= stats[cardId].speed.val; //speed
+        playerScore *= stats[cardId].retention.val; //retention deduction
+                
+        advantage = goatScore - playerScore;
+        console.log('advantage', advantage, cardId);
+        if (maxAdvantage === null || advantage > maxAdvantage) {
+          maxAdvantage = advantage;
+          maxCardId = cardId;
+        }
+      });
+
+      console.log('chose', maxCardId, maxAdvantage, stats[maxCardId]);
+      game.selected_cards.set(maxCardId, game.selected_cards.get(maxCardId) + 1 );
+    });
+
+		game.numSelected(game.nCards());
+  }
 
 	Guru.prototype.setupTimes = function(changed) {
 		if (!changed)
@@ -187,7 +238,7 @@
 		var cardDist = Stats.cardTime(problem.card_id);
 		var x = 1 - db_stats.speed.val * Math.sqrt(db_stats.retention.val)
 		var time = Stats.inverseGaussQuantile(x, cardDist.mu, cardDist.lambda);
-		if (time < .4) time = .4;
+		time = Math.max(time, topSpeed);
 		return time * 1000;
 	}
 
@@ -222,6 +273,10 @@
 		var update = {};
 		update['stats.'+cardId] = stats;
 		self.mygame.updatePlayer(update);
+	}
+
+	Guru.prototype.getCardStats = function(cardId) {
+		return this.mygame.get(Guru.goat()._id + '.stats.' + cardId);
 	}
 
 	function cap(val) {

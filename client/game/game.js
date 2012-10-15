@@ -331,7 +331,8 @@
         accuracy: { name: 'accuracy', val:  stat.accuracy},
         speed:  { name: 'speed', val: stat.speed },
         points: { name: 'points', val: Math.round(Stats.points(Stats.regrade(cardId))) },
-        retention: { name: 'retention', val: stat.retention }
+        retention: { name: 'retention', val: stat.retention },
+        time: {name: 'time', vals: stat.time_mu}
       };
       return stats;
     }
@@ -428,6 +429,8 @@
 
     self.numSelected(self.nCards());
   }
+
+  
 
   Game.prototype.selectedCards = function() {
     var self = this;
@@ -648,6 +651,7 @@
       var problem = problemize(Cards.findOne(c));
       // allows players to sort in same order
       problem.order = Math.random();
+      problem.picker = self.me_id;
       self.emit('problemInstantiated', problem);
       return problem; 
     });
