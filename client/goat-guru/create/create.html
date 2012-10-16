@@ -1,0 +1,115 @@
+<template name='create'>
+	<div class='create-view'>
+		<div class="tome-info-form">
+			{{> tome_info_form}}
+		</div>
+		<div class='scroll-select'>
+			{{> scroll_select}}
+		</div>
+	</div>
+</template>
+
+<template name="tome_info_form">
+	{{> form_dialog}}
+	<center>
+		<div id='title' class='input'>
+			<h2 class='tome-title'>{{{hasProperty "title"}}}</h2>
+		</div>
+		<div id='image' class='big-tome'>
+			{{> big_tome tome}}
+			<input tabindex='-1' onfocus='$(this).click()' id="image-upload" type="file" multiple/>
+		</div>
+		<div id='spg' class='input'>
+			<h3>Scrolls Per Game:</h3>
+			<p>{{{hasProperty "cardsPerGame"}}}</p>
+		</div>
+		<div id='tags' class='input'>
+			<h3>Categories:</h3>
+			<p>{{{hasProperty "tags"}}}</p>
+		</div>
+		<div id='description' class='input'>
+			<h3>Description:</h3>
+			<p>{{{hasProperty "description"}}}</p>
+		</div>
+	</center>
+	<h2 class='assigned-scrolls-title'>Scrolls</h2>	
+	<table class='scroll-table'>
+		<tr class='tome-scroll'>
+			<th>Title</th>
+			<th>Points</th>
+		</tr>
+		{{#each scrollsInTome}}
+			<tr class='tome-scroll'>
+				<td>{{title}}</td>
+				<td>{{points}}</td>
+			</tr>
+		{{/each}}
+	</table>
+</template>
+
+<template name="form_dialog">
+	{{#ui "dialog"}}
+		{{{ form }}}
+	{{/ui}}
+</template>
+
+<template name='title_form'>
+	{{#ui "form"}}
+		<input placeholder="A short title that describes your tome" name="title"/>
+		<div class="buttons">
+			<div class="save">save</div>
+			<div class="cancel">cancel</div>
+		</div>
+	{{/ui}}
+</template>
+
+<template name='spg_form'>
+	{{#ui "form"}}
+		<input placeholder="Scrolls Per Game" name="cardsPerGame"/>
+		<div class="buttons">
+			<div class="save">save</div>
+			<div class="cancel">cancel</div>
+		</div>
+	{{/ui}}
+</template>
+
+<template name='tags_form'>
+	{{#ui "form"}}
+		<input placeholder="Categories" name="tags"/>
+		<div class="buttons">
+			<div class="save">save</div>
+			<div class="cancel">cancel</div>
+		</div>
+	{{/ui}}
+</template>
+
+<template name='description_form'>
+	{{#ui "form"}}
+		<textarea placeholder="Description" name="description"/>
+		<div class="buttons">
+			<div class="save">save</div>
+			<div class="cancel">cancel</div>
+		</div>
+	{{/ui}}
+</template>
+
+<template name='scroll_select'>
+		<h2 class='category-title'>Available</h2>
+		<table class='scroll-table available-scroll-table'>
+			<tr class='available-scroll'>
+				<th>Title</th>
+				<th>Categories</th>
+				<th>Points</th>
+			</tr>
+			{{#each scrolls}}
+				{{#if scrollsNotInTome}}
+					<tr class='available-scroll'>
+						<td>{{title}}</td>
+						<td>{{tags}}</td>
+						<td>{{points}}</td>
+					</tr>
+				{{/if}}
+			{{/each}}
+		</table>
+</template>
+
