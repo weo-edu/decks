@@ -158,7 +158,6 @@ route('/inventory', function() {
 
 	Template.tome.events({
 		'click': function() {
-			console.log(this._id);
 			route('/tome/' + this._id);
 		}
 	});
@@ -168,6 +167,21 @@ route('/inventory', function() {
 			return toggle.deckFilter(routeSession, Meteor.user()._id);
 		}
 	});
+
+	Template.my_collection.events({
+		'click #create-tome': function() {
+			Decks.insert({creator: Meteor.user().username, type: 'deck'}, function(err,_id) {
+				if (err) throw err;
+				route('/create/tome/' + _id);
+			});
+		},
+		'click #create-scroll': function() {
+			Cards.insert({creator: Meteor.user().username, type: 'card'}, function(err,_id) {
+				if (err) throw err;
+				route('/create/scroll' + _id);
+			});
+		}
+	})
 
 	Template.browse_filters.helpers(toggle.helpers(routeSession));
 

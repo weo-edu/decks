@@ -1,0 +1,103 @@
+@import '../decks/client/mixins.styl'
+
+.create-view {
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	background: rgba(white, .95);
+	top: 0;
+	left: 0;
+	z-index: 100;
+	h2 {
+		color: #666;
+	}
+	h3 {
+		font: 25px/45px 'Fresca';
+		text-shadow: 0 0 0;
+		color: black;
+	}
+	p {
+		font: 16px 'Fresca';
+		text-align: center;
+	}
+
+	#image-upload {
+		display: none;
+	}
+
+	.input, .big-tome {
+		cursor: pointer;
+		width: 370px;
+		margin: 10px auto;
+		&:last-child {
+			margin-bottom: 20px;
+		}
+		&.big-tome {
+			width: 264px
+			margin-top: 0px;
+		}
+		&:hover {
+			background-color: rgba(blue, .2);
+		}
+	}
+	input[type='file'] { width: 200px; }
+
+	.assigned-scrolls-title, .category-title {
+		background: blue;
+		color: white;
+		padding: 0 10px;
+		text-align: center;
+	}
+
+	.category-title {
+		color: #FFF;
+		text-align: left;
+	}
+
+	.scroll-table {
+		width: 100%;
+		font: 20px 'Fresca';
+		td{
+			padding: 8px 10px;
+		}
+
+		th {
+			font-family: 'BleakChop';
+			background: #333;
+			color: #fff;
+			padding: 10px;
+			cursor: default;
+		}
+		tr {
+			table-rows();
+			cursor: pointer;
+			&:hover {
+				background: rgba(red, .2);
+			}
+		}
+	}
+
+	.available-scroll-table {
+		background: url('/app!common/textures/handmadepaperA85.png');
+		tr {
+			&:hover {
+				background: rgba(blue, .2);
+			}
+		}
+	}
+}
+
+.tome-info-form {
+	overflow-y: auto;
+	height: 100%;
+	box-shadow: 0 0 20px rgba(black, 1);
+	width: 400px; 
+	float: left;
+	background: url('/app!common/textures/handmadepaperA85.png');
+}
+
+.scroll-select {
+ 	height: 100%;
+ 	overflow-y: auto;
+ 	background: url('/app!decks/img/woodRepeat.jpg');
+}
