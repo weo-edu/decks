@@ -102,7 +102,7 @@ route('/inventory', function() {
 		'click #create-scroll': function() {
 			Cards.insert({creator: Meteor.user().username, type: 'card'}, function(err,_id) {
 				if (err) throw err;
-				route('/create/scroll' + _id);
+				route('/create/scroll/' + _id);
 			});
 		}
 	})
@@ -115,8 +115,8 @@ route('/inventory', function() {
 				_.extend(i, Decks.findOne(i.deck)); 
 			});
 
-			// return deckInfos; 
-			return Decks.find({})
+			return deckInfos; 
+			// return Decks.find({})
 		}
 	});
 

@@ -1,17 +1,37 @@
+<!-- Tome Create -->
+
 <template name='create'>
-	<div class='create-view'>
-		<div class="tome-info-form">
-			{{> tome_info_form}}
-		</div>
-		<div class='scroll-select'>
-			{{> scroll_select}}
+	<div class='create-view {{active}}'>
+		<div class='create-container'>
+			<div class="create-header">
+				{{> tome_create_header}}
+			</div>
+			<div id='create-info' class="tab">
+				{{> tome_info_form}}
+			</div>
+			<div id='scroll-browse' class='tab'>
+				{{> scroll_select}}
+			</div>
+			<div id='view-scrolls' class='tab'>
+				{{> scroll_view}}
+			</div>
 		</div>
 	</div>
+</template>
+
+<template name="tome_create_header">
+	<h4>untitled</h4>
+	<ul class='scroll-info-nav'>
+		<li id='add' class='add-scrolls'></li>
+		<li id='view' class='view-scrolls'></li>
+		<li id='info' class='info'></li>
+	</ul>
 </template>
 
 <template name="tome_info_form">
 	{{> form_dialog}}
 	<center>
+		<div style='height: 10px;'></div>
 		<div id='title' class='input'>
 			<h2 class='tome-title'>{{{hasProperty "title"}}}</h2>
 		</div>
@@ -31,20 +51,58 @@
 			<h3>Description:</h3>
 			<p>{{{hasProperty "description"}}}</p>
 		</div>
+		<div style='height: 10px;'></div>
 	</center>
-	<h2 class='assigned-scrolls-title'>Scrolls</h2>	
-	<table class='scroll-table'>
-		<tr class='tome-scroll'>
-			<th>Title</th>
-			<th>Points</th>
-		</tr>
-		{{#each scrollsInTome}}
-			<tr class='tome-scroll'>
-				<td>{{title}}</td>
-				<td>{{points}}</td>
-			</tr>
-		{{/each}}
-	</table>
+</template>
+
+<template name='scroll_select'>
+		<div class='category scrolls'>
+			<div class='scroll-view-header'>
+				<h2 class='category-title'>Find Scrolls</h2>
+				<input class='browse-filter' type='text' placeholder='Filter' />
+			</div>
+			<div class='shelf connect'></div>
+			{{#each scrolls}}
+				{{#if scrollsNotInTome}}
+					<div class='scroll-info-view'>
+						<div class='inner-scroll-info image'>{{> small_scroll}}</div>
+						<div class='inner-scroll-info'> 
+							<h4>{{title}}</h4>							
+							<p>{{description}}</p>
+						</div>
+						<div class='inner-scroll-info tags'>
+							<span>{{tags}}</span><span class='label'>+</span><span>{{points}}</span>
+							<span class='created-by'>Created by: {{creatorName}}</span>
+					</div>
+				{{/if}}
+			{{/each}}
+		</div>
+</template>
+
+<template name='small_scroll'>
+	<img src='/app!decks/img/small-scroll.png' />
+</template>
+
+<template name='scroll_view'>
+	<div class='category scrolls assigned'>
+			<div class='scroll-view-header'>
+				<h2 class='category-title'>Assigned Scrolls</h2>
+				<input class='browse-filter' type='text' placeholder='Filter' />
+			</div>
+			<div class='shelf connect'></div>
+			{{#each scrollsInTome}}
+				<div class='scroll-info-view'>
+					<div class='inner-scroll-info image'>{{> small_scroll}}</div>
+					<div class='inner-scroll-info'> 
+						<h4>{{title}}</h4>							
+						<p>{{description}}</p>
+					</div>
+					<div class='inner-scroll-info tags'>
+						<span>{{tags}}</span><span class='label'>+</span><span>{{points}}</span>
+						<span class='created-by'>Created by: {{creatorName}}</span>
+					</div>
+			{{/each}}
+		</div>
 </template>
 
 <template name="form_dialog">
@@ -93,23 +151,97 @@
 	{{/ui}}
 </template>
 
-<template name='scroll_select'>
-		<h2 class='category-title'>Available</h2>
-		<table class='scroll-table available-scroll-table'>
-			<tr class='available-scroll'>
-				<th>Title</th>
-				<th>Categories</th>
-				<th>Points</th>
-			</tr>
-			{{#each scrolls}}
-				{{#if scrollsNotInTome}}
-					<tr class='available-scroll'>
-						<td>{{title}}</td>
-						<td>{{tags}}</td>
-						<td>{{points}}</td>
-					</tr>
-				{{/if}}
-			{{/each}}
-		</table>
+
+
+<!-- Scroll Create -->
+
+<template name='create_scroll'>
+	<div class='create-view {{active}}'>
+		<div class='create-container'>
+			<div class="create-header">
+				{{> scroll_create_header}}
+			</div>
+
+			<div id='scroll-editor' class='tab'>
+				{{> scroll_editor}}
+			</div>
+			<div id='scroll-preview' class='tab'>
+				{{> scroll_preview}}
+			</div>
+			<div id='create-info' class='tab'>
+				{{> scroll_create_info}}
+			</div>
+			<div id='zebra-info' class='tab'>
+				{{> zebra_info}}
+			</div>
+		</div>
+	</div>
 </template>
+
+<template name="scroll_create_header">
+	<h4>untitled</h4>
+	<ul class='scroll-info-nav'>
+		<li id='zebra' class='zebra'></li>
+		<li id='editor' class='compose'></li>
+		<li id='preview' class='view'></li>
+		<li id='info' class='info'></li>
+	</ul>
+</template>
+
+<template name='scroll_editor'>
+	ACE
+</template>
+
+<template name='scroll_preview'>
+	<div id='my-tracker' class='tracker'>
+		{{> problem_tracker}}
+	</div>
+	<div id='problem-container'>
+		<div id='problem'>
+		</div>
+	</div>
+	{{> problem_tracker}}
+	<div class='tracker'>
+		{{> problem_tracker}}
+	</div>
+</template>
+
+<template name='scroll_create_info'>
+	{{> form_dialog}}
+	<center>
+		<div style='height: 10px;'></div>
+		<div id='title' class='input'>
+			<h3>{{{hasProperty "title"}}}</h3>
+		</div>
+		<div class='shelf connect'></div>
+		<div id='grade' class='input'>
+			<h3>Grade Level:</h3>
+			<p>{{{hasProperty "grade"}}}</p>
+		</div>
+		<div id='tags' class='input'>
+			<h3>Categories:</h3>
+			<p>{{{hasProperty "tags"}}}</p>
+		</div>
+		<div id='description' class='input'>
+			<h3>Description:</h3>
+			<p>{{{hasProperty "description"}}}</p>
+		</div>
+		<div style='height: 10px;'></div>
+	</center>
+</template>
+
+<template name='zebra_info'>
+	ZEBRA
+</template>
+
+<template name='grade_form'>
+	{{#ui "form"}}
+		<input type='text' placeholder="Grade Level" name="grade"/>
+		<div class="buttons">
+			<div class="save">save</div>
+			<div class="cancel">cancel</div>
+		</div>
+	{{/ui}}
+</template>
+
 

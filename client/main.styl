@@ -127,7 +127,7 @@ html, body {
 
 #nav {
 	clear: both;
-	height: 141px;
+	height: 111px;
 	width: 1026px;
 	margin-left: ((1026 - 980) / -2px);
 	background: url('/app!decks/img/nav.png') center bottom no-repeat;
@@ -135,7 +135,7 @@ html, body {
 	z-index: 99;
 	.goat-nav, .friends-nav {
 		position: absolute;
-		top: 30px;
+		top: -2px;
 		left: 60px;
 		display: block;
 		float: left;
@@ -143,11 +143,23 @@ html, body {
 		height: 160px;
 		width: 120px;
 		&:hover {
-			background-position: 0 173px;
+			top: -3px;
+			// background-position: 0 173px;
 		}
 		&:active {
-			background-position: 0px 0px;
+			top: -2px;
+			// background-position: 0px 0px;
 		}
+	}
+
+	.goat-nav {
+		height: 134px;
+		&:hover {
+			// background-position: 0 165px;
+		}
+		// &:active {
+		// 	background-position: 0px 0px;
+		// }
 	}
 
 	.friends-nav {
@@ -155,11 +167,11 @@ html, body {
 		left: 180px;
 		background-position: 125px 0px;
 		&:hover {
-			background-position: 125px 168px;
+			// background-position: 125px 168px;
 		}
-		&:active {
-			background-position: 125px 0px;
-		}
+		// &:active {
+		// 	background-position: 125px 0px;
+		// }
 	}
 
 	.nav-title {
@@ -170,12 +182,13 @@ html, body {
 		position: absolute;
 		left: 50%;
 		margin-left: -185px;
-		top: 50px;
+		top: 20px;
+		box-shadow: 0 0 8px rgba(black, .8);
 	}
 
 	.nav-user {
 		position: absolute;
-		top: 45px;
+		top: 15px;
 		right: 0;
 		width: 305px;
 		height: 101px;

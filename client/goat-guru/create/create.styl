@@ -1,36 +1,54 @@
 @import '../decks/client/mixins.styl'
 
+.create-container {
+	height: 100%;
+	overflow-y: auto;
+}
+
+.create-header {
+	height: 50px;
+	z-index: 3;
+	position: absolute;
+	clearfix();
+	width: 100%;
+	background: blue;
+	border-bottom: 1px solid darken(blue, 20);
+	box-shadow: 0 3px 5px rgba(black, .3), inset 0 -5px 15px rgba(black, .2); 
+	h4 {
+		line-height: 49px;
+		float: left;
+		padding-left: 30px;	
+	}
+}
+
 .create-view {
-	position: fixed;
 	height: 100%;
 	width: 100%;
-	background: rgba(white, .95);
-	top: 0;
-	left: 0;
-	z-index: 100;
-	h2 {
-		color: #666;
-	}
-	h3 {
-		font: 25px/45px 'Fresca';
-		text-shadow: 0 0 0;
-		color: black;
-	}
-	p {
-		font: 16px 'Fresca';
-		text-align: center;
+	.tab {
+		display: none;
+		width: 980px;
+		padding: 50px 0px 0;
+		&.active {
+			display: block;
+		}
 	}
 
-	#image-upload {
-		display: none;
+	#scroll-preview {
+		width: 980px;
 	}
+
+	.category-title {
+		float: left;
+	}
+
+	#image-upload { display: none; }
 
 	.input, .big-tome {
 		cursor: pointer;
 		width: 370px;
 		margin: 10px auto;
-		&:last-child {
-			margin-bottom: 20px;
+		&:first-child {
+			margin-top: 0;
 		}
 		&.big-tome {
 			width: 264px
@@ -39,65 +57,192 @@
 		&:hover {
 			background-color: rgba(blue, .2);
 		}
-	}
-	input[type='file'] { width: 200px; }
-
-	.assigned-scrolls-title, .category-title {
-		background: blue;
-		color: white;
-		padding: 0 10px;
-		text-align: center;
-	}
-
-	.category-title {
-		color: #FFF;
-		text-align: left;
-	}
-
-	.scroll-table {
-		width: 100%;
-		font: 20px 'Fresca';
-		td{
-			padding: 8px 10px;
+		&:active  {
+			outline: 2px solid blue;
+			background-color: rgba(blue, .2);
+			box-shadow: 0 0 10px blue, inset 0 0 5px blue;
 		}
-
-		th {
-			font-family: 'BleakChop';
-			background: #333;
-			color: #fff;
-			padding: 10px;
-			cursor: default;
+		p {
+			padding-bottom: 10px;
 		}
-		tr {
-			table-rows();
+	}
+
+	
+
+	.scroll-info-nav {
+		float: right;
+		margin-right: 20px;
+		li {
+			float: left;
+			height: 37px;
+			width: 37px;
+			background-color: rgba(black, .15);
+			background-image: url('/app!decks/img/create-nav.png');
+			background-position: 1px 0;
+			margin: 6px 0 6px 1px;
+			text-align: center;
+			line-height: 35px;
+			transition: background-color 200ms linear;
 			cursor: pointer;
+			radius = 5px;
+
+			&.info { background-position: 111px 0; }
+			&.compose { background-position: 78px 0; }
+			&.zebra { background-position: 185px 0; }
+			&.add-scrolls { background-position: 114px 38px; }
+			&.view-scrolls { background-position: 149px 37px; }
+
+			&:first-child {
+				border-radius: radius 0 0 radius;
+			}
+			&:last-child {
+				border-radius: 0 radius radius 0;
+			}
 			&:hover {
-				background: rgba(red, .2);
+				background-color: rgba(black, .2);
+			}
+			&.active {
+				background-color: rgba(black, .3);
 			}
 		}
 	}
 
-	.available-scroll-table {
-		background: url('/app!common/textures/handmadepaperA85.png');
-		tr {
-			&:hover {
-				background: rgba(blue, .2);
+	&.info {
+		#info { background-color: rgba(black, .3); }
+		#create-info { display: block; }
+	}
+	&.preview {
+		#preview { background-color: rgba(black, .3); }
+		#scroll-preview { display: block; }
+	}
+	&.zebra {
+		#zebra { background-color: rgba(black, .3); }
+		#zebra-info { display: block; }
+	}
+	&.editor {
+		#editor { background-color: rgba(black, .3); }
+		#scroll-editor { display: block; }
+	}
+	&.add {
+		#add { background-color: rgba(black, .3); }
+		#scroll-browse { display: block; }
+	}
+	&.view {
+		#view { background-color: rgba(black, .3); }
+		#view-scrolls { display: block; }
+	}
+
+	/**
+	 * Info Tab
+	 */
+
+	#create-info {
+		height: 100%;
+		center {
+			background: url('/app!common/textures/handmadepaper.png');
+			position: relative;
+			min-height: 100%;
+			width: 526px;
+			padding: 0 17px;
+			box-shadow: 0 0 20px rgba(black, 1);
+			woodSides();
+			margin: 0 auto;
+			z-index: 0;
+			&:before, &:after{
+				top: 0;
 			}
+		}
+		p {
+			font-family: 'Fresca';
+		}
+	}
+
+	/**
+	 * Preview Tab
+	 */
+	
+	.tracker {
+		float: left;
+	}
+
+}
+
+/**
+ * Scroll Tables
+ */
+
+.category.scrolls {
+	clearfix();
+	width: 963px;
+	overflow: visible;
+	background: url('/app!common/textures/handmadepaper.png');
+	.shelf {
+		margin-left: 10px;
+		margin-bottom: 0;
+	}
+	.scroll-view-header {
+		clearfix();
+		.category-title {
+			margin-top: 10px !important;
+			color: #666;
+		}
+		.browse-filter {
+			margin: 27px 0 0 20px;
+			background: url('/app!common/textures/handmadepaper.png');
 		}
 	}
 }
 
-.tome-info-form {
-	overflow-y: auto;
-	height: 100%;
-	box-shadow: 0 0 20px rgba(black, 1);
-	width: 400px; 
-	float: left;
-	background: url('/app!common/textures/handmadepaperA85.png');
+.assigned .scroll-info-view:hover {
+	background-color: red;
 }
 
-.scroll-select {
- 	height: 100%;
- 	overflow-y: auto;
- 	background: url('/app!decks/img/woodRepeat.jpg');
+.scroll-info-view {
+	padding: 20px 0px 20px 40px ;
+	border-bottom: 1px dashed rgba(#CCC, .7);
+	background: url('/app!common/textures/handmadepaper.png');
+	clearfix();
+	cursor: pointer;
+	&:hover {
+		background-image: url('/app!common/textures/handmadepaperA85.png');
+		background-color: rgba(blue, 1);
+	}
+	.inner-scroll-info {
+		float: left;
+		height: 100%;
+		font-family: 'Fresca';
+		margin-right: 25px;
+	}
+
+	.tags {
+		float: right;
+		font-size: 14px;
+		color: #444;
+		width: 250px;
+		line-height: 1.5em;
+		overflow: ellipsis;
+		text-align: right;
+		span {
+			margin-right: 15px;
+		}
+
+		.label {
+			font: 18px 'BleakChop';
+			margin-right: 0;
+			color: blue;
+		}
+	}
+
+	.created-by {
+		font-size: 14px;
+		margin-bottom: 5px;
+		display: block;
+		color: #777;
+	}
+
+	h4 {
+		font-size: 25px;
+		color: blue;
+		text-shadow: 0 0 0;
+	}
 }

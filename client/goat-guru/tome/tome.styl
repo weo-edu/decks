@@ -28,20 +28,42 @@ tome(width = 181px, height = 195px) {
 		background-size: cover;
 		background-position: center;
 		box-shadow: inset -1px -1px 0 rgba(black, .5), inset 0px 1px 0 rgba(white, .5);
-		&:after {
-			content: '';
-			position: absolute;
-			height: 100%;
-			width: 100%;
-			border-radius: 0 14px 14px 0;
-			background: url('/app!decks/img/tome-overlay.png');
-			display: none;
-		}
+		// &:after {
+		// 	content: '';
+		// 	position: absolute;
+		// 	height: 100%;
+		// 	width: 100%;
+		// 	border-radius: 0 14px 14px 0;
+		// 	background: url('/app!decks/img/tome-overlay.png');
+		// 	display: none;
+		// }
 	}
 	.tome-title {
 		position: absolute;
 		bottom: 0;
 		width: 100%;
+	}
+}
+
+scroll(width = 181px, height = 195px) {
+	float: left;
+	cursor: pointer;
+	position: relative;
+	width: width;
+	height: height;
+	background: url('/app!decks/img/scroll.png') center no-repeat;
+	margin: 27px;
+	.scroll-title {
+		background: rgba(black, .5);
+		border-radius: 15px 25px 18px 30px;
+		font: 20px 'BleakChop';
+		color: white;
+		text-shadow: 1px 1px 0 rgba(0, 0, 0, .8);
+		position: absolute;
+		top: 80px;
+		width: 171px;
+		padding: 5px;
+		text-align: center;
 	}
 }
 
@@ -55,6 +77,10 @@ tome(width = 181px, height = 195px) {
 			height: 1em;
 		}
 	}
+}
+
+.scroll-container {
+	scroll();
 }
 
 .big-tome {
