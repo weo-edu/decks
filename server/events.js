@@ -128,8 +128,11 @@ Observer.on('complete:game', function(e) {
     }
 
     update.$set = {last_played: e.time};
-    
+    var score = match[e.user._id].points;
     update.$inc = inc;
     UserDeckInfo.update({user: e.user._id, deck: match.deck}, update, {multi: 0, upsert: true});
+    UserDeckInfo.update(
+      {user: e.user._id, deck: match.deck, high_score: {$lt : score}}, 
+      { high_socre: score });
   }).run();
 });
