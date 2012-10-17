@@ -64,13 +64,7 @@
 		<h2 class='category-title'>Pick a Friend</h2>
 	{{/if}}
 	<div class='shelf'></div>
-	{{#each tomes}}
-		<div class='tome-container stars'>
-			{{> tome}}
-			<div class='twist-stars twist-stars-{{mastery.rank}}'></div>
-			<h5 class='tome-title'>{{title}}</h5>
-		</div>
-	{{/each}}
+	{{> browse_tomes}}
 	</div>
 </template>
 
@@ -79,11 +73,7 @@
 		<img class='avatar' style='background-image: url({{avatar}});' />
 		<h2 class='category-title'>{{username}}</h2>
 		{{> level_progress}}
-		<div class='filters'>
-			<div class='browse-button'>Collected</div>
-			<div class='browse-button'>Created</div>
-			<input class='browse-filter' type='text' placeholder='Filter' />
-		</div>
+		{{> browse_filters}}
 	</div>
 </template>
 
@@ -92,27 +82,36 @@
 <template name='my_collection'>
 	<div class='collection-browse'>
 		<div class='category'>
-			
+
 			<div class='collection-nav'>
 				<h2 class='category-title'>{{currentUser.username}}</h2>
-				<div class='filters'>
-					<div class='browse-button'>Collected</div>
-					<div class='browse-button'>Created</div>
-					<input class='browse-filter' type='text' placeholder='Filter' />
-				</div>
+				{{> browse_filters}}
 				<div class='create-buttons'>
 					<div class='create-button'>Add Scrolls</div>
 					<div class='create-button'>Add Tomes</div>
 				</div>
 			</div>
 			<div class='shelf'></div>
-			{{#each tomes}}
-				<div class='tome-container stars'>
-					{{> tome}}
-					<div class='twist-stars twist-stars-{{mastery.rank}}'></div>
-					<h5 class='tome-title'>{{title}}</h5>
-				</div>
-			{{/each}}
+			{{> browse_tomes}}
 		</div>
 	</div>
+</template>
+
+<template name='browse_filters'>
+	<div class='filters'>
+		<div id="collected-toggle" class='browse-button {{collectedToggle}}'>Collected</div>
+		<div id="played-toggle" class="browse-button {{playedToggle}}">Played</div>
+		<div id="created-toggle" class='browse-button {{createdToggle}}'>Created</div>
+		<input class='browse-filter' type='text' placeholder='Filter' />
+	</div>
+</template>
+
+<template name="browse_tomes">
+	{{#each tomes}}
+		<div class='tome-container stars'>
+			{{> tome}}
+			<div class='twist-stars twist-stars-{{mastery.rank}}'></div>
+			<h5 class='tome-title'>{{title}}</h5>
+		</div>
+	{{/each}}
 </template>
