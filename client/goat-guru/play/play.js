@@ -105,6 +105,12 @@
 				}
   		})
 
+  		Template.game_user.helpers({
+  			isSynthetic: function() {
+  				return this.synthetic;
+  			}
+  		})
+
 
   		//XXX if you could access a parent template vars this would be unnecessary
   		var selected_cards = null;
@@ -501,12 +507,26 @@
 							}
 				 		}, dur);
 				 		
-			 		}
-
-			 		
+			 		} else {
+			 			$('#bonus').attr('style', ' ').html(' ' + problem.solution).attr('class', 'error')
+							.stop(true, false)
+							.animate({
+								'margin'		: 0,
+								'opacity'		: 1, 
+								'font-size'	: '80px'
+							}, 0, 'easeOutSine')
+							.delay(1000)
+							.animate({
+								'margin'		: 0,
+								'font-size'	: '100px'
+							}, 50, 'easeOutSine')
+							.animate({
+								'opacity'		: 0,
+								'font-size'	: 0
+							}, 80, 'easeInSine');
+					}
 
 					Meteor.defer(function(){ 
-						console.log('answer focus');
 						$('#answer').focus(); 
 					});
 				}
