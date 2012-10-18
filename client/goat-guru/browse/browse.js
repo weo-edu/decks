@@ -28,11 +28,11 @@ toggle.deckFilter = function(routeSession, decks, userId) {
 	var query = {};
 	if (filter)
 		query['search.keywords'] = filter;
-	console.log('filter', filter);
 
 	if (routeSession.get('toggle') === 'collected') {
 		query['UserDeck.user'] = userId;
 		query['UserDeck.mastery.rank'] = {$gt: 0};
+		console.log('decks', decks.find(query).fetch());
 		return decks.find(query, {sort: {last_played: -1}});
 	} else if (routeSession.get('toggle') === 'played') {
 		query['UserDeck.user'] = userId;
@@ -99,7 +99,8 @@ route('/friends',function() {
 		'click': function() {
 			console.log(this);
 			var friendName = Session.get('active').username;
-			route('/tome/' + friendName + '/' + this._id);
+			console.log(this)
+			route('/tome/' + friendName + '/' + this.Decks._id);
 		}
 	});
 
@@ -176,7 +177,7 @@ route('/inventory', function() {
 			if(routeSession.equals('toggle', 'draft'))
 				path = '/create/tome/'
 
-			route(path + this._id);
+			route(path + this.Decks._id);
 		}
 	});
 
