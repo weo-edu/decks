@@ -27,20 +27,20 @@ toggle.deckFilter = function(routeSession, userId) {
 	if (routeSession.get('toggle') === 'collected') {
 		var query = {user: userId};
 		query['mastery.rank'] = {$gt: 0};
-		var deckInfos = UserDeckInfo.find(query, {sort: {last_played: -1}}).fetch();
+		var deckInfos = UserDeck.find(query, {sort: {last_played: -1}}).fetch();
 		_.each(deckInfos, function(deckInfo) {
 			_.extend(deckInfo, Decks.findOne(deckInfo.deck)); 
 		});
 	} else if (routeSession.get('toggle') === 'played') {
 		var query = {user: userId};
-		var deckInfos = UserDeckInfo.find(query, {sort: {last_played: -1}}).fetch();
+		var deckInfos = UserDeck.find(query, {sort: {last_played: -1}}).fetch();
 		_.each(deckInfos, function(deckInfo) {
 			_.extend(deckInfo, Decks.findOne(deckInfo.deck)); 
 		});
 	} else if (routeSession.get('toggle') === 'created') {
 		var deckInfos = Decks.find({creator: userId}).fetch();
 		_.each(deckInfos, function(deckInfo) {
-			_.extend(deckInfo, UserDeckInfo.findOne(deckInfo._id));
+			_.extend(deckInfo, UserDeck.findOne(deckInfo._id));
 		});
 	}
 
@@ -82,10 +82,10 @@ route('/friends',function() {
 	/*console.log('user', Session.get('active'));
 	var decks = join({
 		cursor: [
-			UserDeckInfo.find({user: {$in: Meteor.user().friends}}),
+			UserDeck.find({user: {$in: Meteor.user().friends}}),
 			Decks.find({})
 		],
-		on: ['decks._id', 'UserDeckInfo.deck']
+		on: ['decks._id', 'UserDeck.deck']
 	});
 
 	console.log('decks',decks.find({}).fetch())*/
@@ -138,7 +138,7 @@ route('/friends',function() {
 		'tomes': function() {
 			var active = Session.get('active');
 			if(active) {
-				Meteor.subscribe('UserDeckInfo', active._id);
+				Meteor.subscribe('userDecks', active._id);
 				return toggle.deckFilter(routeSession, active._id);
 			}
 		}

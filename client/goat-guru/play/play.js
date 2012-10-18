@@ -2,7 +2,7 @@
 
   route('/game/:id',
   	route.requireSubscriptionById('game'),
-  	route.requireSubscription('UserDeckInfo', 
+  	route.requireSubscription('UserDeck', 
   		function(ctx) {
   			return Games.findOne(ctx.params.id).users;
   		},
@@ -11,7 +11,7 @@
   			return Games.findOne(ctx.params.id).deck;
   		}
   	),
-  	route.requireSubscription('Cards', function(ctx) {
+  	route.requireSubscription('cards', function(ctx) {
   		return Decks.findOne(Games.findOne(ctx.params.id).deck).cards;
   	}),
   	route.requireSubscription('gradeStats'),

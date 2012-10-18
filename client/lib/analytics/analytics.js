@@ -3,11 +3,11 @@
 	route('/analytics/:user', route.requireSubscription('user', route.params('user')), 
 		function(ctx, next) {
 		var user = User.lookup(ctx.params.user);
-		Meteor.subscribe('UserCardStats', user._id);
+		Meteor.subscribe('userCards', user._id);
 
 		Template.analytics.helpers({
 			user_cards: function() {
-				return UserCardStats.find();
+				return UserCard.find();
 			},
 			card: function() {
 				return Cards.findOne({_id: this.pid});

@@ -15,26 +15,7 @@
 	});
 
 	Meteor.publish('game', function(id) {
-		return Games.find({ _id: id });
-	});
-
-	Meteor.publish('userDeckInfo', function(users, deck) {
-		users = _.without(users, 1);
-
-		//XXX index on user,deck
-		return UserDeckInfo.find({ user: { $in: users }, deck: deck });
-
-	});
-
-	Meteor.publish('gradeStats', function() {
-		return StatsCollection.find({ name: 'gradeStats' });
-	});
-
-	Meteor.publish('userCardStats', function (users, cards) {
-		users = _.without(users,1);
-		var query = {uid: {$in: users}};
-		if(cards) query['cid'] = {$in: cards};
-		return UserCardStats.find(query);
+		return Games.find(id);
 	});
 
 	Meteor.startup(function() {
