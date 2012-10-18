@@ -151,6 +151,14 @@ route('/friends',function() {
 
 route('/inventory', function() {
 
+	var decks = join({
+		cursor: [
+			UserDeck.find({user: Meteor.user()._id}),
+			Decks.find({})
+		],
+		on: ['Decks._id', 'UserDeck.deck']
+	});
+
 	Template.tome.events({
 		'click': function() {
 			route('/tome/' + this._id);
@@ -159,7 +167,7 @@ route('/inventory', function() {
 
 	Template.browse_tomes.helpers({
 		tomes: function() {
-			return toggle.deckFilter(routeSession, Meteor.user()._id);
+			return toggle.deckFilter(routeSession, decks, Meteor.user()._id);
 		}
 	});
 
