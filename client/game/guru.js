@@ -194,7 +194,7 @@
 		var mastery = self.mastery(),
 			modify = {$inc: { 'mastery.wins' : 1 } };
 
-		if (mastery.winsAtRank >= 2) {
+		if (mastery.winsAtRank >= 2 &&  mastery.rank <= MASTERY.MASTER_GURU) {
 			modify['$set'] = {'mastery.winsAtRank': 0};
 			modify['$inc']['mastery.rank'] = 1;		
 		} else {
@@ -371,14 +371,6 @@
 			speed: {u: .94, s: .002},
 			retention: {u: .99, s: .002}
 		}
-	}
-
-	Guru[MASTERY.MASTER_GURU].prototype.beat = function() {
-		var self = this;
-		UserDeckInfo.update(
-			{ user: self.mygame.opponent()._id, deck: self.mygame.deck()._id },
-			{$inc: { 'mastery.wins': 1, 'mastery.winsAtRank': 1}}
-		);
 	}
 
 	

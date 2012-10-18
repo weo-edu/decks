@@ -111,6 +111,17 @@
   			}
   		})
 
+  		Template.game_deck_stats.helpers({
+  			rank: function() {
+					var deckInfo = UserDeckInfo.findOne({
+  					user: Meteor.user()._id,
+  					deck: game.deck()._id
+  				});
+
+  				return deckInfo && deckInfo.mastery ? deckInfo.mastery.rank : '';
+  			}
+  		});
+
 
   		//XXX if you could access a parent template vars this would be unnecessary
   		var selected_cards = null;

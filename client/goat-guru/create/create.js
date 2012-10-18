@@ -15,8 +15,25 @@ route('/create/tome/:id', route.requireSubscriptionById('Deck'), function(ctx) {
 	});
 
 	Template.tome_create_header.events({
-		'click .scroll-info-nav li': function(evt) {
+		'click .scroll-info-nav.tabs li': function(evt) {
 			routeSession.set('active', $(evt.currentTarget).attr('id'));
+		},
+		'click #done': function() {
+			route('/inventory');
+		},
+		'click #delete': function() {
+			route('/inventory');
+			Decks.remove(deck_id);
+		},
+		'click #publish': function() {
+			if(isDeckComplete() === true) {
+				if(confirm('Are you sure you want to publish? Once this is done you will not be able to delete or edit this tome.')) {
+					Decks.update(deck_id, {$set: {status: 'published'}})
+					route('/inventory');	
+				}
+			} else {
+				alert(isDeckComplete());
+			}
 		}
 	});
 
@@ -133,27 +150,43 @@ route('/create/tome/:id', route.requireSubscriptionById('Deck'), function(ctx) {
 		console.log(isEmptyDeck(deck_id));
 		if(isEmptyDeck(deck_id))
 			Decks.remove(ctx.params.id) && console.log('removed?');
-		else if(!thisDeck.cards)
-			Decks.update(deck_id, {$set: {status: 'draft'}});
-		else if(thisDeck.cards.length === 0)
-			Decks.update(deck_id, {$set: {status: 'draft'}});
 	}
 
 	dojo.render('create');
 
+	function isDeckComplete() {
+		var deck = Decks.findOne(ctx.params.id);
+		if(!deck.title)
+			return 'Please add a title.';
+		else if(!deck.image)
+			return 'Please upload an image for this tome.';
+		else if(!deck.cardsPerGame)
+			return 'Please add the number of scrolls per game.';
+		else if(!deck.tags) 
+			return 'Please add the categories that this tome falls into.';
+		else if(!deck.description)
+			return 'Please add a short descirption of this tome.';
+		else if(!deck.cards || deck.cards.length <= 0)
+			return 'Please add at least 1 scroll to this tome.';
+		else
+			return true;
+	}
+
+	function isEmptyDeck(id) {
+		var deck = Decks.findOne(id);
+		if(!deck) return true;
+
+		var keys = _.keys(deck);
+		keys = _.without(keys,'_id','type', 'creator', 'status');
+		if (_.all(keys, function(key) {return !deck[key];}))
+			return true;
+		else
+			return false;
+	}
+
 });
 
-function isEmptyDeck(id) {
-	var deck = Decks.findOne(id);
-	if(!deck) return true;
 
-	var keys = _.keys(deck);
-	keys = _.without(keys,'_id','type', 'creator');
-	if (_.all(keys, function(key) {return !deck[key];}))
-		return true;
-	else
-		return false;
-}
 
 /**
  * Scroll Create
@@ -191,8 +224,25 @@ route('/create/scroll/:id', route.requireSubscriptionById('Card'), function(ctx)
 	})
 
 	Template.scroll_create_header.events({
-		'click .scroll-info-nav li': function(evt) {
+		'click .scroll-info-nav.tabs li': function(evt) {
 			routeSession.set('active', $(evt.currentTarget).attr('id'));
+		},
+		'click #done': function() {
+			route('/inventory');
+		},
+		'click #delete': function() {
+			route('/inventory');
+			Cards.remove(card_id);
+		},
+		'click #publish': function() {
+			if(isCardComplete() === true) {
+				if(confirm('Are you sure you want to publish? Once this is done you will not be able to delete or edit this scroll.')) {
+					Cards.update(card_id, {$set: {status: 'published'}})
+					route('/inventory');	
+				}
+			} else {
+				alert(isCardComplete());
+			}
 		}
 	});
 	
@@ -248,17 +298,33 @@ route('/create/scroll/:id', route.requireSubscriptionById('Card'), function(ctx)
 
 	dojo.render('create_scroll');
 
+	function isCardComplete() {
+		var card = Cards.findOne(ctx.params.id);
+		if(!card.title)
+			return 'Please add a title.';
+		else if(!card.grade) 
+			return 'Please add the grade level that this scroll falls into.';
+		else if(!card.tags) 
+			return 'Please add the categories that this scroll falls into.';
+		else if(!card.description)
+			return 'Please add a short descirption of this scroll.';
+		else
+			return true;
+	}
+
+	function isEmptyCard(id) {
+		var card = Cards.findOne(id);
+		if(!card) return true;
+
+		var keys = _.keys(card);
+		keys = _.without(keys,'_id','type', 'creator', 'status');
+		if (_.all(keys, function(key) {return !card[key];}))
+			return true;
+		else
+			return false;
+	}
+
 });
 
-function isEmptyCard(id) {
-	var card = Cards.findOne(id);
-	if(!card) return true;
 
-	var keys = _.keys(card);
-	keys = _.without(keys,'_id','type', 'creator');
-	if (_.all(keys, function(key) {return !card[key];}))
-		return true;
-	else
-		return false;
-}
 

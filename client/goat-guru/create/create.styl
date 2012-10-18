@@ -30,6 +30,11 @@
 .create-view {
 	height: 100%;
 	width: 100%;
+	&.preview {
+		.create-container {
+			background: none;
+		}
+	}
 	.tab {
 		display: none;
 		width: 980px;
@@ -109,6 +114,18 @@
 			}
 			&.active {
 				background-color: rgba(black, .3);
+			}
+		}
+
+		&.save {
+			li {
+				width: auto;
+				font-family: 'Fresca';
+				background-image: none;
+				color: #FFF;
+				line-height: 37px;
+				padding: 0 15px;
+				text-transform: uppercase;
 			}
 		}
 	}
