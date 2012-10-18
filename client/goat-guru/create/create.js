@@ -22,8 +22,10 @@ route('/create/tome/:id', route.requireSubscriptionById('Deck'), function(ctx) {
 			route('/inventory');
 		},
 		'click #delete': function() {
-			route('/inventory');
-			Decks.remove(deck_id);
+			if(confirm('Are you sure you want to delete this tome?')) {
+				route('/inventory');
+				Decks.remove(deck_id);	
+			}
 		},
 		'click #publish': function() {
 			if(isDeckComplete() === true) {
@@ -231,8 +233,10 @@ route('/create/scroll/:id', route.requireSubscriptionById('Card'), function(ctx)
 			route('/inventory');
 		},
 		'click #delete': function() {
-			route('/inventory');
-			Cards.remove(card_id);
+			if(confirm('Are you sure you want to delete this scroll?')) {
+				route('/inventory');
+				Cards.remove(card_id);
+			}
 		},
 		'click #publish': function() {
 			if(isCardComplete() === true) {

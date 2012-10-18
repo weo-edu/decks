@@ -43,7 +43,9 @@
 			{{> tome_buddies}}
 		</div>
 	</div>
-	<div class='practice'>PRACTICE</div>
+	{{#if isPublished}}
+		<div class='practice'>PRACTICE</div>
+	{{/if}}
 	<img class='goat-left' src='/app!decks/img/goat-left.png' />
 </template>
 
@@ -129,6 +131,8 @@
 <template name='friend_tome_stats'>
 	{{> tome_stats}}
 	{{#if isConnected}}
-		<div class='challenge-button'>Challenge</div>
+		{{#if isPublished}}
+			<div class='challenge-button'>Challenge</div>
+		{{/if}}
 	{{/if}}
 </template>

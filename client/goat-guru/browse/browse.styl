@@ -142,11 +142,15 @@ status-icon(color) {
 	width: 920px;
 	margin: 0 auto;
 	.category-title {
+		margin-top: 20px !important;
+		float: none;
+	}
+	.collection-left-nav {
 		float: left;
 	}
 	.filters {
 		float: left;
-		margin: 53px 0 0 10px;
+		margin: 10px 0 0 20px;
 	}
 	.collection-nav {
 		clear: both;
@@ -180,21 +184,12 @@ status-icon(color) {
 
 
 .browse-filter {
-	font: 17px 'Fresca';
+	text-input();
+	background: url('/app!decks/img/woodRepeat.jpg');
 	float: left;
 	margin-left: 10px;
-	color: #FFF;
 	text-shadow: 1px 1px 0 rgba(black, .5), 0 0 5px rgba(white, .3);
-	background: url('/app!decks/img/woodRepeat.jpg');
-	border-radius: 9px;
-	border: 0;
-	box-shadow: inset 1px 1px 0 rgba(black, .5), inset -1px -1px 0 rgba(white, .3), inset 0 0 5px rgba(black, .8), inset 0 0 0 14px rgba(white, .02), inset 0 5px 22px rgba(black, .35);
-	padding: 3px 11px;
-	outline: 0;
-	width: 130px;
-	&:focus {
-		box-shadow: inset 1px 1px 0 rgba(black, .5), inset -1px -1px 0 rgba(white, .3), inset 0 0 5px rgba(black, .8), inset 0 0 0 14px rgba(white, .02), inset 0 5px 22px rgba(black, .25);
-	}
+	color: #FFF;
 }
 
 .browse-button {

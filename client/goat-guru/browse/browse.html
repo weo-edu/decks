@@ -84,8 +84,10 @@
 		<div class='category'>
 
 			<div class='collection-nav'>
-				<h2 class='category-title'>{{currentUser.username}}</h2>
-				{{> browse_filters}}
+				<div class='collection-left-nav'>
+					<h2 class='category-title'>{{currentUser.username}}</h2>
+					{{> browse_filters}}
+				</div>
 				<div class='create-buttons'>
 					<div id='create-scroll' class='create-button'>Create<br/>Scrolls</div>
 					<div id='create-tome' class='create-button'>Create<br/>Tomes</div>

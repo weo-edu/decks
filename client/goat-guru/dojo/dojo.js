@@ -4,7 +4,6 @@ var easing = 'easeInQuad';
 var dojoRenderer = view.renderer('dojoRender', {
 	tome_view: {
 		in: function(cb) {
-			console.log('in');
 			var el = $('#tome-view');
 			el.css('top', -$(window).height());
 			el.animate({
@@ -31,7 +30,6 @@ dojo.render = function(name, nav) {
 	
 
 	nav = nav || 'dojo_browse_nav';
-	console.log('nav',nav, navRenderer.rendered());
 	if (navRenderer.rendered() !== nav)
 		navRenderer.render(nav);
 

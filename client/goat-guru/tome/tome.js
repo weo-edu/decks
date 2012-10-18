@@ -74,6 +74,13 @@ function tomeViewSetup(ctx, next) {
 		}
 	});
 
+	Template.inner_tome.helpers({
+		isPublished: function() {
+			var tome = Decks.findOne(tomeId)
+			return tome && tome.status === 'published';
+		}
+	})
+
 	Template.tome_buddies.helpers({
 		friends: function() {
 			var user_decks = UserDeckInfo.find({
@@ -176,6 +183,10 @@ route('/tome/:username/:id',
 	Template.friend_tome_stats.helpers({
 		isConnected: function() {
 			return Meteor.users.findOne({username: ctx.params.username}).connected;
+		},
+		isPublished: function() {
+			var tome = Decks.findOne(tomeId)
+			return tome.status === 'published';
 		}
 	});
 

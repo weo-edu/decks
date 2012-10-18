@@ -10,6 +10,20 @@ table-rows() {
 	&:nth-child(odd) { background: rgba(black, .15) }
 }
 
+text-input() {
+	font: 17px 'Fresca';
+	background: transparent;
+	border-radius: 9px;
+	border: 0;
+	box-shadow: inset 1px 1px 0 rgba(black, .5), inset -1px -1px 0 rgba(white, .3), inset 0 0 5px rgba(black, .8), inset 0 0 0 14px rgba(white, .02), inset 0 5px 22px rgba(black, .35);
+	padding: 3px 11px;
+	outline: 0;
+	width: 130px;
+	&:focus {
+		box-shadow: inset 1px 1px 0 rgba(black, .5), inset -1px -1px 0 rgba(white, .3), inset 0 0 5px rgba(black, .8), inset 0 0 0 14px rgba(white, .02), inset 0 5px 22px rgba(black, .25);
+	}
+}
+
 level() {
 	position: absolute; 
 	bottom: 0;
