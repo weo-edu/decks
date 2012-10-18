@@ -4,13 +4,15 @@
 				<div id='my-tracker' class='tracker'>
 					{{> problem_tracker me}}
 				</div>
-				{{> game_points}}
-				{{> game_multiplier}}
 			</div>
 
 			<div id='problem-container'>
+				<div class='game-info'>
+					{{> game_points}}
+					{{> game_multiplier}}
+				</div>
 				{{> problem_container}}
-				{{> current_card}}
+				
 				{{#constant}}
 					<div id='bonus'></div>
 				{{/constant}}

@@ -206,8 +206,8 @@
 
 
 #problem-container {
-	background: url("/app!decks/img/playground.png");
-	height: 514px;
+	background: url("/app!decks/img/playground.png") 0 20px no-repeat;
+	height: 534px;
 	width: 548px;
 	margin: 10px -8px 0;
 	float: left;
@@ -234,19 +234,30 @@
 	}
 }
 
+.game-info {
+	clearfix();
+	// height: 30px;
+	background: rgba(blue, .5);
+	padding: 5px 0;
+}
+
 #game-points {
-	text-align: center;
-	font: 23px/35px 'BleakChop';
+	float: left;
+	font: 23px/20px 'BleakChop';
 	color: #FFF;
 	text-shadow: 1px 1px 0 rgba(black, .5);
 }
 
+.timer {
+	position: absolute;
+	left: -100px;;
+}
 #speed-bar {
 	height: 20px;
 	width: 120px;
 	margin: 0 auto;
 	background: #EEE;
-	box-shadow: inset 0 0 6px #222;
+	// box-shadow: inset 0 0 6px #222;
 	.inner-speed-bar {
 		height: 20px;
 		background-color: blue;
@@ -254,6 +265,7 @@
 }
 
 #multiplier {
+	position: absolute;
 	font: 17px/25px 'BleakChop';
 	color: #FFF;
 	text-align: center;
