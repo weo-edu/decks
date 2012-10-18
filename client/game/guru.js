@@ -4,9 +4,9 @@
 
 	Guru.create  = function (game) {
 		var deck_id = game.deck()._id;
-		var deck_info = UserDeckInfo.findOne({user: Meteor.user()._id, deck: deck_id});
+		var deck_info = UserDeck.findOne({user: Meteor.user()._id, deck: deck_id});
 		if (!deck_info) {
-			UserDeckInfo.insert({user: Meteor.user()._id, deck: deck_id});
+			UserDeck.insert({user: Meteor.user()._id, deck: deck_id});
 			return new Guru[MASTERY.PROFICIENT](game);
 		}
 		else {
@@ -201,17 +201,17 @@
 			modify['$inc']['mastery.winsAtRank'] = 1;
 		}
 
-		UserDeckInfo.update(
+		UserDeck.update(
 			{ user: self.mygame.opponent()._id, deck: self.mygame.deck()._id },
 			modify
 		);
 
-		console.log(UserDeckInfo.findOne({user: self.mygame.opponent()._id, deck: self.mygame.deck()._id}));		
+		console.log(UserDeck.findOne({user: self.mygame.opponent()._id, deck: self.mygame.deck()._id}));		
 	}
 
 	Guru.prototype.mastery = function() {
 		var self = this,
-			info = UserDeckInfo.findOne({ 
+			info = UserDeck.findOne({ 
 				user: self.mygame.opponent()._id, 
 				deck: self.mygame.deck()._id
 			});
@@ -373,7 +373,7 @@
 		}
 	}
 
-	
+
 	window.Guru = Guru;
 
 

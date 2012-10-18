@@ -202,50 +202,49 @@ var cards = [
 
 
 Meteor.startup(function() {
-  Meteor.publish('UserCardStats', function(uid) {
-      return UserCardStats.find({uid: uid});
-  });
+  
 
   Meteor.publish('user', function(identifier) {
     return Meteor.users.find({$or: [{_id: identifier}, {username: identifier}]});
   });
 
-  Meteor.publish('Deck', function(id) {
-    return Decks.find(id);
-  });
-
-  Meteor.publish('Card', function(id) {
-    return Cards.find(id);
-  });
-
-  Meteor.publish('Decks', function(){
-    return Decks.find({});
+  Meteor.publish('decks', function(id){
+    return Decks.find(id || {});
 	});
 
-  Meteor.publish('Cards', function(ids){
-    var query = {};
-    if(ids && typeof ids === 'array') query['_id'] = {$in: ids};
-    return Cards.find(query);
+  Meteor.publish('cards', function(ids){
+    return Cards.find(ids);
   });
 
-  Meteor.publish('UserDeckInfo', function(uid, did) {
+  Meteor.publish('userCards', function (users, cards) {
+    var query = {};
+    if (_.isArray(users)) {
+        users = _.without(users,1);
+        query.uid = {$in: users};
+    } else 
+        query.uid = users;
+    if(cards) query['cid'] = {$in: cards};
+    return UserCard.find(query);
+  });
+
+  Meteor.publish('userDecks', function(uid, did) {
     if(_.isArray(uid)) 
         uid = _.without(uid, 1);
     if(did) 
-        return UserDeckInfo.findUserDeck(uid, did);
+        return UserDeck.findUserDeck(uid, did);
     else
-        return UserDeckInfo.findUser(uid);
+        return UserDeck.findUser(uid);
   });
 
-  Meteor.publish('UsersDecks', function(uid) {
-    return Decks.findUser(uid);
-  });
-
-  Meteor.publish('HomeDecks', function(uid) {
+  Meteor.publish('homeDecks', function(uid) {
     var self = this;
     _.each(Decks.homeFeeds, function(feed) {
       self._publishCursor(Decks.feed(feed, uid), 'Decks');
     });
+  });
+
+  Meteor.publish('gradeStats', function() {
+    return Info.find({ name: 'gradeStats' });
   });
 
   Observer.start();

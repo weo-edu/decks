@@ -54,7 +54,7 @@
     }
 
     //XXX should unsubscribe at some point
-    Meteor.subscribe('userCardStats', self.game().users, self.deck().cards);
+    Meteor.subscribe('userCards', self.game().users, self.deck().cards);
 
     self.me_id = self.me()._id;
     self.opponent_id = self.opponent()._id;

@@ -1,7 +1,7 @@
-Meteor.subscribe('Decks');
-Meteor.subscribe('Cards');
-Meteor.subscribe('UserDeckInfo', Meteor.user()._id);
-Meteor.subscribe('UserDecks', Meteor.user()._id);
+//XXX you cant subscribe to all cards and decks
+Meteor.subscribe('decks');
+Meteor.subscribe('cards');
+Meteor.subscribe('userDecks', Meteor.user()._id);
 
 Template.level_progress.helpers({
 	level: function() {

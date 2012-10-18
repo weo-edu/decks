@@ -49,7 +49,7 @@ Observer.on('complete:card', function(e) {
           update.$inc[name] = stat;
         });
         update.$set = {last_played: +new Date()}
-        UserCardStats.update(
+        UserCard.update(
           {uid: e.user._id, cid: e.object._id},
           update,
           {multi: 0, upsert: 1}
@@ -60,7 +60,7 @@ Observer.on('complete:card', function(e) {
         _.each(stats,function(stat, name) {
           update.$inc[card.grade + '.' + name] = stat;
         });
-        StatsCollection.update(
+        Info.update(
           {name: 'gradeStats'},
           update,
           {multi: 0, upsert: 1}
@@ -82,7 +82,7 @@ Observer.on('complete:card', function(e) {
 });
 
 /**
- *  UserDeckInfo
+ *  UserDeck
  *  wins 
  *  attempts
  *  mastery
@@ -130,6 +130,6 @@ Observer.on('complete:game', function(e) {
     update.$set = {last_played: e.time};
     
     update.$inc = inc;
-    UserDeckInfo.update({user: e.user._id, deck: match.deck}, update, {multi: 0, upsert: true});
+    UserDeck.update({user: e.user._id, deck: match.deck}, update, {multi: 0, upsert: true});
   }).run();
 });

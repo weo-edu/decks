@@ -30,13 +30,13 @@ function tomeViewSetup(ctx, next) {
 			return friend._id;
 	});
 
-	Meteor.subscribe('UserDeckInfo', friend_ids, tomeId);
+	Meteor.subscribe('userDecks', friend_ids, tomeId);
 
 	Template.tome_view.helpers({
 		'tome': function() {
 			var curTome = Decks.findOne(tomeId);
 
-			_.extend(curTome, UserDeckInfo.findOne({
+			_.extend(curTome, UserDeck.findOne({
 				deck: tomeId, 
 				user: friendId || Meteor.user()._id
 			}));
@@ -83,7 +83,7 @@ function tomeViewSetup(ctx, next) {
 
 	Template.tome_buddies.helpers({
 		friends: function() {
-			var user_decks = UserDeckInfo.find({
+			var user_decks = UserDeck.find({
 				user: {$in: friend_ids}, 
 				deck: tomeId
 			}).fetch();
@@ -97,7 +97,7 @@ function tomeViewSetup(ctx, next) {
 			}, {sort: {connected: -1, username: 1}});
 		},
 		friendMastery: function() {
-			var info = UserDeckInfo.findOne({
+			var info = UserDeck.findOne({
 				deck: tomeId, 
 				user: this._id
 			});
@@ -138,7 +138,7 @@ route('/tome/:id',
 	tomeViewSetup,
 	function(ctx) {
 
-	var myDeckInfo = UserDeckInfo.find({deck: this._id, user: Meteor.user()._id}).fetch();
+	var myDeckInfo = UserDeck.find({deck: this._id, user: Meteor.user()._id}).fetch();
 
 	tome.render('tome_info');
 
