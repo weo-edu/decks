@@ -188,8 +188,6 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
 
 });
 
-
-
 /**
  * Scroll Create
  */

@@ -185,6 +185,7 @@ route('/tome/:username/:id',
 			return Meteor.users.findOne({username: ctx.params.username}).connected;
 		},
 		isPublished: function() {
+			console.log('tome id', tomeId);
 			var tome = Decks.findOne(tomeId)
 			return tome.status === 'published';
 		}

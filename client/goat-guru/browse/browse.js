@@ -32,6 +32,7 @@ toggle.deckFilter = function(routeSession, decks, userId) {
 	if (routeSession.get('toggle') === 'collected') {
 		query['UserDeck.user'] = userId;
 		query['UserDeck.mastery.rank'] = {$gt: 0};
+		console.log('decks', decks.find(query).fetch());
 		return decks.find(query, {sort: {last_played: -1}});
 	} else if (routeSession.get('toggle') === 'played') {
 		query['UserDeck.user'] = userId;
@@ -174,7 +175,7 @@ route('/inventory', function() {
 			if(routeSession.equals('toggle', 'draft'))
 				path = '/create/tome/'
 
-			route(path + this._id);
+			route(path + this.Decks._id);
 		}
 	});
 
