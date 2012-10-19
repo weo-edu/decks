@@ -326,6 +326,15 @@ route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx
 			return false;
 	}
 
+	Template.scroll_editor.rendered = function() {
+		console.log('scroll editor');
+		if (this.firstRender) {
+			var editor = ace.edit("ace-editor");
+			editor.setTheme("ace/theme/twilight");
+			editor.getSession().setMode("ace/mode/javascript");
+		}
+	}
+
 });
 
 

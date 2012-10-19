@@ -199,7 +199,11 @@
 </template>
 
 <template name='scroll_editor'>
-	ACE
+	{{#constant}}
+	<div id="ace-editor-wrap">
+		<div id="ace-editor"></div>
+	</div>
+	{{/constant}}
 </template>
 
 <template name='scroll_preview'>
