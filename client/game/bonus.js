@@ -11,7 +11,6 @@
 					return
 
 				var self = this;
-				console.log('critical', problem.critical);
 				if(problem.critical < self.baseProbability)
 					return true;
 			},
@@ -43,7 +42,6 @@
 				}
 
 				self.n = n;
-				console.log('n', n);
 				return n > self.nOk;
 			},
 			value: function(problem) {

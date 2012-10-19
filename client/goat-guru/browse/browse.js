@@ -97,9 +97,7 @@ route('/friends',function() {
 
 	Template.tome.events({
 		'click': function() {
-			console.log(this);
 			var friendName = Session.get('active').username;
-			console.log(this)
 			route('/tome/' + friendName + '/' + this.Decks._id);
 		}
 	});

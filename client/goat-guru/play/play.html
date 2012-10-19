@@ -12,7 +12,6 @@
 					{{> game_multiplier}}
 				</div>
 				{{> problem_container}}
-				
 				{{#constant}}
 					<div id='bonus'></div>
 				{{/constant}}
@@ -81,12 +80,12 @@
 </template>
 
 <template name='game_multiplier'>
+	<div id='multiplier'>{{multiplier}}</div>
 	{{#constant}}
 	<div id='speed-bar'>
 		<div class="inner-speed-bar" ></div>
 	</div>
 	{{/constant}}
-	<div id='multiplier'>{{multiplier}}</div>
 </template>
 
 

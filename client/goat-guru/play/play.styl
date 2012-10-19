@@ -206,8 +206,8 @@
 
 
 #problem-container {
-	background: url("/app!decks/img/playground.png") 0 20px no-repeat;
-	height: 534px;
+	background: url("/app!decks/img/playground.png") 0 50px no-repeat;
+	height: 564px;
 	width: 548px;
 	margin: 10px -8px 0;
 	float: left;
@@ -237,15 +237,18 @@
 .game-info {
 	clearfix();
 	// height: 30px;
-	background: rgba(blue, .5);
-	padding: 5px 0;
+	padding: 5px 15px 0;
+	position: relative;
 }
 
 #game-points {
-	float: left;
-	font: 23px/20px 'BleakChop';
-	color: #FFF;
-	text-shadow: 1px 1px 0 rgba(black, .5);
+	position: absolute;
+	left: 15px;
+	font: 44px/30px 'BleakChop';
+	color = white;
+	color: gold;
+	// -webkit-text-stroke: 3px #333;
+	text-shadow: 2px 2px 0 rgba(black, .8);
 }
 
 .timer {
@@ -253,22 +256,46 @@
 	left: -100px;;
 }
 #speed-bar {
-	height: 20px;
-	width: 120px;
+	height: 15px;
+	width: 300px;
 	margin: 0 auto;
-	background: #EEE;
-	// box-shadow: inset 0 0 6px #222;
+	background: rgba(white, .08);
+	box-shadow: inset 1px 1px 6px #222, 1px 1px 1px rgba(white, .2);
+	overflow: hidden;
 	.inner-speed-bar {
-		height: 20px;
-		background-color: blue;
+		height: 100%;
+		background-color: rgba(blue, 1);
+		position: relative;
+		box-shadow: 0 0 10px rgba(black, .8);
+		&:after {
+			content: '';
+			display: block;
+			position: absolute;
+			width: 100%;
+			height: 5px;
+			top: 0;
+			background: rgba(white, .15);
+		}
 	}
 }
 
 #multiplier {
-	position: absolute;
-	font: 17px/25px 'BleakChop';
-	color: #FFF;
-	text-align: center;
+	height: 30px;
+	width: 300px;
+	margin: 0 auto 5px;
+	background: rgba(white, .08);
+	box-shadow: inset 1px 1px 6px #222, 1px 1px 1px rgba(white, .2);
+	overflow: hidden;
+
+	// position: absolute;
+	// font: 20px/25px 'BleakChop';
+	// color: #FFF;
+	// text-align: center;
+	// width: 60px;
+	// top: 8px;
+	// left: 50%;
+	// margin-left: -30px;
+	// text-shadow: 1px 1px 0 rgba(black, .5);
 }
 
 #bonus {
