@@ -2,7 +2,7 @@
  * Tome Create
  */
 
-route('/create/tome/:id', route.requireSubscriptionById('Deck'), function(ctx) {
+route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) {
 	var deck_id = ctx.params.id;
 	var deck = Decks.findOne(ctx.params.id);
 
@@ -194,7 +194,7 @@ route('/create/tome/:id', route.requireSubscriptionById('Deck'), function(ctx) {
  * Scroll Create
  */
 
-route('/create/scroll/:id', route.requireSubscriptionById('Card'), function(ctx) {
+route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx) {
 	var card_id = ctx.params.id;
 	var card = Cards.findOne(card_id);
 

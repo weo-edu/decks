@@ -213,7 +213,11 @@ Meteor.startup(function() {
 	});
 
   Meteor.publish('cards', function(ids){
-    return Cards.find(ids);
+    console.log('Cards Ids',ids)
+    if (_.isArray(ids))
+        return Cards.find({_id: {$in: ids}});
+    else
+        return Cards.find(ids);
   });
 
   Meteor.publish('userCards', function (users, cards) {

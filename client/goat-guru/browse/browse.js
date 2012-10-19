@@ -28,7 +28,6 @@ toggle.deckFilter = function(routeSession, decks, userId) {
 	var query = {};
 	if (filter)
 		query['search.keywords'] = filter;
-	console.log('filter', filter);
 
 	if (routeSession.get('toggle') === 'collected') {
 		query['UserDeck.user'] = userId;
@@ -97,9 +96,8 @@ route('/friends',function() {
 
 	Template.tome.events({
 		'click': function() {
-			console.log(this);
 			var friendName = Session.get('active').username;
-			route('/tome/' + friendName + '/' + this._id);
+			route('/tome/' + friendName + '/' + this.Decks._id);
 		}
 	});
 

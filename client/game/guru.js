@@ -26,7 +26,6 @@
 	}
 
 	Game.on('start', function(game) {
-		console.log('guru start');
 		if(game.opponent().synthetic) {
 			var guru = Guru.create(game);
 			guru.start();
@@ -95,7 +94,6 @@
 
 		if (!changed)
 			return;
-		console.log('guru choose');
 		self.mygame.initSelection();
 		self.select();
 		self.mygame.pickSelectedCards();
@@ -106,7 +104,6 @@
 		var self = this;
     var game = self.mygame;
     var cardsLeft = game.nCards() - game.numSelected();
-    console.log('gardsLeft');
     var deck = game.deck();
 
     var stats = {};
@@ -138,14 +135,12 @@
         playerScore *= stats[cardId].retention.val; //retention deduction
                 
         advantage = goatScore - playerScore;
-        console.log('advantage', advantage, cardId);
         if (maxAdvantage === null || advantage > maxAdvantage) {
           maxAdvantage = advantage;
           maxCardId = cardId;
         }
       });
 
-      console.log('chose', maxCardId, maxAdvantage, stats[maxCardId]);
       game.selected_cards.set(maxCardId, game.selected_cards.get(maxCardId) + 1 );
     });
 
@@ -225,7 +220,6 @@
 
 	Guru.prototype.stop = function() {
 		var self = this;
-		console.log('stop guru');
 		self.answerTimeout && Meteor.clearTimeout(self.answerTimeout);
 		self.answerTimeout = null;
 		
@@ -345,7 +339,6 @@
 
 	Guru[MASTERY.GURU] = function(game) {
 		Guru.call(this, game);
-		console.log('guru');
 	}
 
 	utils.inherits(Guru[MASTERY.GURU], Guru);
@@ -360,7 +353,6 @@
 
 	Guru[MASTERY.MASTER_GURU] = function(game) {
 		Guru.call(this, game);
-		console.log('master guru');
 	}
 
 	utils.inherits(Guru[MASTERY.MASTER_GURU], Guru);

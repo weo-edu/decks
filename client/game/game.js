@@ -165,10 +165,6 @@
     if(!self.game())
         throw new Error('Sorry the specified game does not exist');
 
-    console.log(self.me_id, 'start');
-
-
-
     if (self.state() === 'limbo')
       self.dispatch('joined');
     
@@ -551,7 +547,6 @@
     time /= 1000; // in seconds
     var cardStatistics = Stats.cardTime(problem.card_id);
     var cutoffTime = Stats.inverseGaussQuantile(defaults.speedBonusCutoff, cardStatistics.mu, cardStatistics.lambda);
-    console.log('cutoFFtime', cutoffTime, time);
     return utils.round(Math.max(cutoffTime-time,0),4);
   }
 
@@ -577,7 +572,6 @@
 
     // when no more problems are left the game is finished
     if (problem_idx === num_problems) {
-      console.log('dispatch finished', self.me_id);
       self.dispatch('finished');
       return;
     }
@@ -710,8 +704,6 @@
     problem.points = correct ? Stats.points(Stats.regrade(problem.card_id)) : 0;
     problem.points = Math.round(problem.points);
     
-    if (self.me_id === 1)
-      console.log('update', problem.points);
     self.updateProblem(problem, {
       answer: answer, 
       points: problem.points, 
@@ -744,8 +736,6 @@
 
   Game.prototype.multiplier = function(mult, problem) {
     var self = this;
-    if (self.me_id !== 1)
-      console.log('multiplier', mult);
     var problem_update = self._updateProblem(problem, {multiplier: mult});
     if (mult === 0)
       self.resetMultiplier();
@@ -772,8 +762,6 @@
     var self = this;
     var points = self.get(self.me_id + '.points') || 0;
     var multiplier = 1 + self.get(self.me_id + '.multiplier');
-    if (self.me_id !== 1)
-      console.log('applied multiplier', multiplier);
     var bonus = _.reduce(problem.bonuses, function(memo, bonus) {
       return memo + bonus;
     }, 0);
@@ -891,10 +879,6 @@
       var points = Math.round(problem_points * (1 + mult));
       breakdown.points += problem_points;
       breakdown.multiplier += points - problem_points;
-      if (uid !== 1) {
-        console.log('problem mult', problem.multiplier);
-        console.log('mult', 1 + mult);
-      }
       points_total += points + bonus;
     });
 
@@ -1001,7 +985,6 @@
   Game.prototype.state = function(state) {
     var self = this;
     if (state) {
-      console.log('state', state);
       self.updatePlayer({state: state}, self.me_id);
       self.emit(state, true);
       // XXX use event emitter instead?

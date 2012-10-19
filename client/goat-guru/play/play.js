@@ -2,12 +2,11 @@
 
   route('/game/:id',
   	route.requireSubscriptionById('game'),
-  	route.requireSubscription('UserDeck', 
+  	route.requireSubscription('userDecks', 
   		function(ctx) {
   			return Games.findOne(ctx.params.id).users;
   		},
   		function(ctx) {
-  			console.log('deck', Games.findOne(ctx.params.id).deck);
   			return Games.findOne(ctx.params.id).deck;
   		}
   	),
@@ -19,15 +18,11 @@
   		var game = null
   			, game_id = ctx.params.id
   			, gameCreated = new ReactiveVar(false);
-
-  		console.log('route');
   		
 			Template.game.created = function() {
 				var self = this;
 				game = new Game(game_id);
 				gameCreated.set(true);
-				console.log('game created');
-
 
 				function showDialog(message) {
 					console.log('show dialog', message);
@@ -52,7 +47,6 @@
 				}
 
 				self.hideDialog = function() {
-					console.log('hide dialog');
 					var dialog = ui.get('.dialog');
 					if (dialog && dialog.isVisible())
 						dialog.hide();
@@ -62,7 +56,6 @@
 				var dialogHandle = ui.autorun(function() {
 					var dialog_state = game.dialogState();
 					Meteor.defer(function() {
-						console.log('defer dialog state');
 	  				if (dialog_state)
 	  					self.showDialogWrap(game.state().replace('.','_'));
 	  				else {
@@ -113,7 +106,7 @@
 
   		Template.game_deck_stats.helpers({
   			rank: function() {
-					var deckInfo = UserDeckInfo.findOne({
+					var deckInfo = UserDeck.findOne({
   					user: Meteor.user()._id,
   					deck: game.deck()._id
   				});
@@ -251,7 +244,6 @@
 			function getHeight() { 
 				cols = Math.floor(trackerWidth / width);
 				rows = Math.ceil((game.nCards() * 2) / cols);
-				console.log(cols, rows);
 				return (rows * height);
 			}
   	}
@@ -337,7 +329,7 @@
 		});
 
 		Template.play_view_dialog.rendered = function() {
-			console.log('play view dialog');
+			// console.log('play view dialog');
 		}
 		/*
 			Deck play template helpers and events
@@ -391,7 +383,6 @@
  		}
 
  		Template.problem_container.rendered = function() {
- 			console.log('problem_container rendered');
  			if (this.firstRender) {
  				if (!this.timer_el)
  					this.timer_el = this.find('.timer');
@@ -456,11 +447,6 @@
         return game.currentProblem();
       }
    	}); 
-
-   	Template.play_view.rendered = function() {
-   		console.log('play view rendered');
-   	}
-
 
  		Template.play_view.events({
 				'click': function(e, template) {

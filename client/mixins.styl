@@ -23,6 +23,23 @@ text-input() {
 		box-shadow: inset 1px 1px 0 rgba(black, .5), inset -1px -1px 0 rgba(white, .3), inset 0 0 5px rgba(black, .8), inset 0 0 0 14px rgba(white, .02), inset 0 5px 22px rgba(black, .25);
 	}
 }
+shine-bar() {
+	&:before, &:after {
+		top: 0;
+		content: '';
+		display: block;
+		background: rgba(white, .15);
+		height: 4px;
+		width: 100%;
+		position: absolute;
+	}
+	&:after {
+		background: rgba(black, .1);
+		top: auto;
+		bottom: 0px;
+		height: 8px;
+	}
+}
 
 level() {
 	position: absolute; 
