@@ -191,16 +191,57 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
 /**
  * Scroll Create
  */
-
+var editor;
 route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx) {
 	var card_id = ctx.params.id;
 	var card = Cards.findOne(card_id);
 
-	routeSession.set('active', 'info')
+	routeSession.set('active', 'info');
+
+	//XXX clean this up
+	//var editor = null;
+	var emitter = new Emitter();
+	function onEditor(cb) {
+		if (editor)
+			cb(editor);
+		else
+			emitter.once('editor', cb);
+	}
+
+	Template.scroll_editor.rendered = function() {
+		if (this.firstRender) {
+			scroad('/ace/ace.js', function() {
+				var card = Cards.findOne(card_id);
+				editor = ace.edit("ace-editor");
+				emitter.emit('editor', editor);
+				editor.setTheme("ace/theme/textmate");
+				var session = editor.getSession();
+				session.setMode("ace/mode/markdown");
+				session.setTabSize(2);
+				session.setUseWrapMode(true);
+				session.setValue(card.zebra || "");
+				setEditorHeight();
+				$('#ace-editor').css({fontSize:'15px'});
+				
+			});
+		}
+	}
+	
+	function setEditorHeight() {
+		$('#ace-editor').css({height: $(window).height() - 170});
+	}
+	
+	Template.create_scroll.created = function() {
+		onEditor(function(editor) {
+			$(window).resize(setEditorHeight);
+		});
+	}
 
 	Template.create_scroll.destroyed = function(){
 		if(isEmptyCard(card_id)) 
 			Cards.remove(ctx.params.id);
+		Cards.update(card_id, {$set: {zebra: editor.getValue()}});
+		$(window).unbind('resize', setEditorHeight);
 	}
 
 	Template.create_scroll.helpers({
@@ -225,7 +266,15 @@ route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx
 
 	Template.scroll_create_header.events({
 		'click .scroll-info-nav.tabs li': function(evt) {
+
 			routeSession.set('active', $(evt.currentTarget).attr('id'));
+			if (routeSession.get('active') === 'editor') 
+				onEditor(function() {
+					editor.focus();
+				});
+			else {
+				Cards.update(card_id, {$set: {zebra: editor.getValue()}});
+			}
 		},
 		'click #done': function() {
 			route('/inventory');
@@ -247,6 +296,11 @@ route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx
 			}
 		}
 	});
+
+	Template.scroll_preview.zebra = function() {
+		var card = Cards.find(card_id);
+		return card.zebra;
+	}
 	
 	/**
 	 * Info Form
@@ -298,10 +352,9 @@ route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx
 		}
 	});
 
-	dojo.render('create_scroll');
 
 	function isCardComplete() {
-		var card = Cards.findOne(ctx.params.id);
+		var card = Cards.findOne(card_id);
 		if(!card.title)
 			return 'Please add a title.';
 		else if(!card.grade) 
@@ -326,14 +379,7 @@ route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx
 			return false;
 	}
 
-	Template.scroll_editor.rendered = function() {
-		console.log('scroll editor');
-		if (this.firstRender) {
-			var editor = ace.edit("ace-editor");
-			editor.setTheme("ace/theme/twilight");
-			editor.getSession().setMode("ace/mode/javascript");
-		}
-	}
+	dojo.render('create_scroll');
 
 });
 

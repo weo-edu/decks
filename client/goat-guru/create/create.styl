@@ -275,19 +275,48 @@
 	}
 }
 
+ace_margin_top = 10px;
 #ace-editor-wrap {
 	margin-left: 17px;
-	margin-top: 1px
+	background: url("/app!common/textures/handmadepaper.png");
+	padding-bottom: 100px
 }
 
 #ace-editor {
 	margin: 0;
-	height: 100%;
-	width: 100%;
+	position: absolute;
+	width: 946px;
 }
 
 .ace_print_margin {
 	display: none;
 }
 
-top_buffer = 10px
+gutter_width= 100px;
+
+#ace-editor-wrap {
+	.ace_scroller {
+		background: transparent;
+	}
+
+	.ace_gutter_top {
+		border-right: 1px solid #CCC;
+		height: ace_margin_top;
+		width: gutter_width;
+	}
+
+	.ace_gutter {
+		color: #AAA;
+		border-right: 1px solid #CCC;
+		background: transparent;
+		width: gutter_width;
+	}
+
+	.ace_gutter-layer {
+		width: gutter_width !important;
+	}
+
+	.ace_active_line {
+		background: transparent;
+	}
+}
