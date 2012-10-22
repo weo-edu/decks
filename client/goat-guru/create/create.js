@@ -79,9 +79,9 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
 			}
 			var set = {};
 			set[key] = vals;
+			set['updated'] = +new Date();
 			Decks.update(deck_id,  {$set: set});
 			keywordsForDeck(deck_id);
-			console.log('deck_id', deck_id);
 			var dialog = ui.get(template.find('.dialog'));
 			dialog.hide();
 		}
@@ -331,6 +331,21 @@ route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx
 		return Template[form]({});
 	}
 
+	//XXX find somewhere else for this to go (maybe Cards)
+	function keywordsForCard(cardId) {
+		var card = Cards.findOne(cardId);
+		var keywords = nlp.keywords(
+			(card.tags || '') + 
+			' ' + 
+			(card.title || '')  + 
+			' ' + 
+			(card.description || '') +
+			' ' + 
+			(card.creatorName || '')
+		);
+		Cards.update(cardId, {$set: {'search.keywords': keywords}});
+	}
+
 	Template.form_dialog.events = {
 		'click .cancel': function(evt,template) {
 			var dialog = ui.get(template.find('.dialog'));
@@ -347,8 +362,12 @@ route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx
 			}
 			var set = {};
 			set[key] = vals;
-
+			set['updated'] = +new Date();
 			Cards.update(card_id,  {$set: set});
+
+			keywordsForCard(card_id);
+
+			
 			var dialog = ui.get(template.find('.dialog'));
 			dialog.hide();
 		}

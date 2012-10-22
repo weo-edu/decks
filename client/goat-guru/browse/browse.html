@@ -110,20 +110,50 @@
 </template>
 
 <template name="browse_tomes">
-	{{#if joined}}
-		{{#each tomes}}
-			<div class='tome-container stars'>
-				{{> tome}}
-				<div class='twist-stars twist-stars-{{UserDeck.mastery.rank}}'></div>
-				<h5 class='tome-title'>{{Decks.title}}</h5>
-			</div>
-		{{/each}}
+	{{#if played}}
+		{{> browse_tomes_played}}
 	{{else}}
-		{{#each tomes}}
-			<div class='tome-container'>
-				{{> tome_general}}
-				<h5 class='tome-title'>{{title}}</h5>
-			</div>
-		{{/each}}
+		{{> browse_created}}
 	{{/if}}
+</template>
+
+<template name="browse_tomes_played">
+	{{#each tomes}}
+		<div class='tome-container stars'>
+			{{> tome}}
+			<div class='twist-stars twist-stars-{{UserDeck.mastery.rank}}'></div>
+			<h5 class='tome-title'>{{Decks.title}}</h5>
+		</div>
+	{{/each}}
+</template>
+
+<template name="browse_created">
+	{{#each items}}
+		{{#if tome}}
+			{{> tome_detailed}}
+		{{else}}
+			{{> scroll_detailed}}
+		{{/if}}
+	{{/each}}
+</template>
+
+<template name="tome_detailed">
+	<div class='tome-detailed-container'>
+				{{> tome_general}}
+				<div class="item-detailed-info">
+					<h4>{{title}}</h4>
+					<p>{{description}}</p>
+					<p>{{tags}}</p>
+				</div>
+			</div>
+</template>
+
+<template name="scroll_detailed">
+	<div class="scroll-detailed-container">
+		<div class="item-detailed-info">
+			<h4>{{title}}</h4>
+			<p>{{description}}</p>
+			<p>{{tags}}</p>
+		</div>
+	</div>
 </template>
