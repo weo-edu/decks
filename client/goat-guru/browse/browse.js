@@ -38,13 +38,14 @@ toggle.deckFilter = function(routeSession, decks, userId) {
 		query['UserDeck.user'] = userId;
 		return decks.find(query, {sort: {last_played: -1}});
 	} else if (routeSession.get('toggle') === 'created') {
-		query['Deck.creator'] = userId;
-		query['Decks.status'] = 'published';
-		return decks.find(query);
+		query['creator'] = userId;
+		query['status'] = 'published';
+		return Decks.find(query);
 	} else if (routeSession.get('toggle') === 'draft') {
-		query['Deck.creator'] = userId;
-		query['Decks.status'] = 'draft';
-		return decks.find(query);
+		query['creator'] = userId;
+		query['status'] = 'draft';
+		console.log(decks.find().fetch());
+		return Decks.find(query);
 	}
 }
 
@@ -93,7 +94,6 @@ route('/friends',function() {
 		],
 		on: ['Decks._id', 'UserDeck.deck']
 	});
-
 
 	Template.tome.events({
 		'click': function() {
@@ -169,31 +169,50 @@ route('/inventory', function() {
 		on: ['Decks._id', 'UserDeck.deck']
 	});
 
-	Template.tome.events({
+	Template.tome_general.events({
 		'click': function() {
 			var path = '/tome/';
 			if(routeSession.equals('toggle', 'draft'))
 				path = '/create/tome/'
 
-			route(path + this.Decks._id);
+			route(path + this._id);
 		}
 	});
 
 	Template.browse_tomes.helpers({
 		tomes: function() {
 			return toggle.deckFilter(routeSession, decks, Meteor.user()._id);
+		},
+		joined: function() {
+			console.log('joined');
+			var toggle = routeSession.get('toggle');
+			if (toggle === 'collected' || toggle === 'played') {
+				return true
+			}
 		}
 	});
 
 	Template.my_collection.events({
 		'click #create-tome': function() {
-			Decks.insert({creator: Meteor.user()._id, type: 'deck', status: 'draft'}, function(err,_id) {
+			Decks.insert(
+				{	creator: Meteor.user()._id, 
+					type: 'deck', 
+					status: 'draft',
+					creatorName: Meteor.user().username
+				}, 
+				function(err,_id) {
 				if (err) throw err;
 				route('/create/tome/' + _id);
 			});
 		},
 		'click #create-scroll': function() {
-			Cards.insert({creator: Meteor.user()._id, type: 'card', status: 'draft'}, function(err,_id) {
+			Cards.insert(
+				{ creator: Meteor.user()._id, 
+					type: 'card', 
+					status: 'draft',
+					creatorName: Meteor.user().username
+				}, 
+					function(err,_id) {
 				if (err) throw err;
 				route('/create/scroll/' + _id);
 			});

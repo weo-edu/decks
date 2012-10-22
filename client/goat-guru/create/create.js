@@ -47,6 +47,22 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
 		return Template[form]({});
 	}
 
+	//XXX find somewhere else for this to go (maybe Decks)
+	function keywordsForDeck(deckId) {
+		var deck = Decks.findOne(deckId);
+		console.log('deck', deck);
+		var keywords = nlp.keywords(
+			(deck.tags || '') + 
+			' ' + 
+			(deck.title || '')  + 
+			' ' + 
+			(deck.description || '') +
+			' ' + 
+			(deck.creatorName || '')
+		);
+		Decks.update(deckId, {$set: {'search.keywords': keywords}});
+	}
+
 	Template.form_dialog.events = {
 		'click .cancel': function(evt,template) {
 			var dialog = ui.get(template.find('.dialog'));
@@ -63,8 +79,9 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
 			}
 			var set = {};
 			set[key] = vals;
-
 			Decks.update(deck_id,  {$set: set});
+			keywordsForDeck(deck_id);
+			console.log('deck_id', deck_id);
 			var dialog = ui.get(template.find('.dialog'));
 			dialog.hide();
 		}
