@@ -314,9 +314,9 @@ route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx
 		}
 	});
 
-	Template.scroll_preview.zebra = function() {
-		var card = Cards.find(card_id);
-		return card.zebra;
+	Template.scroll_preview.html = function() {
+		var card = Cards.findOne(card_id);
+		return problemize(card).html;
 	}
 	
 	/**

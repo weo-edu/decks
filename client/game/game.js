@@ -641,7 +641,8 @@
   Game.prototype.setProblems = function(cards) {
     var self = this;
   
-    var problems = _.map(cards, function(c) { 
+    var problems = _.map(cards, function(c) {
+      console.log(Cards.findOne(c));
       var problem = problemize(Cards.findOne(c));
       // allows players to sort in same order
       problem.order = Math.random();
@@ -699,7 +700,6 @@
       problem.time = (+new Date()) - problem.startTime;
 
     var correct = self.isCorrect(problem);
-    
 
     problem.points = correct ? Stats.points(Stats.regrade(problem.card_id)) : 0;
     problem.points = Math.round(problem.points);
@@ -711,7 +711,6 @@
     });
 
     self.emit('answer', problem, correct);
-
     return correct;
   }
 
