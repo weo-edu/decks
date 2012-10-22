@@ -10,8 +10,8 @@ emitter
 views
 utilities
 purl
-accounts
-accounts-passwords
+accounts-base
+accounts-password
 users
 observer
 showdown
@@ -24,3 +24,4 @@ models
 gsUpload
 edis-cli
 stateMachine
+zebra
