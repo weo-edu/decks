@@ -526,7 +526,9 @@
     var self = this;
     player_id = player_id || self.me_id;
 
+    
     var problem_idx = this.get((player_id || this.me_id)+'.problem');
+    
     if (problem_idx === undefined)
       return;
     else
@@ -646,7 +648,7 @@
   */
   Game.prototype.problems = function(player_id) {
     var self = this;
-    return self.get((player_id || self.me_id) + '.problems');
+    return self.get((player_id || self.me_id) + '.problems', true);
   }
 
   Game.prototype.setProblems = function(cards) {

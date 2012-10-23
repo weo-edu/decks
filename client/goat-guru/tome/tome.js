@@ -14,7 +14,8 @@ tome.render = function(name) {
 
 Template.tome_info.helpers({
 	CPG: function() {
-		return this.cardsPerGame && this.cardsPerGame * 2 || '';
+		console.log('cards', this);
+		return this.Decks && this.Decks.cardsPerGame && this.Decks.cardsPerGame * 2 || '';
 	}
 })
 
@@ -30,17 +31,19 @@ function tomeViewSetup(ctx, next) {
 			return friend._id;
 	});
 
+	//XXX unsubscribe
 	Meteor.subscribe('userDecks', friend_ids, tomeId);
+	Meteor.subscribe('decks', tomeId);
 
 	Template.tome_view.helpers({
 		'tome': function() {
-			var curTome = Decks.findOne(tomeId);
-
-			_.extend(curTome, UserDeck.findOne({
+			var curTome = {};
+			curTome.Decks = Decks.findOne(tomeId);
+			curTome.UserDeck = UserDeck.findOne({
 				deck: tomeId, 
 				user: friendId || Meteor.user()._id
-			}));
-
+			});
+			console.log('tome', curTome);
 			return curTome;	
 		}
 	});
@@ -119,7 +122,7 @@ function tomeViewSetup(ctx, next) {
 			return Meteor.users.findOne(this.opponent).username;
 		},
 		pastGames: function() {
-			return _.clone(this.history || []).reverse();
+			return _.clone(this.UserDeck.history || []).reverse();
 		},
 		player: function() {
 			return username ? username + "'s Stats" : Meteor.user().username + "'s Stats";

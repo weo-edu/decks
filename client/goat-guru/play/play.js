@@ -1,5 +1,7 @@
 ;(function(){
 
+	//Meteor.deps.Context.logInvalidateStack = true;
+
   route('/game/:id',
   	route.requireSubscriptionById('game'),
   	route.requireSubscription('userDecks', 
@@ -10,6 +12,9 @@
   			return Games.findOne(ctx.params.id).deck;
   		}
   	),
+  	route.requireSubscription('decks', function(ctx) {
+  		return Games.findOne(ctx.params.id).deck
+  	}),
   	route.requireSubscription('cards', function(ctx) {
   		return Decks.findOne(Games.findOne(ctx.params.id).deck).cards;
   	}),
@@ -391,13 +396,16 @@
  		}
 
  		Template.problem_container.helpers({
- 			card: function() {
+ 			html: function() {
+ 				//var ctx = Meteor.deps.Context.current;
+ 				//Meteor.deps.Context.current = null;
  				var p = game.currentProblem();
+ 				//Meteor.deps.Context.current = ctx;
+
  				if(p) {
 	 				curZebra = new Zebra(p.zebra);
 
- 					p.html = curZebra.render(p.assignment);
- 					return p;
+ 					return curZebra.render(p.assignment);
  				}
  			}
  		});

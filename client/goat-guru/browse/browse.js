@@ -219,13 +219,14 @@ route('/inventory', function() {
 
 	Template.tome_detailed.events({
 		'click': function() {
-			var path = null;
-			if(routeSession.equals('toggle', 'draft'))
-				path = '/create/tome/';
-			else
-				path = '/tome/';
+			route('/create/tome/' + this._id);
+		}
+	});
 
-			route(path + this._id);
+	Template.tome.events({
+		click: function() {
+			console.log('click');
+			route('/tome/' + this.Decks._id);
 		}
 	});
 

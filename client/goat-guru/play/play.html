@@ -2,7 +2,9 @@
 	<div id='play-view'>
 			<div class='tracker-container'>
 				<div id='my-tracker' class='tracker'>
-					{{> problem_tracker me}}
+					{{#isolate}}
+						{{> problem_tracker me}}
+					{{/isolate}}
 				</div>
 			</div>
 
@@ -19,7 +21,9 @@
 
 			<div class='tracker-container'>
 				<div id='opponent-tracker' class='tracker'>
-					{{> problem_tracker opponent}}
+					{{#isolate}}
+						{{> problem_tracker opponent}}
+					{{/isolate}}
 				</div>
 				<div class="quit-button">Quit</div>
 			</div>

@@ -234,6 +234,8 @@ Meteor.startup(function() {
   Meteor.publish('userDecks', function(uid, did) {
     if(_.isArray(uid)) 
         uid = _.without(uid, 1);
+
+    console.log('userDecks', uid, did);
     if(did) 
         return UserDeck.findUserDeck(uid, did);
     else
