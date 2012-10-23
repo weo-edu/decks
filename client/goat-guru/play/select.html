@@ -57,8 +57,14 @@
 		<tr class='scroll-select-info'>
 			<th>Title</th>
 			<th>Points</th>
-			<th class='center'>{{currentUser.username}}</th>
-			<th class='center'>{{opponent.username}}</th>
+			<th class='center'>
+				{{currentUser.username}}
+				<div class='stat-icons'></div>
+			</th>
+			<th class='center'>
+				{{opponent.username}}
+				<div class='stat-icons'></div>
+			</th>
 			<th></th>
 		</tr>
 		{{#each this}}
@@ -68,7 +74,7 @@
 </template>
 
 <template name='scroll_select_view'>
-	<tr class='scroll-select-info'>
+	<tr class='scroll-select-info select-scroll'>
 		<td>
 			<div class='scroll-title'>{{title}}</div>
 		</td>

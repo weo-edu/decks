@@ -80,12 +80,19 @@
 </template>
 
 <template name='game_multiplier'>
-	<div id='multiplier'>{{multiplier}}</div>
+	<!-- <div id='multiplier'>{{multiplier}}</div> -->
+	<div id='speed-bar' class='{{multiplier}}'>
 	{{#constant}}
-	<div id='speed-bar'>
 		<div class="inner-speed-bar" ></div>
-	</div>
+		<div class='div'></div>
+		<div class='div'></div>
+		<div class='div'></div>
+		<div class='mult-block'>
+			<div class="inner-speed-bar" ></div>
+			<div class='mult-image'></div>
+		</div>
 	{{/constant}}
+	</div>
 </template>
 
 
