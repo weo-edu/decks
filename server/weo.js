@@ -240,11 +240,27 @@ Meteor.startup(function() {
         return UserDeck.findUser(uid);
   });
 
+  Meteor.publish('playedDecks', function(uid) {
+    var self = this;
+    var cursor = UserDeck.find({user: uid});
+    self._publishCursor(cursor, false);
+    cursor.observe({
+      added: function(userDeck) {
+        self._publishCursor(Decks.find(userDeck.deck), false);
+      }
+    });
+    self.complete();
+  });
+
+  Meteor.publish('created', function(uid) {
+    this._publishCursor(Decks.find({creator: uid}), false);
+    this._publishCursor(Cards.find({creator: uid}));
+  });
+
   Meteor.publish('homeDecks', function(uid) {
     var self = this;
-    _.each(Decks.homeFeeds, function(feed) {
-      self._publishCursor(Decks.feed(feed, uid), 'Decks');
-    });
+    self._publishCursor(Decks.popular(), false);
+    self._publishCursor(Decks.featured());
   });
 
   Meteor.publish('gradeStats', function() {

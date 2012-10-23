@@ -1,5 +1,6 @@
 route('/goat',function() { 
-
+	//XXX unsubscribe
+	Meteor.subscribe('homeDecks');
 	Template.goat_browse.categories = function() {
 		return Decks.homeFeeds;
 	}
@@ -9,7 +10,7 @@ route('/goat',function() {
 		return feed.fetch();
 	}
 
-	Template.tome.events({
+	Template.tome_general.events({
 		'click': function() {
 			console.log(this._id);
 			route('/tome/' + this._id);
@@ -23,7 +24,7 @@ route('/goat',function() {
 var toggle = {};
 
 
-toggle.deckFilter = function(routeSession, decks, userId) {
+toggle.deckFilter = function(routeSession, collection, userId) {
 	var filter = routeSession.get('filter');
 	var query = {};
 	if (filter)
@@ -32,19 +33,18 @@ toggle.deckFilter = function(routeSession, decks, userId) {
 	if (routeSession.get('toggle') === 'collected') {
 		query['UserDeck.user'] = userId;
 		query['UserDeck.mastery.rank'] = {$gt: 0};
-		console.log('decks', decks.find(query).fetch());
-		return decks.find(query, {sort: {last_played: -1}});
+		return collection.find(query, {sort: {last_played: -1}});
 	} else if (routeSession.get('toggle') === 'played') {
 		query['UserDeck.user'] = userId;
-		return decks.find(query, {sort: {last_played: -1}});
+		return collection.find(query, {sort: {last_played: -1}});
 	} else if (routeSession.get('toggle') === 'created') {
-		query['Deck.creator'] = userId;
-		query['Decks.status'] = 'published';
-		return decks.find(query);
+		query['creator'] = userId;
+		query['status'] = 'published';
+		return collection.find(query, {sort: {updated: -1}});
 	} else if (routeSession.get('toggle') === 'draft') {
-		query['Deck.creator'] = userId;
-		query['Decks.status'] = 'draft';
-		return decks.find(query);
+		query['creator'] = userId;
+		query['status'] = 'draft';
+		return collection.find(query, {sort: {updated: -1}});
 	}
 }
 
@@ -86,14 +86,27 @@ toggle.events = function(routeSession) {
 }
 
 route('/friends',function() { 
-	var decks = join({
-		cursor: [
-			UserDeck.find({user: {$in: Meteor.user().friends}}),
-			Decks.find({})
-		],
-		on: ['Decks._id', 'UserDeck.deck']
-	});
+	var decks = null;
+	var created = null;
 
+	function setupCollections(user) {
+		Meteor.subscribe('playedDecks', user._id);
+		Meteor.subscribe('created', user._id);
+
+		decks = join({
+			cursor: [
+				UserDeck.find({user: user._id}),
+				Decks.find({})
+			],
+			on: ['Decks._id', 'UserDeck.deck']
+		});
+
+		created = union(
+			Decks.find({creator: user._id}),
+			Cards.find({creator: user._id})
+		);
+	}
+	
 
 	Template.tome.events({
 		'click': function() {
@@ -104,6 +117,7 @@ route('/friends',function() {
 
 	Template.buddies.events({
 		'click .buddy': function(e) {
+			setupCollections(this);
 			Session.set('active', this);
 			routeSession.set('toggle', 'collected');
 		},
@@ -139,12 +153,37 @@ route('/friends',function() {
 	});
 
 	Template.browse_tomes.helpers({
-		'tomes': function() {
+		played: function() {
+			var toggle = routeSession.get('toggle');
+			if (toggle === 'collected' || toggle === 'played') {
+				return true
+			}
+		}
+	});
+
+	Template.browse_tomes_played.helpers({
+		tomes: function() {
 			var active = Session.get('active');
 			if(active) {
-				Meteor.subscribe('userDecks', active._id);
+				if (!decks)
+					setupCollections(active);
 				return toggle.deckFilter(routeSession, decks, active._id);
 			}
+		}
+	});
+
+	Template.browse_created.helpers({
+		items: function() {
+			var active = Session.get('active');
+			if(active) {
+				if (!created)
+					setupCollections(active)
+				return toggle.deckFilter(routeSession, created, active._id);
+			}
+		},
+		tome: function() {
+			console.log(this);
+			return this.type === 'deck';
 		}
 	});
 
@@ -159,7 +198,13 @@ route('/friends',function() {
 });
 
 
+created = null
 route('/inventory', function() {
+
+	//XXX remember to unsubscribe
+	Meteor.subscribe('playedDecks', Meteor.user()._id);
+	Meteor.subscribe('created', Meteor.user()._id);
+
 
 	var decks = join({
 		cursor: [
@@ -169,31 +214,81 @@ route('/inventory', function() {
 		on: ['Decks._id', 'UserDeck.deck']
 	});
 
-	Template.tome.events({
-		'click': function() {
-			var path = '/tome/';
-			if(routeSession.equals('toggle', 'draft'))
-				path = '/create/tome/'
+	created = union(
+		Decks.find({creator: Meteor.user()._id}),
+		Cards.find({creator: Meteor.user()._id})
+	);
 
-			route(path + this.Decks._id);
+	Template.tome_detailed.events({
+		'click': function() {
+			var path = null;
+			if(routeSession.equals('toggle', 'draft'))
+				path = '/create/tome/';
+			else
+				path = '/tome/';
+
+			route(path + this._id);
+		}
+	});
+
+	Template.scroll_detailed.events({
+		'click': function() {
+			var path = null;
+			if(routeSession.equals('toggle', 'draft'))
+				path = '/create/scroll/'
+			else
+				path = '/scroll/'
+
+			route(path + this._id);
 		}
 	});
 
 	Template.browse_tomes.helpers({
+		played: function() {
+			var toggle = routeSession.get('toggle');
+			if (toggle === 'collected' || toggle === 'played') {
+				return true
+			}
+		}
+	});
+
+	Template.browse_tomes_played.helpers({
 		tomes: function() {
 			return toggle.deckFilter(routeSession, decks, Meteor.user()._id);
 		}
 	});
 
+	Template.browse_created.helpers({
+		items: function() {
+			return toggle.deckFilter(routeSession, created, Meteor.user()._id);
+		},
+		tome: function() {
+			console.log(this);
+			return this.type === 'deck';
+		}
+	});
+
 	Template.my_collection.events({
 		'click #create-tome': function() {
-			Decks.insert({creator: Meteor.user()._id, type: 'deck', status: 'draft'}, function(err,_id) {
+			Decks.insert(
+				{	creator: Meteor.user()._id, 
+					type: 'deck', 
+					status: 'draft',
+					creatorName: Meteor.user().username
+				}, 
+				function(err,_id) {
 				if (err) throw err;
 				route('/create/tome/' + _id);
 			});
 		},
 		'click #create-scroll': function() {
-			Cards.insert({creator: Meteor.user()._id, type: 'card', status: 'draft'}, function(err,_id) {
+			Cards.insert(
+				{ creator: Meteor.user()._id, 
+					type: 'card', 
+					status: 'draft',
+					creatorName: Meteor.user().username
+				}, 
+					function(err,_id) {
 				if (err) throw err;
 				route('/create/scroll/' + _id);
 			});

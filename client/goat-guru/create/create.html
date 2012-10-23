@@ -199,7 +199,12 @@
 </template>
 
 <template name='scroll_editor'>
-	ACE
+	{{#constant}}
+	<div id="ace-editor-wrap">
+		<div class="ace_gutter_top"></div>
+		<div id="ace-editor"></div>
+	</div>
+	{{/constant}}
 </template>
 
 <template name='scroll_preview'>
@@ -208,6 +213,7 @@
 	</div>
 	<div id='problem-container'>
 		<div id='problem'>
+			{{#markdown}}{{{zebra}}}{{/markdown}}
 		</div>
 	</div>
 	{{> problem_tracker}}

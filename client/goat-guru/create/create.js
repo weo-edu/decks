@@ -47,6 +47,22 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
 		return Template[form]({});
 	}
 
+	//XXX find somewhere else for this to go (maybe Decks)
+	function keywordsForDeck(deckId) {
+		var deck = Decks.findOne(deckId);
+		console.log('deck', deck);
+		var keywords = nlp.keywords(
+			(deck.tags || '') + 
+			' ' + 
+			(deck.title || '')  + 
+			' ' + 
+			(deck.description || '') +
+			' ' + 
+			(deck.creatorName || '')
+		);
+		Decks.update(deckId, {$set: {'search.keywords': keywords}});
+	}
+
 	Template.form_dialog.events = {
 		'click .cancel': function(evt,template) {
 			var dialog = ui.get(template.find('.dialog'));
@@ -63,8 +79,9 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
 			}
 			var set = {};
 			set[key] = vals;
-
+			set['updated'] = +new Date();
 			Decks.update(deck_id,  {$set: set});
+			keywordsForDeck(deck_id);
 			var dialog = ui.get(template.find('.dialog'));
 			dialog.hide();
 		}
@@ -191,16 +208,57 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
 /**
  * Scroll Create
  */
-
+var editor;
 route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx) {
 	var card_id = ctx.params.id;
 	var card = Cards.findOne(card_id);
 
-	routeSession.set('active', 'info')
+	routeSession.set('active', 'info');
+
+	//XXX clean this up
+	//var editor = null;
+	var emitter = new Emitter();
+	function onEditor(cb) {
+		if (editor)
+			cb(editor);
+		else
+			emitter.once('editor', cb);
+	}
+
+	Template.scroll_editor.rendered = function() {
+		if (this.firstRender) {
+			scroad('/ace/ace.js', function() {
+				var card = Cards.findOne(card_id);
+				editor = ace.edit("ace-editor");
+				emitter.emit('editor', editor);
+				editor.setTheme("ace/theme/textmate");
+				var session = editor.getSession();
+				session.setMode("ace/mode/markdown");
+				session.setTabSize(2);
+				session.setUseWrapMode(true);
+				session.setValue(card.zebra || "");
+				setEditorHeight();
+				$('#ace-editor').css({fontSize:'15px'});
+				
+			});
+		}
+	}
+	
+	function setEditorHeight() {
+		$('#ace-editor').css({height: $(window).height() - 170});
+	}
+	
+	Template.create_scroll.created = function() {
+		onEditor(function(editor) {
+			$(window).resize(setEditorHeight);
+		});
+	}
 
 	Template.create_scroll.destroyed = function(){
 		if(isEmptyCard(card_id)) 
 			Cards.remove(ctx.params.id);
+		Cards.update(card_id, {$set: {zebra: editor.getValue()}});
+		$(window).unbind('resize', setEditorHeight);
 	}
 
 	Template.create_scroll.helpers({
@@ -225,7 +283,15 @@ route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx
 
 	Template.scroll_create_header.events({
 		'click .scroll-info-nav.tabs li': function(evt) {
+
 			routeSession.set('active', $(evt.currentTarget).attr('id'));
+			if (routeSession.get('active') === 'editor') 
+				onEditor(function() {
+					editor.focus();
+				});
+			else {
+				Cards.update(card_id, {$set: {zebra: editor.getValue()}});
+			}
 		},
 		'click #done': function() {
 			route('/inventory');
@@ -247,6 +313,11 @@ route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx
 			}
 		}
 	});
+
+	Template.scroll_preview.zebra = function() {
+		var card = Cards.find(card_id);
+		return card.zebra;
+	}
 	
 	/**
 	 * Info Form
@@ -258,6 +329,21 @@ route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx
 		var form = dialog.get('form');
 		console.log(form);
 		return Template[form]({});
+	}
+
+	//XXX find somewhere else for this to go (maybe Cards)
+	function keywordsForCard(cardId) {
+		var card = Cards.findOne(cardId);
+		var keywords = nlp.keywords(
+			(card.tags || '') + 
+			' ' + 
+			(card.title || '')  + 
+			' ' + 
+			(card.description || '') +
+			' ' + 
+			(card.creatorName || '')
+		);
+		Cards.update(cardId, {$set: {'search.keywords': keywords}});
 	}
 
 	Template.form_dialog.events = {
@@ -276,8 +362,12 @@ route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx
 			}
 			var set = {};
 			set[key] = vals;
-
+			set['updated'] = +new Date();
 			Cards.update(card_id,  {$set: set});
+
+			keywordsForCard(card_id);
+
+			
 			var dialog = ui.get(template.find('.dialog'));
 			dialog.hide();
 		}
@@ -298,10 +388,9 @@ route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx
 		}
 	});
 
-	dojo.render('create_scroll');
 
 	function isCardComplete() {
-		var card = Cards.findOne(ctx.params.id);
+		var card = Cards.findOne(card_id);
 		if(!card.title)
 			return 'Please add a title.';
 		else if(!card.grade) 
@@ -325,6 +414,8 @@ route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx
 		else
 			return false;
 	}
+
+	dojo.render('create_scroll');
 
 });
 
