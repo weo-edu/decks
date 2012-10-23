@@ -291,7 +291,6 @@
 
 	Guru[MASTERY.PROFICIENT] = function(game) {
 		Guru.call(this, game);
-		console.log('proficient');
 	}
 
 	utils.inherits(Guru[MASTERY.PROFICIENT], Guru);
@@ -306,7 +305,6 @@
 
 	Guru[MASTERY.ADVANCED] = function(game) {
 		Guru.call(this, game);
-		console.log('advanced');
 	}
 
 	utils.inherits(Guru[MASTERY.ADVANCED], Guru);
@@ -323,7 +321,6 @@
 
 	Guru[MASTERY.EXPERT] = function(game) {
 		Guru.call(this, game);
-		console.log('expert');
 	}
 
 	utils.inherits(Guru[MASTERY.EXPERT], Guru);
@@ -367,6 +364,4 @@
 
 
 	window.Guru = Guru;
-
-
 })();
