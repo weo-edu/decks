@@ -138,7 +138,6 @@
 
       if (change) {
         self.updatePlayer({play_end: +new Date()});
-        console.log('play_end');
       }
 
 
@@ -152,7 +151,6 @@
       if (self.me().synthetic)
         return;
       self.timeouts.heartbeat = Meteor.setTimeout(function() {
-        console.log('heartbeat timeout');
         if (self.state() === 'select.waiting')
           self.heartbeat();
       }, self.timeToSelect(), 0);
@@ -310,7 +308,12 @@
   }
 
   Game.prototype.isCorrect = function(problem){
-    return problem.answer === problem.solution;
+    var answer = problem.answer;
+    if(_.isNumber(problem.solution)) {
+      answer = _.first(_.flatten(answer));
+    }
+
+    return answer == problem.solution;
   }
 
   Game.prototype.isIncorrect = function(problem) {
@@ -650,7 +653,6 @@
     var self = this;
   
     var problems = _.map(cards, function(c) {
-      console.log(Cards.findOne(c));
       var problem = problemize(Cards.findOne(c));
       // allows players to sort in same order
       problem.order = Math.random();
@@ -888,8 +890,6 @@
       breakdown.multiplier += points - problem_points;
       points_total += points + bonus;
     });
-
-    console.log('points', points_total);
 
     breakdown.multiplier = Math.round(breakdown.multiplier);
     breakdown.points = Math.round(breakdown.points);

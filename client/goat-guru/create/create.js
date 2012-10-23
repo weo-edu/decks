@@ -316,7 +316,9 @@ route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx
 
 	Template.scroll_preview.html = function() {
 		var card = Cards.findOne(card_id);
-		return problemize(card).html;
+		var p = problemize(card);
+		var z = new Zebra(p.zebra);
+		return z.render(p.assignment);
 	}
 	
 	/**

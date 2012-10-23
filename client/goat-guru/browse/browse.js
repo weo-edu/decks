@@ -12,7 +12,6 @@ route('/goat',function() {
 
 	Template.tome_general.events({
 		'click': function() {
-			console.log(this._id);
 			route('/tome/' + this._id);
 		}
 	});
@@ -182,7 +181,6 @@ route('/friends',function() {
 			}
 		},
 		tome: function() {
-			console.log(this);
 			return this.type === 'deck';
 		}
 	});
@@ -263,7 +261,6 @@ route('/inventory', function() {
 			return toggle.deckFilter(routeSession, created, Meteor.user()._id);
 		},
 		tome: function() {
-			console.log(this);
 			return this.type === 'deck';
 		}
 	});

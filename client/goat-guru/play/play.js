@@ -26,7 +26,6 @@
 				gameCreated.set(true);
 
 				function showDialog(message) {
-					console.log('show dialog', message);
 					var dialog = ui.get('.dialog');
 					if (!dialog) {
 						console.warn('no dialog for message: ' + message);
@@ -37,7 +36,6 @@
 				}
 
 				self.showDialogWrap = function(message) {
-					console.log('show dialog');
 					if (self.firstRender) {
 						self.onRender(function() {
 							showDialog(message);
@@ -395,11 +393,12 @@
  		Template.problem_container.helpers({
  			card: function() {
  				var p = game.currentProblem();
- 				curZebra = new Zebra(p.zebra);
+ 				if(p) {
+	 				curZebra = new Zebra(p.zebra);
 
- 				p.html = curZebra.render(p.assignments);
- 				console.log('html', p, p.zebra, p.html);
- 				return p;
+ 					p.html = curZebra.render(p.assignment);
+ 					return p;
+ 				}
  			}
  		});
 
@@ -462,16 +461,14 @@
 					game.quit();
 					route('/goat');
 				},
-				'click .continue': function() {
-					game.answer();
-				},
-				'keypress': function(e, template) {
-					if(e.which === 13 && game.state() !== 'play.waiting') {
+				'click #continue-button': function(e, template) {
+				//	game.answer();
+				//},
+				//'keypress body': function(e, template) {
+					//console.log('keypress');
+					//if(e.which === 13 && game.state() !== 'play.waiting') {
 					var problem = game.currentProblem();
-					console.log('answer', curZebra.answer());
 					var res = game.answer(curZebra.answer());
-					//var res = game.answer(parseInt($('#answer').val(), 10));
-					//var problem = game.currentProblem();
 
 					var card = _.clone(Cards.findOne(problem.card_id));
 					card.type = 'card';
@@ -538,7 +535,7 @@
 					Meteor.defer(function(){ 
 						$('#answer').focus(); 
 					});
-				}
+				//}
 			}
 		});
 
@@ -674,7 +671,6 @@
 
 		Template.error_scroll.helpers({
 			scrolls: function() {
-				console.log(game.problems());
 				return game.problems();
 			},
 			title: function() {
@@ -690,7 +686,6 @@
 
 		Template.error_scroll.events({
 			'click .error-scroll': function(evt){
-				console.log(evt, this)
 				routeSession.set('review-scroll', this);
 				ui.get('.dialog').closable().overlay().center().show();
 			}
