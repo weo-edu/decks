@@ -175,7 +175,7 @@
 					game.quit();
 					route('/goat');
 				},
-				'mousedown .scroll-select-info': function(evt, template) {
+				'mousedown .select-scroll': function(evt, template) {
 					if(evt.which === 1) {
 						var data = this;
 						template.handler = ui.down(template,function() {
@@ -426,11 +426,23 @@
  				var self = this;
 	 			//XXX shouldnt use spark for rendering of this
 	 			var el = $("#speed-bar .inner-speed-bar");
+	 			var totWidth = parseInt($('#speed-bar').width(), 10);
 	 			self.speedUpdate = function() {
-	 				el.css({width: '100%'});
+	 				var mult = game.getMultiplier();
+	 				
+	 				if( mult > .5)
+	 					mult = .5 + ((mult - .5) / 2);
+	 				if( (mult + .25) >= 1 ) 
+	 					mult = .75;
+
+	 				console.log('adjusted Mult', mult);
+
+	 				var width = (mult + .25) * totWidth;
+	 				
+	 				el.width(width + 'px');
 		 			el
 		 				.stop(true,false)
-		 				.animate({width: "0%"}, game.timeForBonus() * 1000, 'linear');	
+		 				.animate({width: "0px"}, game.timeForBonus() * 1000, 'linear');	
 		 		}
 	 			self.speedUpdate();
  			}
@@ -438,8 +450,16 @@
 
  		Template.game_multiplier.helpers({
 	 		multiplier: function() {
-	 			var multiplier = utils.round(game.getMultiplier(),2);
-	 			return multiplier ? ('x' + multiplier) : '';
+	 			var mult = game.getMultiplier(); 
+	 			console.log(mult);
+	 			if(mult >= 1)
+	 				return 'third-mult';
+	 			else if (mult >= .5)
+	 				return 'second-mult';
+	 			else if (mult >= .25)
+	 				return 'first-mult';
+	 			else
+	 				return '';
  			}
  		}); 
 

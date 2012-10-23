@@ -21,6 +21,10 @@
 	h4 {
 		padding-top: 10px;
 		text-align: center;
+		width: 197px;
+		height: 1em;
+		overflow: ellipsis;
+		padding-left: 17px;
 	}
 
 	.problem-tracker {
@@ -111,27 +115,27 @@
 	.scroll-select-info {
 		cursor: pointer;
 		clearfix();
-		&:nth-child(even) {
-				background: rgba(black, .2);				
-		}
+		table-rows()
 		&:hover {
 				background: rgba(black, .35);
-				text-shadow: -1px -1px 0 rgba(white, .3)
+				// text-shadow: -1px -1px 0 rgba(white, .3)
 		}
-		&:first-child:hover {
+		&:first-child {
 			cursor: default;
-			background: none;
-		}
-		th {
-			color: #555;
-			font: 22px 'BleakChop';
-			&.center {
-				text-align: center;
-			}
+			background: transparent;
 		}
 		td, th {
 			height: 40px;
 			padding: 10px 6px;
+		}
+		th {
+			color: #555;
+			font: 22px 'BleakChop';
+			position: relative;
+			padding-bottom: 20px;
+			&.center {
+				text-align: center;
+			}
 		}
 
 		.selection-counter {
@@ -165,6 +169,16 @@
 	.stats-box > div {
 		width: 80px;
 		margin: 0 auto;
+	}
+
+	.stat-icons {
+		background: url('/img/stat-icons.png');
+		width: 85px;
+		height: 25px;
+		position: absolute;
+		left: 50%;
+		margin-left: -42px;
+		bottom: 3px;
 	}
 
 	.scroll-stat {
@@ -206,8 +220,8 @@
 
 
 #problem-container {
-	background: url("/app!decks/img/playground.png") 0 50px no-repeat;
-	height: 564px;
+	background: url("/app!decks/img/playground.png") 0 60px no-repeat;
+	height: 574px;
 	width: 548px;
 	margin: 10px -8px 0;
 	float: left;
@@ -244,7 +258,7 @@
 #game-points {
 	position: absolute;
 	left: 15px;
-	font: 44px/30px 'BleakChop';
+	font: 44px/60px 'BleakChop';
 	color = white;
 	color: gold;
 	// -webkit-text-stroke: 3px #333;
@@ -256,46 +270,144 @@
 	left: -100px;;
 }
 #speed-bar {
-	height: 15px;
-	width: 300px;
-	margin: 0 auto;
-	background: rgba(white, .08);
-	box-shadow: inset 1px 1px 6px #222, 1px 1px 1px rgba(white, .2);
-	overflow: hidden;
+	height: 40px;
+	// width = 380px;
+	// float: right;
+	width = 252px;
+	width: width;
+	margin: 6px auto 0;
+	background-image: url('/app!common/textures/handmadepaper.png');
+	border: 6px solid black;
+	box-shadow: inset 1px 1px 6px #222;
+	box-shadow: inset 1px 1px 6px #222, 0px 0px 2px rgba(white, .2), 1px 1px 2px rgba(white, .2);
+	position: relative;
 	.inner-speed-bar {
 		height: 100%;
-		background-color: rgba(blue, 1);
+		background-color: rgba(red, 1);
 		position: relative;
 		box-shadow: 0 0 10px rgba(black, .8);
+
 		&:after {
 			content: '';
 			display: block;
 			position: absolute;
 			width: 100%;
-			height: 5px;
+			height: 10px;
 			top: 0;
-			background: rgba(white, .15);
+			background: rgba(white, .14);
+		}
+	}
+
+	.div {	
+		box-width =  (width / 4);
+		border-width = 6px;
+		border-left: border-width solid black;
+		width: 60px;
+		position: absolute;
+		height: 100%;
+		top: 0px;
+		&:nth-child(2) { left: box-width - (border-width / 2); }
+		&:nth-child(3) { left: (box-width * 2) - (border-width / 2); }
+		&:nth-child(4) { left: (box-width * 3) - (border-width / 2); }
+	}
+
+	.mult-block {
+		position: absolute;
+		height: 50px;
+		width: 27%;
+		border: 6px solid black;
+		top: -11px;
+		background: url("/app!common/textures/handmadepaper.png") 1px 0 no-repeat;
+		transition: transform .3s;
+		transform: scale(0);
+		overflow: hidden;
+		.mult-image {
+			height: 80px;
+			width: 150px;
+			position: fixed;
+			background-image: url("/img/multi-numbers.png");
+			top: -14px;
+			left: -44px;
+		}
+		// &.first {
+		// 	left: 52px;
+		// }
+		// &.second {
+		// 	left: 119px;
+		// 	.inner-speed-bar { background-color: blue; }
+		// 	.mult-image {
+		// 		width: 132px;
+		// 		left: -27px;
+		// 		background-position: 220px 0px;
+		// 	}
+		// }
+	// 	&.third {
+	// 		left: 183px;
+	// 		.inner-speed-bar { background-color: #8DC63F; }
+	// 		.mult-image {
+	// 			width: 100px;
+	// 			left: -12px;
+	// 			background-position: 92px 0px;
+	// 		}
+	// 	}
+	}
+	&.first-mult {
+		.mult-block { 
+			.inner-speed-bar { background-color: red; }
+			left: 52px;
+			transform: scale(1);
+			.inner-speed-bar {
+				left: -58px;
+			}
+		}
+	}
+	&.second-mult {
+		.inner-speed-bar { background-color: blue; }
+		.mult-block { 
+			left: 119px;
+			transform: scale(1);
+			.inner-speed-bar {
+				background-color: blue;
+				left: -125px;
+			}
+			.mult-image {
+				width: 132px;
+				left: -27px;
+				background-position: 220px 0px;
+			}
+		}
+	}
+	&.third-mult {
+		.inner-speed-bar { background-color: #8DC63F; }
+		.mult-block { 
+			transform: scale(1); 
+			left: 183px;
+			.inner-speed-bar { 
+				// width: 257px;
+				left: -185px;
+				background-color: #8DC63F; 
+			}
+			.mult-image {
+				width: 100px;
+				left: -12px;
+				background-position: 92px 0px;
+			}
 		}
 	}
 }
 
 #multiplier {
-	height: 30px;
+	// height: 30px;\
 	width: 300px;
 	margin: 0 auto 5px;
 	background: rgba(white, .08);
-	box-shadow: inset 1px 1px 6px #222, 1px 1px 1px rgba(white, .2);
+	box-shadow: inset 1px 1px 6px #222, 0px 0px 2px rgba(white, .2), 1px 1px 2px rgba(white, .2);
 	overflow: hidden;
-
-	// position: absolute;
-	// font: 20px/25px 'BleakChop';
-	// color: #FFF;
-	// text-align: center;
-	// width: 60px;
-	// top: 8px;
-	// left: 50%;
-	// margin-left: -30px;
-	// text-shadow: 1px 1px 0 rgba(black, .5);
+	font: 30px/31px 'BleakChop';
+	color: #FFF;
+	text-align: center;
+	text-shadow: 1px 1px 0 rgba(black, .5);
+	display: none;
 }
 
 #bonus {
