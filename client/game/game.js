@@ -309,7 +309,7 @@
 
   Game.prototype.isCorrect = function(problem){
     var answer = problem.answer;
-    if(_.isNumber(problem.solution)) {
+    if(_.isNumber(problem.solution) && _.isArray(answer)) {
       answer = _.first(_.flatten(answer));
     }
 
