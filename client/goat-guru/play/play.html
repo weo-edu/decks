@@ -68,11 +68,9 @@
 </template>
 
 <template name='problem_container'>
-	{{#with card}}
 	<div id='problem'>
 		{{#markdown}}{{{html}}}{{/markdown}}<br/>
 	</div>
-	{{/with}}
 	<div id='continue-button'>Continue</div>
 	{{#constant}}
 		<span class='timer'></span>

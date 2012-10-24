@@ -27,9 +27,9 @@
 		<li id='publish' class=''>Publish</li>
 	</ul>
 	<ul class='scroll-info-nav tabs'>
+		<li id='info' class='info'></li>
 		<li id='add' class='add-scrolls'></li>
 		<li id='view' class='view-scrolls'></li>
-		<li id='info' class='info'></li>
 	</ul>
 </template>
 
@@ -191,10 +191,10 @@
 		<li id='publish' class=''>Publish</li>
 	</ul>
 	<ul class='scroll-info-nav tabs'>
-		<li id='zebra' class='zebra'></li>
+		<li id='info' class='info'></li>
 		<li id='editor' class='compose'></li>
 		<li id='preview' class='view'></li>
-		<li id='info' class='info'></li>
+		<li id='zebra' class='zebra'></li>
 	</ul>
 </template>
 
@@ -247,7 +247,11 @@
 </template>
 
 <template name='zebra_info'>
-	ZEBRA
+	<div class="zebra-markdown-wrap">
+		<div class="markdown-body">
+			{{{zebra_markdown}}}
+		</div>
+	</div>
 </template>
 
 <template name='grade_form'>
