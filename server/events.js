@@ -133,7 +133,10 @@ Observer.on('complete:game', function(e) {
     update.$set = {last_played: e.time};
     var score = match[e.user._id].points;
     update.$inc = inc;
+
+    var userDeck = UserDeck.findOne({user: e.user._id, deck: match.deck});
+    if (!userDeck.high_score || score > userDeck.high_score)
+      update.$set.high_score = score;
     UserDeck.update({user: e.user._id, deck: match.deck}, update, {multi: 0, upsert: true});
-    UserDeck.update({user: e.user._id, deck: match.deck, high_score: {$lt: score}}, {$set: {high_score: score}});
   }).run();
 });

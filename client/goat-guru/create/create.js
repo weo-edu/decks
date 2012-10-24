@@ -417,6 +417,19 @@ route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx
 			return false;
 	}
 
+
+	Template.zebra_info.created = function() {
+		$.get('/packages/zebra/zebra.md.html', function(data) {
+			routeSession.set('zebra_markdown', data);
+		});
+	}
+
+	Template.zebra_info.helpers({
+		zebra_markdown: function() {
+			return routeSession.get('zebra_markdown');
+		}
+	});
+
 	dojo.render('create_scroll');
 
 });

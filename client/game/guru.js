@@ -186,7 +186,7 @@
 		var mastery = self.mastery(),
 			modify = {$inc: { 'mastery.wins' : 1 } };
 
-		if (mastery.winsAtRank >= 2 &&  mastery.rank <= MASTERY.MASTER_GURU) {
+		if (mastery.winsAtRank >= 2 &&  (mastery.rank || 0) <= MASTERY.MASTER_GURU) {
 			modify['$set'] = {'mastery.winsAtRank': 0};
 			modify['$inc']['mastery.rank'] = 1;		
 		} else {

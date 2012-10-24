@@ -23,23 +23,30 @@ var toggle = {};
 toggle.deckFilter = function(routeSession, collection, userId) {
 	var filter = routeSession.get('filter');
 	var query = {};
-	if (filter)
-		query['search.keywords'] = filter;
-
+	
+	//XXX too much repeat code
 	if (routeSession.get('toggle') === 'collected') {
 		query['UserDeck.user'] = userId;
 		query['UserDeck.mastery.rank'] = {$gt: 0};
-		return collection.find(query, {sort: {last_played: -1}});
+		if (filter)
+			query['Decks.search.keywords'] = filter;
+		return collection.find(query, {sort: {'UserDeck.last_played': -1}});
 	} else if (routeSession.get('toggle') === 'played') {
 		query['UserDeck.user'] = userId;
-		return collection.find(query, {sort: {last_played: -1}});
+		if (filter)
+			query['Decks.search.keywords'] = filter;
+		return collection.find(query, {sort: {'UserDeck.last_played': -1}});
 	} else if (routeSession.get('toggle') === 'created') {
 		query['creator'] = userId;
 		query['status'] = 'published';
+		if (filter)
+			query['search.keywords'] = filter;
 		return collection.find(query, {sort: {updated: -1}});
 	} else if (routeSession.get('toggle') === 'draft') {
 		query['creator'] = userId;
 		query['status'] = 'draft';
+		if (filter)
+			query['search.keywords'] = filter;
 		return collection.find(query, {sort: {updated: -1}});
 	}
 }
