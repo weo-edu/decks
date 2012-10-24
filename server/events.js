@@ -19,69 +19,76 @@ Observer.on('complete:deck', function(e) {
 });
 
 Observer.on('complete:card', function(e) {
-    //console.log('completed:card', e);
-    Fiber(function() {
-        var match = {_id: e.object._id};
-        var card = Cards.findOne(e.object._id);
-        var time = e.action.time || 0;
-        var correct = ~e.action.adverbs.indexOf('correctly') ? 1 : 0;
+  //console.log('completed:card', e);
+  Fiber(function() {
+    var card_id = e.object._id;
+    var match = {_id: card_id};
+    var card = Cards.findOne(card_id);
+    var time = e.action.time || 0;
+    var correct = ~e.action.adverbs.indexOf('correctly') ? 1 : 0;
 
-        //XXX time_squared is used for variance calc
-        // we may want to use an incremental variance calculation instead
-        if(time <= 0 || ! isFinite(time))
-          throw new Error('Invalid time value, discarding stat');
-        
-        var stats = {
-          attempts: 1,
-          time: time,
-          time_squared: Math.pow(time, 2),
-          correct: correct,
-          correct_time: correct ? time : 0,
-          correct_time_squared: correct ? Math.pow(time, 2) : 0,
-          inverse_correct_time: correct ? 1 / time : 0
-        };
+    //XXX time_squared is used for variance calc
+    // we may want to use an incremental variance calculation instead
+    if(time <= 0 || ! isFinite(time))
+      throw new Error('Invalid time value, discarding stat');
+    
+    var stats = {
+      attempts: 1,
+      time: time,
+      time_squared: Math.pow(time, 2),
+      correct: correct,
+      correct_time: correct ? time : 0,
+      correct_time_squared: correct ? Math.pow(time, 2) : 0,
+      inverse_correct_time: correct ? 1 / time : 0
+    };
 
-        console.log('stats', stats);
+    console.log('stats', stats);
 
-        // card stats update
-        Stats.updateCardStats(match, stats, e.user.grade);
+    // card stats update
+    Stats.updateCardStats(match, stats, e.user.grade);
 
-        // user-card stat update
-        var update = {$inc: {}};
-        _.each(stats,function(stat, name) {
-          update.$inc[name] = stat;
-        });
-        update.$set = {last_played: +new Date()}
-        UserCard.update(
-          {uid: e.user._id, cid: e.object._id},
-          update,
-          {multi: 0, upsert: 1}
-        );
+    // user-card stat update
+    var update = {$inc: {}};
+    _.each(stats,function(stat, name) {
+      update.$inc[name] = stat;
+    });
+    update.$set = {last_played: +new Date()}
+    UserCard.update(
+      {uid: e.user._id, cid: e.object._id},
+      update,
+      {multi: 0, upsert: 1}
+    );
 
-        //grade stats update
-        var update = {$inc: {}};
-        _.each(stats,function(stat, name) {
-          update.$inc[card.grade + '.' + name] = stat;
-        });
-        Info.update(
-          {name: 'gradeStats'},
-          update,
-          {multi: 0, upsert: 1}
-        );
-        
-        if(stats.correct) {
-          if (!card.stats)
-            card = Cards.findOne(e.object._id);
+    //grade stats update
+    var update = {$inc: {}};
+    _.each(stats,function(stat, name) {
+      update.$inc[card.grade + '.' + name] = stat;
+    });
+    Info.update(
+      {name: 'gradeStats'},
+      update,
+      {multi: 0, upsert: 1}
+    );
+    
+    if(stats.correct) {
+      if (!card.stats)
+        card = Cards.findOne(e.object._id);
 
-          if(!card.stats.grade) {
-            Stats.regrade(card);
-            card = Cards.findOne(e.object._id);
-          }
+      if(!card.stats.grade) {
+        Stats.regrade(card);
+        card = Cards.findOne(e.object._id);
+      }
 
-          var pts = Stats.points(card.stats.grade || card.grade);
-          Stats.augmentPoints(e.user._id, pts);
-        }
-    }).run();
+      var pts = Stats.points(card.stats.grade || card.grade);
+      Stats.augmentPoints(e.user._id, pts);
+    }
+
+    // update card plays
+    var alpha = .05;
+    var time_since_last_play = card.last_played ? +new Date() - card.last_played : 0;
+    var moving_play_rate_inc = (alpha * time_since_last_play) - alpha * (card.moving_play_rate || 0);
+    Cards.update(card_id, {$inc: {plays: 1, moving_play_rate: moving_play_rate_inc}, $set: {last_played: +new Date()}});
+  }).run();
 });
 
 /**
@@ -135,8 +142,16 @@ Observer.on('complete:game', function(e) {
     update.$inc = inc;
 
     var userDeck = UserDeck.findOne({user: e.user._id, deck: match.deck});
-    if (!userDeck.high_score || score > userDeck.high_score)
+    if (!userDeck || !userDeck.high_score || score > userDeck.high_score)
       update.$set.high_score = score;
     UserDeck.update({user: e.user._id, deck: match.deck}, update, {multi: 0, upsert: true});
+
+    // update deck plays
+    var deck_id = match.deck;
+    var deck = Decks.findOne(deck_id);
+    var alpha = .05;
+    var time_since_last_play = deck.last_played ? +new Date() - deck.last_played : 0;
+    var moving_play_rate_inc = (alpha * time_since_last_play) - alpha * (deck.moving_play_rate || 0);
+    Decks.update(deck_id, {$inc: {plays: 1, moving_play_rate: moving_play_rate_inc}, $set: {last_played: +new Date()}});
   }).run();
 });

@@ -41,7 +41,7 @@
 			<h2 class='tome-title'>{{{hasProperty "title"}}}</h2>
 		</div>
 		<div id='image' class='big-tome'>
-			{{> big_tome tome}}
+			<div class='tome-image' style='background-image: url({{tome.image}});'></div>
 			<input tabindex='-1' onfocus='$(this).click()' id="image-upload" type="file" multiple/>
 		</div>
 		<div id='spg' class='input'>
@@ -67,21 +67,26 @@
 				<input class='create-filter' type='text' placeholder='Filter' />
 			</div>
 			<div class='shelf connect'></div>
-			{{#each scrolls}}
-				{{#if scrollsNotInTome}}
-					<div class='scroll-info-view'>
-						<div class='inner-scroll-info image'>{{> small_scroll}}</div>
-						<div class='inner-scroll-info'> 
-							<h4>{{title}}</h4>							
-							<p>{{description}}</p>
-						</div>
-						<div class='inner-scroll-info tags'>
-							<span>{{tags}}</span><span class='label'>+</span><span>{{points}}</span>
-							<span class='created-by'>Created by: {{creatorName}}</span>
-					</div>
-				{{/if}}
-			{{/each}}
+			{{> scroll_select_results}}
 		</div>
+</template>
+
+<template name="scroll_select_results">
+	{{#each scrolls}}
+		{{#if scrollsNotInTome}}
+			<div class='scroll-info-view'>
+				<div class='inner-scroll-info image'>{{> small_scroll}}</div>
+				<div class='inner-scroll-info'> 
+					<h4>{{title}}</h4>							
+					<p>{{description}}</p>
+				</div>
+				<div class='inner-scroll-info tags'>
+					<span>{{tags}}</span><span class='label'>+</span><span>{{points}}</span>
+					<span>plays: {{plays}}</span>
+					<span class='created-by'>Created by: {{creatorName}}</span>
+			</div>
+		{{/if}}
+	{{/each}}
 </template>
 
 <template name='small_scroll'>
@@ -104,6 +109,7 @@
 					</div>
 					<div class='inner-scroll-info tags'>
 						<span>{{tags}}</span><span class='label'>+</span><span>{{points}}</span>
+						<span>plays: {{plays}}</span>
 						<span class='created-by'>Created by: {{creatorName}}</span>
 					</div>
 			{{/each}}

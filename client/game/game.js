@@ -76,14 +76,6 @@
       if (self.me().synthetic || !changed)
         return;
       self.complete();
-
-      // update deck plays
-      var deck_id = self.get('deck');
-      var deck = self.deck();
-      var alpha = .05;
-      var time_since_last_play = deck.last_played ? +new Date() - deck.last_played : 0;
-      var moving_play_rate_inc = (alpha * time_since_last_play) - alpha * (deck.moving_play_rate || 0);
-      Decks.update(deck_id, {$inc: {plays: 1, moving_play_rate: moving_play_rate_inc}, $set: {last_played: +new Date()}});
     });
 
     self.on('quit', function(changed) {
