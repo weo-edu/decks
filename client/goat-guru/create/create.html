@@ -209,17 +209,26 @@
 
 <template name='scroll_preview'>
 	<div id='my-tracker' class='tracker'>
-		{{> problem_tracker}}
+		{{> problem_tracker_empty}}
 	</div>
 	<div id='problem-container'>
 		<div id='problem'>
 			{{#markdown}}{{{html}}}{{/markdown}}
+			<div id='solution' style="font-size 14px; color: blue">
+				{{solution}}
+			</div>
 		</div>
 	</div>
-	{{> problem_tracker}}
+	{{> problem_tracker_empty}}
 	<div class='tracker'>
-		{{> problem_tracker}}
+		{{> problem_tracker_empty}}
 	</div>
+</template>
+
+<template name='problem_tracker_empty'>
+	<h4></h4>
+ <div class='problem-tracker'></div>
+ </div>
 </template>
 
 <template name='scroll_create_info'>

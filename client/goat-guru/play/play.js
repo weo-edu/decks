@@ -355,14 +355,12 @@
 			game.when('play.', timer);
  		}
 
- 		Template.problem_container.rendered = function() {
+ 		Template.problem_container.rendered = utils.attach(function() {
  			if (this.firstRender) {
  				if (!this.timer_el)
  					this.timer_el = this.find('.timer');
  			}
-
- 			alignProblem();
- 		}
+ 		}, alignProblem);
 
  		Template.problem_container.helpers({
  			html: function() {
@@ -490,7 +488,7 @@
  		function answerCurrent() {
 			var p = game.currentProblem();
 			if(! p) return;
-			
+
 			var	outcome = game.answer(curZebra.answer());
 				card = _.clone(Cards.findOne(p.card_id));
 			
@@ -631,9 +629,7 @@
 			}
 		});
 
- 		Template.solution_dialog.rendered = function() {
- 			alignProblem();
- 		}
+ 		Template.solution_dialog.rendered = alignProblem;
 
 		Template.solution_dialog.helpers({
 			scroll: function() {

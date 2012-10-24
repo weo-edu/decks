@@ -40,17 +40,13 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
 	});
 
 	Template.form_dialog.form = function() {
-		console.log('form dialog helper');
-		var dialog = ui.get('.dialog');
-		var form = dialog.get('form');
-		console.log(form);
+		var form = ui.get('.dialog').get('form');
 		return Template[form]({});
 	}
 
 	//XXX find somewhere else for this to go (maybe Decks)
 	function keywordsForDeck(deckId) {
 		var deck = Decks.findOne(deckId);
-		console.log('deck', deck);
 		var keywords = nlp.keywords(
 			(deck.tags || '') + 
 			' ' + 
@@ -97,7 +93,6 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
 		'click .input': function(e) {
 			var name = $(e.currentTarget).attr('id');
 			var dialog = ui.get('.dialog');
-			console.log(name + '_form');
 			dialog.set('form', name + '_form');
 			dialog.modal()
 				.relative('#' + name, {top: 0, left: 0})
@@ -154,10 +149,9 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
 		},
 		scrollsNotInTome: function() {
 			var deck = Decks.findOne(deck_id);
-			if (!deck.cards)
-				return true;
-			else
-				return deck.cards.indexOf(this._id) === -1 && this.status === 'published';
+			return deck.cards ?
+				deck.cards.indexOf(this._id) === -1 && this.status === 'published'
+				: true;
 		},
 		points: function() {
 			return Math.round(Stats.points(Stats.regrade(this._id)));
@@ -165,10 +159,7 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
 	});
 
 	Template.create.destroyed = function() {
-		var thisDeck = Decks.findOne(deck_id);
-		console.log(isEmptyDeck(deck_id));
-		if(isEmptyDeck(deck_id))
-			Decks.remove(ctx.params.id) && console.log('removed?');
+		isEmptyDeck(deck_id) && Decks.remove(ctx.params.id);
 	}
 
 	dojo.render('create');
@@ -314,22 +305,30 @@ route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx
 		}
 	});
 
-	Template.scroll_preview.html = function() {
-		var card = Cards.findOne(card_id);
-		var p = problemize(card);
-		var z = new Zebra(p.zebra);
-		return z.render(p.assignment);
+	function alignProblem() {
+		Meteor.defer(function() {
+			var p = $('#problem');
+			p.css({'margin-top': -p.height()/2});
+		});
 	}
+
+	Template.scroll_preview.helpers({
+		html: utils.attachDefer(function(ctx) {
+			ctx.template.p = problemize(Cards.findOne(card_id));
+			ctx.template.z = new Zebra(ctx.template.p.zebra);
+			return ctx.template.z.render(ctx.template.p.assignment);
+		}, alignProblem),
+		solution: function(ctx) {
+			return ctx.template.p.solution;
+		}
+	});
 	
 	/**
 	 * Info Form
 	 */
 
 	Template.form_dialog.form = function() {
-		console.log('form dialog helper');
-		var dialog = ui.get('.dialog');
-		var form = dialog.get('form');
-		console.log(form);
+		var form = ui.get('.dialog').get('form');
 		return Template[form]({});
 	}
 
@@ -379,7 +378,6 @@ route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx
 		'click .input': function(e) {
 			var name = $(e.currentTarget).attr('id');
 			var dialog = ui.get('.dialog');
-			console.log(name + '_form');
 			dialog.set('form', name + '_form');
 			dialog.modal()
 				.relative('#' + name, {top: 0, left: 0})
@@ -431,7 +429,6 @@ route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx
 	});
 
 	dojo.render('create_scroll');
-
 });
 
 
