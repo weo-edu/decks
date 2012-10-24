@@ -38,6 +38,9 @@
 		<li id='tome' class='{{isInfo}}'>Info</li>
 		<li id='stats' class='{{isStats}}'>My Stats</li>
 		<li id='discussion' class='{{isDiscussion}}'>Discussion</li>
+		{{#if editable}}
+			<li id='create/tome'>Edit</li>
+		{{/if}}
 	</ul>
 	<div class='shelf connect'></div>
 </template>

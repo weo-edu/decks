@@ -59,6 +59,10 @@ function tomeViewSetup(ctx, next) {
 		}, 
 		isDiscussion: function(ctx) {
 			return ctx.template.curPage === 'tome_discussion' ? 'active' : '';
+		}, 
+		editable: function() {
+			console.log(this);
+			return this.Decks && this.Decks.creator === Meteor.user()._id;
 		}
 	})
 
@@ -120,7 +124,7 @@ function tomeViewSetup(ctx, next) {
 			return Meteor.users.findOne(this.opponent).username;
 		},
 		pastGames: function() {
-			return _.clone(this.UserDeck.history || []).reverse();
+			return _.clone((this.UserDeck && this.UserDeck.history) || []).reverse();
 		},
 		player: function() {
 			return username ? username + "'s Stats" : Meteor.user().username + "'s Stats";
@@ -187,7 +191,7 @@ route('/tome/:username/:id',
 		},
 		isPublished: function() {
 			var tome = Decks.findOne(tomeId)
-			return tome.status === 'published';
+			return tome && tome.status === 'published';
 		}
 	});
 

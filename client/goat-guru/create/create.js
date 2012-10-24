@@ -157,7 +157,7 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
 
 	Template.scroll_select_results.helpers({
 		scrolls: function() {
-			return Cards.find({status: 'published', 'search.keywords': routeSession.get('filter') }, {sort: {title: 1}});
+			return Cards.find({status: 'published', 'search.keywords': routeSession.get('filter') }, {sort: {plays: -1}});
 		},
 		scrollsNotInTome: function() {
 			var deck = Decks.findOne(deck_id);

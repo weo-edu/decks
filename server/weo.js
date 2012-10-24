@@ -65,7 +65,7 @@ Meteor.startup(function() {
   });
 
   Meteor.publish('cardSearch', function(filter) {
-    return Cards.find({'search.keywords': filter});
+    return Cards.find({'search.keywords': filter}, {sort: {plays: -1}});
   });
 
   Observer.start();
