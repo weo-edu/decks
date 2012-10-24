@@ -223,7 +223,10 @@ route('/inventory', function() {
 
 	Template.tome_detailed.events({
 		'click': function() {
-			route('/create/tome/' + this._id);
+			if (routeSession.equals('toggle', 'draft'))
+				route('/create/tome/' + this._id);
+			else
+				route('/tome/' + this._id);
 		}
 	});
 

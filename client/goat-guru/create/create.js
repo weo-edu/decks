@@ -6,6 +6,8 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
 	var deck_id = ctx.params.id;
 	var deck = Decks.findOne(ctx.params.id);
 
+	Meteor.subscribe('cards', deck.cards);
+
 	routeSession.set('active', 'info');
 
 	Template.create.helpers({
@@ -145,12 +147,17 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
 	Template.scroll_select.events({
 		'click .scroll-info-view': function() {
 			Decks.update(deck_id, { $push: { cards: this._id } });
+		},
+		'keyup .create-filter': function(evt) {
+			var search = $(evt.target).val();
+			routeSession.set('filter', search);
+			Meteor.get('cardSearch', search);
 		}
 	});
 
-	Template.scroll_select.helpers({
+	Template.scroll_select_results.helpers({
 		scrolls: function() {
-			return Cards.find({status: 'published'}, {sort: {title: 1}});
+			return Cards.find({status: 'published', 'search.keywords': routeSession.get('filter') }, {sort: {title: 1}});
 		},
 		scrollsNotInTome: function() {
 			var deck = Decks.findOne(deck_id);
