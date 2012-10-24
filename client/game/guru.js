@@ -68,12 +68,10 @@
 
 
 		self.mygame.on('results', function(changed) {
-			console.log('guru results');
 			self.stop();
 			if (!changed)
 				return
 			var winner = self.mygame.winner();
-			console.log('winner', winner);
       if (winner && winner._id !== Guru.goat()._id)
         self.beat();
 		});
@@ -184,7 +182,6 @@
 
 
 	Guru.prototype.beat = function() {
-		console.log('beat');
 		var self = this;
 		var mastery = self.mastery(),
 			modify = {$inc: { 'mastery.wins' : 1 } };
@@ -200,8 +197,6 @@
 			{ user: self.mygame.opponent()._id, deck: self.mygame.deck()._id },
 			modify
 		);
-
-		console.log(UserDeck.findOne({user: self.mygame.opponent()._id, deck: self.mygame.deck()._id}));		
 	}
 
 	Guru.prototype.mastery = function() {

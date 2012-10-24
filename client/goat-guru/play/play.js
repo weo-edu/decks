@@ -1,7 +1,4 @@
 ;(function(){
-
-	//Meteor.deps.Context.logInvalidateStack = true;
-
   route('/game/:id',
   	route.requireSubscriptionById('game'),
   	route.requireSubscription('userDecks', 
@@ -52,9 +49,7 @@
 
 				self.hideDialog = function() {
 					var dialog = ui.get('.dialog');
-					if (dialog && dialog.isVisible())
-						dialog.hide();
-
+					dialog && dialog.isVisible() && dialog.hide();
 				}
 
 				var dialogHandle = ui.autorun(function() {
@@ -66,12 +61,7 @@
 	  					self.hideDialog();
 	  				}
   				});
-
 				});
-
-				/*game.on('quit', function() {
-					showDialogWrap('quit_overlay');
-				});*/
 
 				game.start();
 
@@ -83,16 +73,15 @@
 				});
 			}
 
+
   		/*
   			Game template helpers and events
   		*/
  			
-
   		Template.game.helpers({
   			renderGame: function() {
   				return Template[game.renderState()]();
   			}
-
   		});
 
   		Template.game_nav.helpers({
@@ -119,9 +108,6 @@
   			}
   		});
 
-
-  		//XXX if you could access a parent template vars this would be unnecessary
-  		var selected_cards = null;
   		/*
   			Cards select template helpers and events
   		*/
@@ -134,16 +120,11 @@
 				game.initSelection();
 
 				self.timer_el = null;
-				function startTimer() {
-					ui.timer(game.timeToSelect(), function(time) {
-						if (self.timer_el)
-							self.timer_el.innerHTML = Math.floor(time / 1000);
-					});
-				}
-				if (game.mainState() === 'select')
-					startTimer();
-				else
-					game.on('select', startTimer);
+				var timer = makeTimer(
+					function() { return game.timeToSelect(); },
+					function() { return self.timer_el; }
+				);
+				game.when('select', timer, true);
 			};
 
 			Template.select_view.destroyed = function() {
@@ -151,9 +132,8 @@
 			}
 
 			Template.select_view.rendered = function() {
-				if (this.firstRender) {
-					if (!this.timer_el) 
-						this.timer_el = this.find('.timer');
+				if (this.firstRender && ! this.timer_el) {
+					this.timer_el = this.find('.timer');
 				}
 			}
 
@@ -204,9 +184,6 @@
 				}
 			});
 
-		var style = '',
-  		innerStyle = '';
-
   	Template.problem_tracker.created = function() {
   		var numCards = game.nCards() * 2;
 
@@ -223,7 +200,6 @@
 	  		rows = 0;
 
 			var totalHeight = getHeight();
-
 			while(totalHeight > trackerHeight) {
 			 	ratio = (trackerWidth / (++cols)) / width;
 				width = Math.floor(ratio * width);
@@ -231,20 +207,19 @@
 				totalHeight = getHeight(width, height, game.nCards() * 2);
 			}
 
-			innerStyle = 'style="margin: 0 auto; height:' + (height - 5) +'px; width:' + (width - 5) +'px;"';
+			this.innerStyle = 'margin: 0 auto; height:' + (height - 5) +'px; width:' + (width - 5) +'px;';
 
 			if(width <= 1) {
 				width = 1;
-				innerStyle = 'style="height: ' + (height - 1) + 'px; width: 1px; margin: 0px"';
+				this.innerStyle = 'height: ' + (height - 1) + 'px; width: 1px; margin: 0px';
 			}
 
 			if(height <= 1) {
 				height = 1;
-				innerStyle = 'style="height: 1px; width: 1px; margin: 0px"';
+				this.innerStyle = 'height: 1px; width: 1px; margin: 0px';
 			}
 
-			style = 'style="height:' + height +'px; width:' + width +'px;"';
-
+			this.style = 'height:' + height +'px; width:' + width +'px;';
 			function getHeight() { 
 				cols = Math.floor(trackerWidth / width);
 				rows = Math.ceil((game.nCards() * 2) / cols);
@@ -256,23 +231,21 @@
 			select: function() {
 				return game.mainState() === 'select';
 			},
-			selected: function() {
-				// XXX Too slow with large numbers of cards
-				var str = '';
-				//var numSelected = game.player(_.without(game.get('users'),this._id)).numSelected;
-				var numSelected = game.player(this._id).numSelected;
-				var selected = ''
-				for(var i = 0; i < game.nCards() ; i++) {
-					selected = i < numSelected ? 'selected' : '';
-					str += '<div class="little-scroll ' + selected + '" ' + style + '><div class="little-scroll-inner" '+ innerStyle +'></div></div>';
-				}
-
-				return  str;
+			cards: function() {
+				return _.range(game.nCards());
+			},
+			style: function(ctx) {
+				return ctx.template.style;
+			},
+			innerStyle: function(ctx) {
+				return ctx.template.innerStyle;
+			},
+			isSelected: function() {
+				return this < game.player(this._id).numSelected ? 'selected' : '';
 			},
 			tracker: function() {
 				var cur = game.currentProblem(this._id);
-				var problems = game.problems(this._id);
-				var arr = _.map(problems,function(p) {
+				var arr = _.map(game.problems(this._id), function(p) {
 					var c = '';
 					if(p.answer !== undefined) {
 						if(game.isCorrect(p))
@@ -287,12 +260,6 @@
 				});
 
 				return arr;
-			},
-			innerStyle: function() {
-				return innerStyle;
-			},
-			style: function() {
-				return style;
 			}
 		});
 
@@ -345,7 +312,7 @@
 	 	};
 
 	 	Template.play_view.rendered = function() {
-	 		$('#answer').focus();
+	 		focusAnswer();
 	 	};
 
  		Template.play_view.helpers({
@@ -360,30 +327,32 @@
  				var message = dialog.get('message');
  				return Template[message] && Template[message]();
  			}
- 		})
+ 		});
 
- 		var problemRendered = null;
+ 		function alignProblem() {
+ 			var p = $('#problem');
+ 			p.css({'margin-top': -p.height()/2});
+ 		}
+
+ 		function makeTimer(tFn, elFn) {
+ 			return (function() {
+ 				ui.timer(tFn(), function(time) {
+ 					var el = elFn();
+ 					if(el)
+	 					el.innerHTML = Math.floor(time/1000);
+ 				});
+ 			});
+ 		}
+
  		Template.problem_container.created = function() {
  			var self = this;
-
  			self.timer_el = null;
-			function startTimer() {
-				ui.timer(game.timeToPlay(), function(time) {
-					if (self.timer_el)
-						self.timer_el.innerHTML = Math.floor(time / 1000);
-				});
-			}
 
-			if (game.state() === 'play.')
-				startTimer();
-			else
-				game.on('play.', startTimer);
-
-			this.alignProblem = function() {
- 				$('#problem').css({
- 					'margin-top': -(($('#problem').height() / 2))
- 				});
- 			}
+			var timer = makeTimer(
+				function() { return game.timeToPlay(); }, 
+				function() { return self.timer_el; }
+			);
+			game.when('play.', timer);
  		}
 
  		Template.problem_container.rendered = function() {
@@ -392,19 +361,14 @@
  					this.timer_el = this.find('.timer');
  			}
 
- 			this.alignProblem();
+ 			alignProblem();
  		}
 
  		Template.problem_container.helpers({
  			html: function() {
- 				//var ctx = Meteor.deps.Context.current;
- 				//Meteor.deps.Context.current = null;
  				var p = game.currentProblem();
- 				//Meteor.deps.Context.current = ctx;
-
  				if(p) {
 	 				curZebra = new Zebra(p.zebra);
-
  					return curZebra.render(p.assignment);
  				}
  			}
@@ -423,19 +387,17 @@
  		Template.game_multiplier.created = function() {
  			var self = this;
  			game.on('next', function() {
- 				if (!self.interval)
- 					self.speedUpdate();
+ 				self.interval || self.speedUpdate();
  			});
-
  		}
 
  		Template.game_multiplier.rendered = function() {
- 			if (this.firstRender) {
- 				var self = this;
+ 			var self = this;
+ 			if (self.firstRender) {
 	 			//XXX shouldnt use spark for rendering of this
 	 			var el = $("#speed-bar .inner-speed-bar");
 	 			var totWidth = parseInt($('#speed-bar').width(), 10);
-	 			self.speedUpdate = function() {
+	 			(self.speedUpdate = function() {
 	 				var mult = game.getMultiplier();
 	 				
 	 				if( mult > .5)
@@ -443,23 +405,17 @@
 	 				if( (mult + .25) >= 1 ) 
 	 					mult = .75;
 
-	 				console.log('adjusted Mult', mult);
-
 	 				var width = (mult + .25) * totWidth;
-	 				
-	 				el.width(width + 'px');
-		 			el
+	 				el.width(width + 'px')
 		 				.stop(true,false)
 		 				.animate({width: "0px"}, game.timeForBonus() * 1000, 'linear');	
-		 		}
-	 			self.speedUpdate();
+		 		})();
  			}
  		}
 
  		Template.game_multiplier.helpers({
 	 		multiplier: function() {
-	 			var mult = game.getMultiplier(); 
-	 			console.log(mult);
+	 			var mult = game.getMultiplier();
 	 			if(mult >= 1)
 	 				return 'third-mult';
 	 			else if (mult >= .5)
@@ -481,89 +437,100 @@
       }
    	}); 
 
+
+ 		function showCorrectAnswer(p) {
+ 			$('#bonus').attr('style', ' ').html(' ' + p.solution).attr('class', 'error')
+				.stop(true, false)
+				.animate({
+					'margin'		: 0,
+					'opacity'		: 1, 
+					'font-size'	: '80px'
+				}, 0, 'easeOutSine')
+				.delay(1000)
+				.animate({
+					'margin'		: 0,
+					'font-size'	: '100px'
+				}, 50, 'easeOutSine')
+				.animate({
+					'opacity'		: 0,
+					'font-size'	: 0
+				}, 80, 'easeInSine');
+ 		}
+
+ 		function showPointIncrease() {
+ 			var self = this;
+ 			var curPoints = parseInt(pointsEl.innerHTML, 10),
+ 				endPoints = Math.round(game.points(game.me()._id));
+ 				inc = 1, dur = 19,
+ 				delta = endPoints - curPoints;
+
+			while(dur < 20) {
+				inc++;
+				dur = 500 / (delta / inc);
+			}
+
+			var stop = (function stop() {
+	 			self.pointsInterval && clearInterval(self.pointsInterval);
+	 			self.pointsInterval = null;
+	 			return stop;
+	 		})();
+
+	 		self.pointsInterval = setInterval(function() {
+ 				if(curPoints < endPoints) {
+					curPoints += inc;
+					pointsEl.innerHTML = curPoints;
+					// XXX Switch to jQuery for setTimeout
+				} else {
+					routeSession.set('myPoints', endPoints);
+					stop();
+				}
+	 		}, dur);
+ 		}
+
+ 		function answerCurrent() {
+			var p = game.currentProblem();
+			if(! p) return;
+			
+			var	outcome = game.answer(curZebra.answer());
+				card = _.clone(Cards.findOne(p.card_id));
+			
+			card.type = 'card';
+			event({ name: 'complete', time: p.time },
+				card,
+				{
+					adverbs: outcome ? 'correctly' : 'incorrectly',
+					groupId: game.id
+				}
+			);
+
+			game.nextProblem();
+
+			outcome ? 
+				showPointIncrease.call(this) 
+				: showCorrectAnswer.call(this, p);
+
+			Meteor.defer(focusAnswer);
+ 		}
+
+ 		function focusAnswer() {
+ 			$('#answer').focus();
+ 		}
+
  		Template.play_view.events({
-				'click': function(e, template) {
-					$('#answer').focus();
-				},
-				'click .quit-button': function() {
-					game.quit();
-					route('/goat');
-				},
-				'click #continue-button': function(e, template) {
-				//	game.answer();
-				//},
-				//'keypress body': function(e, template) {
-					//console.log('keypress');
-					//if(e.which === 13 && game.state() !== 'play.waiting') {
-					var problem = game.currentProblem();
-					var res = game.answer(curZebra.answer());
-
-					var card = _.clone(Cards.findOne(problem.card_id));
-					card.type = 'card';
-
-					event({name: 'complete', time: problem.time},
-						card,
-						{
-							adverbs: res ? 'correctly' : 'incorrectly',
-							groupId: game.id
-						});
-
-						game.nextProblem();
-
- 					var inc = 1;
-			 		var pointsTimeout = null;
-			 		var curPoints = parseInt(pointsEl.innerHTML, 10);
-			 		var endPoints = Math.round(game.points(game.me()._id));
-			 		var delta = endPoints - curPoints;
-
-			 		if (res) {
-			 			var dur = 19;
-	 					while(dur < 20) {
-	 					 inc++;
-	 					 dur = 500 / (delta / inc);
-	 					}
-
-	 					function stop() {
-				 			template.pointsInterval && clearInterval(template.pointsInterval);
-				 			template.pointsInterval = null;
-				 		}
-
-				 		stop();
-
-				 		template.pointsInterval = setInterval(function() {
-			 				if(curPoints < endPoints) {
-								curPoints += inc;
-								pointsEl.innerHTML = curPoints;
-								// XXX Switch to jQuery for setTimeout
-							} else {
-								routeSession.set('myPoints', endPoints);
-								stop();
-							}
-				 		}, dur);
-				 		
-			 		} else {
-			 			$('#bonus').attr('style', ' ').html(' ' + problem.solution).attr('class', 'error')
-							.stop(true, false)
-							.animate({
-								'margin'		: 0,
-								'opacity'		: 1, 
-								'font-size'	: '80px'
-							}, 0, 'easeOutSine')
-							.delay(1000)
-							.animate({
-								'margin'		: 0,
-								'font-size'	: '100px'
-							}, 50, 'easeOutSine')
-							.animate({
-								'opacity'		: 0,
-								'font-size'	: 0
-							}, 80, 'easeInSine');
-					}
-
-					Meteor.defer(function(){ 
-						$('#answer').focus(); 
-					});
-				//}
+			'click': function(e, template) {
+				focusAnswer();
+			},
+			'click .quit-button': function() {
+				game.quit();
+				route('/goat');
+			},
+			'click #continue-button': function(e, template) {
+				answerCurrent.call(template);
+			},
+			'keypress input': function(e, template) {
+				if(e.which === 13 && game.state() !== 'play.waiting') {
+					answerCurrent.call(template);
+				}
 			}
 		});
 
@@ -580,17 +547,11 @@
 		Template.play_waiting.created = function() {
 			var self = this;
 			self.timer_el = null;
-			function startTimer() {
-				ui.timer(game.timeToPlay(), function(time) {
-					if (self.timer_el)
-						self.timer_el.innerHTML = Math.floor(time / 1000);
-				});
-			}
-
-			if (game.state() === 'play.waiting')
-				startTimer();
-			else
-				game.on('play.waiting', startTimer);
+			var timer = makeTimer(
+				function() { return game.timeToPlay(); },
+				function() { return self.timer_el; }
+			);
+			game.when('play.waiting', timer);
 		}
 
 		Template.play_waiting.rendered = function() {
@@ -647,55 +608,6 @@
  			}
  		});
 
- 	// 	Template.end_game.helpers({
- 	// 		results: function(ctx) {
- 	// 			return ctx.template.results;
- 	// 		},
- 	// 		opponent: function() {
- 	// 			console.log('game',game.me());
- 	// 			return game.opponent();
- 	// 		},
- 	// 		winner: function(ctx) {
- 	// 			var winner = game.winner();
- 	// 			return winner && winner.username || 'TIE';
- 	// 		},
-		// 	show_cards: function() {
-		// 		return routeSession.get('show_cards');
-		// 	},
- 	// 		message: function() {
- 	// 			var dialog = ui.get('.dialog');
- 	// 			var message = dialog.get('message');
- 	// 			return Template[message] && Template[message]();
- 	// 		}
-		// });
-
-		// Template.end_game.events({
-		// 		'click #results-nav .rematch': function() {
-		// 			var deckId = game.deck()._id;
-		// 			var uid = game.opponent().synthetic ? game.me()._id : game.opponent()._id;
-
-		// 			Game.route(deckId, uid);
-		// 		},
-		// 		'click #results-nav .back': function() {
-		// 			route('/');
-		// 		},
-		// 		'click #view-cards-nav .results': function(evt, template) {
-		// 			$('#slider').removeClass('show-cards', 400, 'easeInOutExpo', function(){
-		// 					routeSession.set('show_cards', '');
-		// 			});
-		// 		},
-		// 		'click #results-nav .view-cards': function(evt, template) {
-		// 			$('#slider').addClass('show-cards', 400, 'easeInOutExpo', function(){
-		// 					routeSession.set('show_cards', 'show-cards');
-		// 			});
-		// 		} 
-		// });
-
-		// Template.individual_results.helpers({
- 	// 		round: function(points) {
- 	// 			return Math.round(points);
- 	// 		}
- 	// 	});
 
 		Template.error_scroll.helpers({
 			scrolls: function() {
@@ -713,41 +625,21 @@
 		});
 
 		Template.error_scroll.events({
-			'click .error-scroll': function(evt){
+			'click .error-scroll': function(e){
 				routeSession.set('review-scroll', this);
 				ui.get('.dialog').closable().overlay().center().show();
 			}
 		});
 
-		// Template.view_cards.events({
-		// 	'click .card': function(evt, template) {
-		// 		var self = this;
-		// 		$('#slider').addClass('review', 400, 'easeInOutExpo', function(){
-		// 				routeSession.set('review_card', self);
-		// 				routeSession.set('show_cards', 'review');
-		// 		});
-		// 	}
-		// });
-
-		Template.solution_dialog.created = function() {
- 			this.alignProblem = function() {
- 				$('#problem').css({
- 					'margin-top': -(($('#problem').height() / 2))
- 				});
- 			}
- 		}
-
  		Template.solution_dialog.rendered = function() {
- 			this.alignProblem();
+ 			alignProblem();
  		}
 
 		Template.solution_dialog.helpers({
 			scroll: function() {
-				var scroll = routeSession.get('review-scroll');
-				return scroll;
+				return routeSession.get('review-scroll');
 			}
-		})
-
+		});
 
 		Template.select_dialog.helpers({
 			init: function() {

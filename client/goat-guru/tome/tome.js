@@ -14,7 +14,6 @@ tome.render = function(name) {
 
 Template.tome_info.helpers({
 	CPG: function() {
-		console.log('cards', this);
 		return this.Decks && this.Decks.cardsPerGame && this.Decks.cardsPerGame * 2 || '';
 	}
 })
@@ -43,7 +42,6 @@ function tomeViewSetup(ctx, next) {
 				deck: tomeId, 
 				user: friendId || Meteor.user()._id
 			});
-			console.log('tome', curTome);
 			return curTome;	
 		}
 	});
@@ -188,7 +186,6 @@ route('/tome/:username/:id',
 			return Meteor.users.findOne({username: ctx.params.username}).connected;
 		},
 		isPublished: function() {
-			console.log('tome id', tomeId);
 			var tome = Decks.findOne(tomeId)
 			return tome.status === 'published';
 		}

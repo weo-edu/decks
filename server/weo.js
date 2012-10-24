@@ -235,7 +235,6 @@ Meteor.startup(function() {
     if(_.isArray(uid)) 
         uid = _.without(uid, 1);
 
-    console.log('userDecks', uid, did);
     if(did) 
         return UserDeck.findUserDeck(uid, did);
     else

@@ -36,11 +36,15 @@
 	<h4>{{username}}</h4>
  <div class='problem-tracker'>
  	{{#if select}}
- 		{{{selected}}}
+ 		{{#each cards}}
+ 			<div class='little-scroll {{isSelected}}' + style='{{style}}'>
+ 				<div class='little-scroll-inner' style='{{innerStyle}}'></div>
+ 			</div>
+ 		{{/each}}
  	{{else}}
  		{{#each tracker}}
- 			<div class='little-scroll {{this}}' {{{style}}}>
- 				<div class='little-scroll-inner' {{{innerStyle}}} ></div>
+ 			<div class='little-scroll {{this}}' style='{{style}}'>
+ 				<div class='little-scroll-inner' style='{{innerStyle}}' ></div>
  			</div>
  		{{/each}}
 	{{/if}}

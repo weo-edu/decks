@@ -28,6 +28,9 @@ Observer.on('complete:card', function(e) {
 
         //XXX time_squared is used for variance calc
         // we may want to use an incremental variance calculation instead
+        if(time <= 0 || ! isFinite(time))
+          throw new Error('Invalid time value, discarding stat');
+        
         var stats = {
           attempts: 1,
           time: time,

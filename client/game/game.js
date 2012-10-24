@@ -1002,6 +1002,12 @@
     return self.get(self.me_id + '.state');
   }
 
+  Game.prototype.when = function(state, fn, main) {
+    (main ? this.mainState() : this.state()) === state
+      ? fn()
+      : this.on(state, fn);
+  }
+
   Game.prototype.opponentState = function() {
     return this.get(this.opponent_id + '.state');
   }

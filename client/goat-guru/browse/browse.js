@@ -17,12 +17,9 @@ route('/goat',function() {
 	});
 
 	dojo.render('goat_browse');
-
 });
 
 var toggle = {};
-
-
 toggle.deckFilter = function(routeSession, collection, userId) {
 	var filter = routeSession.get('filter');
 	var query = {};
