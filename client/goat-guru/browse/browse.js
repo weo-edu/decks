@@ -240,7 +240,7 @@ route('/inventory', function() {
 	Template.scroll_detailed.events({
 		'click': function() {
 			var path = null;
-			if(routeSession.equals('toggle', 'draft'))
+			if(routeSession.equals('toggle', 'draft') || routeSession.equals('toggle', 'created'))
 				path = '/create/scroll/'
 			else
 				path = '/scroll/'
