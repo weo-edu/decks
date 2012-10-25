@@ -798,8 +798,11 @@
       adverb = 'andWon';
     else
       adverb = 'andLost';
+    //XXX app name should be different
     event('complete', game, {
-      adverbs: adverb
+      adverbs: adverb,
+      feed: true,
+      app: 'decks'
     });
     self.emit('complete');
   }
