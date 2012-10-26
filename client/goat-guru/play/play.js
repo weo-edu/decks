@@ -511,7 +511,7 @@
  		}
 
  		function focusAnswer() {
- 			$('#answer').focus();
+ 			$('.answer').focus();
  		}
 
  		Template.play_view.events({
@@ -630,10 +630,16 @@
 		});
 
  		Template.solution_dialog.rendered = alignProblem;
-
 		Template.solution_dialog.helpers({
-			scroll: function() {
-				return routeSession.get('review-scroll');
+			html: function(ctx) { 
+				var s = routeSession.get('review-scroll');
+				curZebra = new Zebra(s.zebra);
+				return curZebra.render(s.assignment);
+			},
+			solution: function(ctx) {
+				var s = routeSession.get('review-scroll');
+				if(! curZebra.showSolution(s.solution))
+					return s.solution;
 			}
 		});
 

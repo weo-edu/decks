@@ -61,7 +61,6 @@ function tomeViewSetup(ctx, next) {
 			return ctx.template.curPage === 'tome_discussion' ? 'active' : '';
 		}, 
 		editable: function() {
-			console.log(this);
 			return this.Decks && this.Decks.creator === Meteor.user()._id;
 		}
 	})
