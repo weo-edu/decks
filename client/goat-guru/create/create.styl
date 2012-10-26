@@ -9,6 +9,56 @@
 	&:before, &:after {
 		top: 0;
 	}
+
+	.dialog {
+		.form-label {
+		  font-weight: bold;
+		  float: left;
+		  margin-right: 15px;
+		}
+
+		.form {
+			float: right;
+			width: 320px;
+		}	
+		input, textarea {
+			width: 300px;
+			padding: 4px 6px;
+			font-size: 13px;
+			height: 18px;
+			color: #999;
+			border: 1px solid #d9d9d9;
+			border-top: 1px solid #c0c0c0;
+		}
+
+		textarea {
+			resize: none;
+			height: 100px;
+		}
+
+		.buttons {
+			font-family: 'Helvetica Neue', Helvetica;
+			> div {
+				font-size: 13px;
+				float: left;
+				margin: 10px 10px 10px 0;
+				text-align: center;
+				padding: 6px 10px;
+				border-radius: 3px;
+				text-transform: capitalize;
+				&.save {
+					button-gradient(blue);
+					border: 1px solid darken(blue, 5);
+					color: #FFF;
+				}
+				&.cancel {
+					button-gradient(#EEE);
+					border: 1px solid darken(#EEE, 6);
+				}
+			}
+
+		}
+	}
 }
 
 .create-header {

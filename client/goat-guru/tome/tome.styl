@@ -79,16 +79,24 @@ scroll(width = 181px, height = 195px) {
 	}
 }
 
+.detailed-container {
+	float: left;
+	width: 360px;
+	height: 200px;
+	> div { 
+		float: left;
+	}
+}
+
 .tome-detailed-container {
 	tome();
 	float: left;
-	width: 460px;
+	// width: 460px;
 }
 
 .scroll-detailed-container {
 	tome();
 	float: left;
-	width: 460px;
 	background: url("/app!decks/img/scroll.png") no-repeat;
 	&:after {
 		background: transparent;
@@ -97,8 +105,13 @@ scroll(width = 181px, height = 195px) {
 
 .item-detailed-info {
 	float: left;
-	margin-left: 160px;
-	margin-top: 10px;
+	margin: 20px 0 0 -15px;
+	width: 185px;
+	font-family: 'Fresca';
+	text-shadow: -1px -1px 1px rgba(white, .2);
+	h4 {
+		font-size: 20px;
+	}
 }
 
 .scroll-container {
@@ -188,6 +201,10 @@ scroll(width = 181px, height = 195px) {
 				padding-top: 20px;
 				text-align: center;
 				color: #666;
+			}
+			.table {
+				display: table;
+				margin: 0 auto;
 			}
 			.tome-nav {
 				text-align: center;

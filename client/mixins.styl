@@ -122,16 +122,17 @@ red-button() {
 }
 
 wood-button() {
-	font: 35px/73px "Nuku Nuku";
-	width: 198px;
-	height: 70px;
-	background: url("/img/wood-button.png");
+	font: 30px/1em "BleakChop";
+	display: inline-block;
+	border-radius: 5px;
+	padding: 0px 20px;
+	background: url("/img/woodRepeat.jpg");
 	text-align: center;
 	color: #9E7850;
 	text-shadow: -1px -1px 0 rgba(black, .5);
 	cursor: pointer;
+	box-shadow: 0 0 10px rgba(black), inset 1px 1px 0px rgba(white, .2), inset -1px -1px 0 rgba(black, .3);
 	&:hover {
-		background-position: 0px 70px;
 		text-shadow: 1px 1px 0 rgba(black, .5);
 	}
 	&:active{

@@ -34,14 +34,16 @@
 
 <template name='tome_nav'>
 	<h2 class='tome-title'>{{Decks.title}}</h2>
-	<ul class='tome-nav'> 
-		<li id='tome' class='{{isInfo}}'>Info</li>
-		<li id='stats' class='{{isStats}}'>My Stats</li>
-		<li id='discussion' class='{{isDiscussion}}'>Discussion</li>
-		{{#if editable}}
-			<li id='create/tome'>Edit</li>
-		{{/if}}
-	</ul>
+	<div class='table'>
+		<ul class='tome-nav'> 
+			<li id='tome' class='{{isInfo}}'>Info</li>
+			<li id='stats' class='{{isStats}}'>My Stats</li>
+			<li id='discussion' class='{{isDiscussion}}'>Discussion</li>
+			{{#if editable}}
+				<li id='create/tome'>Edit</li>
+			{{/if}}
+		</ul>
+	</div>
 	<div class='shelf connect'></div>
 </template>
 

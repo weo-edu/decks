@@ -209,7 +209,12 @@
 	}
 }
 
-.quit-button, .randomize-button, .play-button {
+.quit-button {
+	wood-button();
+	margin: 30px 0 0 65px;
+}
+
+.randomize-button, .play-button {
 	red-button();
 	margin: 0 auto;
 }
@@ -226,6 +231,22 @@
 	margin: 10px -8px 0;
 	float: left;
 	position: relative;
+
+	.draggable {
+		cursor: pointer;
+	}
+
+	#continue-button {
+		position: absolute;
+		red-button();
+		font-size: 33px;
+		bottom: 110px;
+		right: -190px;
+		&:active {
+			bottom: 111px;
+			right: -190px;
+		}
+	}
 }
 
 #problem {
