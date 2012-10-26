@@ -215,10 +215,15 @@ html, body {
 			position: absolute;
 			bottom: 15px;
 			left: 132px;
-			shine-bar();
+			overflow: hidden;
+			box-shadow: 1px 1px 1px rgba(white, .2), -1px -1px 1px rgba(black, .5), inset 0 0 10px rgba(black, .9);
 			.inner-bar {
 				height: 100%;
 				background: #F9B900;
+				shine-bar();
+				box-shadow: 0 0 5px rgba(black, .5);
+				overflow: hidden;
+				position: relative;
 			}
 		}
 

@@ -138,22 +138,26 @@
 </template>
 
 <template name="tome_detailed">
-	<div class='tome-detailed-container'>
-				{{> tome_general}}
-				<div class="item-detailed-info">
-					<h4>{{title}}</h4>
-					<p>{{description}}</p>
-					<p>{{tags}}</p>
-				</div>
-			</div>
-</template>
-
-<template name="scroll_detailed">
-	<div class="scroll-detailed-container">
+	<div class='detailed-container'>
+		<div class='tome-detailed-container'>
+					{{> tome_general}}
+		</div>
 		<div class="item-detailed-info">
 			<h4>{{title}}</h4>
 			<p>{{description}}</p>
 			<p>{{tags}}</p>
+		</div>
+	</div>
+</template>
+
+<template name="scroll_detailed">
+	<div class='detailed-container'>
+		<div class="scroll-detailed-container">
+		</div>
+		<div class="item-detailed-info">
+				<h4>{{title}}</h4>
+				<p>{{description}}</p>
+				<p>{{tags}}</p>
 		</div>
 	</div>
 </template>

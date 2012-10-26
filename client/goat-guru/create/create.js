@@ -16,6 +16,12 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
 		}
 	});
 
+	Template.tome_create_header.helpers({
+		'title': function() {
+			return Decks.findOne(deck_id).title || 'Untitled';
+		}
+	});
+
 	Template.tome_create_header.events({
 		'click .scroll-info-nav.tabs li': function(evt) {
 			routeSession.set('active', $(evt.currentTarget).attr('id'));
@@ -106,9 +112,9 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
 	});
 
 	var res = {
-		title: 'Title',
+		title: 'Untitled',
 		cardsPerGame: 'The number of cards each player must select',
-		tags: 'Examples: Addition, Single Digit, Easy...',
+		tags: 'Example: Addition, Single Digit, Easy...',
 		description: 'Provide a more detailed description of this tome so people know what to expect'
 	}
 
@@ -268,7 +274,7 @@ route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx
 	var res = {
 		title: 'Untitled',
 		grade: 'Estimate the grade level of this scroll',
-		tags: 'Examples: Addition, Single Digit, Easy...',
+		tags: 'Example: Addition, Single Digit, Easy...',
 		description: 'Provide a more detailed description of this scroll so people know what to expect'
 	}
 
@@ -278,6 +284,12 @@ route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx
 			return prop ? prop : '<span style="color: #888">' + res[name] + '</span>';
 		}
 	})
+
+	Template.scroll_create_header.helpers({
+		'title': function() {
+			return Cards.findOne(card_id).title || 'Untitled';
+		}
+	});
 
 	Template.scroll_create_header.events({
 		'click .scroll-info-nav.tabs li': function(evt) {
