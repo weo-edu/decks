@@ -507,11 +507,13 @@
 				showPointIncrease.call(this) 
 				: showCorrectAnswer.call(this, p);
 
-			Meteor.defer(focusAnswer);
+			focusAnswer();
  		}
 
  		function focusAnswer() {
- 			$('.answer').focus();
+ 			Meteor.defer(function() {
+	 			$('.answer').focus();
+	 		});
  		}
 
  		Template.play_view.events({
