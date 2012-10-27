@@ -139,7 +139,7 @@
 		else
 			msg += '<br/>' + points
 		if(self.game.me()._id !== 1) {
-			$('#bonus').attr('style', ' ').html(msg).attr('class', self.name)
+			$('#bonus').attr('style', 'display: block;').html(msg).attr('class', self.name)
 				.stop(true, false)
 				.animate({
 					'margin'		: 0,
@@ -155,7 +155,10 @@
 					'margin'		: '0 0 0 -300px',
 					'opacity'		: 0,
 					'font-size'	: 0
-				}, 80, 'easeInSine');
+				}, 80, 'easeInSine')
+				.animate({
+					'display': 'none'
+				}, 0);
 		}
 	}
 
