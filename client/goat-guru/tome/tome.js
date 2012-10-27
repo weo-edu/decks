@@ -6,12 +6,6 @@ tome.render = function(name) {
 	tomeRenderer.render(name);
 }
 
-// Template.tome_view.helpers({
-// 	'show': function() {
-// 		return Session.get('show_tome');
-// 	}
-// });
-
 Template.tome_info.helpers({
 	CPG: function() {
 		return this.Decks && this.Decks.cardsPerGame && this.Decks.cardsPerGame * 2 || '';
