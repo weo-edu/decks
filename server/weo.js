@@ -9,6 +9,8 @@ Meteor.startup(function() {
 	});
 
   Meteor.publish('cards', function(ids){
+    if(! ids) return;
+
     console.log('Cards Ids',ids)
     if (_.isArray(ids))
         return Cards.find({_id: {$in: ids}});

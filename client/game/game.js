@@ -299,13 +299,13 @@
     return this.ncards;
   }
 
-  Game.prototype.isCorrect = function(problem){
-    var answer = problem.answer;
-    if(_.isNumber(problem.solution) && _.isArray(answer)) {
+  Game.prototype.isCorrect = function(p){
+    var answer = p.answer;
+    if(! _.isArray(p.solution) && _.isArray(answer)) {
       answer = _.first(_.flatten(answer));
     }
 
-    return answer == problem.solution;
+    return verifier(p.solutionText, p.assignment)(answer, p.solution);
   }
 
   Game.prototype.isIncorrect = function(problem) {
