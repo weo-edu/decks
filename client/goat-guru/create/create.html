@@ -73,19 +73,7 @@
 
 <template name="scroll_select_results">
 	{{#each scrolls}}
-		{{#if scrollsNotInTome}}
-			<div class='scroll-info-view'>
-				<div class='inner-scroll-info image'>{{> small_scroll}}</div>
-				<div class='inner-scroll-info'> 
-					<h4>{{title}}</h4>							
-					<p>{{description}}</p>
-				</div>
-				<div class='inner-scroll-info tags'>
-					<span>{{tags}}</span><span class='label'>+</span><span>{{points}}</span>
-					<span>plays: {{plays}}</span>
-					<span class='created-by'>Created by: {{creatorName}}</span>
-			</div>
-		{{/if}}
+		{{> scroll_info_view}}
 	{{/each}}
 </template>
 
@@ -101,19 +89,24 @@
 			</div>
 			<div class='shelf connect'></div>
 			{{#each scrollsInTome}}
-				<div class='scroll-info-view'>
-					<div class='inner-scroll-info image'>{{> small_scroll}}</div>
-					<div class='inner-scroll-info'> 
-						<h4>{{title}}</h4>							
-						<p>{{description}}</p>
-					</div>
-					<div class='inner-scroll-info tags'>
-						<span>{{tags}}</span><span class='label'>+</span><span>{{points}}</span>
-						<span>plays: {{plays}}</span>
-						<span class='created-by'>Created by: {{creatorName}}</span>
-					</div>
+				{{> scroll_info_view}}
 			{{/each}}
 		</div>
+</template>
+
+<template name='scroll_info_view'>
+	<div class='scroll-info-view {{scrollsInTome}}'>
+		<div class='inner-scroll-info image'>{{> small_scroll}}</div>
+		<div class='inner-scroll-info'> 
+			<h4>{{title}}</h4>							
+			<p>{{description}}</p>
+		</div>
+		<div class='inner-scroll-info tags'>
+			<span>{{tags}}</span>
+			<span>plays: {{hasPlays}}</span>
+			<span class='label'>+</span><span>{{points}}</span>
+			<span class='created-by'>Created by: {{creatorName}}</span>
+	</div>
 </template>
 
 <template name="form_dialog">

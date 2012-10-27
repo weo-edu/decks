@@ -133,9 +133,6 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
 			var deck = Decks.findOne(deck_id);
 			if(deck.cards)
 				return Cards.find(deck.cards, {sort: {title: 1}});
-		},
-		points: function() {
-			return Math.round(Stats.points(Stats.regrade(this._id)));
 		}
 	});
 
@@ -146,8 +143,10 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
 	});
 
 	Template.scroll_select.events({
-		'click .scroll-info-view': function() {
-			Decks.update(deck_id, { $push: { cards: this._id } });
+		'click .scroll-info-view': function(e) {
+			$(e.currentTarget).hasClass('in-tome') 
+				? Decks.update(deck_id, { $pull: { cards: this._id } })
+				: Decks.update(deck_id, { $push: { cards: this._id } });
 		},
 		'keyup .create-filter': function(evt) {
 			var search = $(evt.target).val();
@@ -159,17 +158,22 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
 	Template.scroll_select_results.helpers({
 		scrolls: function() {
 			return Cards.find({status: 'published', 'search.keywords': routeSession.get('filter') }, {sort: {plays: -1}});
-		},
-		scrollsNotInTome: function() {
-			var deck = Decks.findOne(deck_id);
-			return deck.cards ?
-				deck.cards.indexOf(this._id) === -1 && this.status === 'published'
-				: true;
-		},
-		points: function() {
-			return Math.round(Stats.points(Stats.regrade(this._id)));
 		}
 	});
+
+	Template.scroll_info_view.helpers({
+		points: function() {
+			return Math.round(Stats.points(Stats.regrade(this._id)));
+		},
+		hasPlays: function() {
+			return this.plays || 0;
+		},
+		scrollsInTome: function() {
+			var deck = Decks.findOne(deck_id);
+			if(deck.cards)
+				return deck.cards.indexOf(this._id) === -1 && this.status ? '' : 'in-tome'
+		}
+	})
 
 	Template.create.destroyed = function() {
 		isEmptyDeck(deck_id) && Decks.remove(ctx.params.id);

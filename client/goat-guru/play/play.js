@@ -280,11 +280,11 @@
 				var p = (this.val * 100);
 				var color = '#D31F2C';
 				if ( p > 95)
-					color = '#29ABE2';		
+					color = 'rgb(64, 202, 49)';		
 				else if (p > 75)
-					color = '#52BF46';
+					color = '#29ABE2';
 				else if (p > 40)
-					color = '#FED53A';
+					color = 'rgb(241, 205, 12)';
 
 				return color;
 			}
@@ -434,7 +434,7 @@
 
 
  		function showCorrectAnswer(p) {
- 			$('#bonus').attr('style', ' ').html(' ' + p.solution).attr('class', 'error')
+ 			$('#bonus').attr('style', 'display: block;').html(' ' + p.solution).attr('class', 'error')
 				.stop(true, false)
 				.animate({
 					'margin'		: 0,
@@ -449,7 +449,10 @@
 				.animate({
 					'opacity'		: 0,
 					'font-size'	: 0
-				}, 80, 'easeInSine');
+				}, 80, 'easeInSine')
+				.animate({
+					'display': 'none'
+				}, 0);
  		}
 
  		function showPointIncrease() {
