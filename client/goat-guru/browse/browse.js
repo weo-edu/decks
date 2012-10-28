@@ -88,40 +88,47 @@ toggle.events = function(routeSession) {
 	}
 }
 
-route('/friends',function() { 
-	var decks = null;
-	var created = null;
+route('/:username', 
+	route.requireSubscription('userByName', function(ctx) {
+		return ctx.params.username;
+	}),
+	function(ctx) { 
+	var username = ctx.params.username;
+	var user = Meteor.users.findOne({username: username});
 
-	function setupCollections(user) {
-		Meteor.subscribe('playedDecks', user._id);
-		Meteor.subscribe('created', user._id);
+	Meteor.subscribe('playedDecks', user._id);
+	Meteor.subscribe('created', user._id);
 
-		decks = join({
-			cursor: [
-				UserDeck.find({user: user._id}),
-				Decks.find({})
-			],
-			on: ['Decks._id', 'UserDeck.deck']
-		});
+	var decks = join({
+		cursor: [
+			UserDeck.find({user: user._id}),
+			Decks.find({})
+		],
+		on: ['Decks._id', 'UserDeck.deck']
+	});
 
-		created = union(
-			Decks.find({creator: user._id}),
-			Cards.find({creator: user._id})
-		);
-	}
+	var	created = union(
+		Decks.find({creator: user._id}),
+		Cards.find({creator: user._id})
+	);
 	
 
 	Template.tome.events({
 		'click': function() {
-			var friendName = Session.get('active').username;
-			route('/tome/' + friendName + '/' + this.Decks._id);
+			route('/' + this.Decks.creatorName + '/t/' + this.Decks.title.replace(/ /g, '-'));
+		}
+	});
+
+	Template.tome_detailed.events({
+		'click': function() {
+			console.log(this);
+			route('/' + this.creatorName + '/t/' + this.title.replace(/ /g, '-'));
 		}
 	});
 
 	Template.buddies.events({
 		'click .buddy': function(e) {
-			setupCollections(this);
-			Session.set('active', this);
+			route('/' + this.username);
 			routeSession.set('toggle', 'collected');
 		},
 	});
@@ -137,11 +144,7 @@ route('/friends',function() {
 			return User.friends();
 		},
 	 	'active': function() {
-	 		var active = Session.get('active');
-	 		if(active)
-	 			return this._id == active._id ? 'active' : '';
-	 		else
-	 			return '';
+	 		return this._id === user._id ? 'active' : '';
 	 	},
 	 	'isConnected': function() {
 	 		return this.connected ? 'connected' : 'disconnected';
@@ -150,8 +153,7 @@ route('/friends',function() {
 
 	Template.opponent_decks.helpers({
 		'user': function() {
-			var active = Session.get('active');
-			return active ? active : false;
+			return user;
 		}
 	});
 
@@ -166,23 +168,13 @@ route('/friends',function() {
 
 	Template.browse_tomes_played.helpers({
 		tomes: function() {
-			var active = Session.get('active');
-			if(active) {
-				if (!decks)
-					setupCollections(active);
-				return toggle.deckFilter(routeSession, decks, active._id);
-			}
+			return toggle.deckFilter(routeSession, decks, user._id);
 		}
 	});
 
 	Template.browse_created.helpers({
 		items: function() {
-			var active = Session.get('active');
-			if(active) {
-				if (!created)
-					setupCollections(active)
-				return toggle.deckFilter(routeSession, created, active._id);
-			}
+			return toggle.deckFilter(routeSession, created, user._id);
 		},
 		tome: function() {
 			return this.type === 'deck';

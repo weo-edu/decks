@@ -15,27 +15,43 @@ Template.tome_info.helpers({
 // Template.tome_view.preserve(['#tome-view']);
 
 function tomeViewSetup(ctx, next) {
-	var tomeId = ctx.params.id;
-	var curTome = Decks.findOne(tomeId);
-	var username = ctx.params.username;
-	var friendId = username && Meteor.users.findOne({username: username})._id;
-
-	var friend_ids = _.map(User.friends().fetch(), function(friend) {
-			return friend._id;
-	});
+	var tomeUsername = ctx.params.username;
+	var tomeTitle = ctx.params.title.replace(/-/g,' ');
+	var friendName = ctx.params.friend;
+	var friend_ids = Meteor.user().friends;
+	var tomeId = null;
 
 	//XXX unsubscribe
-	Meteor.subscribe('userDecks', friend_ids, tomeId);
-	Meteor.subscribe('decks', tomeId);
+	Meteor.subscribe('deckByName', tomeUsername, tomeTitle, function() {
+		var tome = getTome()
+		tomeId = tome._id;
+		Meteor.subscribe('userDecks', friend_ids, tomeId);
+	});
+
+	function getTome() {
+		var tome =  tomeId 
+			? Decks.findOne(tomeId) 
+			: Decks.findOne({creatorName: tomeUsername, title: tomeTitle});
+		return tome || {};
+	}
+
+	Meteor.subscribe('userByName', friendName);
+	function friendId() {
+		var friend = Meteor.users.findOne({username: friendName});
+		return friend && friend._id;
+	}
 
 	Template.tome_view.helpers({
 		'tome': function() {
 			var curTome = {};
-			curTome.Decks = Decks.findOne(tomeId);
-			curTome.UserDeck = UserDeck.findOne({
-				deck: tomeId, 
-				user: friendId || Meteor.user()._id
-			});
+			curTome.Decks = getTome();
+			if (curTome.Decks) {
+				curTome.UserDeck = UserDeck.findOne({
+					deck: tomeId, 
+					user: friendId() || Meteor.user()._id
+				});
+			}
+			console.log('curTome', curTome);
 			return curTome;	
 		}
 	});
@@ -62,7 +78,7 @@ function tomeViewSetup(ctx, next) {
 	Template.tome_nav.events({
 		'click .tome-nav li': function(evt) {
 			var name = $(evt.currentTarget).attr('id');
-			route('/' + name + '/' + tomeId);
+			route('/' + tomeUsername + '/t/' + tomeTitle.replace(/ /g, '-') + '/' + name);
 		}
 	});
 
@@ -74,7 +90,7 @@ function tomeViewSetup(ctx, next) {
 
 	Template.inner_tome.helpers({
 		isPublished: function() {
-			var tome = Decks.findOne(tomeId)
+			var tome = getTome();
 			return tome && tome.status === 'published';
 		}
 	})
@@ -83,7 +99,7 @@ function tomeViewSetup(ctx, next) {
 		friends: function() {
 			var user_decks = UserDeck.find({
 				user: {$in: friend_ids}, 
-				deck: tomeId
+				deck: getTome()._id
 			}).fetch();
 			
 			return Meteor.users.find({
@@ -96,7 +112,7 @@ function tomeViewSetup(ctx, next) {
 		},
 		friendMastery: function() {
 			var info = UserDeck.findOne({
-				deck: tomeId, 
+				deck: getTome()._id, 
 				user: this._id
 			});
 			return info.mastery ? info.mastery.rank : '';
@@ -108,7 +124,7 @@ function tomeViewSetup(ctx, next) {
 
 	Template.tome_buddies.events({
 		'click .buddy': function() {
-			route('/tome/' + this.username + '/' + tomeId);	
+			route('/' + tomeUsername + '/t/' + tomeTitle.replace(/ /g, '-') + '/stats/' + this.username);	
 		}
 	});
 
@@ -120,7 +136,7 @@ function tomeViewSetup(ctx, next) {
 			return _.clone((this.UserDeck && this.UserDeck.history) || []).reverse();
 		},
 		player: function() {
-			return username ? username + "'s Stats" : Meteor.user().username + "'s Stats";
+			return friendName ? friendName + "'s Stats" : Meteor.user().username + "'s Stats";
 		},
 		number: function(opts) {
 			return opts || 0;
@@ -130,9 +146,11 @@ function tomeViewSetup(ctx, next) {
 	next();
 }
 
-route('/tome/:id', 
-	route.requireUser(), 
-	route.requireSubscription('userList'), 
+route('/:username/t/:title', function(ctx) {
+	route.redirect('/' + ctx.params.username + '/t/' + ctx.params.title + '/info');
+});
+
+route('/:username/t/:title/info', 
 	tomeViewSetup,
 	function(ctx) {
 
@@ -142,9 +160,7 @@ route('/tome/:id',
 
 });
 
-route('/stats/:id', 
-	route.requireUser(), 
-	route.requireSubscription('userList'), 
+route('/:username/t/:title/stats', 
 	tomeViewSetup,
 	function(ctx) {
 	
@@ -152,9 +168,7 @@ route('/stats/:id',
 
 });
 
-route('/discussion/:id', 
-	route.requireUser(), 
-	route.requireSubscription('userList'), 
+route('/:username/t/:title/discussion', 
 	tomeViewSetup,
 	function(ctx) {
 
@@ -162,35 +176,47 @@ route('/discussion/:id',
 
 });
 
-route('/tome/:username/:id', 
-	route.requireUser(), 
-	route.requireSubscription('userList'), 
+route('/:username/t/:title/stats/:friend', 
 	tomeViewSetup,
 	function(ctx) {
 
-	var tomeId = ctx.params.id;
-	var friendName = ctx.params.username;
-	var friendId = Meteor.users.findOne({username: friendName})._id;
+	var tomeUsername = ctx.params.username;
+	var tomeTitle = ctx.params.title;
+	var friendName = ctx.params.friend;
+	var tomeId = null;
+
+	function getTome() {
+		var tome =  tomeId 
+			? Decks.findOne(tomeId) 
+			: Decks.findOne({creatorName: tomeUsername, title: tomeTitle});
+		return tome || {};
+	}
+
+	function friendId() {
+		var friend = Meteor.users.findOne({username: friendName});
+		return friend && friend._id;
+	}
 
 	Template.friend_tome_stats.events({
 		'click .challenge-button': function() {
-			Game.route(tomeId, friendId);
+			Game.route(getTome()._id, friendId());
 		}
 	});
 
 	Template.friend_tome_stats.helpers({
 		isConnected: function() {
-			return Meteor.users.findOne({username: ctx.params.username}).connected;
+			var friend = Meteor.users.findOne({username: friendName})
+			return friend && friend.connected;
 		},
 		isPublished: function() {
-			var tome = Decks.findOne(tomeId)
+			var tome = getTome();
 			return tome && tome.status === 'published';
 		}
 	});
 
 	Template.tome_buddies.helpers({
 		active: function() {
-			return this._id === friendId ? 'active' : '';
+			return this._id === friendId() ? 'active' : '';
 		}
 	});
 	

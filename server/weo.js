@@ -4,9 +4,18 @@ Meteor.startup(function() {
     return Meteor.users.find({$or: [{_id: identifier}, {username: identifier}]});
   });
 
+  Meteor.publish('userByName', function(username) {
+    return Meteor.users.find({username: username});
+  });
+
   Meteor.publish('decks', function(id){
     return Decks.find(id || {});
 	});
+
+  Meteor.publish('deckByName', function(username, title) {
+    console.log('deckByName', username, title, Decks.findOne({creatorName: username, title: title}));
+    return Decks.find({creatorName: username, title: title});
+  });
 
   Meteor.publish('cards', function(ids){
     console.log('Cards Ids',ids)
