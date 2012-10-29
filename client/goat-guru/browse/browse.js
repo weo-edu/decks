@@ -12,7 +12,7 @@ route('/goat',function() {
 
 	Template.tome_general.events({
 		'click': function() {
-			route('/tome/' + this._id);
+			route('/tome/' + this.creatorName + '/' + this.id);
 		}
 	});
 
@@ -88,26 +88,19 @@ toggle.events = function(routeSession) {
 	}
 }
 
-route('/friends',function() { 
-	var decks = null;
-	var created = null;
+route('/users/:username?', 
+	route.requireSubscription('userByName', function(ctx) {
+		return ctx.params.username;
+	}),
+	function(ctx) { 
+	var username = ctx.params.username;
+	if (username) {
+		var user = Meteor.users.findOne({username: username});
 
-	function setupCollections(user) {
 		Meteor.subscribe('playedDecks', user._id);
 		Meteor.subscribe('created', user._id);
-
-		decks = join({
-			cursor: [
-				UserDeck.find({user: user._id}),
-				Decks.find({})
-			],
-			on: ['Decks._id', 'UserDeck.deck']
-		});
-
-		created = union(
-			Decks.find({creator: user._id}),
-			Cards.find({creator: user._id})
-		);
+	} else {
+		user = {};
 	}
 	
 	Template.tome_detailed.events({
@@ -118,10 +111,30 @@ route('/friends',function() {
 		}
 	});
 
+	var decks = join({
+		cursor: [
+			UserDeck.find({user: user._id}),
+			Decks.find({})
+		],
+		on: ['Decks._id', 'UserDeck.deck']
+	});
+
+	var	created = union(
+		Decks.find({creator: user._id}),
+		Cards.find({creator: user._id})
+	);
+	
+
 	Template.tome.events({
 		'click': function() {
-			var friendName = Session.get('active').username;
-			route('/tome/' + friendName + '/' + this.Decks._id);
+			route('/tome/' + this.Decks.creatorName + '/' + this.Decks.id);
+		}
+	});
+
+	Template.tome_detailed.events({
+		'click': function() {
+			console.log(this);
+			route('/tome/' + this.creatorName + '/' + this.id);
 		}
 	});
 
@@ -134,8 +147,7 @@ route('/friends',function() {
 
 	Template.buddies.events({
 		'click .buddy': function(e) {
-			setupCollections(this);
-			Session.set('active', this);
+			route('/users/' + this.username);
 			routeSession.set('toggle', 'collected');
 		},
 	});
@@ -151,11 +163,7 @@ route('/friends',function() {
 			return User.friends();
 		},
 	 	'active': function() {
-	 		var active = Session.get('active');
-	 		if(active)
-	 			return this._id == active._id ? 'active' : '';
-	 		else
-	 			return '';
+	 		return this._id === user._id ? 'active' : '';
 	 	},
 	 	'isConnected': function() {
 	 		return this.connected ? 'connected' : 'disconnected';
@@ -164,8 +172,7 @@ route('/friends',function() {
 
 	Template.opponent_decks.helpers({
 		'user': function() {
-			var active = Session.get('active');
-			return active ? active : false;
+			return user._id && user;
 		}
 	});
 
@@ -180,23 +187,13 @@ route('/friends',function() {
 
 	Template.browse_tomes_played.helpers({
 		tomes: function() {
-			var active = Session.get('active');
-			if(active) {
-				if (!decks)
-					setupCollections(active);
-				return toggle.deckFilter(routeSession, decks, active._id);
-			}
+			return toggle.deckFilter(routeSession, decks, user._id);
 		}
 	});
 
 	Template.browse_created.helpers({
 		items: function() {
-			var active = Session.get('active');
-			if(active) {
-				if (!created)
-					setupCollections(active)
-				return toggle.deckFilter(routeSession, created, active._id);
-			}
+			return toggle.deckFilter(routeSession, created, user._id);
 		},
 		tome: function() {
 			return this.type === 'deck';
@@ -238,21 +235,21 @@ route('/inventory', function() {
 	Template.tome_detailed.events({
 		'click': function() {
 			routeSession.equals('toggle', 'draft') && this.creator === Meteor.user()._id
-				? route('/create/tome/' + this._id)
-				: route('/tome/' + this._id);
+				? route('/tome/' + Meteor.user().username + '/' + this.id + '/edit' )
+				: route('/tome/' + Meteor.user().username + '/' + this.id);
 		}
 	});
 
 	Template.tome.events({
 		click: function() {
-			route('/tome/' + this.Decks._id);
+			route('/tome/' + this.Decks.creatorName + '/' + this.Decks.id);
 		}
 	});
 
 	Template.scroll_detailed.events({
 		'click': function() {
 			if(this.creator === Meteor.user()._id)
-				route('/create/scroll/' + this._id);
+				route('/scroll/' + this.Cards.creatorName + '/' + this.Cards.id + '/edit');
 			// routeSession.equals('toggle', 'draft') || routeSession.equals('toggle', 'created'))
 			// 	?	route('/create/scroll/' + this._id)
 			// 	: route('/scroll/' + this._id);
@@ -285,28 +282,34 @@ route('/inventory', function() {
 
 	Template.my_collection.events({
 		'click #create-tome': function() {
+			Meteor.users.update(Meteor.user()._id, {$inc: {deck_counter: 1}});
+
+			//XXX this only works if users are limited to one session
+			var deck_id = Meteor.user().deck_counter;
 			Decks.insert(
 				{	creator: Meteor.user()._id, 
 					type: 'deck', 
 					status: 'draft',
-					creatorName: Meteor.user().username
-				}, 
-				function(err,_id) {
-				if (err) throw err;
-				route('/create/tome/' + _id);
-			});
+					creatorName: Meteor.user().username,
+					id: deck_id
+				}
+			); 
+			route('/tome/' + Meteor.user().username + '/' + deck_id + '/edit');
 		},
 		'click #create-scroll': function() {
+			Meteor.users.update(Meteor.user()._id, {$inc: {card_counter: 1}});
+
+			var card_id = Meteor.user().card_counter;
 			Cards.insert(
 				{ creator: Meteor.user()._id, 
 					type: 'card', 
 					status: 'draft',
-					creatorName: Meteor.user().username
-				}, 
-					function(err,_id) {
-				if (err) throw err;
-				route('/create/scroll/' + _id);
-			});
+					creatorName: Meteor.user().username,
+					id: card_id
+				}
+			); 
+			
+			route('/scroll/' + Meteor.user().username + '/' + card_id + '/edit');
 		}
 	})
 
