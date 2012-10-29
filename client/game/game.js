@@ -5,7 +5,7 @@
     cardSelectTime: 1000,
     playPastTime: 1000,
     heartbeat_timeout: 2,
-    speedBonusCutoff: .5
+    speedBonusCutoff: .9
   };
 
   Game.route = function(deck, user) {
@@ -552,7 +552,7 @@
     time /= 1000; // in seconds
     var cardStatistics = Stats.cardTime(problem.card_id);
     var cutoffTime = Stats.inverseGaussQuantile(defaults.speedBonusCutoff, cardStatistics.mu, cardStatistics.lambda);
-    return utils.round(Math.max(cutoffTime-time,0),4);
+    return Math.max(cutoffTime-time,0);
   }
 
   Game.prototype.setCurrentProblem = function(idx) {
@@ -761,10 +761,22 @@
     self.update(update);
   }
 
+  Game.prototype.appliedMultiplier = function(multiplier) {
+    if (multiplier >= 1) 
+      return 2
+    else if (multiplier >= .5)
+      return 1.5
+    else if (multiplier >= .25)
+      return 1.25
+    else
+      return 1;
+
+  }
+
   Game.prototype.updatePoints = function(problem) {
     var self = this;
     var points = self.get(self.me_id + '.points') || 0;
-    var multiplier = 1 + self.get(self.me_id + '.multiplier');
+    var multiplier = self.appliedMultiplier(self.get(self.me_id + '.multiplier'));
     var bonus = _.reduce(problem.bonuses, function(memo, bonus) {
       return memo + bonus;
     }, 0);
@@ -882,7 +894,7 @@
         return memo + bonus;
       }, 0);
       var problem_points = problem.points || 0;
-      var points = Math.round(problem_points * (1 + mult));
+      var points = Math.round(problem_points * self.appliedMultiplier(mult));
       breakdown.points += problem_points;
       breakdown.multiplier += points - problem_points;
       points_total += points + bonus;
