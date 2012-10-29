@@ -283,13 +283,21 @@
 	cursor: pointer;
 	&:hover {
 		background-image: url('/app!common/textures/handmadepaperA85.png');
-		background-color: rgba(blue, 1);
+		background-color: #333;
+	}
+	&.in-tome {
+		background-image: url('/app!common/textures/handmadepaperA85.png');
+		background-color: blue;
 	}
 	.inner-scroll-info {
 		float: left;
 		height: 100%;
 		font-family: 'Fresca';
 		margin-right: 25px;
+		width: 500px;
+		&.image {
+			width: 40px;
+		}
 	}
 
 	.tags {

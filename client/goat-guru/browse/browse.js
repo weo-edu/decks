@@ -103,6 +103,13 @@ route('/users/:username?',
 		user = {};
 	}
 	
+	Template.tome_detailed.events({
+		'click': function() {
+			routeSession.equals('toggle', 'draft') && this.creator === Meteor.user()._id
+				? route('/create/tome/' + this._id)
+				: route('/tome/' + this._id);
+		}
+	});
 
 	var decks = join({
 		cursor: [
@@ -128,6 +135,13 @@ route('/users/:username?',
 		'click': function() {
 			console.log(this);
 			route('/tome/' + this.creatorName + '/' + this.id);
+		}
+	});
+
+	Template.scroll_detailed.events({
+		'click': function() {
+			if(this.creator === Meteor.user()._id)
+				route('/create/scroll/' + this._id);
 		}
 	});
 
@@ -220,29 +234,25 @@ route('/inventory', function() {
 
 	Template.tome_detailed.events({
 		'click': function() {
-			if (routeSession.equals('toggle', 'draft'))
-				route('/tome/' + Meteor.user().username + '/' + this.id + '/edit' );
-			else
-				route('/tome/' + Meteor.user().username + '/' + this.id);
+			routeSession.equals('toggle', 'draft') && this.creator === Meteor.user()._id
+				? route('/tome/' + Meteor.user().username + '/' + this.id + '/edit' )
+				: route('/tome/' + Meteor.user().username + '/' + this.id);
 		}
 	});
 
 	Template.tome.events({
 		click: function() {
-			console.log('click');
 			route('/tome/' + this.Decks.creatorName + '/' + this.Decks.id);
 		}
 	});
 
 	Template.scroll_detailed.events({
 		'click': function() {
-			var path = null;
-			if(routeSession.equals('toggle', 'draft') || routeSession.equals('toggle', 'created'))
-				path = '/scroll/' + this.Cards.creatorName + '/' + this.Cards.id + '/edit';
-			else
-				path = '/scroll/' + this.Cards.creatorName + '/' + this.Cards.id;
-
-			route(path);
+			if(this.creator === Meteor.user()._id)
+				route('/scroll/' + this.Cards.creatorName + '/' + this.Cards.id + '/edit');
+			// routeSession.equals('toggle', 'draft') || routeSession.equals('toggle', 'created'))
+			// 	?	route('/create/scroll/' + this._id)
+			// 	: route('/scroll/' + this._id);
 		}
 	});
 
