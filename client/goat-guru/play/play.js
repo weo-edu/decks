@@ -385,7 +385,8 @@
  		Template.game_multiplier.created = function() {
  			var self = this;
  			game.on('next', function() {
- 				self.interval || self.speedUpdate();
+ 				Meteor.clearTimeout(self.resetTimeout);
+ 				self.speedUpdate();
  			});
  		}
 
@@ -406,7 +407,10 @@
 	 				var width = (mult + .25) * totWidth;
 	 				el.width(width + 'px')
 		 				.stop(true,false)
-		 				.animate({width: "0px"}, game.timeForBonus() * 1000, 'linear');	
+		 				.animate({width: "0px"}, game.timeForBonus() * 1000, 'linear');
+		 			self.resetTimeout = Meteor.setTimeout(function() {
+		 				game.resetMultiplier();
+		 			}, game.timeForBonus() * 1000);
 		 		})();
  			}
  		}
@@ -464,6 +468,9 @@
  				endPoints = Math.round(game.points(game.me()._id));
  				inc = 1, dur = 19,
  				delta = endPoints - curPoints;
+
+ 			if (delta < 0)
+ 				throw new Error("negative delta");
 
 			while(dur < 20) {
 				inc++;
