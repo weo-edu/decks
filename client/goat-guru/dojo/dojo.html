@@ -17,6 +17,9 @@
 		<a class='friends-nav' href='/friends'></a>
 		<div class='nav-title'>
 			<img width='350' src='/app!decks/img/title.png' />
+			{{#constant}}
+				<input id='global-search' type='text' />
+			{{/constant}}
 		</div>
 		<div id='nav-user'>
 			{{> nav_user currentUser}}

@@ -193,7 +193,55 @@ html, body {
 		left: 50%;
 		margin-left: -185px;
 		top: 14px;
-		box-shadow: 0 0 6px rgba(black, .8);
+		box-shadow: 0 0 5px rgba(black, .8);
+		transition: box-shadow .2s;
+		&:hover {
+			box-shadow: 0 0 8px rgba(black);
+		}
+	}
+
+	outline-text(size, color) {
+		str = ''
+		for num in 1 .. 30 {
+			str += '0 0 ' + size + ' ' + color + ', ';
+		}
+		str += '0 0 ' + size + ' ' + color;
+		content: unquote(str);
+		text-shadow: unquote(str);
+	}
+
+	#global-search {
+		position: absolute;
+		top: -10px;
+		left: -10px;
+		margin: 0;
+		width: 330px;
+		height: 60px;
+		padding: 10px;
+		font: 60px 'BleakChop';
+		color: #FDD43A;
+		outline-text(5px, blue);
+		outline: 0;
+		opacity: 0;
+		background: url('/app!common/textures/handmadepaper.png');
+		cursor: pointer;
+		border: 10px solid black;
+		transition-property: opacity, margin, width;
+		transition-duration: .15s;
+		transition-delay: .15s, 0s, 0s;
+		z-index: 999;
+		box-shadow: 0 0 20px rgba(black);
+		&:focus {
+			outline: 0;
+			cursor: text;
+			z-index: 999;
+			size = 750px;
+			width: size;
+			opacity: 1;
+			margin-left: 175px - ((size + 20)/2);
+			transition-duration: .15s;
+			transition-delay: 0, .15s, .15s;
+		}
 	}
 
 	.nav-user {
