@@ -16,13 +16,13 @@ Template.tome_info.helpers({
 
 function tomeViewSetup(ctx, next) {
 	var tomeUsername = ctx.params.username;
-	var tomeTitle = ctx.params.title.replace(/-/g,' ');
+	var tomeUsernameId = parseInt(ctx.params.id);
 	var friendName = ctx.params.friend;
 	var friend_ids = Meteor.user().friends;
 	var tomeId = null;
 
 	//XXX unsubscribe
-	Meteor.subscribe('deckByName', tomeUsername, tomeTitle, function() {
+	Meteor.subscribe('deckByName', tomeUsername, tomeUsernameId, function() {
 		var tome = getTome()
 		tomeId = tome._id;
 		Meteor.subscribe('userDecks', friend_ids, tomeId);
@@ -31,7 +31,7 @@ function tomeViewSetup(ctx, next) {
 	function getTome() {
 		var tome =  tomeId 
 			? Decks.findOne(tomeId) 
-			: Decks.findOne({creatorName: tomeUsername, title: tomeTitle});
+			: Decks.findOne({creatorName: tomeUsername, id: tomeUsernameId});
 		return tome || {};
 	}
 
@@ -78,7 +78,8 @@ function tomeViewSetup(ctx, next) {
 	Template.tome_nav.events({
 		'click .tome-nav li': function(evt) {
 			var name = $(evt.currentTarget).attr('id');
-			route('/' + tomeUsername + '/t/' + tomeTitle.replace(/ /g, '-') + '/' + name);
+			route('/tome/' + tomeUsername + '/' + tomeUsernameId + '/' + name);
+
 		}
 	});
 
@@ -124,7 +125,7 @@ function tomeViewSetup(ctx, next) {
 
 	Template.tome_buddies.events({
 		'click .buddy': function() {
-			route('/' + tomeUsername + '/t/' + tomeTitle.replace(/ /g, '-') + '/stats/' + this.username);	
+			route('/tome/' + tomeUsername + '/' + tomeUsernameId + '/stats/' + this.username);	
 		}
 	});
 
@@ -146,11 +147,11 @@ function tomeViewSetup(ctx, next) {
 	next();
 }
 
-route('/:username/t/:title', function(ctx) {
-	route.redirect('/' + ctx.params.username + '/t/' + ctx.params.title + '/info');
+route('/tome/:username/:id', function(ctx) {
+	route.redirect('/tome/' + ctx.params.username + '/' + ctx.params.id + '/info');
 });
 
-route('/:username/t/:title/info', 
+route('/tome/:username/:id/info', 
 	tomeViewSetup,
 	function(ctx) {
 
@@ -160,7 +161,7 @@ route('/:username/t/:title/info',
 
 });
 
-route('/:username/t/:title/stats', 
+route('/tome/:username/:id/stats', 
 	tomeViewSetup,
 	function(ctx) {
 	
@@ -168,7 +169,7 @@ route('/:username/t/:title/stats',
 
 });
 
-route('/:username/t/:title/discussion', 
+route('/tome/:username/:id/discussion', 
 	tomeViewSetup,
 	function(ctx) {
 
@@ -176,19 +177,19 @@ route('/:username/t/:title/discussion',
 
 });
 
-route('/:username/t/:title/stats/:friend', 
+route('/tome/:username/:id/stats/:friend', 
 	tomeViewSetup,
 	function(ctx) {
 
 	var tomeUsername = ctx.params.username;
-	var tomeTitle = ctx.params.title;
+	var tomeUsernameId = parseInt(ctx.params.id);
 	var friendName = ctx.params.friend;
 	var tomeId = null;
 
 	function getTome() {
 		var tome =  tomeId 
 			? Decks.findOne(tomeId) 
-			: Decks.findOne({creatorName: tomeUsername, title: tomeTitle});
+			: Decks.findOne({creatorName: tomeUsername, id: tomeUsernameId});
 		return tome || {};
 	}
 

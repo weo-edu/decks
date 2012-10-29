@@ -12,17 +12,19 @@ Meteor.startup(function() {
     return Decks.find(id || {});
 	});
 
-  Meteor.publish('deckByName', function(username, title) {
-    console.log('deckByName', username, title, Decks.findOne({creatorName: username, title: title}));
-    return Decks.find({creatorName: username, title: title});
+  Meteor.publish('deckByName', function(username, id) {
+    return Decks.find({creatorName: username, id: id});
   });
 
   Meteor.publish('cards', function(ids){
-    console.log('Cards Ids',ids)
     if (_.isArray(ids))
         return Cards.find({_id: {$in: ids}});
     else
         return Cards.find(ids);
+  });
+
+  Meteor.publish('cardByName', function(username, id) {
+    return Cards.find({creatorName: username, id: id});
   });
 
   Meteor.publish('userCards', function (users, cards) {

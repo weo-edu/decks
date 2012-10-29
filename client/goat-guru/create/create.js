@@ -2,9 +2,26 @@
  * Tome Create
  */
 
-route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) {
-	var deck_id = ctx.params.id;
-	var deck = Decks.findOne(ctx.params.id);
+route('/tome/:username/:id/edit', 
+	route.requireSubscription(
+		'deckByName',
+		function(ctx) {
+			return ctx.params.username;
+		},
+		function(ctx) {
+			return parseInt(ctx.params.id);
+		}
+	), 
+	function(ctx) {
+
+	// username namespace unique id
+	var id = parseInt(ctx.params.id);
+	var username = ctx.params.username;
+
+	var deck = Decks.findOne({creatorName: username, id: id});
+
+	// gloabl unique id
+	var deck_id = deck._id;
 
 	Meteor.subscribe('cards', deck.cards);
 
@@ -215,9 +232,24 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
  * Scroll Create
  */
 var editor;
-route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx) {
-	var card_id = ctx.params.id;
-	var card = Cards.findOne(card_id);
+route('/scroll/:username/:id/edit', 
+	route.requireSubscription(
+		'cardByName',
+		function(ctx) {
+			return ctx.params.username;
+		},
+		function(ctx) {
+			return parseInt(ctx.params.id);
+		}
+	), 
+	function(ctx) {
+	var username = ctx.params.username;
+	// username namespaced unique id
+	var id = parseInt(ctx.params.id);
+	var card = Cards.findOne({creatorName: username, id: id});
+
+	// global uniqu id
+	var card_id = card._id;
 
 	routeSession.set('active', 'info');
 

@@ -12,7 +12,7 @@ route('/goat',function() {
 
 	Template.tome_general.events({
 		'click': function() {
-			route('/tome/' + this._id);
+			route('/tome/' + this.creatorName + '/' + this.id);
 		}
 	});
 
@@ -88,16 +88,21 @@ toggle.events = function(routeSession) {
 	}
 }
 
-route('/:username', 
+route('/users/:username?', 
 	route.requireSubscription('userByName', function(ctx) {
 		return ctx.params.username;
 	}),
 	function(ctx) { 
 	var username = ctx.params.username;
-	var user = Meteor.users.findOne({username: username});
+	if (username) {
+		var user = Meteor.users.findOne({username: username});
 
-	Meteor.subscribe('playedDecks', user._id);
-	Meteor.subscribe('created', user._id);
+		Meteor.subscribe('playedDecks', user._id);
+		Meteor.subscribe('created', user._id);
+	} else {
+		user = {};
+	}
+	
 
 	var decks = join({
 		cursor: [
@@ -115,20 +120,20 @@ route('/:username',
 
 	Template.tome.events({
 		'click': function() {
-			route('/' + this.Decks.creatorName + '/t/' + this.Decks.title.replace(/ /g, '-'));
+			route('/tome/' + this.Decks.creatorName + '/' + this.Decks.id);
 		}
 	});
 
 	Template.tome_detailed.events({
 		'click': function() {
 			console.log(this);
-			route('/' + this.creatorName + '/t/' + this.title.replace(/ /g, '-'));
+			route('/tome/' + this.creatorName + '/' + this.id);
 		}
 	});
 
 	Template.buddies.events({
 		'click .buddy': function(e) {
-			route('/' + this.username);
+			route('/users/' + this.username);
 			routeSession.set('toggle', 'collected');
 		},
 	});
@@ -153,7 +158,7 @@ route('/:username',
 
 	Template.opponent_decks.helpers({
 		'user': function() {
-			return user;
+			return user._id && user;
 		}
 	});
 
@@ -216,16 +221,16 @@ route('/inventory', function() {
 	Template.tome_detailed.events({
 		'click': function() {
 			if (routeSession.equals('toggle', 'draft'))
-				route('/create/tome/' + this._id);
+				route('/tome/' + Meteor.user().username + '/' + this.id + '/edit' );
 			else
-				route('/tome/' + this._id);
+				route('/tome/' + Meteor.user().username + '/' + this.id);
 		}
 	});
 
 	Template.tome.events({
 		click: function() {
 			console.log('click');
-			route('/tome/' + this.Decks._id);
+			route('/tome/' + this.Decks.creatorName + '/' + this.Decks.id);
 		}
 	});
 
@@ -233,11 +238,11 @@ route('/inventory', function() {
 		'click': function() {
 			var path = null;
 			if(routeSession.equals('toggle', 'draft') || routeSession.equals('toggle', 'created'))
-				path = '/create/scroll/'
+				path = '/scroll/' + this.Cards.creatorName + '/' + this.Cards.id + '/edit';
 			else
-				path = '/scroll/'
+				path = '/scroll/' + this.Cards.creatorName + '/' + this.Cards.id;
 
-			route(path + this._id);
+			route(path);
 		}
 	});
 
@@ -267,28 +272,34 @@ route('/inventory', function() {
 
 	Template.my_collection.events({
 		'click #create-tome': function() {
+			Meteor.users.update(Meteor.user()._id, {$inc: {deck_counter: 1}});
+
+			//XXX this only works if users are limited to one session
+			var deck_id = Meteor.user().deck_counter;
 			Decks.insert(
 				{	creator: Meteor.user()._id, 
 					type: 'deck', 
 					status: 'draft',
-					creatorName: Meteor.user().username
-				}, 
-				function(err,_id) {
-				if (err) throw err;
-				route('/create/tome/' + _id);
-			});
+					creatorName: Meteor.user().username,
+					id: deck_id
+				}
+			); 
+			route('/tome/' + Meteor.user().username + '/' + deck_id + '/edit');
 		},
 		'click #create-scroll': function() {
+			Meteor.users.update(Meteor.user()._id, {$inc: {card_counter: 1}});
+
+			var card_id = Meteor.user().card_counter;
 			Cards.insert(
 				{ creator: Meteor.user()._id, 
 					type: 'card', 
 					status: 'draft',
-					creatorName: Meteor.user().username
-				}, 
-					function(err,_id) {
-				if (err) throw err;
-				route('/create/scroll/' + _id);
-			});
+					creatorName: Meteor.user().username,
+					id: card_id
+				}
+			); 
+			
+			route('/scroll/' + Meteor.user().username + '/' + card_id + '/edit');
 		}
 	})
 
