@@ -2,9 +2,26 @@
  * Tome Create
  */
 
-route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) {
-	var deck_id = ctx.params.id;
-	var deck = Decks.findOne(ctx.params.id);
+route('/tome/:username/:id/edit', 
+	route.requireSubscription(
+		'deckByName',
+		function(ctx) {
+			return ctx.params.username;
+		},
+		function(ctx) {
+			return parseInt(ctx.params.id);
+		}
+	), 
+	function(ctx) {
+
+	// username namespace unique id
+	var id = parseInt(ctx.params.id);
+	var username = ctx.params.username;
+
+	var deck = Decks.findOne({creatorName: username, id: id});
+
+	// gloabl unique id
+	var deck_id = deck._id;
 
 	Meteor.subscribe('cards', deck.cards);
 
@@ -35,7 +52,7 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
 				Decks.remove(deck_id);	
 			}
 		},
-		'click #publish': function() {
+		'click #publish': function(e) {
 			if(isDeckComplete() === true) {
 				if(confirm('Are you sure you want to publish? Once this is done you will not be able to delete or edit this tome.')) {
 					Decks.update(deck_id, {$set: {status: 'published'}})
@@ -157,6 +174,8 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
 
 	Template.scroll_select_results.helpers({
 		scrolls: function() {
+			if (!routeSession.get('filter'))
+				return;
 			return Cards.find({status: 'published', 'search.keywords': routeSession.get('filter') }, {sort: {plays: -1}});
 		}
 	});
@@ -182,7 +201,7 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
 	dojo.render('create');
 
 	function isDeckComplete() {
-		var deck = Decks.findOne(ctx.params.id);
+		var deck = Decks.findOne(deck_id);
 		if(!deck.title)
 			return 'Please add a title.';
 		else if(!deck.image)
@@ -217,9 +236,24 @@ route('/create/tome/:id', route.requireSubscriptionById('decks'), function(ctx) 
  * Scroll Create
  */
 var editor;
-route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx) {
-	var card_id = ctx.params.id;
-	var card = Cards.findOne(card_id);
+route('/scroll/:username/:id/edit', 
+	route.requireSubscription(
+		'cardByName',
+		function(ctx) {
+			return ctx.params.username;
+		},
+		function(ctx) {
+			return parseInt(ctx.params.id);
+		}
+	), 
+	function(ctx) {
+	var username = ctx.params.username;
+	// username namespaced unique id
+	var id = parseInt(ctx.params.id);
+	var card = Cards.findOne({creatorName: username, id: id});
+
+	// global uniqu id
+	var card_id = card._id;
 
 	routeSession.set('active', 'info');
 
@@ -335,8 +369,12 @@ route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx
 		});
 	}
 
+
+	var context = null;
 	Template.scroll_preview.helpers({
 		html: utils.attachDefer(function(ctx) {
+			context = Meteor.deps.Context.current;
+
 			ctx.template.p = problemize(Cards.findOne(card_id));
 			ctx.template.z = new Zebra(ctx.template.p.zebra);
 			return ctx.template.z.render(ctx.template.p.assignment);
@@ -345,6 +383,23 @@ route('/create/scroll/:id', route.requireSubscriptionById('cards'), function(ctx
 			return ctx.template.p.solution;
 		}
 	});
+
+	Template.scroll_preview.events({
+		'keypress': function(e, tmpl) {
+			if(e.which === 13) {
+				var p = tmpl.p,
+					z = tmpl.z;
+
+				var text = verifier(p.solutionText, p.assignment)(z.answer(), p.solution)
+						? 'correct' : 'incorrect';
+
+				alert(text);
+			}
+		},
+		'click .generate-button': function() {
+			context && context.invalidate();
+		}
+	})
 	
 	/**
 	 * Info Form

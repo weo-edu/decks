@@ -299,17 +299,12 @@
     return this.ncards;
   }
 
-  Game.prototype.isCorrect = function(p){
-    var answer = p.answer;
-    if(! _.isArray(p.solution) && _.isArray(answer)) {
-      answer = _.first(_.flatten(answer));
-    }
-
-    return verifier(p.solutionText, p.assignment)(answer, p.solution);
+  Game.prototype.isCorrect = function(p) {
+    return verifier(p.solutionText, p.assignment)(p.answer, p.solution);
   }
 
-  Game.prototype.isIncorrect = function(problem) {
-    return problem.answer !== undefined && problem.answer !== problem.solution;
+  Game.prototype.isIncorrect = function(p) {
+    return p.answer !== undefined && ! this.isCorrect(p);
   }
 
   /*
