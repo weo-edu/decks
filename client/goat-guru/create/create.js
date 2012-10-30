@@ -65,7 +65,7 @@ route('/tome/:username/:id/edit',
 	});
 
 	Template.form_dialog.form = function() {
-		var form = ui.get('.dialog').get('form');
+		var form = ui.get($('.create-view .dialog')).get('form');
 		return Template[form]({});
 	}
 
@@ -117,7 +117,8 @@ route('/tome/:username/:id/edit',
 	Template.tome_info_form.events({
 		'click .input': function(e) {
 			var name = $(e.currentTarget).attr('id');
-			var dialog = ui.get('.dialog');
+			var dialog = ui.get($('.create-view .dialog'));;
+			console.log(dialog);
 			dialog.set('form', name + '_form');
 			dialog.modal()
 				.relative('#' + name, {top: 0, left: 0})

@@ -5,7 +5,7 @@
 	<div class="dojo">
 		<div id="browse-view">
 			{{#isolate}}
-			{{{dojoRender}}}
+				{{{dojoRender}}}
 			{{/isolate}}
 		</div>
 	</div>
@@ -16,13 +16,29 @@
 		<a class='goat-nav' href='/goat'></a>
 		<a class='friends-nav' href='/users'></a>
 		<div class='nav-title'>
-			<img width='350' src='/app!decks/img/title.png' />
-			{{#constant}}
-				<input id='global-search' type='text' />
-			{{/constant}}
+			<img width='350' src='/app!decks/img/title.png' />		
 		</div>
 		<div id='nav-user'>
 			{{> nav_user currentUser}}
 		</div>
+	</div>
+	{{#constant}}
+				<input id='global-search' type='text' />
+	{{/constant}}
+	{{> global_search}}
+</template>
+
+<template name='global_search'>
+	<div id='global-search-dialog'>
+		{{#ui "dialog"}}
+			<div class='collection-browse'>
+				{{#each results}}
+					<div class='tome-container'>
+						{{> tome_general}}
+						<h5 class='tome-title'>{{title}}</h5>
+					</div>
+				{{/each}}
+			</div>
+		{{/ui}}
 	</div>
 </template>
