@@ -32,6 +32,7 @@ Template.dojo_browse_nav.events({
 	'keyup #global-search': function(evt,template) {
 		var search = $(evt.target).val().toLowerCase();
 		routeSession.set('global-filter', search);
+		Meteor.get('globalSearch', search);
 
 		var dialog = ui.get(template.find('.dialog'));
 		dialog.on('hide', function() { $('#global-search').removeClass('active') });
@@ -39,6 +40,8 @@ Template.dojo_browse_nav.events({
 		if(dialog.hasClass('hide')) {
 			dialog.closable().show();
 			$('#global-search').addClass('active');
+
+
 		}
 	},
 	'blur #global-search': function(evt, template) {
