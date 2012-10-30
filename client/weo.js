@@ -81,10 +81,6 @@ Template.global_search.events({
 	}
 })
 
-// Template.global_search.events({
-
-// });
-
 function animateBg() {
 	var sun = document.getElementById('sun'),
 		deg = 0;
@@ -100,4 +96,48 @@ function animateBg() {
 		$(sun).css(transformPrefix, 'rotate(' + deg + 'deg)');
 	}	
 }
+
+// -- Problem Preview Dialog Start -- //
+
+
+function previewDialog(card) {
+	routeSession.set('scroll-preview', card);
+	ui.get($('#scroll-preview .dialog')).closable().overlay().center().show();
+}
+
+var context = null;
+Template.view_scroll_dialog.helpers({
+	html: utils.attachDefer(function(ctx) {
+		context = Meteor.deps.Context.current;
+		console.log(ctx.template);
+
+		var card = routeSession.get('scroll-preview');
+		ctx.template.p = problemize(Cards.findOne(card._id));
+		ctx.template.z = new Zebra(ctx.template.p.zebra);
+		return ctx.template.z.render(ctx.template.p.assignment);
+	}, _.bind(u.valign, null, '#problem')),
+	solution: function(ctx) {
+		return ctx.template.p.solution;
+	}
+});
+
+Template.view_scroll_dialog.events({
+	'keypress': function(e) {
+		var tmpl = ui.get($('#scroll-preview .dialog'));
+		if(e.which === 13) {
+			var p = tmpl.p,
+				z = tmpl.z;
+
+			var text = verifier(p.solutionText, p.assignment)(z.answer(), p.solution)
+					? 'correct' : 'incorrect';
+
+			alert(text);
+		}
+	},
+	'click .generate-button': function() {
+		context && context.invalidate();
+	}
+})
+
+// -- Problem Preview End -- //
 
