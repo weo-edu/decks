@@ -249,7 +249,7 @@ route('/inventory', function() {
 	Template.scroll_detailed.events({
 		'click': function() {
 			if(this.creator === Meteor.user()._id)
-				route('/scroll/' + this.Cards.creatorName + '/' + this.Cards.id + '/edit');
+				route('/scroll/' + this.creatorName + '/' + this.id + '/edit');
 			// routeSession.equals('toggle', 'draft') || routeSession.equals('toggle', 'created'))
 			// 	?	route('/create/scroll/' + this._id)
 			// 	: route('/scroll/' + this._id);

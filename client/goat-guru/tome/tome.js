@@ -54,7 +54,6 @@ function tomeViewSetup(ctx, next) {
 					user: friendId() || Meteor.user()._id
 				});
 			}
-			console.log('curTome', curTome);
 			return curTome;	
 		}
 	});

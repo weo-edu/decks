@@ -52,7 +52,7 @@ route('/tome/:username/:id/edit',
 				Decks.remove(deck_id);	
 			}
 		},
-		'click #publish': function() {
+		'click #publish': function(e) {
 			if(isDeckComplete() === true) {
 				if(confirm('Are you sure you want to publish? Once this is done you will not be able to delete or edit this tome.')) {
 					Decks.update(deck_id, {$set: {status: 'published'}})
@@ -202,7 +202,7 @@ route('/tome/:username/:id/edit',
 	dojo.render('create');
 
 	function isDeckComplete() {
-		var deck = Decks.findOne(ctx.params.id);
+		var deck = Decks.findOne(deck_id);
 		if(!deck.title)
 			return 'Please add a title.';
 		else if(!deck.image)
@@ -370,8 +370,12 @@ route('/scroll/:username/:id/edit',
 		});
 	}
 
+
+	var context = null;
 	Template.scroll_preview.helpers({
 		html: utils.attachDefer(function(ctx) {
+			context = Meteor.deps.Context.current;
+
 			ctx.template.p = problemize(Cards.findOne(card_id));
 			ctx.template.z = new Zebra(ctx.template.p.zebra);
 			return ctx.template.z.render(ctx.template.p.assignment);
@@ -380,6 +384,23 @@ route('/scroll/:username/:id/edit',
 			return ctx.template.p.solution;
 		}
 	});
+
+	Template.scroll_preview.events({
+		'keypress': function(e, tmpl) {
+			if(e.which === 13) {
+				var p = tmpl.p,
+					z = tmpl.z;
+
+				var text = verifier(p.solutionText, p.assignment)(z.answer(), p.solution)
+						? 'correct' : 'incorrect';
+
+				alert(text);
+			}
+		},
+		'click .generate-button': function() {
+			context && context.invalidate();
+		}
+	})
 	
 	/**
 	 * Info Form
