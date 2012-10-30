@@ -97,7 +97,7 @@
 <template name='scroll_info_view'>
 	<div class='scroll-info-view {{scrollsInTome}}'>
 		<div class='inner-scroll-info image'>{{> small_scroll}}</div>
-		<div class='inner-scroll-info'> 
+		<div class='inner-scroll-info info'> 
 			<h4>{{title}}</h4>							
 			<p>{{description}}</p>
 		</div>
@@ -216,6 +216,7 @@
 			<div id='solution' style="font-size 14px; color: blue">
 				{{solution}}
 			</div>
+			<button class='generate-button'>Generate</button>
 		</div>
 	</div>
 	{{> problem_tracker_empty}}

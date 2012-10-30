@@ -8,7 +8,7 @@ Meteor.startup(function() {
     return Meteor.users.find({username: username});
   });
 
-  Meteor.publish('decks', function(id){
+  Meteor.publish('decks', function(id) {
     return Decks.find(id || {});
 	});
 
@@ -16,11 +16,8 @@ Meteor.startup(function() {
     return Decks.find({creatorName: username, id: id});
   });
 
-  Meteor.publish('cards', function(ids){
-    if (_.isArray(ids))
-        return Cards.find({_id: {$in: ids}});
-    else
-        return Cards.find(ids);
+  Meteor.publish('cards', function(ids) {
+    return ids && Cards.find(ids);
   });
 
   Meteor.publish('cardByName', function(username, id) {
@@ -30,7 +27,7 @@ Meteor.startup(function() {
   Meteor.publish('userCards', function (users, cards) {
     var query = {};
     if (_.isArray(users)) {
-        users = _.without(users,1);
+        users = _.without(users, 1);
         query.uid = {$in: users};
     } else 
         query.uid = users;
@@ -81,5 +78,3 @@ Meteor.startup(function() {
 
   Observer.start();
 });
-
-

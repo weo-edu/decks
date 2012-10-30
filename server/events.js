@@ -1,5 +1,4 @@
 Observer.on('complete:deck', function(e) {
-    //console.log('complete:deck', e);
     Fiber(function() {
         Decks.update(
             { title: e.object.name }, 
@@ -19,7 +18,6 @@ Observer.on('complete:deck', function(e) {
 });
 
 Observer.on('complete:card', function(e) {
-  //console.log('completed:card', e);
   Fiber(function() {
     var card_id = e.object._id;
     var match = {_id: card_id};
@@ -41,8 +39,6 @@ Observer.on('complete:card', function(e) {
       correct_time_squared: correct ? Math.pow(time, 2) : 0,
       inverse_correct_time: correct ? 1 / time : 0
     };
-
-    console.log('stats', stats);
 
     // card stats update
     Stats.updateCardStats(match, stats, e.user.grade);
@@ -100,7 +96,6 @@ Observer.on('complete:card', function(e) {
  */
 
 Observer.on('complete:game', function(e) {
-  console.log('complete game event', e);
   Fiber(function() {
     var match = e.object;
     var action = e.action;

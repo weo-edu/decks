@@ -28,6 +28,38 @@ Template.level_progress.helpers({
 	}
 });
 
+Template.dojo_browse_nav.events({
+	'keyup #global-search': function(evt,template) {
+		var search = $(evt.target).val().toLowerCase();
+		routeSession.set('global-filter', search);
+
+		var dialog = ui.get(template.find('.dialog'));
+		dialog.on('hide', function() { $('#global-search').removeClass('active') });
+		
+		if(dialog.hasClass('hide')) {
+			dialog.closable().show();
+			$('#global-search').addClass('active');
+		}
+	},
+	'blur #global-search': function(evt, template) {
+		if(!routeSession.get('global-filter')) {
+			ui.get(template.find('.dialog')).hide();
+		}
+	}
+});
+
+Template.global_search.helpers({
+	results: function() {
+		if (!routeSession.get('global-filter'))
+				return;
+		return Decks.find({'search.keywords': routeSession.get('global-filter')});
+	}
+});
+
+// Template.global_search.events({
+
+// });
+
 function animateBg() {
 	var sun = document.getElementById('sun'),
 		deg = 0;
@@ -44,12 +76,3 @@ function animateBg() {
 	}	
 }
 
-function hideTome() {
-	// Session.set('animate_tome', false);
-	// if( Session.get('show_tome') ) {
-	// 	console.log('hide')
-	// 	$('#tome-view').animate({'top': '-100%'}, 500, function() {
-			Session.set('show_tome', false);
-	// 	});		
-	// }
-}
