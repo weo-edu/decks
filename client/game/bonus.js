@@ -27,6 +27,11 @@
 				if (!correct)
 					return;
 				var self = this;
+
+				// only apply repeat deduction on cards user has chosen
+				if (problem.picker !== self.game.me_id)
+					return false;
+
 				//	Scale the probability up each time the card appears
 				//	Initialize to 1 because the answer event gets emitted
 				//	before the answer is applied to the problem
@@ -61,10 +66,12 @@
 				var cardStatistics = Stats.cardTime(problem.card_id);
 				var speed = 1 - Stats.inverseGaussCDF(time, cardStatistics.mu, cardStatistics.lambda);
 
-				var cutoff = .5
-				var max_inc = .1;
-				if (speed > cutoff)
-					return utils.round((speed - cutoff) / (1 - cutoff) * max_inc, 2);
+				var cutoff = .1
+				var max_inc = .2;
+				if (speed > cutoff) {
+					var mult_inc = (speed - cutoff) / (1 - cutoff) * max_inc;
+					return mult_inc
+				}
 				else
 					return 0;
 			},
