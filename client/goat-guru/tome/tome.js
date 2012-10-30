@@ -129,7 +129,7 @@ function tomeViewSetup(ctx, next) {
 			ctx.template.p = problemize(Cards.findOne(card._id));
 			ctx.template.z = new Zebra(ctx.template.p.zebra);
 			return ctx.template.z.render(ctx.template.p.assignment);
-		}, alignProblem),
+		}, _.bind(u.valign, null, '#problem')),
 		solution: function(ctx) {
 			return ctx.template.p.solution;
 		}
