@@ -326,11 +326,6 @@
  			}
  		});
 
- 		function alignProblem() {
- 			var p = $('#problem');
- 			p.css({'margin-top': -p.height()/2});
- 		}
-
  		function makeTimer(tFn, elFn) {
  			return (function() {
  				ui.timer(tFn(), function(time) {
@@ -352,12 +347,12 @@
 			game.when('play.', timer);
  		}
 
- 		Template.problem_container.rendered = utils.attach(function() {
+ 		Template.problem_container.rendered = u.attach(function() {
  			if (this.firstRender) {
  				if (!this.timer_el)
  					this.timer_el = this.find('.timer');
  			}
- 		}, alignProblem);
+ 		}, _.bind(u.valign, null, '#problem'));
 
  		Template.problem_container.helpers({
  			html: function() {
@@ -638,7 +633,7 @@
 			}
 		});
 
- 		Template.solution_dialog.rendered = alignProblem;
+ 		Template.solution_dialog.rendered = _.bind(u.valign, null, '#problem');
 		Template.solution_dialog.helpers({
 			html: function(ctx) { 
 				var s = routeSession.get('review-scroll');
