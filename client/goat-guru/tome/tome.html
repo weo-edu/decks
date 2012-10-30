@@ -100,7 +100,7 @@
 			{{> scroll_info_view}}
 		{{/each}}
 		<div id='scroll-preview'>
-			{{> solution_dialog}}
+			{{> view_scroll_dialog}}
 		</div>
 </template>
 
@@ -165,3 +165,19 @@
 		{{/if}}
 	{{/if}}
 </template>
+
+<template name='view_scroll_dialog'>
+	<div class='solution-dialog'>
+		{{#ui "dialog"}}
+		<!-- <div id='problem-container'> -->
+			<div id='problem'>
+				{{#markdown}}{{{html}}}{{/markdown}}
+				<div id='solution' style="font-size 14px; color: blue">
+					{{solution}}
+				</div>
+				<button class='generate-button'>Generate</button>
+			</div>
+		<!-- </div> -->
+		{{/ui}}
+	</div>
+	</template>

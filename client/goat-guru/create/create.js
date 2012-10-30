@@ -282,7 +282,6 @@ route('/scroll/:username/:id/edit',
 				session.setValue(card.zebra || "");
 				setEditorHeight();
 				$('#ace-editor').css({fontSize:'15px'});
-				
 			});
 		}
 	}

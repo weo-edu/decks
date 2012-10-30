@@ -103,32 +103,57 @@ function tomeViewSetup(ctx, next) {
 		}
 	})
 
+	// -- Problem Preview Start -- //
+
 	Template.scroll_info_view.events({
 		'click .scroll-info-view': function(e){
-			routeSession.set('review-scroll', this);
+			console.log(this);
+			routeSession.set('scroll-preview', this);
 			ui.get($('#scroll-preview .dialog')).closable().overlay().center().show();
 		}
 	});
 
 
-	Template.solution_dialog.rendered = function() {
+	function alignProblem() {
 		var p = $('#problem');
 		p.css({'margin-top': -p.height()/2});
 	}
 
-	Template.solution_dialog.helpers({
-		html: function(ctx) { 
-			var s = routeSession.get('review-scroll');
-			curZebra = new Zebra(s.zebra);
-			console.log(curZebra);
-			return curZebra.render(s.assignment);
-		},
+	var context = null;
+	Template.view_scroll_dialog.helpers({
+		html: utils.attachDefer(function(ctx) {
+			context = Meteor.deps.Context.current;
+			console.log(ctx.template);
+
+			var card = routeSession.get('scroll-preview');
+			ctx.template.p = problemize(Cards.findOne(card._id));
+			ctx.template.z = new Zebra(ctx.template.p.zebra);
+			return ctx.template.z.render(ctx.template.p.assignment);
+		}, alignProblem),
 		solution: function(ctx) {
-			var s = routeSession.get('review-scroll');
-			if(! curZebra.showSolution(s.solution))
-				return s.solution;
+			return ctx.template.p.solution;
 		}
 	});
+
+	Template.view_scroll_dialog.events({
+		'keypress': function(e) {
+			var tmpl = ui.get($('#scroll-preview .dialog'));
+			if(e.which === 13) {
+				var p = tmpl.p,
+					z = tmpl.z;
+
+				var text = verifier(p.solutionText, p.assignment)(z.answer(), p.solution)
+						? 'correct' : 'incorrect';
+
+				alert(text);
+			}
+		},
+		'click .generate-button': function() {
+			context && context.invalidate();
+		}
+	})
+
+	// -- Problem Preview End -- //
 
 	Template.inner_tome.helpers({
 		isPublished: function() {
