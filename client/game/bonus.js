@@ -66,7 +66,7 @@
 				var cardStatistics = Stats.cardTime(problem.card_id);
 				var speed = 1 - Stats.inverseGaussCDF(time, cardStatistics.mu, cardStatistics.lambda);
 
-				var cutoff = .1
+				var cutoff = .45
 				var max_inc = .2;
 				if (speed > cutoff) {
 					var mult_inc = (speed - cutoff) / (1 - cutoff) * max_inc;

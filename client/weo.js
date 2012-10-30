@@ -32,6 +32,7 @@ Template.dojo_browse_nav.events({
 	'keyup #global-search': function(evt,template) {
 		var search = $(evt.target).val().toLowerCase();
 		routeSession.set('global-filter', search);
+		Meteor.get('globalSearch', search);
 
 		var d = ui.get(template.find('.dialog'));
 		d.on('hide', function() { 

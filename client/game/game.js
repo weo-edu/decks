@@ -5,7 +5,7 @@
     cardSelectTime: 1000,
     playPastTime: 1000,
     heartbeat_timeout: 2,
-    speedBonusCutoff: .9
+    speedBonusCutoff: .55
   };
 
   Game.route = function(deck, user) {
