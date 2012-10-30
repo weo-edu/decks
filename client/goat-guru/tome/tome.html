@@ -150,7 +150,9 @@
 			{{/each}}
 		</table>
 	{{/if}}
-	<div class='challenge-button'>Challenge</div>
+	{{#if isGoat}}
+		<div class='challenge-button'>Challenge</div>
+	{{/if}}
 </template>
 
 <template name='tome_discussion'>
@@ -175,7 +177,7 @@
 				<div id='solution' style="font-size 14px; color: blue">
 					{{solution}}
 				</div>
-				<button class='generate-button'>Generate</button>
+				<button class='generate-button'>GENERATE</button>
 			</div>
 		<!-- </div> -->
 		{{/ui}}

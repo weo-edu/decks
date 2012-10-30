@@ -190,7 +190,7 @@ route('/tome/:username/:id/edit',
 		},
 		scrollsInTome: function() {
 			var deck = Decks.findOne(deck_id);
-			if(deck.cards)
+			if(deck && deck.cards)
 				return deck.cards.indexOf(this._id) === -1 && this.status ? '' : 'in-tome'
 		}
 	})

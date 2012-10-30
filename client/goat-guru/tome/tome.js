@@ -155,12 +155,12 @@ function tomeViewSetup(ctx, next) {
 
 	// -- Problem Preview End -- //
 
-	Template.inner_tome.helpers({
-		isPublished: function() {
-			var tome = getTome();
-			return tome && tome.status === 'published';
-		}
-	})
+	// Template.inner_tome.helpers({
+	// 	isPublished: function() {
+	// 		var tome = getTome();
+	// 		return tome && tome.status === 'published';
+	// 	}
+	// })
 
 	Template.tome_buddies.helpers({
 		friends: function() {
@@ -216,6 +216,9 @@ function tomeViewSetup(ctx, next) {
 		},
 		number: function(opts) {
 			return opts || 0;
+		},
+		isGoat: function() {
+			return this.UserDeck && this.UserDeck.user === Meteor.user()._id;
 		}
 	});
 

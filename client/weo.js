@@ -33,20 +33,37 @@ Template.dojo_browse_nav.events({
 		var search = $(evt.target).val().toLowerCase();
 		routeSession.set('global-filter', search);
 
-		var dialog = ui.get(template.find('.dialog'));
-		dialog.on('hide', function() { $('#global-search').removeClass('active') });
+		var d = ui.get(template.find('.dialog'));
+		d.on('hide', function() { 
+			$('#global-search, .global-search-bar .close').removeClass('active').val(''); 
+		});
 		
-		if(dialog.hasClass('hide')) {
-			dialog.closable().show();
-			$('#global-search').addClass('active');
+		if(d.hasClass('hide')) {
+			d.overlay().show();
+			$('#global-search, .global-search-bar .close').addClass('active');
 		}
 	},
 	'blur #global-search': function(evt, template) {
 		if(!routeSession.get('global-filter')) {
 			ui.get(template.find('.dialog')).hide();
 		}
+	},
+	'click .close': function(evt, template) {
+		ui.get(template.find('.dialog')).hide();
+		route('/tome/' + this.Decks.creatorName + '/' + this.Decks.id);
 	}
 });
+
+Template.global_search.rendered = function() {
+	var d = ui.get($('#global-search-dialog .dialog'))
+	if(!d.hasClass('hide')) {
+		d.on('hide', function() { 
+			$('#global-search, .global-search-bar .close').removeClass('active').val(''); 
+		});
+		$('#global-search, .global-search-bar .close').addClass('active');
+	}
+		
+}
 
 Template.global_search.helpers({
 	results: function() {
@@ -55,6 +72,13 @@ Template.global_search.helpers({
 		return Decks.find({'search.keywords': routeSession.get('global-filter')});
 	}
 });
+
+Template.global_search.events({
+	'click .tome-container': function(){
+		ui.get($('#global-search-dialog .dialog')).hide();
+
+	}
+})
 
 // Template.global_search.events({
 
