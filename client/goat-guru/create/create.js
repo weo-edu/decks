@@ -362,23 +362,15 @@ route('/scroll/:username/:id/edit',
 		}
 	});
 
-	function alignProblem() {
-		Meteor.defer(function() {
-			var p = $('#problem');
-			p.css({'margin-top': -p.height()/2});
-		});
-	}
-
-
 	var context = null;
 	Template.scroll_preview.helpers({
-		html: utils.attachDefer(function(ctx) {
+		html: u.attachDefer(function(ctx) {
 			context = Meteor.deps.Context.current;
 
 			ctx.template.p = problemize(Cards.findOne(card_id));
 			ctx.template.z = new Zebra(ctx.template.p.zebra);
 			return ctx.template.z.render(ctx.template.p.assignment);
-		}, alignProblem),
+		}, _.bind(u.valign, null, '#problem')),
 		solution: function(ctx) {
 			return ctx.template.p.solution;
 		}
