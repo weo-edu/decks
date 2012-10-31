@@ -372,7 +372,7 @@ route('/scroll/:username/:id/edit',
 			return ctx.template.z.render(ctx.template.p.assignment);
 		}, _.bind(u.valign, null, '#problem')),
 		solution: function(ctx) {
-			return ctx.template.p.solution;
+			return Zebra.string(ctx.template.p.solution);
 		}
 	});
 
