@@ -401,7 +401,7 @@
 		 				.stop(true,false)
 		 				.animate({width: "0px"}, game.timeForBonus() * 1000, 'linear');
 		 			self.resetTimeout = Meteor.setTimeout(function() {
-		 				game.resetMultiplier();
+		 				game && game.resetMultiplier();
 		 			}, game.timeForBonus() * 1000);
 		 		})();
  			}
@@ -422,7 +422,7 @@
  		}); 
 
  		Template.game_multiplier.destroyed = function() {
- 			Meteor.clearInterval(this.interval);
+ 			Meteor.clearTimeout(this.resetTimeout);
  		}
 
  		Template.current_card.helpers({
@@ -491,7 +491,9 @@
 			var p = game.currentProblem();
 			if(! p) return;
 
-			var	outcome = game.answer(curZebra.answer());
+			var	outcome = curZebra.wrap(function() {
+				return game.answer(curZebra.answer());
+			});
 				card = _.clone(Cards.findOne(p.card_id));
 			
 			card.type = 'card';

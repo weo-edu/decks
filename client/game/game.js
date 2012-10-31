@@ -809,7 +809,13 @@
     event('complete', game, {
       adverbs: adverb,
       feed: true,
-      app: 'decks'
+      app: 'decks',
+      render: {
+        opponent: self.opponent().username,
+        deck_title: self.deck().title,
+        deck_url: '/tome/' + self.deck().creatorName + '/' + self.deck().id,
+        game_url: '/game/' + game._id
+      }
     });
     self.emit('complete');
   }
