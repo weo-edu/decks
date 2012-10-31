@@ -401,7 +401,7 @@
 		 				.stop(true,false)
 		 				.animate({width: "0px"}, game.timeForBonus() * 1000, 'linear');
 		 			self.resetTimeout = Meteor.setTimeout(function() {
-		 				gmae && game.resetMultiplier();
+		 				game && game.resetMultiplier();
 		 			}, game.timeForBonus() * 1000);
 		 		})();
  			}
