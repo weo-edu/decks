@@ -51,7 +51,6 @@ Template.dojo_browse_nav.events({
 	},
 	'click .close': function(evt, template) {
 		ui.get(template.find('.dialog')).hide();
-		route('/tome/' + this.Decks.creatorName + '/' + this.Decks.id);
 	}
 });
 
@@ -77,7 +76,7 @@ Template.global_search.helpers({
 Template.global_search.events({
 	'click .tome-container': function(){
 		ui.get($('#global-search-dialog .dialog')).hide();
-
+		route('/tome/' + this.creatorName + '/' + this.id);
 	}
 })
 

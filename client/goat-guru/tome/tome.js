@@ -171,7 +171,10 @@ function tomeViewSetup(ctx, next) {
 			return opts || 0;
 		},
 		isGoat: function() {
-			return this.UserDeck && this.UserDeck.user === Meteor.user()._id;
+			if(!this.UserDeck)
+				return true
+
+			return this.UserDeck.user === Meteor.user()._id;
 		}
 	});
 

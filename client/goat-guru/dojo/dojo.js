@@ -1,5 +1,3 @@
-
-
 var easing = 'easeInQuad';
 var dojoRenderer = view.renderer('dojoRender', {
 	tome_view: {
