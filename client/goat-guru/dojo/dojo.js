@@ -24,10 +24,8 @@ var navRenderer = view.renderer('navRender');
 var dojo = {};
 
 dojo.render = function(name, nav) {
-	if (view.rendered() !== 'dojo_view') {
+	if (view.rendered() !== 'dojo_view')
 		view.render('dojo_view');
-	}
-	
 
 	nav = nav || 'dojo_browse_nav';
 	if (navRenderer.rendered() !== nav)

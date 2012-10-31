@@ -401,7 +401,7 @@
 		 				.stop(true,false)
 		 				.animate({width: "0px"}, game.timeForBonus() * 1000, 'linear');
 		 			self.resetTimeout = Meteor.setTimeout(function() {
-		 				game.resetMultiplier();
+		 				gmae && game.resetMultiplier();
 		 			}, game.timeForBonus() * 1000);
 		 		})();
  			}
@@ -422,7 +422,7 @@
  		}); 
 
  		Template.game_multiplier.destroyed = function() {
- 			Meteor.clearInterval(this.interval);
+ 			Meteor.clearTimeout(this.resetTimeout);
  		}
 
  		Template.current_card.helpers({

@@ -76,5 +76,9 @@ Meteor.startup(function() {
     return Cards.find({'search.keywords': filter}, {sort: {plays: -1}});
   });
 
+  Meteor.publish('globalSearch', function(filter) {
+    return Decks.find({'search.keywords': filter}, {sort: {plays: -1}});
+  });
+
   Observer.start();
 });

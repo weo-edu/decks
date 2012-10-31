@@ -48,21 +48,26 @@
 </template>
 
 <template name='inner_tome'>
-	<div class='shelf connect right'></div>
+	<!-- <div class='shelf connect right'></div> -->
 	<div class='sidebar buddy-list'>
 		<div class='sidebar-inner'>
 			{{> tome_buddies}}
 		</div>
 	</div>
-	{{#if isPublished}}
-		<div class='practice'>PRACTICE</div>
-	{{/if}}
-	<img class='goat-left' src='/app!decks/img/goat-left.png' />
+	{{!#if isPublished}}
+		<!-- <div class='practice'>Challenge</div> -->
+	{{!/if}}
+	<!-- <img class='goat-left' src='/app!decks/img/goat-left.png' /> -->
 </template>
 
 <template name='tome_buddies'>
 	<h3>Friends</h3>
 	<div class='shelf connect'></div>
+		<div id='buddy-goat' class='buddy {{active}} connected tome-buddy'>
+				<div id='goat-avatar' class='avatar avatar-thumb' style='background-image: url("/app!common/avatars/guru.png");'></div>
+				<p class='tome-username'>Goat Guru</p>
+				<div class='show-zero mini-stars mini-stars-{{myMastery}}'></div>
+		</div>
 	{{#each friends}}
 		<div id='buddy-{{_id}}' class='buddy {{active}} {{isConnected}} tome-buddy'>
 				<div id='avatar-{{idx}}' class='avatar avatar-thumb' style='background-image: url({{avatar}});'></div>
@@ -74,17 +79,26 @@
 
 
 <template name='tome_info'>
-	<center>
 		<div class='big-tome'>
 			{{> big_tome}}
 		</div>
-		<h3>Cards Per Game:</h3>
-		<p>{{CPG}}</p>
-		<h3>Categories:</h3>
-		<p>{{Decks.tags}}</p>
-		<h3>Description:</h3>
-		<p>{{Decks.description}}</p>
-	</center>
+		<div class='big-tome-info'>
+			<div>
+				<h3>Cards Per Game:</h3>
+				<p>{{CPG}}</p>
+			</div>
+			<div>
+				<h3>Categories:</h3>
+				<p>{{Decks.tags}}</p>
+			</div>
+			<div>
+				<h3>Description:</h3>
+				<p>{{Decks.description}}</p>
+			</div>
+		</div>
+		{{#each scrollsInTome}}
+			{{> scroll_info_view}}
+		{{/each}}
 </template>
 
 <template name='tome_stats'>
@@ -133,6 +147,9 @@
 			{{/each}}
 		</table>
 	{{/if}}
+	{{#if isGoat}}
+		<div class='challenge-button'>Challenge</div>
+	{{/if}}
 </template>
 
 <template name='tome_discussion'>
@@ -147,3 +164,19 @@
 		{{/if}}
 	{{/if}}
 </template>
+
+<template name='view_scroll_dialog'>
+	<div class='solution-dialog'>
+		{{#ui "dialog"}}
+		<!-- <div id='problem-container'> -->
+			<div id='problem'>
+				{{#markdown}}{{{html}}}{{/markdown}}
+				<div id='solution' style="font-size 14px; color: blue">
+					{{solution}}
+				</div>
+				<button class='generate-button'>GENERATE</button>
+			</div>
+		<!-- </div> -->
+		{{/ui}}
+	</div>
+	</template>

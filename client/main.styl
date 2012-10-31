@@ -58,6 +58,24 @@ html, body {
 	  overflow: hidden;
 }
 
+.dialog.await {
+	font-family: 'Fresca';
+	text-align: center;
+	h2 {
+		background: #555;
+		color: #FFF;
+		text-shadow: 0 0 0;
+		font: 30px/35px 'BleakChop';
+	}
+	.content {
+		padding: 0;
+	}
+	.inner-await {
+		padding: 30px;
+		font-size: 15px;
+	}
+}
+
 .shelf {
 	border-bottom: 10px solid #42210B;
 	box-shadow: 0 10px 8px rgba(black, .15);
@@ -81,6 +99,9 @@ html, body {
 	}
 }
 
+#problem {
+	visibility: hidden;
+}
 
 .avatar {
 	border-radius: 50%;
@@ -193,8 +214,13 @@ html, body {
 		left: 50%;
 		margin-left: -185px;
 		top: 14px;
-		box-shadow: 0 0 6px rgba(black, .8);
+		box-shadow: 0 0 5px rgba(black, .8);
+		transition: box-shadow .2s;
+		&:hover {
+			box-shadow: 0 0 8px rgba(black);
+		}
 	}
+
 
 	.nav-user {
 		position: absolute;
@@ -242,4 +268,104 @@ html, body {
 		}
 	}
 
+}
+
+/**
+ * Gloabl Search
+ */
+
+#global-search {
+	position: fixed;
+	top: 14px;
+	left: 50%;
+	margin: 0;
+	margin-left: -185px;
+	width: 330px;
+	height: 60px;
+	padding: 10px 70px 10px 10px;
+	font: 80px 'BleakChop';
+	text-indent: 10px;
+	-webkit-text-stroke: 2px darken(blue, 17);
+	-webkit-text-fill-color: #FDD43A; 
+	text-shadow: 0 0 10px rgba(black, .5);
+	letter-spacing: 1px;
+	outline: 0;
+	opacity: 0;
+	background: url('/app!common/textures/handmadepaper.png');
+	cursor: pointer;
+	border: 10px solid black;
+	transition-property: opacity, margin, width, height;
+	transition-duration: .15s;
+	transition-delay: .15s, 0s, 0s, 0s;
+	z-index: 9999;
+	box-shadow: 0 0 20px rgba(black);
+	text-align: center;
+	&:focus, &.active {
+		outline: 0;
+		cursor: text;
+		z-index: 999;
+		size = 940px;
+		height: 80px;
+		width: size;
+		opacity: 1;
+		margin-left: -((size + 20)/2) - 40;
+		transition-duration: .15s;
+		transition-delay: 0, .15s, .15s, .15s;
+	}
+}
+
+.global-search-bar {
+	position: relative;
+	.close {
+		cursor: pointer;
+		display: none;
+		position: absolute;
+		right: -7px;
+		top: -67px;
+		font: 80px 'BleakChop';
+		z-index: 999;
+		color: #777;
+		&:hover {
+			color: #333;
+		}
+		&.active {
+			display: block;
+		}
+	}
+}
+
+#global-search-dialog {
+	top: 111px;
+	position: absolute;
+	height: 100%;
+	width: 980px;
+	.dialog {
+		transition: opacity .4s;
+		box-shadow: 0 0 0;
+		background-image: url('/app!common/textures/handmadepaperA85.png');
+		background-color: rgba(white, .7);
+		position: absolute;
+		top: 0;
+		left: 50%;
+		margin-left: -(980/2)px;
+		z-index: 98;
+		width: 980px;
+		max-width: 980px;
+		height: 100%;
+		woodSides();
+		&:after, &:before {
+			top: 0;
+		}
+		.close {
+			display: none;
+		}
+
+		h5 {
+			text-shadow: 0 0 0;
+			color: #333;
+		}
+	}
+	.overlay {
+		z-index: 0;
+	}
 }

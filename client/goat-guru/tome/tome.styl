@@ -139,6 +139,7 @@ scroll(width = 181px, height = 195px) {
 	}
 }
 
+
 /**
  * Tome Drop Down
  */
@@ -169,24 +170,25 @@ scroll(width = 181px, height = 195px) {
 		font-size: 30px;
 		text-transform: uppercase;
 		position: absolute;
-		top: 120px;
-		right: 35px;
+		top: 15px;
+		right: 20px;
 		z-index: 4;
 		&:active {
-			top: 121px;
+			top: 16px;
 		}
 	}
 
-	.goat-left {
-		margin-left: 712px;
-	}
+	// .goat-left {
+	// 	margin-left: 712px;
+	// }
+	// 
 
 	.tome-center {
 		position: relative;
-		width: 526px;
+		width: 737px;
 		height: 100%;
 		box-shadow: 0 0 20px rgba(black, 1);
-		margin: 0 auto;
+		margin-left: 209px;
 		padding: 0 17px;
 		woodSides();
 		background: url('/app!common/textures/handmadepaperA85.png')
@@ -242,16 +244,48 @@ scroll(width = 181px, height = 195px) {
 		&:before, &:after {
 			top: 0px;
 		}
+
+		.big-tome {
+			float: left;
+		}
+		.big-tome-info {
+			float: left;
+			margin: 20px 20px 0;
+			width: 433px;
+			> div {
+				clearfix();
+				margin: 20px 0;
+			}
+			h3 {
+				float: left;
+				width: 165px;
+				margin-right: 15px;
+				line-height: 19px;
+			}
+			p {
+				line-height: 25px;
+			}
+		}
+
+		.scroll-info-view {
+			background: transparent;
+			&:hover {
+				background: rgba(black, .1);
+			}
+			.inner-scroll-info.info {
+				width: 330px;
+			}
+		}
 		
 	}
 
-	.shelf.connect.right {
-		position: absolute;
-		top: 76px;
-		right: 17px;
-		width: 208px;
-		z-index: 2;
-	}
+	// .shelf.connect.right {
+	// 	position: absolute;
+	// 	top: 76px;
+	// 	right: 17px;
+	// 	width: 208px;
+	// 	z-index: 2;
+	// }
 
 	.buddy-list {
 		overflow-y: auto;
@@ -283,7 +317,7 @@ scroll(width = 181px, height = 195px) {
  */
 
 .tome-stats {
-	width: 527px;
+	width: 100%;
 	margin: -20px auto 0;
 	&.stats {
 		td, th {
