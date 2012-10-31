@@ -382,8 +382,12 @@ route('/scroll/:username/:id/edit',
 				var p = tmpl.p,
 					z = tmpl.z;
 
-				var text = verifier(p.solutionText, p.assignment)(z.answer(), p.solution)
+
+				var text = ''
+				z.wrap(function() {
+					text = verifier(p.solutionText, p.assignment)(z.answer(), p.solution)
 						? 'correct' : 'incorrect';
+				});
 
 				alert(text);
 			}

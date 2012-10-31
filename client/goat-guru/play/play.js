@@ -491,7 +491,9 @@
 			var p = game.currentProblem();
 			if(! p) return;
 
-			var	outcome = game.answer(curZebra.answer());
+			var	outcome = curZebra.wrap(function() {
+				return game.answer(curZebra.answer());
+			});
 				card = _.clone(Cards.findOne(p.card_id));
 			
 			card.type = 'card';
