@@ -171,7 +171,7 @@ function tomeViewSetup(ctx, next) {
 			return opts || 0;
 		},
 		isGoat: function() {
-			return this.UserDeck && this.UserDeck.user === Meteor.user()._id;
+			return false;
 		}
 	});
 
@@ -227,6 +227,12 @@ route('/tome/:username/:id/stats',
 			Game.route(getTome()._id);
 		}
 	});
+
+	Template.tome_stats.helpers({
+		isGoat: function() {
+			return true;
+		}
+	})
 	
 	tome.render('tome_stats');
 
