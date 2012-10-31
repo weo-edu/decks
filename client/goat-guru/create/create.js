@@ -383,11 +383,8 @@ route('/scroll/:username/:id/edit',
 					z = tmpl.z;
 
 
-				var text = ''
-				z.wrap(function() {
-					text = verifier(p.solutionText, p.assignment)(z.answer(), p.solution)
-						? 'correct' : 'incorrect';
-				});
+				var text = verifier(p.solutionText, p.assignment)(z.answer(), p.solution)
+					? 'correct' : 'incorrect';
 
 				alert(text);
 			}

@@ -300,7 +300,11 @@
   }
 
   Game.prototype.isCorrect = function(p) {
-    return verifier(p.solutionText, p.assignment)(p.answer, p.solution);
+    var ret = false;
+    //this.zebra.wrap(function() {
+      ret = verifier(p.solutionText, p.assignment)(p.answer, p.solution);
+    //});
+    return ret;
   }
 
   Game.prototype.isIncorrect = function(p) {

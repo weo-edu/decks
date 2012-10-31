@@ -401,7 +401,7 @@
 		 				.stop(true,false)
 		 				.animate({width: "0px"}, game.timeForBonus() * 1000, 'linear');
 		 			self.resetTimeout = Meteor.setTimeout(function() {
-		 				gmae && game.resetMultiplier();
+		 				game && game.resetMultiplier();
 		 			}, game.timeForBonus() * 1000);
 		 		})();
  			}
@@ -491,10 +491,9 @@
 			var p = game.currentProblem();
 			if(! p) return;
 
-			var	outcome = curZebra.wrap(function() {
-				return game.answer(curZebra.answer());
-			});
-				card = _.clone(Cards.findOne(p.card_id));
+			var outcome = game.answer(curZebra.answer());
+
+			card = _.clone(Cards.findOne(p.card_id));
 			
 			card.type = 'card';
 			event({ name: 'complete', time: p.time },
@@ -640,6 +639,7 @@
 			html: function(ctx) { 
 				var s = routeSession.get('review-scroll');
 				curZebra = new Zebra(s.zebra);
+				game.zebra = curZebra;
 				return curZebra.render(s.assignment);
 			},
 			solution: function(ctx) {
