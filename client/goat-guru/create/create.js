@@ -365,7 +365,7 @@ route('/scroll/:username/:id/edit',
 	});
 
 	// scroll preview setup
-	routeSession.set('scroll-preview', card);
+	routeSession.set('scroll-preview', card_id);
 	setupProblemPreview();
 
 	/**

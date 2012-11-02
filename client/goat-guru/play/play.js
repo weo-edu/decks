@@ -651,7 +651,7 @@
 			solution: function(ctx) {
 				var s = routeSession.get('review-scroll');
 				if(! curZebra.showSolution(s.solution))
-					return s.solution;
+					return Zebra.string(s.solution);
 			}
 		});
 

@@ -113,7 +113,7 @@ function tomeViewSetup(ctx, next) {
 	// })
 	Template.scroll_info_view.events({
 	'click .scroll-info-view': function(e){
-			previewDialog(this)
+			previewDialog(this._id)
 		}
 	});
 

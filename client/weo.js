@@ -99,9 +99,8 @@ function animateBg() {
 // -- Problem Preview Dialog Start -- //
 // 
 
-function previewDialog(card) {
-	console.log('previewDialog', card);
-	routeSession.set('scroll-preview', card);
+function previewDialog(card_id) {
+	routeSession.set('scroll-preview', card_id);
 	ui.get($('#scroll-preview .dialog')).closable().overlay().center().show();
 }
 
@@ -113,18 +112,18 @@ function setupProblemPreview() {
 
 			context = Meteor.deps.Context.current;
 
-			var card = routeSession.get('scroll-preview');
+			var card_id = routeSession.get('scroll-preview');
 
-			if (!card)
+			if (!card_id)
 				return;
-			ctx.template.p = problemize(Cards.findOne(card._id));
+			ctx.template.p = problemize(Cards.findOne(card_id));
 			ctx.template.z = new Zebra(ctx.template.p.zebra);
 			return ctx.template.z.render(ctx.template.p.assignment);
 		}, _.bind(u.valign, null, '#problem')),
 		solution: function(ctx) {
 			if (!ctx.template.p)
 				return
-			return ctx.template.p.solution;
+			return Zebra.string(ctx.template.p.solution);
 		}
 	});
 	Template.preview_problem_container.events({
