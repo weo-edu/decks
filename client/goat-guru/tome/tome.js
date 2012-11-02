@@ -103,6 +103,8 @@ function tomeViewSetup(ctx, next) {
 		}
 	})
 
+	setupProblemPreview();
+
 	// Template.inner_tome.helpers({
 	// 	isPublished: function() {
 	// 		var tome = getTome();
@@ -189,7 +191,6 @@ route('/tome/:username/:id/info',
 	var myDeckInfo = UserDeck.find({deck: this._id, user: Meteor.user()._id}).fetch();
 
 	tome.render('tome_info');
-
 });
 
 

@@ -63,13 +63,19 @@ status-icon(color) {
 	.disconnected {
 		position: relative;
 		&:after {
-			status-icon(red);
+			status-icon(black);
 		}
 	}
 	.connected {
 		position: relative;
 		&:after {
 			status-icon(lighten(green, 10));
+		}
+	}
+	.busy {
+		position: relative;
+		&:after {
+			status-icon(red);
 		}
 	}
 }

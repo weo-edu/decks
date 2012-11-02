@@ -258,6 +258,8 @@ route('/scroll/:username/:id/edit',
 
 	routeSession.set('active', 'info');
 
+
+
 	//XXX clean this up
 	//var editor = null;
 	var emitter = new Emitter();
@@ -362,38 +364,10 @@ route('/scroll/:username/:id/edit',
 		}
 	});
 
-	var context = null;
-	Template.scroll_preview.helpers({
-		html: u.attachDefer(function(ctx) {
-			context = Meteor.deps.Context.current;
+	// scroll preview setup
+	routeSession.set('scroll-preview', card);
+	setupProblemPreview();
 
-			ctx.template.p = problemize(Cards.findOne(card_id));
-			ctx.template.z = new Zebra(ctx.template.p.zebra);
-			return ctx.template.z.render(ctx.template.p.assignment);
-		}, _.bind(u.valign, null, '#problem')),
-		solution: function(ctx) {
-			return ctx.template.p.solution;
-		}
-	});
-
-	Template.scroll_preview.events({
-		'keypress': function(e, tmpl) {
-			if(e.which === 13) {
-				var p = tmpl.p,
-					z = tmpl.z;
-
-
-				var text = verifier(p.solutionText, p.assignment)(z.answer(), p.solution)
-					? 'correct' : 'incorrect';
-
-				alert(text);
-			}
-		},
-		'click .generate-button': function() {
-			context && context.invalidate();
-		}
-	})
-	
 	/**
 	 * Info Form
 	 */

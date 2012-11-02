@@ -21,6 +21,12 @@
   			, game_id = ctx.params.id
   			, gameCreated = new ReactiveVar(false)
   			, curZebra = null;
+
+  		Meteor.users.update({_id: Meteor.user()._id}, {$set: {status: 'busy'}});
+			console.log('ctx', ctx);
+			ctx.on('destroy', function() {
+				Meteor.users.update({_id: Meteor.user()._id}, {$set: {status: 'connected'}});
+			});
   		
 			Template.game.created = function() {
 				var self = this;
@@ -659,6 +665,8 @@
 				return Template[message] && Template[message]();
 			}
 		});
+
+
 
 	 	dojo.render('game', 'game_nav');
 	});
