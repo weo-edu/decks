@@ -23,7 +23,6 @@
   			, curZebra = null;
 
   		Meteor.users.update({_id: Meteor.user()._id}, {$set: {status: 'busy'}});
-			console.log('ctx', ctx);
 			ctx.on('destroy', function() {
 				Meteor.users.update({_id: Meteor.user()._id}, {$set: {status: 'connected'}});
 			});
@@ -354,6 +353,7 @@
  		}
 
  		Template.problem_container.rendered = u.attach(function() {
+ 			console.log('problem container rendered');
  			if (this.firstRender) {
  				if (!this.timer_el)
  					this.timer_el = this.find('.timer');
@@ -644,13 +644,15 @@
 		Template.solution_dialog.helpers({
 			html: function(ctx) { 
 				var s = routeSession.get('review-scroll');
-				curZebra = new Zebra(s.zebra);
-				game.zebra = curZebra;
-				return curZebra.render(s.assignment);
+				if(s) {
+					curZebra = new Zebra(s.zebra);
+					game.zebra = curZebra;
+					return curZebra.render(s.assignment);
+				}
 			},
 			solution: function(ctx) {
 				var s = routeSession.get('review-scroll');
-				if(! curZebra.showSolution(s.solution))
+				if(s && ! curZebra.showSolution(s.solution))
 					return Zebra.string(s.solution);
 			}
 		});
