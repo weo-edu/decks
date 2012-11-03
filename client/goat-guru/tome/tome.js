@@ -156,7 +156,7 @@ route('/tome/:creatorName/:id/friends', function(ctx) {
 
 	var friend_ids = Meteor.user().friends;
 	Meteor.subscribe('userDecks', friend_ids, ctx.tome._id);
-
+	
 	Template.tome_friends.helpers({
 		friends: function() {
 			var user_decks = UserDeck.find({

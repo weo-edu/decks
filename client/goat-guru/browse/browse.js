@@ -50,7 +50,7 @@ route('/user/:username?',
 	var myName = Meteor.user().username;
 	var username = ctx.params.username || myName;
 	var isMe = myName === username;
-	var user = Meteor.users.findOne({username: username});
+	var user = Meteor.users.findOne({username: username}) || {};
 	
 	Meteor.subscribe('playedDecks', user._id);
 	Meteor.subscribe('created', user._id);
