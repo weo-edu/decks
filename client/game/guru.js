@@ -55,7 +55,6 @@
 		};
 
 		self.mygame = new Game(self.game.id, options);
-
 		self.mygame.on('select', self.choose.bind(self));
 
 		self.mygame.on('play', self.setupTimes.bind(self));

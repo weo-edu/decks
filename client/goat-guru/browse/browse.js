@@ -45,6 +45,8 @@ route('/user/:username?',
 	setupBuddyList,
 	function(ctx) { 
 
+	setupProblemPreview();
+
 	var myName = Meteor.user().username;
 	var username = ctx.params.username || myName;
 	var isMe = myName === username;
@@ -148,6 +150,7 @@ route('/user/:username?',
 				: route('/tome/' + this.creatorName + '/' + this.id);
 		}
 	});
+
 
 	Template.scroll_detailed.events({
 		'click': function() {

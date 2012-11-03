@@ -166,13 +166,7 @@
 	<div class='solution-dialog'>
 		{{#ui "dialog"}}
 		<!-- <div id='problem-container'> -->
-			<div id='problem'>
-				{{#markdown}}{{{html}}}{{/markdown}}
-				<div id='solution' style="font-size 14px; color: blue">
-					{{solution}}
-				</div>
-				<button class='generate-button'>GENERATE</button>
-			</div>
+		{{> preview_problem_container}}
 		<!-- </div> -->
 		{{/ui}}
 	</div>

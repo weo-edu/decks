@@ -87,30 +87,36 @@ Template.global_search.events({
 
 
 // -- Problem Preview Dialog Start -- //
+// 
 
-
-function previewDialog(card) {
-	routeSession.set('scroll-preview', card);
+function previewDialog(card_id) {
+	routeSession.set('scroll-preview', card_id);
 	ui.get($('#scroll-preview .dialog')).closable().overlay().center().show();
 }
 
-var context = null;
-Template.view_scroll_dialog.helpers({
-	html: utils.attachDefer(function(ctx) {
-		context = Meteor.deps.Context.current;
-		console.log(ctx.template);
 
-		var card = routeSession.get('scroll-preview');
-		ctx.template.p = problemize(Cards.findOne(card._id));
-		ctx.template.z = new Zebra(ctx.template.p.zebra);
-		return ctx.template.z.render(ctx.template.p.assignment);
-	}, _.bind(u.valign, null, '#problem')),
-	solution: function(ctx) {
-		return ctx.template.p.solution;
-	}
-});
+function setupProblemPreview() {
+	var context = null;
+	Template.preview_problem_container.helpers({
+		html: utils.attachDefer(function(ctx) {
 
-Template.view_scroll_dialog.events({
+			context = Meteor.deps.Context.current;
+
+			var card_id = routeSession.get('scroll-preview');
+
+			if (!card_id)
+				return;
+			ctx.template.p = problemize(Cards.findOne(card_id));
+			ctx.template.z = new Zebra(ctx.template.p.zebra);
+			return ctx.template.z.render(ctx.template.p.assignment);
+		}, _.bind(u.valign, null, '#problem')),
+		solution: function(ctx) {
+			if (!ctx.template.p)
+				return
+			return Zebra.string(ctx.template.p.solution);
+		}
+	});
+	Template.preview_problem_container.events({
 	'keypress': function(e) {
 		var tmpl = ui.get($('#scroll-preview .dialog'));
 		if(e.which === 13) {
@@ -127,6 +133,11 @@ Template.view_scroll_dialog.events({
 		context && context.invalidate();
 	}
 })
+}
+
+
+
+
 
 // -- Problem Preview End -- //
 

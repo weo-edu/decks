@@ -21,6 +21,12 @@
   			, game_id = ctx.params.id
   			, gameCreated = new ReactiveVar(false)
   			, curZebra = null;
+
+  		Meteor.users.update({_id: Meteor.user()._id}, {$set: {status: 'busy'}});
+			console.log('ctx', ctx);
+			ctx.on('destroy', function() {
+				Meteor.users.update({_id: Meteor.user()._id}, {$set: {status: 'connected'}});
+			});
   		
 			Template.game.created = function() {
 				var self = this;
@@ -491,10 +497,9 @@
 			var p = game.currentProblem();
 			if(! p) return;
 
-			var	outcome = curZebra.wrap(function() {
-				return game.answer(curZebra.answer());
-			});
-				card = _.clone(Cards.findOne(p.card_id));
+			var outcome = game.answer(curZebra.answer());
+
+			card = _.clone(Cards.findOne(p.card_id));
 			
 			card.type = 'card';
 			event({ name: 'complete', time: p.time },
@@ -640,12 +645,13 @@
 			html: function(ctx) { 
 				var s = routeSession.get('review-scroll');
 				curZebra = new Zebra(s.zebra);
+				game.zebra = curZebra;
 				return curZebra.render(s.assignment);
 			},
 			solution: function(ctx) {
 				var s = routeSession.get('review-scroll');
 				if(! curZebra.showSolution(s.solution))
-					return s.solution;
+					return Zebra.string(s.solution);
 			}
 		});
 
@@ -659,6 +665,8 @@
 				return Template[message] && Template[message]();
 			}
 		});
+
+
 
 	 	dojo.render('game', 'game_nav');
 	});

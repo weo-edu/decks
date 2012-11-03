@@ -12,6 +12,8 @@ function tomeSetup(ctx, next) {
 	Meteor.subscribe('userDecks', Meteor.user()._id, ctx.tome._id);
 	Meteor.subscribe('cards', ctx.tome.cards);
 
+	setupProblemPreview();
+
 	Template.tome_view.helpers({
 		tome: function() {
 			var curTome = {Decks: ctx.tome};
@@ -87,7 +89,7 @@ route('/tome/:creatorName/:id/info', function(ctx) {
 
 	Template.scroll_info_view.events({
 		'click .scroll-info-view': function(e){
-			previewDialog(this)
+			previewDialog(this._id)
 		}
 	});
 
@@ -100,6 +102,7 @@ route('/tome/:creatorName/:id/info', function(ctx) {
 		}
 	})
 
+// <<<<<<< HEAD
 	tome.render('tome_info');
 });
 

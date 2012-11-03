@@ -211,17 +211,21 @@
 		{{> problem_tracker_empty}}
 	</div>
 	<div id='problem-container'>
-		<div id='problem'>
-			{{#markdown}}{{{html}}}{{/markdown}}
-			<div id='solution' style="font-size 14px; color: blue">
-				{{solution}}
-			</div>
-			<button class='generate-button'>Generate</button>
-		</div>
-	</div>
+	{{> preview_problem_container}}
+</div>
 	{{> problem_tracker_empty}}
 	<div class='tracker'>
 		{{> problem_tracker_empty}}
+	</div>
+</template>
+
+<template name="preview_problem_container">
+	<div id='problem'>
+		{{#markdown}}{{{html}}}{{/markdown}}
+		<div id='solution' style="font-size 14px; color: blue">
+			{{solution}}
+		</div>
+		<button class='generate-button'>Generate</button>
 	</div>
 </template>
 
