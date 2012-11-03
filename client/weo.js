@@ -104,9 +104,10 @@ function setupProblemPreview() {
 
 			var card_id = routeSession.get('scroll-preview');
 
-			if (!card_id)
+			var card = Cards.findOne(card_id);
+			if (!card)
 				return;
-			ctx.template.p = problemize(Cards.findOne(card_id));
+			ctx.template.p = problemize(card);
 			ctx.template.z = new Zebra(ctx.template.p.zebra);
 			return ctx.template.z.render(ctx.template.p.assignment);
 		}, _.bind(u.valign, null, '#problem')),

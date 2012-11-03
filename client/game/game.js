@@ -255,10 +255,12 @@
       opponent = Meteor.user();
     }
 
-    return (self.message = function(/* arguments */) {
+    self.message = function(/* arguments */) {
       var args = [opponent._id].concat(_.toArray(arguments));
       return message.apply(window, args);
-    }).apply(self, arguments);
+    }
+
+    return self.message.apply(self, arguments);
   }
 
 
@@ -875,7 +877,7 @@
       return {
         correct: correct,
         incorrect: incorrect,
-        total: problems.length,
+        total: (problems && problems.length) || 0,
         points: self.points(id)
       };
     }
