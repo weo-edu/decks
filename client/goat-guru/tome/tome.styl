@@ -28,15 +28,6 @@ tome(width = 181px, height = 195px) {
 		background-size: cover;
 		background-position: center;
 		box-shadow: inset -1px -1px 0 rgba(black, .5), inset 0px 1px 0 rgba(white, .5);
-		// &:after {
-		// 	content: '';
-		// 	position: absolute;
-		// 	height: 100%;
-		// 	width: 100%;
-		// 	border-radius: 0 14px 14px 0;
-		// 	background: url('/app!decks/img/tome-overlay.png');
-		// 	display: none;
-		// }
 	}
 	.tome-title {
 		position: absolute;
@@ -146,21 +137,10 @@ scroll(width = 181px, height = 195px) {
 
 #tome-view {
 	position: absolute;
-	// left: -17px;
 	z-index: 2;
 	width: 100%;
 	height: 100%;
-	background: url('/app!decks/img/woodRepeat.jpg');
-	woodSides();
-	.tome-bg{
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background: url('/app!common/textures/handmadepaperA85.png')		
-	}
-
+	// woodSides();
 	&:before, &:after {
 			top: 0px;
 	}
@@ -178,11 +158,6 @@ scroll(width = 181px, height = 195px) {
 		}
 	}
 
-	// .goat-left {
-	// 	margin-left: 712px;
-	// }
-	// 
-
 	.tome-center {
 		position: relative;
 		width: 737px;
@@ -191,8 +166,14 @@ scroll(width = 181px, height = 195px) {
 		margin-left: 209px;
 		padding: 0 17px;
 		woodSides();
-		background: url('/app!common/textures/handmadepaperA85.png')
+		background-image: url('/app!common/textures/handmadepaperA85.png');
+		background-color: rgb(165, 165, 165);
 		z-index: 3;
+
+		.tome-top-info {
+			background-image: url('/app!common/textures/handmadepaper.png');
+			padding-bottom: 10px;
+		}
 		
 		.tome-center-inner {
 			width: 100%;
@@ -201,20 +182,40 @@ scroll(width = 181px, height = 195px) {
 			height: 100%;
 			overflow-y: auto;
 			font: 16px 'Fresca';
-				h2 { 
-				padding-top: 20px;
-				text-align: center;
-				color: #666;
+			.title-container {
+				clearfix();
 			}
-			.table {
-				display: table;
-				margin: 0 auto;
+			h2 { 
+				font-size: 60px;
+				padding-top: 20px;
+				margin-left: 20px;
+				color: #4D4D4D;
+				float: left;
+			}
+			.train-button-container {
+				margin: 25px 50px 0 0;
+				float: right;
+				.mini-stars {
+					margin: 5px auto 0;
+				}
+			}
+			.train-button {
+				text-transform: uppercase;
+				text-shadow: -1px -1px 0 rgba(black, .3), 1px 1px 0 rgba(white, .2);
+				text-align: center;
+				font-size: 35px;
+				line-height: 50px;
+				button-gradient(blue);
+				border-radius: 5px;
+				color: #FFF;
+				padding: 0 35px;
+				cursor: pointer;
 			}
 			.tome-nav {
+				clear: both;
 				text-align: center;
 				font: 20px/1.2em 'BleakChop';
-				margin: 5px auto -5px;
-				margin-left: 10px;
+				margin: 10px;
 				clearfix();
 				li{
 					toggle-button();
@@ -250,20 +251,21 @@ scroll(width = 181px, height = 195px) {
 		}
 		.big-tome-info {
 			float: left;
-			margin: 20px 20px 0;
+			margin: 10px 20px 0 50px;
 			width: 433px;
 			> div {
 				clearfix();
-				margin: 20px 0;
+				margin: 15px 0;
 			}
 			h3 {
+				font-size: 20px;
 				float: left;
-				width: 165px;
+				width: 140px;
 				margin-right: 15px;
-				line-height: 19px;
+				line-height: 18px;
 			}
 			p {
-				line-height: 25px;
+				line-height: 22px;
 			}
 		}
 
@@ -275,40 +277,7 @@ scroll(width = 181px, height = 195px) {
 			.inner-scroll-info.info {
 				width: 330px;
 			}
-		}
-		
-	}
-
-	// .shelf.connect.right {
-	// 	position: absolute;
-	// 	top: 76px;
-	// 	right: 17px;
-	// 	width: 208px;
-	// 	z-index: 2;
-	// }
-
-	.buddy-list {
-		overflow-y: auto;
-		height: 100%
-		width: 226px;
-		position: absolute !important;
-		top: 0;
-		margin-left: 0px !important;
-		.disconnected {
-			-webkit-filter: grayscale(100%);	
-			opacity: .5;
-		}
-		.sidebar-inner {
-			background: none !important;
-		}
-
-		.tome-buddy {
-			height: auto !important;
-		}
-
-		.mini-stars {
-			margin: 0 auto;
-		}
+		}	
 	}
 }
 
@@ -318,7 +287,6 @@ scroll(width = 181px, height = 195px) {
 
 .tome-stats {
 	width: 100%;
-	margin: -20px auto 0;
 	&.stats {
 		td, th {
 			width: 102px;
@@ -354,6 +322,30 @@ scroll(width = 181px, height = 195px) {
 			background: blue;
 			text-shadow: 1px 1px 0 rgba(black, .5);
 		}
+	}
+}
+
+/**
+ * Tome Friends
+ */
+
+#tome-challengers {
+	.buddy {
+		width: 100px;
+		text-align: center;
+		float: left;
+		margin: 20px;
+		cursor: pointer;
+		.avatar { margin: 5px auto }
+
+	}
+	.disconnected {
+		-webkit-filter: grayscale(100%);	
+		opacity: .5;
+	}
+
+	.mini-stars {
+		margin: 0 auto;
 	}
 }
 

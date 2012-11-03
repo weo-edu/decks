@@ -1,4 +1,21 @@
-route('/goat',function() { 
+function setupBuddyList(ctx, next) {
+	var user = Meteor.users.findOne({username: ctx.params.username}) || {};
+
+	Template.buddies.helpers({
+		'friends': function() {
+			return User.friends();
+		},
+	 	'active': function() {
+	 		return this._id === user._id ? 'active' : '';
+	 	},
+	 	'isConnected': function() {
+	 		return this.connected ? 'connected' : 'disconnected';
+	 	}
+	});
+	next();
+}
+
+route('/browse', setupBuddyList, function() { 
 	//XXX unsubscribe
 	Meteor.subscribe('homeDecks');
 	Template.goat_browse.categories = function() {
@@ -19,97 +36,22 @@ route('/goat',function() {
 	dojo.render('goat_browse');
 });
 
-var toggle = {};
-toggle.deckFilter = function(routeSession, collection, userId) {
-	var filter = routeSession.get('filter');
-	var query = {};
-	
-	//XXX too much repeat code
-	if (routeSession.get('toggle') === 'collected') {
-		query['UserDeck.user'] = userId;
-		query['UserDeck.mastery.rank'] = {$gt: 0};
-		if (filter)
-			query['Decks.search.keywords'] = filter;
-		return collection.find(query, {sort: {'UserDeck.last_played': -1}});
-	} else if (routeSession.get('toggle') === 'played') {
-		query['UserDeck.user'] = userId;
-		if (filter)
-			query['Decks.search.keywords'] = filter;
-		return collection.find(query, {sort: {'UserDeck.last_played': -1}});
-	} else if (routeSession.get('toggle') === 'created') {
-		query['creator'] = userId;
-		query['status'] = 'published';
-		if (filter)
-			query['search.keywords'] = filter;
-		return collection.find(query, {sort: {updated: -1}});
-	} else if (routeSession.get('toggle') === 'draft') {
-		query['creator'] = userId;
-		query['status'] = 'draft';
-		if (filter)
-			query['search.keywords'] = filter;
-		return collection.find(query, {sort: {updated: -1}});
-	}
-}
 
-toggle.helpers = function(routeSession) {
-	return {
-		collectedToggle: function() {
-			return routeSession.equals('toggle', 'collected') ? 'active' : '';
-		},
-		createdToggle: function() {
-			return routeSession.equals('toggle', 'created') ? 'active' : '';
-		},
-		playedToggle: function() {
-			return routeSession.equals('toggle', 'played') ? 'active' : '';
-		},
-		draftToggle: function() {
-			return routeSession.equals('toggle', 'draft') ? 'active' : '';
-		}
-	}
-}
 
-toggle.events = function(routeSession) {
-	return {
-		'click #collected-toggle': function() {
-			routeSession.set('toggle', 'collected');
-		},
-		'click #created-toggle': function() {
-			routeSession.set('toggle', 'created');
-		},
-		'click #played-toggle': function() {
-			routeSession.set('toggle', 'played');
-		},
-		'click #draft-toggle': function() {
-			routeSession.set('toggle', 'draft');
-		},
-		'keyup .browse-filter': function(evt) {
-			routeSession.set('filter', $(evt.target).val());
-		}
-	}
-}
-
-route('/users/:username?', 
+route('/user/:username?', 
 	route.requireSubscription('userByName', function(ctx) {
 		return ctx.params.username;
 	}),
+	setupBuddyList,
 	function(ctx) { 
-	var username = ctx.params.username;
-	if (username) {
-		var user = Meteor.users.findOne({username: username});
 
-		Meteor.subscribe('playedDecks', user._id);
-		Meteor.subscribe('created', user._id);
-	} else {
-		user = {};
-	}
+	var myName = Meteor.user().username;
+	var username = ctx.params.username || myName;
+	var isMe = myName === username;
+	var user = Meteor.users.findOne({username: username});
 	
-	Template.tome_detailed.events({
-		'click': function() {
-			routeSession.equals('toggle', 'draft') && this.creator === Meteor.user()._id
-				? route('/create/tome/' + this._id)
-				: route('/tome/' + this._id);
-		}
-	});
+	Meteor.subscribe('playedDecks', user._id);
+	Meteor.subscribe('created', user._id);
 
 	var decks = join({
 		cursor: [
@@ -123,7 +65,75 @@ route('/users/:username?',
 		Decks.find({creator: user._id}),
 		Cards.find({creator: user._id})
 	);
-	
+
+	var toggle = {};
+	toggle.deckFilter = function(routeSession, collection, userId) {
+		var filter = routeSession.get('filter');
+		var query = {};
+		
+		//XXX too much repeat code
+		if (routeSession.get('toggle') === 'collected') {
+			query['UserDeck.user'] = userId;
+			query['UserDeck.mastery.rank'] = {$gt: 0};
+			if (filter)
+				query['Decks.search.keywords'] = filter;
+			return collection.find(query, {sort: {'UserDeck.last_played': -1}});
+		} else if (routeSession.get('toggle') === 'played') {
+			query['UserDeck.user'] = userId;
+			if (filter)
+				query['Decks.search.keywords'] = filter;
+			return collection.find(query, {sort: {'UserDeck.last_played': -1}});
+		} else if (routeSession.get('toggle') === 'created') {
+			query['creator'] = userId;
+			query['status'] = 'published';
+			if (filter)
+				query['search.keywords'] = filter;
+			return collection.find(query, {sort: {updated: -1}});
+		} else if (routeSession.get('toggle') === 'draft') {
+			query['creator'] = userId;
+			query['status'] = 'draft';
+			if (filter)
+				query['search.keywords'] = filter;
+			return collection.find(query, {sort: {updated: -1}});
+		}
+	}
+
+	toggle.helpers = function(routeSession) {
+		return {
+			collectedToggle: function() {
+				return routeSession.equals('toggle', 'collected') ? 'active' : '';
+			},
+			createdToggle: function() {
+				return routeSession.equals('toggle', 'created') ? 'active' : '';
+			},
+			playedToggle: function() {
+				return routeSession.equals('toggle', 'played') ? 'active' : '';
+			},
+			draftToggle: function() {
+				return routeSession.equals('toggle', 'draft') ? 'active' : '';
+			}
+		}
+	}
+
+	toggle.events = function(routeSession) {
+		return {
+			'click #collected-toggle': function() {
+				routeSession.set('toggle', 'collected');
+			},
+			'click #created-toggle': function() {
+				routeSession.set('toggle', 'created');
+			},
+			'click #played-toggle': function() {
+				routeSession.set('toggle', 'played');
+			},
+			'click #draft-toggle': function() {
+				routeSession.set('toggle', 'draft');
+			},
+			'keyup .browse-filter': function(evt) {
+				routeSession.set('filter', $(evt.target).val());
+			}
+		}
+	}
 
 	Template.tome.events({
 		'click': function() {
@@ -133,46 +143,17 @@ route('/users/:username?',
 
 	Template.tome_detailed.events({
 		'click': function() {
-			console.log(this);
-			route('/tome/' + this.creatorName + '/' + this.id);
+			routeSession.equals('toggle', 'draft') && this.creator === Meteor.user()._id
+				? route('/tome/' + username + '/' + this.id + '/edit' )
+				: route('/tome/' + this.creatorName + '/' + this.id);
 		}
 	});
 
 	Template.scroll_detailed.events({
 		'click': function() {
-			if(this.creator === Meteor.user()._id)
-				route('/create/scroll/' + this._id);
-		}
-	});
-
-	Template.buddies.events({
-		'click .buddy': function(e) {
-			route('/users/' + this.username);
-			routeSession.set('toggle', 'collected');
-		},
-	});
-
-	Template.buddies.preserve({
-		'.buddy[id]': function(node) {
-			return node.id;
-		}
-	});
-
-	Template.buddies.helpers({
-		'friends': function() {
-			return User.friends();
-		},
-	 	'active': function() {
-	 		return this._id === user._id ? 'active' : '';
-	 	},
-	 	'isConnected': function() {
-	 		return this.connected ? 'connected' : 'disconnected';
-	 	}
-	});
-
-	Template.opponent_decks.helpers({
-		'user': function() {
-			return user._id && user;
+			routeSession.equals('toggle', 'draft') && this.creator === Meteor.user()._id
+				? route('/scroll/' + username + '/' + this.id + '/edit' )
+				: previewDialog(Cards.findOne(this._id));
 		}
 	});
 
@@ -200,87 +181,16 @@ route('/users/:username?',
 		}
 	});
 
-	Template.browse_filters.helpers(toggle.helpers(routeSession));
-
-	Template.browse_filters.events(toggle.events(routeSession));
-
-	routeSession.set('toggle', 'collected');
-	routeSession.set('filter', '');
-
-	dojo.render('friends_browse');
-});
-
-
-created = null
-route('/inventory', function() {
-
-	//XXX remember to unsubscribe
-	Meteor.subscribe('playedDecks', Meteor.user()._id);
-	Meteor.subscribe('created', Meteor.user()._id);
-
-
-	var decks = join({
-		cursor: [
-			UserDeck.find({user: Meteor.user()._id}),
-			Decks.find({})
-		],
-		on: ['Decks._id', 'UserDeck.deck']
-	});
-
-	created = union(
-		Decks.find({creator: Meteor.user()._id}),
-		Cards.find({creator: Meteor.user()._id})
-	);
-
-	Template.tome_detailed.events({
-		'click': function() {
-			routeSession.equals('toggle', 'draft') && this.creator === Meteor.user()._id
-				? route('/tome/' + Meteor.user().username + '/' + this.id + '/edit' )
-				: route('/tome/' + Meteor.user().username + '/' + this.id);
-		}
-	});
-
-	Template.tome.events({
-		click: function() {
-			route('/tome/' + this.Decks.creatorName + '/' + this.Decks.id);
-		}
-	});
-
-	Template.scroll_detailed.events({
-		'click': function() {
-			if(this.creator === Meteor.user()._id)
-				route('/scroll/' + this.creatorName + '/' + this.id + '/edit');
-			// routeSession.equals('toggle', 'draft') || routeSession.equals('toggle', 'created'))
-			// 	?	route('/create/scroll/' + this._id)
-			// 	: route('/scroll/' + this._id);
-		}
-	});
-
-	Template.browse_tomes.helpers({
-		played: function() {
-			var toggle = routeSession.get('toggle');
-			if (toggle === 'collected' || toggle === 'played') {
-				return true
-			}
-		}
-	});
-
-	Template.browse_tomes_played.helpers({
-		tomes: function() {
-			return toggle.deckFilter(routeSession, decks, Meteor.user()._id);
-		}
-	});
-
-	Template.browse_created.helpers({
-		items: function() {
-			return toggle.deckFilter(routeSession, created, Meteor.user()._id);
+	Template.opponent_decks.helpers({
+		'user': function() {
+			return user._id && user;
 		},
-		tome: function() {
-			return this.type === 'deck';
+		isMe: function() {
+			return isMe;
 		}
 	});
 
-	Template.my_collection.events({
+	Template.opponent_decks.events({
 		'click #create-tome': function() {
 			Meteor.users.update(Meteor.user()._id, {$inc: {deck_counter: 1}});
 
@@ -320,6 +230,5 @@ route('/inventory', function() {
 	routeSession.set('toggle', 'collected');
 	routeSession.set('filter', '');
 
-	dojo.render('my_collection');
-
+	dojo.render('friends_browse');
 });

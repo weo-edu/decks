@@ -6,7 +6,10 @@
 	overflow-y: auto;
 	background: url('/app!decks/img/woodRepeat.jpg') 0 60px;
 	.transitions > div {
-		woodSides();
+		// woodSides();
+		&:before, &:after {
+			top: 0;
+		}
 	}
 	#browse-view {
 		background: url('/app!decks/img/woodRepeat.jpg') 0 60px;

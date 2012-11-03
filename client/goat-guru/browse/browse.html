@@ -1,16 +1,13 @@
-
-
 <!-- Goat Browse -->
 
 <template name='goat_browse'>
-	<div class='browse'>
-		{{#each categories}}
-			{{> category this}}
-		{{/each}}
-	</div>
-	<div class='sidebar'>
-		<div class='cloud'>Namaste!</div>
-		<img class='goat-left' src='/app!decks/img/goat-left.png' />
+	<div class='friends-browse'>
+		{{> buddies}}
+		<div class='browse'>
+			{{#each categories}}
+				{{> category this}}
+			{{/each}}
+		</div>
 	</div>
 </template>
 
@@ -33,38 +30,40 @@
 
 <template name='friends_browse'>
 	<div class='friends-browse'>
-		<div class='sidebar buddy-list'>
-			<div class='sidebar-inner'>
-				{{> buddies}}
-			</div>
-		</div>
+		{{> buddies}}
 		<div class='browse'>
 			{{> opponent_decks}}
 		</div>
 	</div>
 </template>
 
-
 <template name='buddies'>
-	<h3>Friends</h3>
-	<div class='shelf connect'></div>
-	{{#each friends}}
-		<div id='buddy-{{_id}}' class='buddy {{isConnected}} {{active}}'>
-			<div id='avatar-{{idx}}' class='avatar avatar-thumb' style='background-image: url({{avatar}});'></div>
-			<p>{{username}}</p>
+	<div class='sidebar buddy-list'>
+		<div class='sidebar-inner'>
+			<h3>Friends</h3>
+			<div class='shelf connect'></div>
+			{{#each friends}}
+			<a href='/user/{{username}}'>
+				<div id='buddy-{{_id}}' class='buddy {{isConnected}} {{active}}'>
+					<div id='avatar-{{idx}}' class='avatar avatar-thumb' style='background-image: url({{avatar}});'></div>
+					<p>{{username}}</p>
+				</div>
+			{{/each}}
 		</div>
-	{{/each}}
+	</div>
 </template>
 
 <template name='opponent_decks'>
 	<div class='category'>
-	{{#if user}}
+		{{#if isMe}}
+			<div class='create-buttons'>
+				<div id='create-scroll' class='create-button'>Create<br/>Scrolls</div>
+				<div id='create-tome' class='create-button'>Create<br/>Tomes</div>
+			</div>
+		{{/if}}
 		{{> browse_user user}}
-	{{else}}
-		<h2 class='category-title'>Pick a Friend</h2>
-	{{/if}}
-	<div class='shelf'></div>
-	{{> browse_tomes}}
+		<div class='shelf'></div>
+		{{> browse_tomes}}
 	</div>
 </template>
 
@@ -77,27 +76,6 @@
 	</div>
 </template>
 
-<!-- Inventory -->
-
-<template name='my_collection'>
-	<div class='collection-browse'>
-		<div class='category'>
-
-			<div class='collection-nav'>
-				<div class='collection-left-nav'>
-					<h2 class='category-title'>{{currentUser.username}}</h2>
-					{{> browse_filters}}
-				</div>
-				<div class='create-buttons'>
-					<div id='create-scroll' class='create-button'>Create<br/>Scrolls</div>
-					<div id='create-tome' class='create-button'>Create<br/>Tomes</div>
-				</div>
-			</div>
-			<div class='shelf'></div>
-			{{> browse_tomes}}
-		</div>
-	</div>
-</template>
 
 <template name='browse_filters'>
 	<div class='filters'>

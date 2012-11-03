@@ -2,18 +2,29 @@ var easing = 'easeInQuad';
 var dojoRenderer = view.renderer('dojoRender', {
 	tome_view: {
 		in: function(cb) {
-			var el = $('#tome-view');
-			el.css('top', -$(window).height());
+			var el = $('#tome-view .tome-center');
+			var bL = $('#tome-view .buddy-list');
+			var height = $(window).height()
+			el.css('top', -height );
+			bL.css('top', 0);
 			el.animate({
 				top: '0'
-			}, 300, easing, cb);
+			}, 300, easing, function() {
+				bL.show();
+				cb();
+			});
 		}, 
 		out: function(cb) {
-			var el = $('#tome-view');
-			el.parent().css('z-index', 98);
+			var el = $('#tome-view .tome-center');
+			var bL = $('#tome-view .buddy-list');
+			var height = $(window).height()
+			el.parent().parent().css({'z-index': 98});
 			el.animate({
-				top: -$(window).height()
-			}, 300, easing, cb);
+				top: -height
+			}, 300, easing, function() {
+				bL.css('top', -height);
+				cb();
+			});
 		}
 	}
 });

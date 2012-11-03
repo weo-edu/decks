@@ -34,7 +34,7 @@ Template.dojo_browse_nav.events({
 		routeSession.set('global-filter', search);
 		Meteor.get('globalSearch', search);
 
-		var d = ui.get(template.find('.dialog'));
+		var d = ui.get($('#global-search-dialog .dialog'));
 		d.on('hide', function() { 
 			$('#global-search, .global-search-bar .close').removeClass('active').val(''); 
 		});
@@ -43,14 +43,19 @@ Template.dojo_browse_nav.events({
 			d.overlay().show();
 			$('#global-search, .global-search-bar .close').addClass('active');
 		}
+
+		if (evt.which === 27) {
+			$('#global-search').blur();
+			ui.get($('#global-search-dialog .dialog')).hide();
+		}
 	},
 	'blur #global-search': function(evt, template) {
 		if(!routeSession.get('global-filter')) {
-			ui.get(template.find('.dialog')).hide();
+			ui.get($('#global-search-dialog .dialog')).hide();
 		}
 	},
 	'click .close': function(evt, template) {
-		ui.get(template.find('.dialog')).hide();
+		ui.get($('#global-search-dialog .dialog')).hide();
 	}
 });
 
@@ -80,21 +85,6 @@ Template.global_search.events({
 	}
 })
 
-function animateBg() {
-	var sun = document.getElementById('sun'),
-		deg = 0;
-	
-	Meteor.defer(function(){
-		sun.addEventListener(transitionEndEvent, rotateSun);	
-		rotateSun();	
-	})
-
-	function rotateSun() {
-		deg +=360;
-		$(sun).css(transitionPrefix, 'all 200s linear');
-		$(sun).css(transformPrefix, 'rotate(' + deg + 'deg)');
-	}	
-}
 
 // -- Problem Preview Dialog Start -- //
 

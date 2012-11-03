@@ -7,14 +7,15 @@
 			{{#isolate}}
 				{{{dojoRender}}}
 			{{/isolate}}
+			{{> global_search}}
 		</div>
 	</div>
 </template>
 
 <template name='dojo_browse_nav'>
 	<div id='nav'>
-		<a class='goat-nav' href='/goat'></a>
-		<a class='friends-nav' href='/users'></a>
+		<!-- <a class='goat-nav' href='/goat'></a> -->
+		<a class='friends-nav' href='/browse'></a>
 		<div class='nav-title'>
 			<img width='350' src='/app!decks/img/title.png' />		
 		</div>
@@ -28,7 +29,6 @@
 			<div class='close'>X</div>
 		</div>
 	{{/constant}}
-	{{> global_search}}
 	<div id='scroll-preview'>
 		{{> view_scroll_dialog}}
 	</div>

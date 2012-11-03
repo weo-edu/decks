@@ -59,134 +59,100 @@ status-icon(color) {
 	box-shadow: inset 1px 1px 0 rgba(white, .3), inset -1px -1px 0 rgba(black, .3);
 }
 
-.friends-browse {
-	.disconnected {
-		position: relative;
-		&:after {
-			status-icon(red);
-		}
-	}
-	.connected {
-		position: relative;
-		&:after {
-			status-icon(lighten(green, 10));
-		}
-	}
-}
-
 .friends-browse, #tome-view {
 	height: 100%;
 	.browse {
 		width: 724px !important;
 		padding: 0 0 0 3px !important;
 		float: none !important;
-	}
-	.sidebar.buddy-list {
-		// margin-left: -17px;
-		position: relative;
-		.sidebar-inner {
-			padding: 0 17px;
-			background: url('/app!common/textures/handmadepaperA85.png');
-			overflow-y: auto;
-			height: 100%;
-		}
-		&:after {
-			position: absolute;
-			top: 0px;
-			z-index: 1;
-			right: 0;
-			content: '';
-			height: 100%;
-			border-right: 10px solid #42210B;
-			width: 7px;
-			background: #603813;
-		}
-
-		h3 {
-			text-align: center;
-			margin: 50px 0 -19px;
-		}
-
-		.buddy {
-			padding: 10px 10px;
-			height: 40px;
-			font: 17px/40px 'Fresca';
-			text-transform: uppercase;
-			clearfix();
-			transition: background-color .2s;
-			cursor: pointer;
-			&:hover {
-				background-color: rgba(#333, .1);
-			}
-			&.active {
-				transition: background-color .4s;
-				background-color: rgba(#000, .2);
-			}
-			.avatar-thumb {
-				height: 40px;
-				width: 40px;
-				float: left;
-				display: block;
-				margin-right: 15px;
-			}
-			p {
-				width: 105px;
-				overflow: ellipsis;
-			}
-		}
+		woodSides();
+		&:after { top: 0px }
 	}
 }
 
-/**
- * My Collection
- */
+.sidebar.buddy-list {
+	position: relative;
+	.sidebar-inner {
+		padding: 0 17px;
+		background: url('/app!common/textures/handmadepaper.png');
+		overflow-y: auto;
+		height: 100%;
+	}
+	woodSides();
+	&:after { top: 0px }
 
-.collection-browse {
-	height: 100%;
-	overflow-y: auto;
-	width: 920px;
-	margin: 0 auto;
-	.category-title {
-		margin-top: 20px !important;
-		float: none;
+	h3 {
+		text-align: center;
+		margin: 50px 0 -19px;
 	}
-	.collection-left-nav {
-		float: left;
-	}
-	.filters {
-		float: left;
-		margin: 10px 0 0 20px;
-	}
-	.collection-nav {
-		clear: both;
+
+	.buddy {
+		padding: 10px 10px;
+		height: 40px;
+		font: 17px/40px 'Fresca';
+		text-transform: uppercase;
 		clearfix();
-	}
-	.create-buttons {
-		float: right;
-		margin-right: 10px;
-		.create-button {
-			float: right; 
-			color: #FFF;
-			font: 18px/1em 'BleakChop';
-			text-shadow: 1px 1px 0 rgba(black, .5);
-			border-radius: 6px;
-			box-shadow: inset 1px 1px 0 rgba(white, .3), inset -1px -1px 0 rgba(black , .5), 0 0 8px rgba(black, .8);
-			background: red;
-			text-align: center;
-			margin: 34px 10px 0;
-			padding: 5px 10px;
-			cursor: pointer;
-			&:hover {
-				box-shadow: inset 1px 1px 0 rgba(white, .3), inset -1px -1px 0 rgba(black , .5), 0 0 10px rgba(black, .9);
+		transition: background-color .2s;
+		cursor: pointer;
+		&:hover {
+			background-color: rgba(#333, .1);
+		}
+		&.active {
+			transition: background-color .4s;
+			background-color: rgba(#000, .2);
+		}
+		.avatar-thumb {
+			height: 40px;
+			width: 40px;
+			float: left;
+			display: block;
+			margin-right: 15px;
+		}
+		p {
+			width: 105px;
+			overflow: ellipsis;
+		}
+		&.disconnected {
+			position: relative;
+			&:after {
+				status-icon(red);
 			}
-			&:active {
-				margin-top: 35px;
-				box-shadow: inset 1px 1px 0 rgba(white, .3), inset -1px -1px 0 rgba(black , .5), 0 0 8px rgba(black, .8);
+		}
+		&.connected {
+			position: relative;
+			&:after {
+				status-icon(lighten(green, 10));
 			}
 		}
 	}
 }
 
+.create-buttons {
+	float: right;
+	margin-right: 10px;
+	position: relative;
+	z-index: 2;
+	.create-button {
+		float: right; 
+		color: #FFF;
+		font: 18px/1em 'BleakChop';
+		text-shadow: 1px 1px 0 rgba(black, .5);
+		border-radius: 6px;
+		box-shadow: inset 1px 1px 0 rgba(white, .3), inset -1px -1px 0 rgba(black , .5), 0 0 8px rgba(black, .8);
+		background: red;
+		text-align: center;
+		margin: 25px 10px 0;
+		padding: 5px 10px;
+		cursor: pointer;
+		&:hover {
+			box-shadow: inset 1px 1px 0 rgba(white, .3), inset -1px -1px 0 rgba(black , .5), 0 0 10px rgba(black, .9);
+		}
+		&:active {
+			margin-top: 26px;
+			box-shadow: inset 1px 1px 0 rgba(white, .3), inset -1px -1px 0 rgba(black , .5), 0 0 8px rgba(black, .8);
+		}
+	}
+}
 
 .browse-filter {
 	text-input();
@@ -228,3 +194,55 @@ status-icon(color) {
 .twist-stars-3 { background-position: 0 -68px; }
 .twist-stars-4 { background-position: 0 -90px; }
 .twist-stars-5 { background-position: 0 -112px; }
+
+
+
+/**
+ * My Collection
+ */
+
+// .collection-browse {
+// 	height: 100%;
+// 	overflow-y: auto;
+// 	width: 920px;
+// 	margin: 0 auto;
+// 	.category-title {
+// 		margin-top: 20px !important;
+// 		float: none;
+// 	}
+// 	.collection-left-nav {
+// 		float: left;
+// 	}
+// 	.filters {
+// 		float: left;
+// 		margin: 10px 0 0 20px;
+// 	}
+// 	.collection-nav {
+// 		clear: both;
+// 		clearfix();
+// 	}
+// 	.create-buttons {
+// 		float: right;
+// 		margin-right: 10px;
+// 		.create-button {
+// 			float: right; 
+// 			color: #FFF;
+// 			font: 18px/1em 'BleakChop';
+// 			text-shadow: 1px 1px 0 rgba(black, .5);
+// 			border-radius: 6px;
+// 			box-shadow: inset 1px 1px 0 rgba(white, .3), inset -1px -1px 0 rgba(black , .5), 0 0 8px rgba(black, .8);
+// 			background: red;
+// 			text-align: center;
+// 			margin: 34px 10px 0;
+// 			padding: 5px 10px;
+// 			cursor: pointer;
+// 			&:hover {
+// 				box-shadow: inset 1px 1px 0 rgba(white, .3), inset -1px -1px 0 rgba(black , .5), 0 0 10px rgba(black, .9);
+// 			}
+// 			&:active {
+// 				margin-top: 35px;
+// 				box-shadow: inset 1px 1px 0 rgba(white, .3), inset -1px -1px 0 rgba(black , .5), 0 0 8px rgba(black, .8);
+// 			}
+// 		}
+// 	}
+// }

@@ -1,5 +1,9 @@
 @import '../decks/client/mixins.styl'
 
+.zebra {
+	overflow: hidden;
+}
+
 .create-container {
 	height: 100%;
 	overflow-y: auto;
@@ -29,6 +33,10 @@
 			color: #999;
 			border: 1px solid #d9d9d9;
 			border-top: 1px solid #c0c0c0;
+			&:focus {
+				outline: 0;
+				border: 1px solid blue;
+			}
 		}
 
 		textarea {
@@ -38,22 +46,25 @@
 
 		.buttons {
 			font-family: 'Helvetica Neue', Helvetica;
-			> div {
+			input, div {
+				display: block;
 				font-size: 13px;
 				float: left;
 				margin: 10px 10px 10px 0;
 				text-align: center;
-				padding: 6px 10px;
+				padding: 0px 12px;
 				border-radius: 3px;
 				text-transform: capitalize;
+				width: auto;
+				height: 30px;
 				&.save {
 					button-gradient(blue);
 					border: 1px solid darken(blue, 5);
 					color: #FFF;
 				}
 				&.cancel {
-					button-gradient(#EEE);
-					border: 1px solid darken(#EEE, 6);
+					button-gradient(#EAEAEA);
+					border: 1px solid darken(#EAEAEA, 8);
 				}
 			}
 
@@ -96,9 +107,14 @@
 	.tab {
 		display: none;
 		width: 980px;
-		padding: 50px 0px 0;
+		height: 100%;
 		&.active {
 			display: block;
+		}
+		&:before {
+			content: '';
+			display: block;
+			height: 40px;
 		}
 	}
 
@@ -342,7 +358,7 @@
 	}
 }
 
-ace_margin_top = 10px;
+ace_margin_top = 30px;
 #ace-editor-wrap {
 	margin-left: 17px;
 	background: url("/app!common/textures/handmadepaper.png");
@@ -359,7 +375,7 @@ ace_margin_top = 10px;
 	display: none;
 }
 
-gutter_width= 100px;
+gutter_width = 90px;
 
 #ace-editor-wrap {
 	.ace_scroller {
@@ -367,14 +383,14 @@ gutter_width= 100px;
 	}
 
 	.ace_gutter_top {
-		border-right: 1px solid #CCC;
+		border-right: 1px solid #DDD;
 		height: ace_margin_top;
 		width: gutter_width;
 	}
 
 	.ace_gutter {
 		color: #AAA;
-		border-right: 1px solid #CCC;
+		border-right: 1px solid #DDD;
 		background: transparent;
 		width: gutter_width;
 	}
@@ -392,4 +408,19 @@ gutter_width= 100px;
 	margin-left: 17px;
 	width: 886px;
 	padding: 30px;
+	:target {
+		background: blue;
+		color: #FFF;
+	}
+	ol {
+		list-style-type: disc;
+		font-weight: bold;
+		ul {
+			font-weight: normal;
+			list-style-type: circle;
+		}
+		a {
+			color: blue;
+		}
+	}
 }

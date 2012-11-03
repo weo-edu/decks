@@ -44,11 +44,11 @@ route('/tome/:username/:id/edit',
 			routeSession.set('active', $(evt.currentTarget).attr('id'));
 		},
 		'click #done': function() {
-			route('/inventory');
+			route('/user');
 		},
 		'click #delete': function() {
 			if(confirm('Are you sure you want to delete this tome?')) {
-				route('/inventory');
+				route('/user');
 				Decks.remove(deck_id);	
 			}
 		},
@@ -56,7 +56,7 @@ route('/tome/:username/:id/edit',
 			if(isDeckComplete() === true) {
 				if(confirm('Are you sure you want to publish? Once this is done you will not be able to delete or edit this tome.')) {
 					Decks.update(deck_id, {$set: {status: 'published'}})
-					route('/inventory');	
+					route('/user');	
 				}
 			} else {
 				alert(isDeckComplete());
@@ -342,11 +342,11 @@ route('/scroll/:username/:id/edit',
 			}
 		},
 		'click #done': function() {
-			route('/inventory');
+			route('/user');
 		},
 		'click #delete': function() {
 			if(confirm('Are you sure you want to delete this scroll?')) {
-				route('/inventory');
+				route('/user');
 				Cards.remove(card_id);
 			}
 		},
@@ -354,7 +354,7 @@ route('/scroll/:username/:id/edit',
 			if(isCardComplete() === true) {
 				if(confirm('Are you sure you want to publish? Once this is done you will not be able to delete or edit this scroll.')) {
 					Cards.update(card_id, {$set: {status: 'published'}})
-					route('/inventory');	
+					route('/user');	
 				}
 			} else {
 				alert(isCardComplete());
@@ -402,7 +402,7 @@ route('/scroll/:username/:id/edit',
 	 */
 
 	Template.form_dialog.form = function() {
-		var form = ui.get('.dialog').get('form');
+		var form = ui.get($('.create-view .dialog')).get('form');
 		return Template[form]({});
 	}
 
@@ -451,7 +451,7 @@ route('/scroll/:username/:id/edit',
 	Template.scroll_create_info.events({
 		'click .input': function(e) {
 			var name = $(e.currentTarget).attr('id');
-			var dialog = ui.get('.dialog');
+			var dialog = ui.get($('.create-view .dialog'));
 			dialog.set('form', name + '_form');
 			dialog.modal()
 				.relative('#' + name, {top: 0, left: 0})

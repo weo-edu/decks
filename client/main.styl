@@ -1,5 +1,6 @@
 @import '../decks/client/mixins.styl';
 global-reset();
+@import '../common/common.styl';
 
 @font-face {
     font-family: 'BleakChop';
@@ -27,7 +28,7 @@ h2 {
 h3 {
 	font: 40px/45px 'BleakChop';
 	text-shadow: 1px 1px 0 black;
-	color: #666;
+	color: #4D4D4D;
 }
 
 h4 {
@@ -41,6 +42,8 @@ h5 {
 	text-shadow: 1px 1px 0 black;
 	color: white;	
 }
+
+a { color: inherit }
 
 /**
  * Main
@@ -195,7 +198,7 @@ html, body {
 
 	.friends-nav {
 		height: 130px;
-		left: 180px;
+		left: 140px;
 		background-position: 125px 0px;
 		&:hover {
 			// background-position: 125px 168px;
@@ -335,7 +338,8 @@ html, body {
 }
 
 #global-search-dialog {
-	top: 111px;
+	top: 0;
+	left: 0;
 	position: absolute;
 	height: 100%;
 	width: 980px;

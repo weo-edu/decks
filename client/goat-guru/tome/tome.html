@@ -20,111 +20,106 @@
 </template>
 
 <template name='tome_view'>
-	<div id='tome-view'>		
-		<div class='tome-bg'></div>
+	<div id='tome-view'>
+		{{> buddies}}
 		<div class='tome-center'>
 			<div class='tome-center-inner'>
-				{{> tome_nav tome}}
-				{{{tomeRender tome}}}
+				<div class='tome-top-info'>
+				{{#with tome}}
+					<div class='title-container'>
+						<h2 class='tome-title'>{{Decks.title}}</h2>
+						<div class='train-button-container'>
+							<div class='train-button'>
+								COLLECT
+								<div class='difficulty-dropdown'></div>
+							</div>
+							<div class='show-zero mini-stars mini-stars-{{mastery.rank}}'></div>
+						</div>
+					</div>
+					<div class='tome-container'>
+						{{> tome}}
+					</div>
+					<div class='big-tome-info'>
+						<div>
+							<h3>Cards Per Game:</h3>
+							<p>{{CPG}}</p>
+						</div>
+						<div>
+							<h3>Categories:</h3>
+							<p>{{Decks.tags}}</p>
+						</div>
+						<div>
+							<h3>Description:</h3>
+							<p>{{Decks.description}}</p>
+						</div>
+					</div>
+					{{> tome_nav}}
+				{{/with}}
+				</div>
+				<div class='tome-tab'>
+					{{{tomeRender}}}
+				</div>
 			</div>
 		</div>
-		{{> inner_tome}}
 	</div>
 </template>
 
 <template name='tome_nav'>
-	<h2 class='tome-title'>{{Decks.title}}</h2>
-	<div class='table'>
-		<ul class='tome-nav'> 
-			<li id='info' class='{{isInfo}}'>Info</li>
-			<li id='stats' class='{{isStats}}'>My Stats</li>
-			<li id='discussion' class='{{isDiscussion}}'>Discussion</li>
-			{{#if editable}}
-				<li id='edit'>Edit</li>
-			{{/if}}
-		</ul>
-	</div>
-	<div class='shelf connect'></div>
+	<ul class='tome-nav'> 
+		<li id='info' class='{{isActive "info"}}'>Scrolls</li>
+		<li id='stats' class='{{isActive "stats"}}'>Stats</li>
+		<li id='friends' class='{{isActive "friends"}}'>Play Friends</li>
+		<li id='discussion' class='{{isActive "discussion"}}'>Discussion</li>
+		{{#if editable}}
+			<li id='edit'>Edit</li>
+		{{/if}}
+	</ul>
 </template>
 
-<template name='inner_tome'>
-	<!-- <div class='shelf connect right'></div> -->
-	<div class='sidebar buddy-list'>
-		<div class='sidebar-inner'>
-			{{> tome_buddies}}
-		</div>
-	</div>
-	{{!#if isPublished}}
-		<!-- <div class='practice'>Challenge</div> -->
-	{{!/if}}
-	<!-- <img class='goat-left' src='/app!decks/img/goat-left.png' /> -->
-</template>
-
-<template name='tome_buddies'>
-	<h3>Friends</h3>
-	<div class='shelf connect'></div>
-		<div id='buddy-goat' class='buddy {{active}} connected tome-buddy'>
-				<div id='goat-avatar' class='avatar avatar-thumb' style='background-image: url("/app!common/avatars/guru.png");'></div>
-				<p class='tome-username'>Goat Guru</p>
-				<div class='show-zero mini-stars mini-stars-{{myMastery}}'></div>
-		</div>
-	{{#each friends}}
-		<div id='buddy-{{_id}}' class='buddy {{active}} {{isConnected}} tome-buddy'>
-				<div id='avatar-{{idx}}' class='avatar avatar-thumb' style='background-image: url({{avatar}});'></div>
+<template name='tome_friends'>
+	<div id='tome-challengers'>
+		{{#each friends}}
+			<div id='buddy-{{_id}}' class='buddy {{active}} {{isConnected}} tome-buddy'>
 				<p class='tome-username'>{{username}}</p>
+				<div id='avatar-{{idx}}' class='avatar avatar-thumb' style='background-image: url({{avatar}});'></div>	
 				<div class='show-zero mini-stars mini-stars-{{friendMastery}}'></div>
-		</div>
-	{{/each}}
+			</div>
+		{{/each}}
+	</div>
 </template>
 
 
 <template name='tome_info'>
-		<div class='big-tome'>
-			{{> big_tome}}
-		</div>
-		<div class='big-tome-info'>
-			<div>
-				<h3>Cards Per Game:</h3>
-				<p>{{CPG}}</p>
-			</div>
-			<div>
-				<h3>Categories:</h3>
-				<p>{{Decks.tags}}</p>
-			</div>
-			<div>
-				<h3>Description:</h3>
-				<p>{{Decks.description}}</p>
-			</div>
-		</div>
 		{{#each scrollsInTome}}
 			{{> scroll_info_view}}
 		{{/each}}
 </template>
 
 <template name='tome_stats'>
+	{{#with userDeck}}
 	<table class='tome-stats stats'>
 		<tr class='table-header'>
 			<th>{{player}}</th><th></th>
 		</tr>
 		<tr>
 			<td>LAST PLAYED</td>
-			<td>{{prettyTime UserDeck.last_played}}</td>
+			<td>{{prettyTime last_played}}</td>
 		</tr>
 		<tr>
 			<td>RANK</td>
-			<td><div class='show-zero mini-stars mini-stars-{{UserDeck.mastery.rank}}'></div></td>
+			<td><div class='show-zero mini-stars mini-stars-{{mastery.rank}}'></div></td>
 		</tr>
 		<tr>
 			<td>HIGHSCORE</td>
-			<td>{{number UserDeck.high_score}}</td>
+			<td>{{number high_score}}</td>
 		</tr>
 		<tr>
 			<td>WINS</td>
-			<td>{{number UserDeck.multiWins}}</td>
+			<td>{{number multiWins}}</td>
 		</tr>
 		<tr>
 			<td>LOSSES</td>
-			<td>{{number UserDeck.multiLosses}}</td>
+			<td>{{number multiLosses}}</td>
 		</tr>
 	</table>
 
@@ -147,13 +142,11 @@
 			{{/each}}
 		</table>
 	{{/if}}
+	{{/with}}
+
 	{{#if isGoat}}
 		<div class='challenge-button'>Challenge</div>
 	{{/if}}
-</template>
-
-<template name='tome_discussion'>
-	This is where the discussion section goes
 </template>
 
 <template name='friend_tome_stats'>
@@ -163,6 +156,10 @@
 			<div class='challenge-button'>Challenge</div>
 		{{/if}}
 	{{/if}}
+</template>
+
+<template name='tome_discussion'>
+	This is where the discussion section goes
 </template>
 
 <template name='view_scroll_dialog'>
