@@ -29,11 +29,8 @@
 					<div class='title-container'>
 						<h2 class='tome-title'>{{Decks.title}}</h2>
 						<div class='train-button-container'>
-							<div class='train-button'>
-								COLLECT
-								<div class='difficulty-dropdown'></div>
-							</div>
-							<div class='show-zero mini-stars mini-stars-{{mastery.rank}}'></div>
+							<div class='train-button'>Play</div>
+							<div class='show-zero mini-stars mini-stars-{{mastery}}'></div>
 						</div>
 					</div>
 					<div class='tome-container'>
@@ -61,14 +58,30 @@
 				</div>
 			</div>
 		</div>
+		{{> difficulty_dialog}}
+	</div>
+</template>
+
+<template name='difficulty_dialog'>
+	<div class='difficulty'>
+	{{#ui "dialog"}}
+		<h2>Select your Difficulty</h2>
+		<div class='inner-dialog'>
+			<div class='difficulty-buttons'>
+				<div class='easy'>Collect</div>
+				<div class='medium'>Train</div>
+				<div class='hard'>Master</div>
+			</div>
+		</div>
+	{{/ui}}
 	</div>
 </template>
 
 <template name='tome_nav'>
 	<ul class='tome-nav'> 
+		<li id='friends' class='{{isActive "friends"}}'>People</li>
 		<li id='info' class='{{isActive "info"}}'>Scrolls</li>
-		<li id='stats' class='{{isActive "stats"}}'>Stats</li>
-		<li id='friends' class='{{isActive "friends"}}'>Play Friends</li>
+		<!-- <li id='stats' class='{{isActive "stats"}}'>My Stats</li> -->
 		<li id='discussion' class='{{isActive "discussion"}}'>Discussion</li>
 		{{#if editable}}
 			<li id='edit'>Edit</li>
@@ -78,6 +91,13 @@
 
 <template name='tome_friends'>
 	<div id='tome-challengers'>
+		<div id='buddy-me' class='buddy connected tome-buddy'>
+				{{#with currentUser}}
+					<p class='tome-username'>{{username}}</p>
+					<div id='avatar-me' class='avatar avatar-thumb' style='background-image: url({{avatar}});'></div>	
+					<div class='show-zero mini-stars mini-stars-{{myMastery}}'></div>
+				{{/with}}
+		</div>
 		{{#each friends}}
 			<div id='buddy-{{_id}}' class='buddy {{active}} {{isConnected}} tome-buddy'>
 				<p class='tome-username'>{{username}}</p>
@@ -96,11 +116,28 @@
 </template>
 
 <template name='tome_stats'>
-	{{#with userDeck}}
+	<div id='tome-stats-header'>
+		{{#with user}}	
+			<div class='avatar avatar-thumb' style='background-image: url({{avatar}});'></div>	
+			<h2 class='tome-username'>{{username}}</h2>
+		{{/with}}
+		{{#if isChallengable}}
+		<div class='challenge-button'>Challenge</div>
+		{{/if}}
+		<ul class='tome-sub-nav'> 
+			<li id='overview' class='{{isActive "overview"}}'>Overview</li>
+			<li id='history' class='{{isActive "history"}}'>History</li>
+			<li id='scroll_stats' class='{{isActive "scroll_stats"}}'>Scroll Stats</li>
+			{{#if editable}}
+				<li id='edit'>Edit</li>
+			{{/if}}
+		</ul>
+	</div>
+		{{{tomeSubTab userDeck}}}
+</template>
+
+<template name='tome_overview'>
 	<table class='tome-stats stats'>
-		<tr class='table-header'>
-			<th>{{player}}</th><th></th>
-		</tr>
 		<tr>
 			<td>LAST PLAYED</td>
 			<td>{{prettyTime last_played}}</td>
@@ -122,41 +159,65 @@
 			<td>{{number multiLosses}}</td>
 		</tr>
 	</table>
+</template>
 
+<template name='tome_history'>
 	{{#if pastGames}}
-		<table class='tome-stats history'>
-			<tr class='table-header'>
-				<th>Recent History</th><th></th><th></th>
-			</tr>
+	<table class='tome-stats history'>
 			<tr class='table-sub-header'>
 				<th>Opponent</th>
 				<th>Result</th>
 				<th>Date</th>
 			</tr>
-			{{#each pastGames}}
-				<tr>
-					<td style='text-transform: uppercase;'>{{opponentName}}</td>
-					<td>{{result}}</td>
-					<td>{{prettyTime time}}</td>
-				</tr>
-			{{/each}}
+				{{#each pastGames}}
+					<tr>
+						<td style='text-transform: uppercase;'>{{opponentName}}</td>
+						<td>{{result}}</td>
+						<td>{{prettyTime time}}</td>
+					</tr>
+				{{/each}}
 		</table>
-	{{/if}}
-	{{/with}}
-
-	{{#if isGoat}}
-		<div class='challenge-button'>Challenge</div>
+	{{else}}
+		<div style='padding: 20px;'>No History</div>
 	{{/if}}
 </template>
 
-<template name='friend_tome_stats'>
+<template name='tome_scroll_stats'>
+	<tr class='table-sub-header'>
+		<th>scroll</th>
+		<th><div class='stat-icons'></div></th>
+	</tr>
+	{{#each scrollsInTome}}		
+		{{> scroll_info_stat_view}}
+	{{/each}}
+</template>
+
+<template name='scroll_info_stat_view'>
+	<div class='scroll-info-view'>
+		<div class='inner-scroll-info image'>{{> small_scroll}}</div>
+		<div class='inner-scroll-info info'> 
+			<h4>{{title}}</h4>							
+			<p>{{description}}</p>
+		</div>
+		<div class='inner-scroll-info tags'>
+			{{#with stats}}
+			<div>
+				{{> scroll_stat speed}}
+				{{> scroll_stat accuracy}}
+				{{> scroll_stat retention}}
+			</div>
+			{{/with}}
+	</div>
+</template>
+
+<!-- <template name='friend_tome_stats'>
 	{{> tome_stats}}
 	{{#if isConnected}}
 		{{#if isPublished}}
 			<div class='challenge-button'>Challenge</div>
 		{{/if}}
 	{{/if}}
-</template>
+</template> -->
 
 <template name='tome_discussion'>
 	This is where the discussion section goes

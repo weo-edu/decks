@@ -173,47 +173,50 @@
 		}
 	}
 	
-	.stats-box > div {
-		width: 80px;
-		margin: 0 auto;
-	}
-
 	.stat-icons {
 		background: url('/img/stat-icons.png');
 		width: 85px;
 		height: 25px;
-		position: absolute;
-		left: 50%;
-		margin-left: -42px;
-		bottom: 3px;
 	}
+}
 
-	.scroll-stat {
-		float: left;
-		width: 20px;
-		height: 40px;
-		margin-right: 10px;
-		position: relative;
-		background: #EEE;
-		box-shadow: inset 0 0 6px #222;
-		outline: 1px solid #999;
-		&:last-child {
-			margin-right: 0;
-		}
-		.scroll-stat-inner {
+.stats-box > div {
+	width: 80px;
+	margin: 0 auto;
+}
+
+
+.scroll-stat {
+	float: left;
+	width: 18px;
+	height: 40px;
+	margin-right: 10px;
+	position: relative;
+	background: #EEE;
+	box-shadow: inset 0 0 6px #222;
+	border: 1px solid #999;
+	&:last-child {
+		margin-right: 0;
+	}
+	.scroll-stat-inner {
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		&:after {
 			position: absolute;
-			bottom: 0;
-			width: 100%;
-			&:after {
-				position: absolute;
-				content: '';
-				height: 100%;
-				width: 6px;
-				right: 0;
-				background: rgba(white, .1);
-			}
+			content: '';
+			height: 100%;
+			width: 6px;
+			right: 0;
+			background: rgba(white, .1);
 		}
 	}
+}
+
+.stat-icons {
+	background: url('/img/stat-icons.png');
+	width: 85px;
+	height: 25px;
 }
 
 .quit-button {

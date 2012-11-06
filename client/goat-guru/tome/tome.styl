@@ -167,7 +167,7 @@ scroll(width = 181px, height = 195px) {
 		padding: 0 17px;
 		woodSides();
 		background-image: url('/app!common/textures/handmadepaperA85.png');
-		background-color: rgb(165, 165, 165);
+		background-color: #999;
 		z-index: 3;
 
 		.tome-top-info {
@@ -192,25 +192,27 @@ scroll(width = 181px, height = 195px) {
 				color: #4D4D4D;
 				float: left;
 			}
+
 			.train-button-container {
-				margin: 25px 50px 0 0;
+				margin: 10px 15px 0 0;
 				float: right;
 				.mini-stars {
 					margin: 5px auto 0;
 				}
 			}
 			.train-button {
-				text-transform: uppercase;
-				text-shadow: -1px -1px 0 rgba(black, .3), 1px 1px 0 rgba(white, .2);
-				text-align: center;
-				font-size: 35px;
-				line-height: 50px;
-				button-gradient(blue);
-				border-radius: 5px;
-				color: #FFF;
-				padding: 0 35px;
-				cursor: pointer;
+				red-button();
+				margin: 0 0 -10px;
 			}
+			.difficulty-dropdown {
+				height: 30px;
+				width: 30px;
+				position: absolute;
+				right: 2px;
+				top: 6px;
+				background: url('/img/difficulty.png') -10px 0;
+			}
+
 			.tome-nav {
 				clear: both;
 				text-align: center;
@@ -285,6 +287,44 @@ scroll(width = 181px, height = 195px) {
  * Tome Stats View
  */
 
+#tome-stats-header {
+	clearfix();
+	position: relative;
+	.challenge-button {
+		position: absolute;
+		right: 0;
+		top: 10px;
+	}
+	.avatar {
+		margin: 15px;
+		float: left;
+	}
+	h2 {
+		margin: -10px 0 0 0 !important;
+		float: none !important;
+	}
+	.tome-sub-nav {
+		display: block;
+		color: #FFF;
+		clear: both;
+		clearfix();
+		font: 25px 'BleakChop';
+		padding: 10px 10px;
+		background: blue;
+		text-shadow: 1px 1px 0 rgba(black, .5);
+		li {
+			opacity: .5;
+			transition: opacity .2s;
+			float: left;
+			margin: 0 25px 0 0;
+			cursor: pointer;
+			&:active, &:hover, &.active {
+				opacity: 1;
+			}
+		}
+	}
+}
+
 .tome-stats {
 	width: 100%;
 	&.stats {
@@ -305,21 +345,21 @@ scroll(width = 181px, height = 195px) {
 	td, th {
 		padding: 10px;
 	}
-	.table-header, .table-sub-header {
-
-		font: 22px 'BleakChop';
-		color: #FFF;
-		text-shadow: 1px 1px 0 rgba(black, .5);
-	}
+	// .table-header, .table-sub-header {
+	// 	font: 22px 'BleakChop';
+	// 	color: #FFF;
+	// 	text-shadow: 1px 1px 0 rgba(black, .5);
+	// }
 	th {
 		background: blue;
 	}	
 	.table-sub-header {
 		font: 18px 'BleakChop';
 		text-shadow: 0 0 0;
+		color: #FFF;
 		th {
-			padding: 5px 10px;
-			background: blue;
+			padding: 8px 10px;
+			background: #444;
 			text-shadow: 1px 1px 0 rgba(black, .5);
 		}
 	}
@@ -346,6 +386,66 @@ scroll(width = 181px, height = 195px) {
 
 	.mini-stars {
 		margin: 0 auto;
+	}
+}
+
+.tome-tab {
+	.table-sub-header {
+		font: 18px 'BleakChop';
+		text-shadow: 0 0 0;
+		color: #FFF;
+		background: #444;
+		width: 100%;
+		th {
+			padding: 5px 0;
+			width: 278px;
+			&:first-child {
+				padding-left: 10px;
+				width: 449px;
+			}
+		}
+	}
+
+	.scroll-stat {
+		height: 54px;
+	}
+}
+
+.difficulty .dialog {
+	width: 400px;
+	h2 { background: #333 !important }
+	.inner-dialog { 
+		height: 120px;
+		background: #666;
+		.difficulty-buttons {
+			width: 255px;
+			margin: 0 auto;			
+			> div {
+				opacity: .92;
+				transition: opacity .2s;
+				cursor: pointer;
+				text-align: center;
+				color: #FFF;
+				font-size: 20px;
+				text-transform: uppercase;
+				height: 63px;
+				width: 63px
+				line-height: 155px;
+				margin: 0 10px 5px;
+				float: left;
+				background-image: url('/img/difficulty.png');
+				background-position: 1px 0;
+				&.medium {
+					background-position: 145px 0;
+				}
+				&.hard {
+					background-position: 63px 0;
+				}
+				&:hover {
+					opacity: 1;
+				}
+			}
+		}
 	}
 }
 
