@@ -166,7 +166,7 @@ route('/users/:username?',
 	 		return this._id === user._id ? 'active' : '';
 	 	},
 	 	'isConnected': function() {
-	 		return this.status;
+	 		return User.statusToString(this.status);
 	 	}
 	});
 

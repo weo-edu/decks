@@ -10,8 +10,8 @@
 			return new Guru[MASTERY.PROFICIENT](game);
 		}
 		else {
-			var rank = deck_info.mastery && deck_info.mastery.rank || 0;
-			return new (Guru[rank] || Guru[MASTERY.MASTER_GURU])(game);
+			var rank = game.opponent().rank || 0;
+			return new (Guru[rank] || Guru[MASTERY.GURU])(game);
 		}
 			
 	}
@@ -276,10 +276,8 @@
 
 	var MASTERY = {
 		PROFICIENT: 0,
-		ADVANCED: 1,
-		EXPERT: 2,
-		GURU: 3,
-		MASTER_GURU: 4
+		EXPERT: 1,
+		GURU: 2,
 	};
 
 
@@ -296,22 +294,6 @@
 			retention: {u: .80, s: .10}
 		}
 	}
-
-	Guru[MASTERY.ADVANCED] = function(game) {
-		Guru.call(this, game);
-	}
-
-	utils.inherits(Guru[MASTERY.ADVANCED], Guru);
-
-
-	Guru[MASTERY.ADVANCED].prototype.cardStats = function() {
-		return {
-			accuracy: {u: .80, s: .04},
-			speed: {u: .66, s: .04},
-			retention: {u: .85, s: .10}
-		}
-	}
-
 
 	Guru[MASTERY.EXPERT] = function(game) {
 		Guru.call(this, game);
@@ -341,21 +323,6 @@
 			retention: {u: .99, s: .01}
 		}
 	}
-
-	Guru[MASTERY.MASTER_GURU] = function(game) {
-		Guru.call(this, game);
-	}
-
-	utils.inherits(Guru[MASTERY.MASTER_GURU], Guru);
-
-	Guru[MASTERY.MASTER_GURU].prototype.cardStats = function() {
-		return {
-			accuracy: {u: .995, s: .002},
-			speed: {u: .94, s: .002},
-			retention: {u: .99, s: .002}
-		}
-	}
-
 
 	window.Guru = Guru;
 })();
