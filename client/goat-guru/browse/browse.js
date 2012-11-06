@@ -9,7 +9,7 @@ function setupBuddyList(ctx, next) {
 	 		return this._id === user._id ? 'active' : '';
 	 	},
 	 	'isConnected': function() {
-	 		return this.connected ? 'connected' : 'disconnected';
+	 		return User.statusToString(this.status);
 	 	}
 	});
 	next();

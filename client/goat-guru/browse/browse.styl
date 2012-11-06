@@ -134,6 +134,12 @@ status-icon(color) {
 			width: 105px;
 			overflow: ellipsis;
 		}
+		&.busy {
+			position: relative;
+			&:after {
+				status-icon(orange);
+			}
+		}
 		&.disconnected {
 			position: relative;
 			&:after {
@@ -201,21 +207,21 @@ status-icon(color) {
 
 
 .twist-stars {
-	background-image: url('/app!decks/img/twist-stars.png');
-	background-position: 0px -2px;
-	width: 93px;
-	height: 22px;
+	background-image: url("/app!decks/img/twist-stars.png");
+	background-position: 0px 0px;
+	width: 70px;
+	height: 25px;
 	position: absolute;
-	bottom: 20px;
+	bottom: 17px;
 	left: 50%;
-	margin-left: -46px;
+	margin-left: -35px;
 }
 
 .twist-stars-1 { background-position: 0 -24px; }
-.twist-stars-2 { background-position: 0 -46px; }
-.twist-stars-3 { background-position: 0 -68px; }
-.twist-stars-4 { background-position: 0 -90px; }
-.twist-stars-5 { background-position: 0 -112px; }
+.twist-stars-2 { background-position: 0 -48px; }
+.twist-stars-3, .twist-stars-4, .twist-stars-5 { background-position: 0 -72px; }
+// .twist-stars-4 { background-position: 0 -90px; }
+// .twist-stars-5 { background-position: 0 -112px; }
 
 
 

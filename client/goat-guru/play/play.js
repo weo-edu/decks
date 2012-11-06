@@ -22,15 +22,21 @@
   			, gameCreated = new ReactiveVar(false)
   			, curZebra = null;
 
-  		Meteor.users.update({_id: Meteor.user()._id}, {$set: {status: 'busy'}});
-			ctx.on('destroy', function() {
-				Meteor.users.update({_id: Meteor.user()._id}, {$set: {status: 'connected'}});
-			});
+
+			
   		
 			Template.game.created = function() {
 				var self = this;
 				game = new Game(game_id);
 				gameCreated.set(true);
+
+				if (game.state() !== 'results') {
+					Meteor.users.update({_id: Meteor.user()._id}, {$set: {status: User.STATUS.BUSY}});
+					ctx.on('destroy', function() {
+						Meteor.users.update({_id: Meteor.user()._id}, {$set: {status: User.STATUS.CONNECTED}});
+					});
+				}
+					
 
 				function showDialog(message) {
 					var dialog = ui.get('.dialog');
@@ -586,7 +592,7 @@
 	 			var deckId = game.deck()._id;
 				var uid = game.opponent().synthetic ? game.me()._id : game.opponent()._id;
 
-				Game.route(deckId, uid);
+				Game.route(deckId, uid, {rank: game.player(game.opponent()._id).rank});
 	 		}
 	 	});
 	 	

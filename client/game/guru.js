@@ -10,8 +10,8 @@
 			return new Guru[MASTERY.PROFICIENT](game);
 		}
 		else {
-			var rank = deck_info.mastery && deck_info.mastery.rank || 0;
-			return new (Guru[rank] || Guru[MASTERY.MASTER_GURU])(game);
+			var rank = game.player(game.opponent()._id).rank || 0;
+			return new (Guru[rank] || Guru[MASTERY.GURU])(game);
 		}
 			
 	}
@@ -185,12 +185,9 @@
 		var mastery = self.mastery(),
 			modify = {$inc: { 'mastery.wins' : 1 } };
 
-		if (mastery.winsAtRank >= 2 &&  (mastery.rank || 0) <= MASTERY.MASTER_GURU) {
-			modify['$set'] = {'mastery.winsAtRank': 0};
-			modify['$inc']['mastery.rank'] = 1;		
-		} else {
-			modify['$inc']['mastery.winsAtRank'] = 1;
-		}
+		console.log('mastery', mastery);
+		if (this.rank() + 1 > mastery.rank) 
+			modify['$set'] = {'mastery.rank': this.rank() + 1}
 
 		UserDeck.update(
 			{ user: self.mygame.opponent()._id, deck: self.mygame.deck()._id },
@@ -276,10 +273,8 @@
 
 	var MASTERY = {
 		PROFICIENT: 0,
-		ADVANCED: 1,
-		EXPERT: 2,
-		GURU: 3,
-		MASTER_GURU: 4
+		EXPERT: 1,
+		GURU: 2,
 	};
 
 
@@ -297,21 +292,9 @@
 		}
 	}
 
-	Guru[MASTERY.ADVANCED] = function(game) {
-		Guru.call(this, game);
+	Guru[MASTERY.PROFICIENT].prototype.rank = function() {
+		return MASTERY.PROFICIENT;
 	}
-
-	utils.inherits(Guru[MASTERY.ADVANCED], Guru);
-
-
-	Guru[MASTERY.ADVANCED].prototype.cardStats = function() {
-		return {
-			accuracy: {u: .80, s: .04},
-			speed: {u: .66, s: .04},
-			retention: {u: .85, s: .10}
-		}
-	}
-
 
 	Guru[MASTERY.EXPERT] = function(game) {
 		Guru.call(this, game);
@@ -325,6 +308,10 @@
 			speed: {u: .80, s: .03},
 			retention: {u: .90, s: .10}
 		}
+	}
+
+	Guru[MASTERY.EXPERT].prototype.rank = function() {
+		return MASTERY.EXPERT;
 	}
 
 
@@ -342,20 +329,9 @@
 		}
 	}
 
-	Guru[MASTERY.MASTER_GURU] = function(game) {
-		Guru.call(this, game);
+	Guru[MASTERY.GURU].prototype.rank = function() {
+		return MASTERY.GURU;
 	}
-
-	utils.inherits(Guru[MASTERY.MASTER_GURU], Guru);
-
-	Guru[MASTERY.MASTER_GURU].prototype.cardStats = function() {
-		return {
-			accuracy: {u: .995, s: .002},
-			speed: {u: .94, s: .002},
-			retention: {u: .99, s: .002}
-		}
-	}
-
 
 	window.Guru = Guru;
 })();

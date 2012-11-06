@@ -8,8 +8,10 @@
     speedBonusCutoff: .55
   };
 
-  Game.route = function(deck, user) {
-    var game = new Game({deck: deck, user: user});
+
+
+  Game.route = function(deck, user, options) {
+    var game = new Game({deck: deck, user: user}, options);
     game.invite();
     route(game.url());
   }
@@ -48,6 +50,10 @@
       };
       game[Meteor.user()._id] = {state: 'limbo'};
       game[user._id] = {state: 'limbo'};
+      if (user._id === Guru.goat()._id) {
+        game[user._id].rank = options.rank;
+        console.log('options', options);
+      }
       self.id = Games.insert(game);
     } else {
       self.id = id;
@@ -75,6 +81,8 @@
     self.on('results', function(changed) {
       if (self.me().synthetic || !changed)
         return;
+      //exit busy state
+      Meteor.users.update({_id: Meteor.user()._id}, {$set: {status: User.STATUS.CONNECTED}});
       self.complete();
     });
 

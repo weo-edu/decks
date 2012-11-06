@@ -48,6 +48,13 @@ function tomeSetup(ctx, next) {
 		}
 	})
 
+	Template.difficulty_dialog.events({
+		'click .difficulty-buttons div': function(evt) {
+			var d = $(evt.currentTarget).attr('rel');
+			Game.route(ctx.tome._id, Guru.goat(), {rank: parseInt(d, 10)});
+		}
+	})	
+
 	Template.tome_nav.created = function() {
 		this.curPage = tomeRenderer.rendered();
 	}
@@ -155,7 +162,7 @@ route('/tome/:creatorName/:id/friends', function(ctx) {
 						return user_deck.user;
 					})
 				}
-			}, {sort: {connected: -1, username: 1}});
+			}, {sort: {status: -1, username: 1}});
 		},
 		myMastery : function() {
 			return ctx.user_deck && ctx.user_deck.mastery && ctx.user_deck.mastery.rank;
@@ -168,7 +175,7 @@ route('/tome/:creatorName/:id/friends', function(ctx) {
 			return info.mastery ? info.mastery.rank : '';
 		},
 		isConnected: function() {
-			return this.connected ? 'connected' : 'disconnected';
+			return User.statusToString(this.status);
 		}
 	});
 
@@ -227,7 +234,7 @@ route('/tome/:creatorName/:id/stats/:statUsername?/:subNav?',
 		},
 		isChallengable: function() {
 			return ctx.params.statUsername !== Meteor.user().username
-				&& Meteor.users.findOne(ctx.statUID).connected;
+				&& Meteor.users.findOne(ctx.statUID).status === User.STATUS.CONNECTED;
 		}
 	});
 
@@ -268,7 +275,6 @@ route('/tome/:creatorName/:id/stats/:statUsername?/:subNav?',
 		stats: function() {
 			var cardId = this._id;
       var stat = Stats.userCard(ctx.statUID, cardId);
-      console.log(stat, ctx.statUID, cardId);
       var stats = {
         accuracy: { name: 'accuracy', val:  stat.accuracy},
         speed:  { name: 'speed', val: stat.speed },
