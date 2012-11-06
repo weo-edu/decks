@@ -7,23 +7,24 @@
 tome(width = 181px, height = 195px) {
 	cursor: pointer;
 	position: relative;
-	width: width;
+	width: width - 20px;
+	margin: 0 10px;
 	height: height;
-	background: url('/app!decks/img/tome.png') no-repeat ;
+	background: url('/app!decks/img/tome.png') no-repeat -10px 0;
 	&:after {
 		content: '';
 		position: absolute;
 		height: 100%;
 		width: 10px;
 		background: url("/app!decks/img/tome.png") no-repeat -189px 0px;
-		left: 36px;
+		left: 26px;
 	}
 	.tome-image {
 		position: absolute;
 		height: 132px;
 		width: 109px;
 		top: 18px;
-		left: 40px;
+		left: 30px;
 		border-radius: 0 14px 14px 0;
 		background-size: cover;
 		background-position: center;
@@ -66,6 +67,33 @@ scroll(width = 181px, height = 195px) {
 		.tome-title {
 			top: 3px;
 			height: 1em;
+		}
+	}
+	.challenge {
+		position: absolute;
+		opacity: 0;
+		transition: opacity .6s;
+		size = 45px;
+		font: 12px 'Fresca';
+		color: #FFF;
+		border-radius: 50%; 
+		position: absolute;
+		padding: 5px;
+		width: size;
+		height: size;
+		line-height: size;
+		text-align: center;
+		box-shadow: inset 1px 1px 0 rgba(white, .3), inset -1px -1px 0 rgba(black, .3), 0 0 5px rgba(black, .6);
+		bottom: 38px;
+		right: 0px;
+		button-gradient(red);	
+		&:hover, &:active {
+			box-shadow: inset 1px 1px 0 rgba(white, .3), inset -1px -1px 0 rgba(black, .3), 0 0 5px rgba(black, .6);
+		}
+	}
+	&:hover {
+		.challenge {
+			opacity: 1;
 		}
 	}
 }
@@ -167,7 +195,7 @@ scroll(width = 181px, height = 195px) {
 		padding: 0 17px;
 		woodSides();
 		background-image: url('/app!common/textures/handmadepaperA85.png');
-		background-color: #999;
+		background-color: #888;
 		z-index: 3;
 
 		.tome-top-info {

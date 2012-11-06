@@ -101,6 +101,13 @@
 			{{> tome}}
 			<div class='twist-stars twist-stars-{{UserDeck.mastery.rank}}'></div>
 			<h5 class='tome-title'>{{Decks.title}}</h5>
+			{{#if isChallengable}}
+				{{#if haveCollected}}
+					<div class='challenge'>Challenge</div>
+				{{else}}
+					<div class='challenge unlock'>Challenge</div>
+				{{/if}}
+			{{/if}}
 		</div>
 	{{/each}}
 </template>

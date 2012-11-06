@@ -168,11 +168,24 @@ route('/user/:username?',
 			}
 		}
 	});
+	// var myName = Meteor.user().username;
+	// var username = ctx.params.username || myName;
+	// var isMe = myName === username;
+	// var user = Meteor.users.findOne({username: username}) || {};
+
 
 	Template.browse_tomes_played.helpers({
 		tomes: function() {
 			return toggle.deckFilter(routeSession, decks, user._id);
+		},
+		isChallengable: function() {
+			return this.UserDeck && this.UserDeck.mastery && this.UserDeck.mastery.rank >= 1;
+		},
+		haveCollected: function() {
+			var myDeck = UserDeck.findOne({deck: this.Decks._id, user: Meteor.user()._id});
+			return myDeck && myDeck.mastery && myDeck.mastery.rank >= 1;
 		}
+
 	});
 
 	Template.browse_created.helpers({
